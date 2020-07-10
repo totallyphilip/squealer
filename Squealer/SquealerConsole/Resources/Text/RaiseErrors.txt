@@ -1,0 +1,17 @@
+﻿
+There are two ways to cause the stored procedure to roll back the transaction.
+
+
+(1) Set the return code which will bubble up to the outermost nested stored procedure. MSSQL will not generate an error.
+
+begin
+	set @SqlrInternalErrorNumber = ?; -- Value must be between -99999 and -1.
+	raiserror('',11,1);
+end;
+
+
+(2) Cause a fatal SQL crash that must be handled by the calling process outside of the outermost nested procedure.
+begin
+	set @SqlrInternalErrorNumber = -999999;
+	raiserror('An error happened because...',11,1);
+end;

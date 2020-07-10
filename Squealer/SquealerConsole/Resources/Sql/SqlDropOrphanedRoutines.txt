@@ -1,0 +1,78 @@
+﻿set nocount on;
+
+create table #CodeToDrop ([Type] nvarchar(10), [Schema] nvarchar(10), [Name] nvarchar(500));
+
+{RoutineList}
+
+with cteObjects as
+(
+	select
+		r.ROUTINE_TYPE as ObjectType
+		,r.ROUTINE_SCHEMA as ObjectSchema
+		,r.ROUTINE_NAME as ObjectName
+	from
+		INFORMATION_SCHEMA.ROUTINES r
+	union
+	select
+		'VIEW'
+		,v.TABLE_SCHEMA
+		,v.TABLE_NAME
+	from
+		INFORMATION_SCHEMA.VIEWS v
+)
+select
+	o.ObjectType
+	,o.ObjectSchema
+	,o.ObjectName
+into
+	#AllObjects
+from
+	cteObjects o
+where
+	o.ObjectName not like '%{ExcludeFilename}%'
+;
+
+
+select
+	'' as [ON SQUEALER]
+	,'[' + o.ObjectSchema + '].[' + o.ObjectName + ']' as [ON DATABASE]
+	,'drop '
+		+ o.ObjectType
+		+ ' [' + o.ObjectSchema + ']'
+		+ '.[' + o.ObjectName + '];'
+		+ ' -- delete from database'
+		as [DESTRUCTIVE COMMAND]
+from
+	#AllObjects o
+left outer join
+	#CodeToDrop t
+	on t.[Type] = o.ObjectType collate database_default
+	and t.[Schema] = o.ObjectSchema collate database_default
+	and t.[Name] = o.ObjectName collate database_default
+where
+	t.[Name] is null
+	and o.ObjectSchema != 'cdc'
+
+union
+
+select
+	'[' + t.[Schema] + '].[' + t.[Name] + ']'
+	,''
+	,'delete ' + t.[Schema] + '.' + t.[Name] collate database_default
+from
+	#CodeToDrop t
+left outer join
+	#AllObjects o
+	on t.[Type] = o.ObjectType collate database_default
+	and t.[Schema] = o.ObjectSchema collate database_default
+	and t.[Name] = o.ObjectName collate database_default
+where
+	o.ObjectName is null
+
+order by
+	[ON SQUEALER]
+	,[ON DATABASE]
+;
+
+drop table #CodeToDrop;
+drop table #AllObjects;

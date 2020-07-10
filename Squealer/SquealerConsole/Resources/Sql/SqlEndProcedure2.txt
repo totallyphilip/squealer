@@ -1,0 +1,5 @@
+		set @SqlrInternalErrorMessage =
+			@SqlrInternalErrorMessage
+			+ char(10)
+			+ '@{ErrorParameterName} = '
+			+ isnull(convert(varchar(max),@{ErrorParameterName}),'[NULL]');

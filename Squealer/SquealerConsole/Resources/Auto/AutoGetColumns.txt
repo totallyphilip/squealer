@@ -1,0 +1,58 @@
+﻿declare @table_id int = {TableId};
+
+with ctePkCols as
+(
+	select
+		i.object_id as table_id
+		,c.column_id
+	from
+		sys.indexes i
+	join
+		sys.index_columns c
+		on c.object_id = i.object_id
+		and c.index_id = i.index_id
+	where
+		i.is_primary_key = 'true'
+)
+,cteDefaults as
+(
+	select
+		c.parent_object_id as table_id
+		,c.parent_column_id as column_id
+		,c.definition
+	from
+		sys.default_constraints c
+)
+select
+	c.name as [column]
+	,ty.name as [type]
+	,c.is_identity
+	,c.is_rowguidcol
+	,c.column_id
+	,c.max_length
+	,c.precision
+	,c.scale
+	,def.definition as default_value
+	,case
+		when pk.column_id is null then convert(bit,0)
+		else convert(bit,1)
+	end as [is_pk_column]
+	,c.is_computed
+from
+	sys.columns c
+join
+	sys.types ty
+	on ty.system_type_id = c.system_type_id
+	and ty.user_type_id = c.user_type_id
+left outer join
+	ctePkCols pk
+	on pk.table_id = c.object_id
+	and pk.column_id = c.column_id
+left outer join
+	cteDefaults def
+	on def.table_id = c.object_id
+	and def.column_id = c.column_id
+where
+	c.object_id = @table_id
+order by
+	c.column_id

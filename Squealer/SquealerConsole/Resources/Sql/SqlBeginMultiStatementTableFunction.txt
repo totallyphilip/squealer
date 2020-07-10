@@ -1,0 +1,7 @@
+
+)
+
+{WithOptions}
+as
+begin
+set ansi_nulls on;

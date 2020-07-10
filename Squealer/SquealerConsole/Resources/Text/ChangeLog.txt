@@ -1,0 +1,186 @@
+﻿/*********************
+      CHANGE LOG
+*********************/
+
+{0}2019-02-21{1}
+
+{2}Added a switch to the GENERATE command to optionally generate test scripts instead of CREATE scripts.
+
+{2}Added a change log. :)
+
+
+
+{0}2019-03-18{1}
+
+{2}Added SQLSERVER command to save/read a connection string for each project folder.
+
+{2}Added MAKE command to automatically generate stored procedures by reading the table structures in a SQL database.
+
+{2}Bug fixes and performance improvements.
+
+
+
+{0}2019-03-19{1}
+
+{2}Added views.
+
+{2}Added PostCode section to files so additional T-SQL commands can be executed after each object is built.
+
+
+
+{0}2019-03-22{1}
+
+{2}Added -ALT switch to GENERATE command to allow creation of ALTER scripts instead of only DROP/CREATE scripts.
+
+{2}Added -X switch to several file commands to find exact file matches (overrides AutoSearch setting).
+
+{2}Added VIEW detection to SYNC command and improved results of SYNC T-SQL execution.
+
+
+
+{0}2019-03-29{1}
+
+{2}Rewrote the command input parser for greater consistency.
+
+{2}Renamed a few commands and improved their descriptions and examples.
+
+{2}File search options are now consistent across file commands.
+
+{2}Major internal code refactoring.
+
+
+
+{0}2019-04-04{1}
+
+{2}Added NUKE command.
+
+{2}Added more switches to the MAKE command.
+
+
+
+{0}2019-04-12{1}
+
+{2}Added informational flags to Squealer objects for ad hoc documentation needs.
+
+
+
+{0}2019-05-02{1}
+
+{2}MAKE command now safely handles column names containing spaces.
+
+{2}Several minor fixes and performance enhancements.
+
+{2}Added version/upgrade detection.
+
+
+
+{0}2019-05-09{1}
+
+{2}FIX command file wildcard is now optional (i.e. all files will be selected if nothing is specified).
+
+{2}FIX command now skips files that are already in the desired format.
+
+{2}Bug fixed: Change log was being displayed whenever a new version became available for download.
+
+
+
+{0}2019-05-17{1}
+
+{2}Output is now sent to the clipboard by default.
+
+{2}Added STR switch to DIRECTORY command.
+
+{2}Increased the console input buffer size to 8192 bytes.
+
+{2}FIX command no longer ignores whitespace differences.
+
+
+
+{0}2019-06-05{1}
+
+{2}Renamed the MAKE command (formerly KESSEL) and switches for better clarity.
+
+{2}Added TextEditorSwitches setting.
+
+
+
+{0}2019-06-12{1}
+
+{2}The -NOSAVE option of the MAKE command was not working. Fixed.
+
+{2}Added WITH options. Example: <Squealer Type="View" WithOptions="schemabinding,encryption">
+
+
+
+{0}2019-10-16{1}
+
+{2}Added SHOWBRANCH setting to optionally display Git branch on the command line.
+
+
+
+{0}2019-10-17{1}
+
+{2}Added color.
+
+
+
+{0}2019-10-18{1}
+
+{2}Minor bug fixes and code improvements.
+
+
+
+{0}2019-10-22{1}
+
+{2}Added Git history option to DIRECTORY command.
+
+{2}Added UNCOMMITTED command to display uncommitted changes.
+
+
+
+{0}2019-11-06{1}
+
+{2}Added a new GIT command and removed Git switches from other commands.
+
+{2}Removed empty sections from generated SQL output.
+
+{2}Improved color scheme.
+
+
+
+{0}2020-02-07{1}
+
+{2}New user setting WILDCARDSPACES allows treating the spacebar as the asterisk key.
+
+{2}The file explorer no longer returns "file not found" for empty directories.
+
+
+
+{0}2020-02-07{1}
+
+{2}Table-valued paramaters with READONLY keyword are now supported.
+
+{2}Fixed a minor console text formatting issue.
+
+{2}Added PreCode section to files so additional T-SQL commands can be executed before each object is built.
+
+
+
+{0}2020-07-01{1}
+
+{2}Added reformat switch to FIX command for automatically beautifying messy code. THIS IS EXPERIMENTAL! Check your results before committing changes. For technical details, see: https://github.com/TaoK/PoorMansTSqlFormatter
+
+
+
+{0}2020-07-08{1}
+
+{2}The number of recent folderes remembered is now configurable via the SET command.
+
+{2}The length limit of project names was increased to 30 characters.
+
+{2}Added -AUTO switch to the FORGET command for quick cleanup of the folder list.
+
+{2}Added directory styles via the SET command: full (classic), compact, and symbolic.
+
+{2}Bug fixed: Square brackets [] in file names were causing unexpected results.
+

@@ -1,0 +1,60 @@
+
+/*######################################################################
+                          YOUR CODE ENDS HERE.
+######################################################################*/
+
+
+/***********************************************************************
+	Commit the transaction. If this is the parent process, then all
+	pending work will be written to the database. If this is a child
+    process, then the commit statement will merely decrement the
+	@@trancount system variable.
+***********************************************************************/
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+	commit transaction
+end try
+
+
+/***********************************************************************
+	Rollback the transaction. If we caught a new error, construct the
+    error message to bubble up. If a child process threw the error, then
+    the message was already constructed. A deadlock from a child process
+    will be thrown by the child as error 50001, but it will be caught by
+    the parent process as 18054.
+
+    (Error 18054 means "error raised but no corresponding user-defined
+    error message exists in sys.messages." Without permission to use
+    sp_addmessage to add a custom "deadlock" message, we must rely on
+    the 18054 error as an indicator that the child process tried to
+    throw a "deadlock" exception.)
+***********************************************************************/
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+begin catch
+
+	-- Determine the exception unless it was manually thrown by setting the error variable.
+	if @SqlrInternalErrorNumber = 0
+		set @SqlrInternalErrorNumber = error_number();
+
+
+	declare @SqlrInternalErrorMessage varchar(7000)
+	if @SqlrInternalErrorNumber = -999999
+		or
+		(
+			@SqlrInternalErrorNumber > 0
+			and @SqlrInternalErrorNumber <> 50000
+			and @SqlrInternalErrorNumber <> 18054
+		)
+	-- Construct the error message.
+	begin
+		-- Build the error message and embed the details of the error into the message.
+		set @SqlrInternalErrorMessage =
+			'Sql Error: ' + convert(varchar,@SqlrInternalErrorNumber) + '; ' +
+			'Severity: ' + convert(varchar,error_severity()) + '; ' +
+			'State: ' + convert(varchar,error_state()) + '; ' +
+			'Procedure: ' + coalesce(error_procedure(),'n/a') + '; ' +
+			'Line: ' + convert(varchar,error_line()) + '; ' +
+			'Message: ' + error_message();

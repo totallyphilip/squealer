@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="eggVader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggvader.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggXwing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggxwing.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="PigNose" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PigNose.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RaiseErrors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\text\raiseerrors.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlBeginInlineTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbegininlinetablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlBeginMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginmultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlBeginProcedure" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginprocedure.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlBeginScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginscalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlComment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlcomment.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlCreateFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlcreatefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlCreateProcedure" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlcreateprocedure.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlDrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqldrop.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlEndMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendmultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlEndProcedure1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendprocedure1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlEndProcedure2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendprocedure2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlEndProcedure3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendprocedure3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlEndScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendscalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlGrantExecute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlgrantexecute.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlGrantSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlgrantselect.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlTableMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltablemultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlTemplateInlineTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltemplateinlinetablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlTemplateMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltemplatemultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlTemplateProcedure" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltemplateprocedure.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlTemplateScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltemplatescalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="UserConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\text\userconfig.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="eggMay4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggmay4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_I" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_i.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_III" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_iii.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_IV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_iv.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_V" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_v.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_VI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_vi.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_VII" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_vii.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggCrawl_VIII" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggcrawl_viii.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggSeagulls" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggseagulls.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggDroids" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggdroids.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggEmpire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggempire.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggRebels" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggrebels.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="eggVictory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\eggvictory.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlDropOrphanedRoutines" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqldroporphanedroutines.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="ChangeLog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\text\changelog.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlBeginMultiStatementTableFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginmultistatementtablefunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlBeginProcedureTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginproceduretest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlBeginScalarFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginscalarfunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlEndMultiStatementTableFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendmultistatementtablefunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlEndProcedureTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendproceduretest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlEndScalarFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendscalarfunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlTableMultiStatementTableFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltablemultistatementtablefunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="AutoGetColumns" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\auto\autogetcolumns.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="AutoGetTables" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\auto\autogettables.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="AutoProcTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\auto\autoproctemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SqlBeginView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlbeginview.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlTemplateView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltemplateview.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlCreateView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlcreateview.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+</root>

@@ -1,0 +1,26 @@
+
+/***********************************************************************
+	Begin the transaction. Start the TRY..CATCH wrapper.
+***********************************************************************/
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+{WithOptions}
+as
+set ansi_nulls on;
+set nocount on;
+set quoted_identifier on;
+
+declare @SqlrInternalErrorNumber	int; -- Error code to return to parent process.
+declare @SqlrInternalNestLevel		int; -- Current nested level of procedure calls.
+set @SqlrInternalNestLevel = @@trancount;
+
+SquealerDeadlock:
+begin try
+	set @SqlrInternalErrorNumber = 0; -- Reset the error variable.
+	begin transaction
+
+/*######################################################################
+                         YOUR CODE BEGINS HERE.
+######################################################################*/
+;

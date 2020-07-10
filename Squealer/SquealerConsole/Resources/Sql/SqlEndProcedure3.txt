@@ -1,0 +1,51 @@
+
+	end
+	else
+	-- The exception was raised in a nested procedure, so just grab the message it bubbled up to this procedure.
+	begin
+		set @SqlrInternalErrorMessage = error_message();
+	end
+
+
+	if @SqlrInternalNestLevel =	0
+	-- We're at the outermost procedure, so rollback the whole transaction.
+	begin
+		rollback transaction
+	end
+	else
+	-- We are still	within a nested	procedure, so just decrement the transaction count.
+	begin
+		commit transaction
+	end
+
+end catch
+
+
+/***********************************************************************
+	If a deadlock error was detected and we are at the parent process,
+    restart the whole transaction. If a deadlock was detected and we are
+    in a child process, throw the deadlock back to the parent. If a
+    non-deadlock error was detected, throw a generic exception back to
+    the parent process.
+***********************************************************************/
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+if @SqlrInternalErrorNumber <> 0
+begin
+
+	if @SqlrInternalErrorNumber = 1205 or @SqlrInternalErrorNumber = 18054
+	begin
+		if @SqlrInternalNestLevel = 0 -- Restart the whole transaction.
+			goto SquealerDeadlock
+		else -- Throw deadlock exception back to the parent process.
+			raiserror(50001,11,1)
+	end
+
+	-- Raise any unhandled exceptions to the calling process.
+	else if @SqlrInternalErrorNumber = -999999 or @SqlrInternalErrorNumber > 0
+		raiserror(@SqlrInternalErrorMessage,11,1)
+
+end
+
+return @SqlrInternalErrorNumber

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!-- Project name maximum 10 characters (longer names will be truncated). -->
+<Settings ProjectName="myproject">
+	<DefaultUsers>
+		<User Name="User1" />
+		<User Name="User2" />
+	</DefaultUsers>
+<!-- String replacements are case-sensitive and applied sequentially. Format "$TEXT$" is not required but recommended as a visual cue. -->
+	<StringReplacements>
+		<String Original="$YODA-QUOTE$" Replacement="$AFFIRMATIVE$ or $NEGATORY$. There is no Try." Comment="" />
+		<String Original="$NEGATORY$" Replacement="$AFFIRMATIVE$ Not" Comment="" />
+		<String Original="$AFFIRMATIVE$" Replacement="Do" Comment="The Comment attribute is ignored; leave it blank or delete it if you wish." />
+	</StringReplacements>
+</Settings>

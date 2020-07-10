@@ -1,0 +1,11 @@
+﻿
+/*######################################################################
+                          YOUR CODE ENDS HERE.
+######################################################################*/
+
+-- This script defaults to ROLLBACK so you can repeat your testing.
+
+rollback transaction
+--commit transaction
+
+print '@SqlrInternalErrorNumber = ' + convert(varchar,(@SqlrInternalErrorNumber));
