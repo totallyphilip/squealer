@@ -9,6 +9,8 @@ Once the main goal was accomplished, I added additional features like code gener
 
 I hope you get some use out of this. If you would like to contribute to its ongoing development, please donate to https://paypal.me/totallyphilip. I have spent decades providing support to developers, and at this point I'm not ashamed to ask for some help in return.
 
+This project includes https://github.com/TaoK/PoorMansTSqlFormatter, a very awesome package that deserves your support.
+
 Thanks, and happy coding!
 
 -TotallyPhilip
