@@ -283,9 +283,14 @@ Module Main
 
     Private Function InvalidFolderIndex() As Integer
 
-        Dim f As String = FolderCollection().Find(Function(x) My.Computer.FileSystem.GetFiles(x, FileIO.SearchOption.SearchTopLevelOnly, "*" & MyConstants.ObjectFileExtension).Count = 0)
-        If String.IsNullOrEmpty(f) Then
-            InvalidFolderIndex = -1
+        Dim f As String = FolderCollection().Find(Function(x) Not My.Computer.FileSystem.DirectoryExists(x))
+        If String.IsNullOrEmpty(f) Then ' couldn't find any bad directories
+            f = FolderCollection().Find(Function(x) My.Computer.FileSystem.GetFiles(x, FileIO.SearchOption.SearchTopLevelOnly, "*" & MyConstants.ObjectFileExtension).Count = 0)
+            If String.IsNullOrEmpty(f) Then ' couldn't find any unused directories
+                InvalidFolderIndex = -1
+            Else
+                InvalidFolderIndex = FolderCollection().IndexOf(f)
+            End If
         Else
             InvalidFolderIndex = FolderCollection().IndexOf(f)
         End If
@@ -350,7 +355,7 @@ Module Main
 
             For i As Integer = 0 To highestnumber
                 Textify.SayBullet(Textify.eBullet.Star, String.Format("{0} | ", farray(i, 0).PadLeft(highestnumber.ToString.Length)))
-                Textify.Write(farray(i, 1).PadLeft(longestnickname), ConsoleColor.Cyan)
+                Textify.Write(farray(i, 1).PadRight(longestnickname), ConsoleColor.Cyan)
                 Textify.WriteLine(String.Format(" | {0}", farray(i, 2)))
             Next
 
@@ -370,7 +375,7 @@ Module Main
                 ChangeFolder(FolderCollection(n), WorkingFolder)
             Else
                 ' Load by project name
-                Dim s As String = FolderCollection.Find(Function(x) GetProjectNickname(x).ToLower = NewFolder.ToLower)
+                Dim s As String = FolderCollection.Find(Function(x) GetProjectNickname(x).ToLower.StartsWith(NewFolder.ToLower))
                 ChangeFolder(s, WorkingFolder)
             End If
 

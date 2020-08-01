@@ -184,3 +184,12 @@
 
 {2}Bug fixed: Square brackets [] in file names were causing unexpected results.
 
+
+
+{0}2020-07-31{1}
+
+{2}Fixed a bug in FORGET -AUTO that would skip over deleted folders.
+
+{2}USE command now accepts partial project nicknames. Ex: "USE myp" will work same as "USE myproject".
+
+
