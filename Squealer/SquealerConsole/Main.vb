@@ -370,12 +370,15 @@ Module Main
 
         Try
             Dim n As Integer
-            If Integer.TryParse(NewFolder, n) Then
+            If Integer.TryParse(NewFolder, n) AndAlso n < 100 Then
                 ' Load by project number
                 ChangeFolder(FolderCollection(n), WorkingFolder)
             Else
                 ' Load by project name
                 Dim s As String = FolderCollection.Find(Function(x) GetProjectNickname(x).ToLower.StartsWith(NewFolder.ToLower))
+                If String.IsNullOrEmpty(s) Then
+                    s = FolderCollection.Find(Function(x) GetProjectNickname(x).ToLower.Contains(NewFolder.ToLower))
+                End If
                 ChangeFolder(s, WorkingFolder)
             End If
 
@@ -1539,8 +1542,10 @@ Module Main
 
 
                     If StringInList(MySwitches, "release") Then
-                        Dim s As String = "C:\Users\pwright\Source\Repos\Squealer 2018\Squealer\Setup\Release\ver.txt"
+                        Dim s As String = WorkingFolder & "\ver.txt"
                         My.Computer.FileSystem.WriteAllText(s, My.Application.Info.Version.ToString, False)
+                        Console.WriteLine()
+                        Console.WriteLine()
                         Console.WriteLine("generated " & s & " with " & My.Application.Info.Version.ToString)
                         Console.WriteLine()
                     End If
@@ -2920,12 +2925,17 @@ Module Main
             Textify.SayBulletLine(Textify.eBullet.Hash, .Copyright)
             Textify.SayBulletLine(Textify.eBullet.Hash, """" & .Trademark & """")
             Textify.SayBulletLine(Textify.eBullet.Hash, "v." & .Version.ToString)
-            Textify.SayNewLine()
-            Textify.SayBulletLine(Textify.eBullet.Hash, "SQL formatting by https://github.com/TaoK/PoorMansTSqlFormatter")
-            Textify.SayNewLine()
-            Textify.SayBulletLine(Textify.eBullet.Hash, "May the Force be with you.")
-            Textify.SayNewLine()
         End With
+        Textify.SayNewLine()
+        Textify.SayBulletLine(Textify.eBullet.Hash, "++++++++++++++++++++++++++++++++++++++++++++++++++++++ #")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "Check out my album ""To The Crows"" at www.thehusht.com  #")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "New album ""The Law of Gravity"" coming out in 2020!     #")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "++++++++++++++++++++++++++++++++++++++++++++++++++++++ #")
+        Textify.SayNewLine()
+        Textify.SayBulletLine(Textify.eBullet.Hash, "SQL formatting by https://github.com/TaoK/PoorMansTSqlFormatter")
+        Textify.SayNewLine()
+        Textify.SayBulletLine(Textify.eBullet.Hash, "May the Force be with you.")
+        Textify.SayNewLine()
     End Sub
 
 
