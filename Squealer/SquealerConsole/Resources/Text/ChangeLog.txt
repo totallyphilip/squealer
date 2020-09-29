@@ -193,3 +193,7 @@
 {2}USE command now accepts partial project nicknames. Ex: "USE my" and "USE pro" will work same as "USE myproject".
 
 
+
+{0}2020-08-05{1}
+
+{2}Added a new setting to automatically open new files in the configured text editor (default TRUE). Great suggestion, Yamil F.!

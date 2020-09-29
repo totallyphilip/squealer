@@ -388,13 +388,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A2F965C0DE42675577A39E73B500DBE5"
+        "OwnerKey" = "8:_E08036423206FC5171C0C427E98ECC12"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E08036423206FC5171C0C427E98ECC12"
+        "OwnerKey" = "8:_A2F965C0DE42675577A39E73B500DBE5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2596,15 +2596,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer 2018"
-        "ProductCode" = "8:{7820F44D-31A1-419B-9960-275F463964E8}"
-        "PackageCode" = "8:{36C3FE65-6890-491F-8A0E-5CDCDC30280A}"
+        "ProductCode" = "8:{62ACC0FE-7B9B-4EF4-90D6-3E7D104D26C5}"
+        "PackageCode" = "8:{469EFE90-C642-452A-94F0-9E82E5EB1FF7}"
         "UpgradeCode" = "8:{1D6B365A-8443-4FE0-BF17-8DD0D6C149E0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.11"
+        "ProductVersion" = "8:1.1.12"
         "Manufacturer" = "8:Philip Wright"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

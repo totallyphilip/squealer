@@ -58,6 +58,17 @@ Module Main
     Const s3ZipFile As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/Squealer.zip"
 
     Public Class UserSettingsClass
+
+        Private _EditNew As Boolean
+        Public Property EditNew As Boolean
+            Get
+                Return _EditNew
+            End Get
+            Set(value As Boolean)
+                _EditNew = value
+            End Set
+        End Property
+
         Private _TextEditor As String
         Public Property TextEditor As String
             Get
@@ -436,6 +447,7 @@ Module Main
         UserSettings.TextEditorSwitches = My.Configger.LoadSetting(NameOf(UserSettings.TextEditorSwitches), "")
         UserSettings.ShowClock = My.Configger.LoadSetting(NameOf(UserSettings.ShowClock), False)
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
+        UserSettings.EditNew = My.Configger.LoadSetting(NameOf(UserSettings.EditNew), True)
         UserSettings.UseClipboard = My.Configger.LoadSetting(NameOf(UserSettings.UseClipboard), True)
         UserSettings.ShowBranch = My.Configger.LoadSetting(NameOf(UserSettings.ShowBranch), True)
         UserSettings.WildcardSpaces = My.Configger.LoadSetting(NameOf(UserSettings.WildcardSpaces), False)
@@ -933,6 +945,7 @@ Module Main
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.AutoSearch).ToLower & ";auto-search expansion"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowClock).ToLower & ";clock display"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.TextEditor).ToLower & ";text editor program"))
+        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.EditNew).ToLower & ";edit on new file"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowBranch).ToLower & ";show Git branch"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.RecentFolders).ToLower & ";maximum recent folders"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.DirStyle).ToLower & ";directory style"))
@@ -1354,7 +1367,11 @@ Module Main
 
                     BracketCheck(UserInput)
 
-                    CreateNewFile(WorkingFolder, filetype, UserInput)
+                    Dim f As String = CreateNewFile(WorkingFolder, filetype, UserInput)
+
+                    If UserSettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
+                        FileEdit(f)
+                    End If
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[open].ToString Then
@@ -1751,6 +1768,10 @@ Module Main
         Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to show the clock, FALSE to hide.")
         Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, the clock will display in the command prompt.")
         Textify.SayNewLine()
+        SettingViewOne(NameOf(UserSettings.EditNew), UserSettings.EditNew.ToString)
+        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to edit new files, FALSE to create only.")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, new files will automatically be opened in the configured text editor.")
+        Textify.SayNewLine()
         SettingViewOne(NameOf(UserSettings.UseClipboard), UserSettings.UseClipboard.ToString)
         Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to save output to clipboard, FALSE to open in text editor.")
         Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, output will be copied directly to the Windows clipboard instead of into a temp file.")
@@ -1815,6 +1836,11 @@ Module Main
                 previous = UserSettings.ShowClock.ToString
                 UserSettings.ShowClock = CBool(value)
                 My.Configger.SaveSetting(NameOf(UserSettings.ShowClock), CBool(value))
+
+            Case NameOf(UserSettings.EditNew).ToLower
+                previous = UserSettings.EditNew.ToString
+                UserSettings.EditNew = CBool(value)
+                My.Configger.SaveSetting(NameOf(UserSettings.EditNew), CBool(value))
 
             Case NameOf(UserSettings.RecentFolders).ToLower
                 previous = UserSettings.RecentFolders.ToString
@@ -2311,7 +2337,7 @@ Module Main
     End Function
 
     ' Create a new proc or function.
-    Private Sub CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String)
+    Private Function CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String) As String
 
         Dim Template As String = String.Empty
         Select Case FileType
@@ -2346,25 +2372,18 @@ Module Main
         ' Careful not to overwrite existing file.
         If My.Computer.FileSystem.FileExists(fqTarget) Then
             Textify.SayError("File already exists.")
+            CreateNewFile = String.Empty
         Else
-            'My.Computer.FileSystem.WriteAllText(fqTemp, Template, False, System.Text.Encoding.ASCII)
-            'RepairXmlFile(True, fqTemp)
-            'My.Computer.FileSystem.MoveFile(fqTemp, fqTarget)
-            'Textify.SayBullet(Textify.eBullet.Hash, "OK", False)
-            'Textify.Write(" (" & filename & ")", False)
-            'Textify.SayNewLine()
-
             My.Computer.FileSystem.WriteAllText(fqTarget, Template, False, System.Text.Encoding.ASCII)
             RepairXmlFile(True, fqTarget, False)
-            'My.Computer.FileSystem.MoveFile(fqTemp, fqTarget)
             Textify.SayBullet(Textify.eBullet.Hash, "OK")
             Textify.WriteLine(" (" & filename & ")")
-
+            CreateNewFile = fqTarget
         End If
 
         Textify.SayNewLine()
 
-    End Sub
+    End Function
 
 
 #End Region
