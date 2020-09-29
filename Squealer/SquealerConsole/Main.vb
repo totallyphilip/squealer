@@ -508,7 +508,7 @@ Module Main
 
     End Sub
 
-    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean) As List(Of String)
+    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean, hasPrePostCode As Boolean) As List(Of String)
 
         Wildcard = Wildcard.Replace("[", "").Replace("]", "")
 
@@ -540,6 +540,10 @@ Module Main
 
         Dim EverythingIncludingDuplicates As New List(Of String)
         Textify.Write(" files", plaincolor)
+        If hasPrePostCode Then
+            Textify.Write(" with ", plaincolor)
+            Textify.Write("pre/post code", highlightcolor)
+        End If
         If Not String.IsNullOrEmpty(SearchText) Then
             Textify.Write(" containing ", plaincolor)
             Textify.Write("""" & SearchText & """" & IIf(ignoreCase, "", "(case-sensitive)").ToString, highlightcolor)
@@ -586,6 +590,11 @@ Module Main
             With My.Computer.FileSystem
                 DistinctFiles.RemoveAll(Function(x) Not (.GetFileInfo(x).LastWriteTime.Year = Now.Year AndAlso .GetFileInfo(x).LastWriteTime.DayOfYear = Now.DayOfYear))
             End With
+        End If
+
+        ' Remove any results that don't have pre/post code
+        If hasPrePostCode Then
+            DistinctFiles.RemoveAll(Function(x) Not PrePostCodeExists(x))
         End If
 
         Return DistinctFiles
@@ -1294,8 +1303,10 @@ Module Main
                     Dim ignoreCase As Boolean = Not StringInList(MySwitches, "cs")
                     Dim findexact As Boolean = StringInList(MySwitches, "x")
                     Dim ignorefilelimit As Boolean = StringInList(MySwitches, "all")
+                    Dim findPrePost As Boolean = StringInList(MySwitches, "code")
 
-                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly)
+
+                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost)
 
                     ' Remove any files that don't have uncommitted git statuses
                     If git.ShowUncommittedChanges Then
@@ -1490,7 +1501,7 @@ Module Main
 
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
                         Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
-                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False)
+                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False)
                         ProcessFiles(SelectedFiles, eFileAction.generate, eMode.normal, SquealerObjectType.eType.Invalid, New GitFlags(), False)
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
 
@@ -1929,6 +1940,34 @@ Module Main
         End Try
 
     End Function
+
+    Private Function PrePostCodeExists(FileName As String) As Boolean
+
+        Dim InputXml As Xml.XmlDocument = New Xml.XmlDocument
+
+        InputXml.Load(FileName)
+
+        Dim InRoot As Xml.XmlElement = DirectCast(InputXml.SelectSingleNode(My.Application.Info.ProductName), Xml.XmlElement)
+
+        Dim HasCode As Boolean = False
+
+        Try
+            If Not String.IsNullOrWhiteSpace(InRoot.SelectSingleNode("PreCode").InnerText) Then
+                HasCode = True
+            End If
+        Catch ex As Exception
+        End Try
+        Try
+            If Not String.IsNullOrWhiteSpace(InRoot.SelectSingleNode("PostCode").InnerText) Then
+                HasCode = True
+            End If
+        Catch ex As Exception
+        End Try
+
+        Return HasCode
+
+    End Function
+
 
     ' Get all the parameters.
     Private Function GetParameters(ByVal InXml As Xml.XmlDocument) As DataTable

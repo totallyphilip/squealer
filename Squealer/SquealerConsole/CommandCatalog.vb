@@ -321,6 +321,7 @@
                 _Options.Items.Add(New CommandSwitch(String.Format("x;exact filename match, override {0} setting", NameOf(temp.AutoSearch))))
                 _Options.Items.Add(New CommandSwitch("today;files with today's date"))
                 _Options.Items.Add(New CommandSwitch("cs;case-sensitive text search"))
+                _Options.Items.Add(New CommandSwitch("code;with pre/post code"))
                 '_Options.Items.Add(New CommandSwitch("fi;include flags, case-sensitive:<flags>;pipe-delimited flags")) ' this won't work until command parser is more robust
                 '_Options.Items.Add(New CommandSwitch("fx;exclude flags, case-sensitive:<flags>;pipe-delimited flags"))
             End If

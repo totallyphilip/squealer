@@ -197,3 +197,9 @@
 {0}2020-08-05{1}
 
 {2}Added a new setting to automatically open new files in the configured text editor (default TRUE). Great suggestion, Yamil F.!
+
+
+
+{0}2020-09-29{1}
+
+{2}Added -CODE switch to limit search results to files containing pre- or post-code.
