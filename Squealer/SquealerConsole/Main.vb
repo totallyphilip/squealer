@@ -745,7 +745,6 @@ Module Main
                     Case eFileAction.git
                         If git.ShowUncommittedChanges Then
                             Textify.Write(" " & GitResults(info.DirectoryName, "git status -s " & info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
-
                         End If
                         If git.ShowHistory Then
                             GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
@@ -769,7 +768,16 @@ Module Main
                         My.Computer.FileSystem.DeleteFile(info.FullName, FileIO.UIOption.OnlyErrorDialogs, trashcan)
                 End Select
                 If Not mode = eMode.string Then
+
+                    If git.ShowUncommittedChanges Then
+                        Textify.Write(" " & GitResults(info.DirectoryName, "git status -s " & info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
+                    End If
+                    If git.ShowHistory Then
+                        GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
+                    End If
+
                     Console.WriteLine()
+
                 End If
                 FileCount += 1
             Catch ex As Exception
@@ -865,6 +873,7 @@ Module Main
 
         ' dir
         cmd = New CommandCatalog.CommandDefinition({eCommandType.directory.ToString, "dir"}, {"Directory.", String.Format("List {0} objects in the current working folder.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("h;show git history"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("f;show flags"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("str;string output"))
         cmd.Examples.Add("% -cs dbo.* / Han shot first -- find all dbo.* files containing "" Han shot first"" (with leading space and capital H)")
@@ -1225,7 +1234,6 @@ Module Main
                     Dim todayonly As Boolean = StringInList(MySwitches, "today")
                     Dim git As New GitFlags()
                     Dim pretty As Boolean = False
-                    Dim uncommittedonly As Boolean = False
 
                     If Not MyCommand.ParameterRequired AndAlso String.IsNullOrWhiteSpace(UserInput) Then
                         UserInput = "*"
@@ -1235,10 +1243,6 @@ Module Main
                     If Not String.IsNullOrWhiteSpace(UserInput) AndAlso UserInput = "#" Then
                         usedialog = True
                         UserInput = "*"
-                    End If
-
-                    If StringInList(MySwitches, "git") Then
-                        uncommittedonly = True
                     End If
 
 
@@ -1255,6 +1259,9 @@ Module Main
 
                     ElseIf MyCommand.Keyword = eCommandType.directory.ToString Then
 
+                        If StringInList(MySwitches, "h") Then
+                            git.ShowHistory = True
+                        End If
                         If StringInList(MySwitches, "f") Then
                             mode = eMode.flags
                         ElseIf StringInList(MySwitches, "str") Then
@@ -1321,22 +1328,25 @@ Module Main
 
                     End If
 
+
+
+
                     Dim ignoreCase As Boolean = Not StringInList(MySwitches, "cs")
                     Dim findexact As Boolean = StringInList(MySwitches, "x")
                     Dim ignorefilelimit As Boolean = StringInList(MySwitches, "all")
                     Dim findPrePost As Boolean = StringInList(MySwitches, "code")
+                    '                    Dim uncommittedonly As Boolean = StringInList(MySwitches, "u") Or git.ShowUncommittedChanges
+                    'Dim uncommittedonly As Boolean = StringInList(MySwitches, "u")
+                    git.ShowUncommittedChanges = StringInList(MySwitches, "u")
 
 
-                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost, uncommittedonly)
+                    'If uncommittedonly Then
+                    '    git.ShowUncommittedChanges = True
+                    'End If
 
-                    ' Remove any files that don't have uncommitted git statuses
-                    If git.ShowUncommittedChanges Then
-                        Try
-                            Dim changedfiles As List(Of String) = GitChangedFiles(WorkingFolder, "git status -s")
-                            SelectedFiles.RemoveAll(Function(x) Not changedfiles.Exists(Function(y) y = x))
-                        Catch ex As Exception
-                        End Try
-                    End If
+
+                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost, git.ShowUncommittedChanges)
+
 
                     ThrowErrorIfOverFileLimit(FileLimit, SelectedFiles.Count, ignorefilelimit)
 
