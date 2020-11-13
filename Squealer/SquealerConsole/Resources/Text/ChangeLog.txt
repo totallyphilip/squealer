@@ -208,6 +208,8 @@
 ***not yet released***
 {0}2020-11-13{1}
 
+{2}Added -GIT switch to several file commands to find uncommitted files.
+
 {2}Added <BOF> and <EOF> comments to generated output to make it easier to read through.
 
 {2}Added more collation handlers to COMPARE command output to hopefully avoid collation conflicts during SQL exeucution.

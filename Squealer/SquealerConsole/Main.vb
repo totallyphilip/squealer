@@ -221,7 +221,7 @@ Module Main
     End Enum
 
     Private Enum eCommandType
-        [git]
+        [track]
         [command]
         [nerfherder]
         [about]
@@ -508,12 +508,13 @@ Module Main
 
     End Sub
 
-    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean, hasPrePostCode As Boolean) As List(Of String)
+    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean, hasPrePostCode As Boolean, uncommittedonly As Boolean) As List(Of String)
 
         Wildcard = Wildcard.Replace("[", "").Replace("]", "")
 
         Dim plaincolor As New Textify.ColorScheme(ConsoleColor.Gray, ConsoleColor.Black)
         Dim highlightcolor As New Textify.ColorScheme(ConsoleColor.Cyan, ConsoleColor.Black)
+        Dim gitcolor As New Textify.ColorScheme(ConsoleColor.Red, ConsoleColor.Black)
 
         Textify.SayBullet(Textify.eBullet.Hash, "")
         Textify.Write("finding", plaincolor)
@@ -525,7 +526,15 @@ Module Main
         End If
         If filter.AllSelected Then
             Textify.Write(" all", highlightcolor)
+            If uncommittedonly Then
+                Textify.Write(" uncommitted", gitcolor)
+            End If
         Else
+
+            If uncommittedonly Then
+                Textify.Write(" uncommitted", gitcolor)
+            End If
+
             comma = " "
 
             For Each t As SquealerObjectType In filter.Items.Where(Function(x) x.Selected)
@@ -595,6 +604,12 @@ Module Main
         ' Remove any results that don't have pre/post code
         If hasPrePostCode Then
             DistinctFiles.RemoveAll(Function(x) Not PrePostCodeExists(x))
+        End If
+
+        ' Remove any results that haven't been committed to git
+        If uncommittedonly Then
+            Dim uncommitted As List(Of String) = GitChangedFiles(ProjectFolder, "git status -s").FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
+            DistinctFiles.RemoveAll(Function(x) Not uncommitted.Exists(Function(y) y = x))
         End If
 
         Return DistinctFiles
@@ -916,8 +931,8 @@ Module Main
 
 
 
-        ' git
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.git.ToString}, {"A limited Git interface.", String.Format("Similar to {0}, but for Git commands.", eCommandType.directory.ToString)}, CommandCatalog.eCommandCategory.file, False, True)
+        ' track / git
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.track.ToString}, {"Track uncommitted changes.", String.Format("A very limited interface to the ""git status"" command.")}, CommandCatalog.eCommandCategory.file, False, True)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("ch;show uncommitted changes", True))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("h;show history"))
         MyCommands.Items.Add(cmd)
@@ -1200,7 +1215,7 @@ Module Main
                     OrElse MyCommand.Keyword = eCommandType.edit.ToString _
                     OrElse MyCommand.Keyword = eCommandType.fix.ToString _
                     OrElse MyCommand.Keyword = eCommandType.compare.ToString _
-                    OrElse MyCommand.Keyword = eCommandType.git.ToString Then
+                    OrElse MyCommand.Keyword = eCommandType.track.ToString Then
 
 
                     Dim FileLimit As Integer = Integer.MaxValue
@@ -1210,6 +1225,7 @@ Module Main
                     Dim todayonly As Boolean = StringInList(MySwitches, "today")
                     Dim git As New GitFlags()
                     Dim pretty As Boolean = False
+                    Dim uncommittedonly As Boolean = False
 
                     If Not MyCommand.ParameterRequired AndAlso String.IsNullOrWhiteSpace(UserInput) Then
                         UserInput = "*"
@@ -1220,6 +1236,11 @@ Module Main
                         usedialog = True
                         UserInput = "*"
                     End If
+
+                    If StringInList(MySwitches, "git") Then
+                        uncommittedonly = True
+                    End If
+
 
                     If MyCommand.Keyword = eCommandType.delete.ToString Then
 
@@ -1241,7 +1262,7 @@ Module Main
                         End If
 
 
-                    ElseIf MyCommand.Keyword = eCommandType.git.ToString Then
+                    ElseIf MyCommand.Keyword = eCommandType.track.ToString Then
 
                         action = eFileAction.git
 
@@ -1306,7 +1327,7 @@ Module Main
                     Dim findPrePost As Boolean = StringInList(MySwitches, "code")
 
 
-                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost)
+                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost, uncommittedonly)
 
                     ' Remove any files that don't have uncommitted git statuses
                     If git.ShowUncommittedChanges Then
@@ -1501,7 +1522,7 @@ Module Main
 
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
                         Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
-                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False)
+                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False, False)
                         ProcessFiles(SelectedFiles, eFileAction.generate, eMode.normal, SquealerObjectType.eType.Invalid, New GitFlags(), False)
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
 
@@ -1514,7 +1535,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = "test" Then
 
-                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s")
+                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s").FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
                         Textify.WriteLine(s)
                     Next
 
