@@ -573,6 +573,12 @@ Module Main
             Else
                 EverythingIncludingDuplicates.AddRange(My.Computer.FileSystem.FindInFiles(ProjectFolder, SearchText, ignoreCase, FileIO.SearchOption.SearchTopLevelOnly, s).ToList)
             End If
+
+            ' Add in uncommitted entries in case of deleted files that we need to show
+            If uncommittedonly Then
+                EverythingIncludingDuplicates.AddRange(GitChangedFiles(ProjectFolder, "git status -s").FindAll(Function(x) x.ToLower Like s.ToLower))
+            End If
+
         Next
 
         Dim DistinctFiles As New List(Of String)
