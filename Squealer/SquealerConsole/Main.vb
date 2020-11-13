@@ -201,7 +201,6 @@ Module Main
 
     Private Enum eFileAction
         directory
-        git
         edit
         generate
         fix
@@ -221,7 +220,6 @@ Module Main
     End Enum
 
     Private Enum eCommandType
-        [track]
         [command]
         [nerfherder]
         [about]
@@ -742,13 +740,6 @@ Module Main
                                 SkippedFiles += 1
                             End If
                         End If
-                    Case eFileAction.git
-                        If git.ShowUncommittedChanges Then
-                            Textify.Write(" " & GitResults(info.DirectoryName, "git status -s " & info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
-                        End If
-                        If git.ShowHistory Then
-                            GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
-                        End If
 
 
 
@@ -936,14 +927,6 @@ Module Main
         cmd = New CommandCatalog.CommandDefinition({eCommandType.nuke.ToString}, {String.Format("Quick delete {0} objects.", My.Application.Info.ProductName), "This performs an operating system delete command, so it's extremely fast but irreversible and unforgiving."}, CommandCatalog.eCommandCategory.file, CommandCatalog.CommandDefinition.WildcardText, True)
         cmd.Examples.Add(String.Format("% dbo.* -- delete dbo.*{0}", MyConstants.ObjectFileExtension))
         cmd.Examples.Add(String.Format("% * -- delete *{0}", MyConstants.ObjectFileExtension))
-        MyCommands.Items.Add(cmd)
-
-
-
-        ' track / git
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.track.ToString}, {"Track uncommitted changes.", String.Format("A very limited interface to the ""git status"" command.")}, CommandCatalog.eCommandCategory.file, False, True)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("ch;show uncommitted changes", True))
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("h;show history"))
         MyCommands.Items.Add(cmd)
 
 
@@ -1223,8 +1206,7 @@ Module Main
                     OrElse MyCommand.Keyword = eCommandType.[generate].ToString _
                     OrElse MyCommand.Keyword = eCommandType.edit.ToString _
                     OrElse MyCommand.Keyword = eCommandType.fix.ToString _
-                    OrElse MyCommand.Keyword = eCommandType.compare.ToString _
-                    OrElse MyCommand.Keyword = eCommandType.track.ToString Then
+                    OrElse MyCommand.Keyword = eCommandType.compare.ToString Then
 
 
                     Dim FileLimit As Integer = Integer.MaxValue
@@ -1266,22 +1248,6 @@ Module Main
                             mode = eMode.flags
                         ElseIf StringInList(MySwitches, "str") Then
                             mode = eMode.string
-                        End If
-
-
-                    ElseIf MyCommand.Keyword = eCommandType.track.ToString Then
-
-                        action = eFileAction.git
-
-                        If StringInList(MySwitches, "h") Then
-                            git.ShowHistory = True
-                        End If
-                        If StringInList(MySwitches, "ch") Then
-                            git.ShowUncommittedChanges = True
-                        End If
-
-                        If Not git.GitEnabled Then
-                            git.ShowUncommittedChanges = True ' this is the default switch if nothing else was specified
                         End If
 
 
