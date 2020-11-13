@@ -2,17 +2,27 @@
 
 Public Class GitFlags
 
-    Private _ShowUncommittedChanges As Boolean
-    Public Property ShowUncommittedChanges As Boolean
+    Private _ShowUncommitted As Boolean = False
+    Public Property ShowUncommitted As Boolean
         Get
-            Return _ShowUncommittedChanges
+            Return _ShowUncommitted
         End Get
         Set(value As Boolean)
-            _ShowUncommittedChanges = value
+            _ShowUncommitted = value
         End Set
     End Property
 
-    Private _ShowHistory As Boolean
+    Private _ShowDeleted As Boolean = False
+    Public Property ShowDeleted As Boolean
+        Get
+            Return _ShowDeleted And _ShowUncommitted
+        End Get
+        Set(value As Boolean)
+            _ShowDeleted = value
+        End Set
+    End Property
+
+    Private _ShowHistory As Boolean = False
     Public Property ShowHistory As Boolean
         Get
             Return _ShowHistory
@@ -22,26 +32,30 @@ Public Class GitFlags
         End Set
     End Property
 
-    Private _UndoChanges As Boolean
-    Public Property UndoChanges As Boolean
-        Get
-            Return _UndoChanges
-        End Get
-        Set(value As Boolean)
-            _UndoChanges = value
-        End Set
-    End Property
+    'Private _UndoChanges As Boolean
+    'Public Property UndoChanges As Boolean
+    '    Get
+    '        Return _UndoChanges
+    '    End Get
+    '    Set(value As Boolean)
+    '        _UndoChanges = value
+    '    End Set
+    'End Property
 
     Public ReadOnly Property GitEnabled As Boolean
         Get
-            Return _ShowHistory Or _ShowUncommittedChanges Or _UndoChanges
+            Return _ShowHistory Or _ShowUncommitted
         End Get
     End Property
 
-    Public Sub New(Optional unc As Boolean = False, Optional undo As Boolean = False, Optional history As Boolean = False)
-        _ShowUncommittedChanges = unc
-        _UndoChanges = undo
-        _ShowHistory = history
+    'Public Sub New(Optional unc As Boolean = False, Optional history As Boolean = False, Optional showdeleted As Boolean = False)
+    '    _ShowUncommitted = unc
+    '    _ShowHistory = history
+    '    _ShowDeleted = showdeleted
+    'End Sub
+
+    Public Sub New()
+
     End Sub
 
 End Class
@@ -506,7 +520,7 @@ Module Main
 
     End Sub
 
-    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean, hasPrePostCode As Boolean, uncommittedonly As Boolean) As List(Of String)
+    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean, hasPrePostCode As Boolean, gf As GitFlags) As List(Of String)
 
         Wildcard = Wildcard.Replace("[", "").Replace("]", "")
 
@@ -519,17 +533,18 @@ Module Main
 
         Dim comma As String = Nothing
 
+
         If todayonly Then
             Textify.Write(" today's", highlightcolor)
         End If
         If filter.AllSelected Then
             Textify.Write(" all", highlightcolor)
-            If uncommittedonly Then
+            If gf.GitEnabled Then
                 Textify.Write(" uncommitted", gitcolor)
             End If
         Else
 
-            If uncommittedonly Then
+            If gf.GitEnabled Then
                 Textify.Write(" uncommitted", gitcolor)
             End If
 
@@ -568,15 +583,12 @@ Module Main
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
 
-            If String.IsNullOrEmpty(SearchText) Then
+            If gf.GitEnabled Then
+                EverythingIncludingDuplicates.AddRange(GitChangedFiles(ProjectFolder, "git status -s", gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
+            ElseIf String.IsNullOrEmpty(SearchText) Then
                 EverythingIncludingDuplicates.AddRange(My.Computer.FileSystem.GetFiles(ProjectFolder, FileIO.SearchOption.SearchTopLevelOnly, s).ToList)
             Else
                 EverythingIncludingDuplicates.AddRange(My.Computer.FileSystem.FindInFiles(ProjectFolder, SearchText, ignoreCase, FileIO.SearchOption.SearchTopLevelOnly, s).ToList)
-            End If
-
-            ' Add in uncommitted entries in case of deleted files that we need to show
-            If uncommittedonly Then
-                EverythingIncludingDuplicates.AddRange(GitChangedFiles(ProjectFolder, "git status -s").FindAll(Function(x) x.ToLower Like s.ToLower))
             End If
 
         Next
@@ -610,11 +622,11 @@ Module Main
             DistinctFiles.RemoveAll(Function(x) Not PrePostCodeExists(x))
         End If
 
-        ' Remove any results that haven't been committed to git
-        If uncommittedonly Then
-            Dim uncommitted As List(Of String) = GitChangedFiles(ProjectFolder, "git status -s").FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
-            DistinctFiles.RemoveAll(Function(x) Not uncommitted.Exists(Function(y) y = x))
-        End If
+        '' Remove any results that haven't been committed to git
+        'If uncommittedonly Then
+        '    Dim uncommitted As List(Of String) = GitChangedFiles(ProjectFolder, "git status -s").FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
+        '    DistinctFiles.RemoveAll(Function(x) Not uncommitted.Exists(Function(y) y = x))
+        'End If
 
         Return DistinctFiles
 
@@ -766,7 +778,7 @@ Module Main
                 End Select
                 If Not mode = eMode.string Then
 
-                    If git.ShowUncommittedChanges Then
+                    If git.ShowUncommitted Then
                         Textify.Write(" " & GitResults(info.DirectoryName, "git status -s " & info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
                     End If
                     If git.ShowHistory Then
@@ -1220,7 +1232,9 @@ Module Main
                     Dim mode As eMode = eMode.normal
                     Dim targetftype As SquealerObjectType.eType = SquealerObjectType.eType.Invalid ' for object conversion only
                     Dim todayonly As Boolean = StringInList(MySwitches, "today")
-                    Dim git As New GitFlags()
+                    Dim gf As New GitFlags()
+                    gf.ShowUncommitted = StringInList(MySwitches, "u")
+
                     Dim pretty As Boolean = False
 
                     If Not MyCommand.ParameterRequired AndAlso String.IsNullOrWhiteSpace(UserInput) Then
@@ -1247,8 +1261,11 @@ Module Main
 
                     ElseIf MyCommand.Keyword = eCommandType.directory.ToString Then
 
+                        If gf.ShowUncommitted Then
+                            gf.ShowDeleted = True
+                        End If
                         If StringInList(MySwitches, "h") Then
-                            git.ShowHistory = True
+                            gf.ShowHistory = True
                         End If
                         If StringInList(MySwitches, "f") Then
                             mode = eMode.flags
@@ -1307,22 +1324,12 @@ Module Main
                     Dim findexact As Boolean = StringInList(MySwitches, "x")
                     Dim ignorefilelimit As Boolean = StringInList(MySwitches, "all")
                     Dim findPrePost As Boolean = StringInList(MySwitches, "code")
-                    '                    Dim uncommittedonly As Boolean = StringInList(MySwitches, "u") Or git.ShowUncommittedChanges
-                    'Dim uncommittedonly As Boolean = StringInList(MySwitches, "u")
-                    git.ShowUncommittedChanges = StringInList(MySwitches, "u")
 
-
-                    'If uncommittedonly Then
-                    '    git.ShowUncommittedChanges = True
-                    'End If
-
-
-                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost, git.ShowUncommittedChanges)
-
+                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost, gf)
 
                     ThrowErrorIfOverFileLimit(FileLimit, SelectedFiles.Count, ignorefilelimit)
 
-                    ProcessFiles(SelectedFiles, action, mode, targetftype, git, pretty)
+                    ProcessFiles(SelectedFiles, action, mode, targetftype, gf, pretty)
 
 
 
@@ -1504,7 +1511,8 @@ Module Main
 
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
                         Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
-                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False, False)
+                        Dim gf As New GitFlags ' all defaults to false
+                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False, gf)
                         ProcessFiles(SelectedFiles, eFileAction.generate, eMode.normal, SquealerObjectType.eType.Invalid, New GitFlags(), False)
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
 
@@ -1517,7 +1525,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = "test" Then
 
-                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s").FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
+                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s", True).FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
                         Textify.WriteLine(s)
                     Next
 
@@ -2804,10 +2812,14 @@ Module Main
 
 #Region " Git "
 
-    Private Function GitChangedFiles(folder As String, gc As String) As List(Of String)
+    Private Function GitChangedFiles(folder As String, gc As String, includeDeleted As Boolean) As List(Of String)
+
         Dim gitstream As New List(Of String)
         For Each s As String In GitResults(folder, gc)
-            gitstream.Add(folder & "\" & s.Substring(3))
+            Dim f As String = folder & "\" & s.Substring(3)
+            If My.Computer.FileSystem.FileExists(f) OrElse includeDeleted Then
+                gitstream.Add(f)
+            End If
         Next
 
         Return gitstream
