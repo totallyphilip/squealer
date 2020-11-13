@@ -2780,6 +2780,14 @@ Module Main
             End If
         Next
 
+
+
+        ' Add top/bottom markers
+        ExpandIndividual =
+            SpitDashes(String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)), "<BOF>") _
+            & vbCrLf & ExpandIndividual & vbCr _
+            & SpitDashes(String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)), "<EOF>") & vbCrLf & vbCrLf
+
         ' Do string replacements.
         For Each Replacement As DataRow In StringReplacements.Select() '.Select("")
             ExpandIndividual = ExpandIndividual.Replace(Replacement.Item("Original").ToString, Replacement.Item("Replacement").ToString)
@@ -2922,6 +2930,10 @@ Module Main
 #End Region
 
 #Region " Misc "
+
+    Private Function SpitDashes(s As String, marker As String) As String
+        Return New String("-"c, 5) & " " & s & " " & New String("-"c, 100 - s.Length) & " " & marker
+    End Function
 
     Private Sub BracketCheck(s As String)
         If s.Contains("["c) OrElse s.Contains("]"c) Then

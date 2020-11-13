@@ -21,9 +21,9 @@ with cteObjects as
 		INFORMATION_SCHEMA.VIEWS v
 )
 select
-	o.ObjectType
-	,o.ObjectSchema
-	,o.ObjectName
+	o.ObjectType collate database_default
+	,o.ObjectSchema collate database_default
+	,o.ObjectName collate database_default
 into
 	#AllObjects
 from

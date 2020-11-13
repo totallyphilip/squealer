@@ -203,3 +203,15 @@
 {0}2020-09-29{1}
 
 {2}Added -CODE switch to limit search results to files containing pre- or post-code.
+
+
+***not yet released***
+{0}2020-11-13{1}
+
+{2}Added <BOF> and <EOF> comments to generated output to make it easier to read through.
+
+{2}Added more collation handlers to COMPARE command output to hopefully avoid collation conflicts during SQL exeucution.
+
+
+
+
