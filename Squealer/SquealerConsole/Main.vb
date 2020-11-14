@@ -583,8 +583,28 @@ Module Main
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
 
+
             If gf.GitEnabled Then
-                EverythingIncludingDuplicates.AddRange(GitChangedFiles(ProjectFolder, "git status -s", gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
+
+                If Not String.IsNullOrEmpty(SearchText) Then
+                    gf.ShowDeleted = False ' there will not be any deleted files that contain search text
+                End If
+
+                Dim FoundFiles As New List(Of String)
+
+                FoundFiles.AddRange(GitChangedFiles(ProjectFolder, "git status -s", gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
+
+                ' Remove any results that don't contain the search text
+                If gf.GitEnabled AndAlso Not String.IsNullOrEmpty(SearchText) Then
+                    If ignoreCase Then
+                        FoundFiles.RemoveAll(Function(x) Not My.Computer.FileSystem.ReadAllText(x).ToLower.Contains(SearchText.ToLower))
+                    Else
+                        FoundFiles.RemoveAll(Function(x) Not My.Computer.FileSystem.ReadAllText(x).Contains(SearchText))
+                    End If
+                End If
+
+                EverythingIncludingDuplicates.AddRange(FoundFiles)
+
             ElseIf String.IsNullOrEmpty(SearchText) Then
                 EverythingIncludingDuplicates.AddRange(My.Computer.FileSystem.GetFiles(ProjectFolder, FileIO.SearchOption.SearchTopLevelOnly, s).ToList)
             Else
@@ -621,12 +641,6 @@ Module Main
         If hasPrePostCode Then
             DistinctFiles.RemoveAll(Function(x) Not PrePostCodeExists(x))
         End If
-
-        '' Remove any results that haven't been committed to git
-        'If uncommittedonly Then
-        '    Dim uncommitted As List(Of String) = GitChangedFiles(ProjectFolder, "git status -s").FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
-        '    DistinctFiles.RemoveAll(Function(x) Not uncommitted.Exists(Function(y) y = x))
-        'End If
 
         Return DistinctFiles
 
