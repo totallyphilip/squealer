@@ -44,7 +44,7 @@ Public Class GitFlags
 
     Public ReadOnly Property GitEnabled As Boolean
         Get
-            Return _ShowHistory Or _ShowUncommitted
+            Return _ShowUncommitted
         End Get
     End Property
 
@@ -1021,7 +1021,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' cls
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.clear.ToString, "cc"}, {"Clear the console."}, CommandCatalog.eCommandCategory.other)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.clear.ToString, "cls"}, {"Clear the console."}, CommandCatalog.eCommandCategory.other)
         MyCommands.Items.Add(cmd)
 
 
@@ -3026,10 +3026,9 @@ Module Main
             Textify.SayBulletLine(Textify.eBullet.Hash, "v." & .Version.ToString)
         End With
         Textify.SayNewLine()
-        Textify.SayBulletLine(Textify.eBullet.Hash, "++++++++++++++++++++++++++++++++++++++++++++++++++++++ #")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Check out my album ""To The Crows"" at www.thehusht.com  #")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "New album ""The Law of Gravity"" coming out in 2020!     #")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "++++++++++++++++++++++++++++++++++++++++++++++++++++++ #")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "++++++++++++++++++++++++++++++++++++++++++ #")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "For more info, visit www.thehusht.com/code #")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "++++++++++++++++++++++++++++++++++++++++++ #")
         Textify.SayNewLine()
         Textify.SayBulletLine(Textify.eBullet.Hash, "SQL formatting by https://github.com/TaoK/PoorMansTSqlFormatter")
         Textify.SayNewLine()

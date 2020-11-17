@@ -205,16 +205,16 @@
 {2}Added -CODE switch to limit search results to files containing pre- or post-code.
 
 
-***not yet released***
-{0}2020-11-13{1}
+
+{0}2020-11-17{1}
 
 {2}Removed GIT command.
 
-{2}Added -U switch to several file commands to find uncommitted files.
+{2}Added -U switch to find uncommitted files. This works with several file commands.
 
 {2}Added -H switch to DIR command to view commit history.
 
-{2}Added <BOF> and <EOF> comments to generated output to make it easier to read through.
+{2}Added <BOF> and <EOF> comments to generated output to make the text more human-readable.
 
 {2}Added more collation handlers to COMPARE command output to hopefully avoid collation conflicts during SQL exeucution.
 
