@@ -20,6 +20,39 @@ begin try
 	set @SqlrInternalErrorNumber = 0; -- Reset the error variable.
 	begin transaction
 
+	if object_id('dbo.SqlrRuntimeProcedureLog') is null
+	begin
+
+		create table
+			[dbo].[SqlrRuntimeProcedureLog]
+		(
+			RunId int not null primary key identity(1,1)
+			,SchemaName varchar(50) null default object_schema_name(@@procid)
+			,ProcName varchar(50) null default object_name(@@procid)
+			,RunDate datetime not null default getdate()
+			,NestLevel int not null default @@nestlevel
+		);
+
+		create table
+			[dbo].[SqlrRuntimeParameterLog]
+		(
+			RunId int not null
+			,ParameterNumber int not null
+			,ParameterName varchar(150) not null
+			,ParameterValue varchar(1000)
+		);
+
+		alter table [dbo].[SqlrRuntimeParameterLog] add constraint [Fk_SqlrRuntime_Parameters] foreign key ([RunId]) references [dbo].[SqlrRuntimeProcedureLog] ([RunId]) on delete cascade;
+
+	end
+
+	if 'True' = '{SqlrRunLogEnabled}'
+	begin
+		declare @SqlrRunId int;
+		insert dbo.SqlrRuntimeProcedureLog default values;
+		set @SqlrRunId = scope_identity();{RuntimeParameters}
+	end
+
 /*######################################################################
                          YOUR CODE BEGINS HERE.
 ######################################################################*/

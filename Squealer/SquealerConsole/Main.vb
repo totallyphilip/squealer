@@ -2004,6 +2004,7 @@ Module Main
             .Add("Type", GetType(String))
             .Add("Output", GetType(Boolean))
             .Add("DefaultValue", GetType(String))
+            .Add("RunLog", GetType(Boolean))
             .Add("Comments", GetType(String))
         End With
 
@@ -2014,6 +2015,7 @@ Module Main
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Type"), String.Empty),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Output"), Boolean.FalseString),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("DefaultValue"), String.Empty),
+                AttributeDefaultString(Node.Attributes.GetNamedItem("RunLog"), Boolean.TrueString),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Comments"), String.Empty)
             )
 
@@ -2104,7 +2106,9 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
-
+        If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
+            OutRoot.SetAttribute("RunLog", obj.RunLog.ToString)
+        End If
 
         ' Pre-Code.
         Dim OutPreCode As Xml.XmlElement = OutputXml.CreateElement("PreCode")
@@ -2167,7 +2171,8 @@ Module Main
             Dim InParameters As DataTable = GetParameters(InputXml)
 
             If InParameters.Rows.Count = 0 Then
-                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name=""MyParameter"" Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
+                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name=""MyParameter"" Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" RunLog=""True"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
+                'OutParameters.AppendChild(OutputXml.CreateComment(String.Format("<Parameter {0} Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "RunLog=""True"" DefaultValue="""" Comments="""" />")))
             Else
                 For Each InParameter As DataRow In InParameters.Select()
                     Dim OutParameter As Xml.XmlElement = OutputXml.CreateElement("Parameter")
@@ -2175,6 +2180,7 @@ Module Main
                     OutParameter.SetAttribute("Type", InParameter.Item("Type").ToString)
                     If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
                         OutParameter.SetAttribute("Output", InParameter.Item("Output").ToString)
+                        OutParameter.SetAttribute("RunLog", InParameter.Item("RunLog").ToString)
                     End If
                     OutParameter.SetAttribute("DefaultValue", InParameter.Item("DefaultValue").ToString)
                     OutParameter.SetAttribute("Comments", InParameter.Item("Comments").ToString)
@@ -2520,6 +2526,7 @@ Module Main
         Dim DeclareList As New ArrayList
         Dim SetList As New ArrayList
         Dim OutputParameters As String = String.Empty
+        Dim RuntimeParameters As String = String.Empty
         Dim ErrorLogParameters As String = String.Empty
 
         For Each Parameter As DataRow In InParameters.Select()
@@ -2562,6 +2569,9 @@ Module Main
                 End If
                 ' Write out error logging section.
                 If Not (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
+                    If CBool(Parameter.Item("RunLog")) Then
+                        RuntimeParameters &= vbCrLf & vbTab & vbTab & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',isnull(convert(varchar(1000),@{ParameterName}),'[NULL]'));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
+                    End If
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
@@ -2674,7 +2684,7 @@ Module Main
                 If genmode = eMode.test Then
                     BeginBlock = My.Resources.SqlBeginProcedureTest
                 Else
-                    BeginBlock = My.Resources.SqlBeginProcedure
+                    BeginBlock = My.Resources.SqlBeginProcedure.Replace("{RuntimeParameters}", RuntimeParameters)
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 Dim Returns As String = Nothing
@@ -2721,7 +2731,7 @@ Module Main
             BeginBlock = BeginBlock.Replace("{WithOptions}", "with " & WithOptions)
         End If
 
-        Block &= BeginBlock
+        Block &= BeginBlock.Replace("{SqlrRunLogEnabled}", obj.RunLog.ToString)
 
         ' Code
         Dim InCode As String = String.Empty

@@ -258,6 +258,16 @@ Public Class SquealerObject
         End Set
     End Property
 
+    Private _RunLog As Boolean
+    Public Property RunLog As Boolean
+        Get
+            Return _RunLog
+        End Get
+        Set(value As Boolean)
+            _RunLog = value
+        End Set
+    End Property
+
     Public ReadOnly Property FlagsList As List(Of String)
         Get
             Dim flags As New List(Of String)
@@ -285,6 +295,7 @@ Public Class SquealerObject
         _Type.LongType = SquealerObjectType.eType.Invalid
         _Flags = String.Empty
         _WithOptions = String.Empty
+        _RunLog = True
 
         Dim Reader As New Xml.XmlDocument
 
@@ -307,6 +318,11 @@ Public Class SquealerObject
 
         Try
             _WithOptions = Node.Attributes("WithOptions").Value.ToString
+        Catch ex As Exception
+        End Try
+
+        Try
+            _RunLog = CBool(Node.Attributes("RunLog").Value)
         Catch ex As Exception
         End Try
 
