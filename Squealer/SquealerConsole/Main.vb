@@ -592,7 +592,7 @@ Module Main
 
                 Dim FoundFiles As New List(Of String)
 
-                FoundFiles.AddRange(GitChangedFiles(ProjectFolder, "git status -s", gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
+                FoundFiles.AddRange(GitChangedFiles(ProjectFolder, "git status -s", s, gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
 
                 ' Remove any results that don't contain the search text
                 If gf.GitEnabled AndAlso Not String.IsNullOrEmpty(SearchText) Then
@@ -748,6 +748,11 @@ Module Main
 
             Try
 
+                Dim gitstatuscode As String = String.Empty
+                If git.ShowUncommitted Then
+                    gitstatuscode = " " & GitResults(info.DirectoryName, "git status -s ", info.Name)(0).Replace(info.Name, "").TrimStart
+                End If
+
                 Select Case Action
                     Case eFileAction.directory
                         If mode = eMode.flags AndAlso obj.FlagsList.Count > 0 Then
@@ -773,9 +778,6 @@ Module Main
                             End If
                         End If
 
-
-
-
                     Case eFileAction.edit
                         FileEdit(info.FullName)
                     Case eFileAction.generate
@@ -793,7 +795,12 @@ Module Main
                 If Not mode = eMode.string Then
 
                     If git.ShowUncommitted Then
-                        Textify.Write(" " & GitResults(info.DirectoryName, "git status -s " & info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
+                        'Try
+                        ' This will fail if we just now deleted the file
+                        'Textify.Write(" " & GitResults(info.DirectoryName, "git status -s ", info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
+                        Textify.Write(gitstatuscode, ConsoleColor.Red)
+                        'Catch ex As Exception
+                        'End Try
                     End If
                     If git.ShowHistory Then
                         GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
@@ -1539,7 +1546,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = "test" Then
 
-                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s", True).FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
+                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s", "*", True).FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
                         Textify.WriteLine(s)
                     Next
 
@@ -2836,10 +2843,10 @@ Module Main
 
 #Region " Git "
 
-    Private Function GitChangedFiles(folder As String, gc As String, includeDeleted As Boolean) As List(Of String)
+    Private Function GitChangedFiles(folder As String, gc As String, glob As String, includeDeleted As Boolean) As List(Of String)
 
         Dim gitstream As New List(Of String)
-        For Each s As String In GitResults(folder, gc)
+        For Each s As String In GitResults(folder, gc, glob)
             Dim f As String = folder & "\" & s.Substring(3)
             If My.Computer.FileSystem.FileExists(f) OrElse includeDeleted Then
                 gitstream.Add(f)
@@ -2850,13 +2857,13 @@ Module Main
 
     End Function
 
-    Private Function GitResults(folder As String, gc As String) As List(Of String)
+    Private Function GitResults(folder As String, gc As String, glob As String) As List(Of String)
 
         Dim gitstream As New List(Of String)
 
         Try
             Dim command As String = "cmd.exe"
-            Dim arguments As String = "/c " & gc
+            Dim arguments As String = String.Format("/c {0} glob ""{1}""", gc, glob)
             Dim ps As New ProcessStartInfo With {
                 .WorkingDirectory = folder,
                 .FileName = command,
