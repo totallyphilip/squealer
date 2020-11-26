@@ -2498,6 +2498,7 @@ Module Main
         Dim SetList As New ArrayList
         Dim OutputParameters As String = String.Empty
         Dim RuntimeParameters As String = String.Empty
+        Dim RuntimeOutputParameters As String = String.Empty
         Dim ErrorLogParameters As String = String.Empty
 
         For Each Parameter As DataRow In InParameters.Select()
@@ -2534,16 +2535,14 @@ Module Main
                 End If
                 If Parameter.Item("Output").ToString = Boolean.TrueString Then
                     def = def & " output"
+                    RuntimeOutputParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue,OutputValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}),'true');".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
                 End If
                 If Not Parameter.Item("Comments").ToString = String.Empty Then
                     def = def & " -- " & Parameter.Item("Comments").ToString
                 End If
                 ' Write out error logging section.
                 If Not (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-                    'If CBool(Parameter.Item("RunLog")) Then
-                    'RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',isnull(convert(varchar(1000),@{ParameterName}),'[NULL]'));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
                     RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
-                    'End If
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
@@ -2726,6 +2725,12 @@ Module Main
                     Block &= My.Resources.SqlEndProcedureTest
                 Else
                     Block &= My.Resources.SqlEndProcedure1 & ErrorLogParameters & My.Resources.SqlEndProcedure3
+                    If obj.RunLog Then
+                        Block = Block.Replace("{RuntimeParameters}", RuntimeOutputParameters)
+                    Else
+                        Block = Block.Replace("{RuntimeParameters}", String.Empty)
+                    End If
+
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 If genmode = eMode.test Then
