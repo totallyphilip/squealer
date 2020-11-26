@@ -519,12 +519,12 @@ Module Main
         If filter.AllSelected Then
             Textify.Write(" all", highlightcolor)
             If gf.GitEnabled Then
-                Textify.Write(" uncommitted", gitcolor)
+                Textify.Write(" uncommitted case-sensitive", gitcolor)
             End If
         Else
 
             If gf.GitEnabled Then
-                Textify.Write(" uncommitted", gitcolor)
+                Textify.Write(" uncommitted case-sensitive", gitcolor)
             End If
 
             comma = " "
