@@ -814,7 +814,7 @@ Module Main
 
             If Action = eFileAction.compare Then
                 GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", MyConstants.AutocreateFilename)
-            Else
+            ElseIf Not mode = eMode.test Then
                 GeneratedOutput = My.Resources.SqlRunLogCreate & GeneratedOutput
             End If
 
