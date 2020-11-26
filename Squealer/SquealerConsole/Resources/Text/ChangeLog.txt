@@ -220,4 +220,15 @@
 
 
 
+{0}2020-11-25{1}
+
+{2}Added automatic execution logging for stored procedures.
+
+{2}DELETE command was crashing with -U switch. Fixed.
+
+{2}Processing filenames with spaces was crashing with -U switch. Fixed.
+
+
+
+
 

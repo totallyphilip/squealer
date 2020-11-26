@@ -32,27 +32,11 @@ Public Class GitFlags
         End Set
     End Property
 
-    'Private _UndoChanges As Boolean
-    'Public Property UndoChanges As Boolean
-    '    Get
-    '        Return _UndoChanges
-    '    End Get
-    '    Set(value As Boolean)
-    '        _UndoChanges = value
-    '    End Set
-    'End Property
-
     Public ReadOnly Property GitEnabled As Boolean
         Get
             Return _ShowUncommitted
         End Get
     End Property
-
-    'Public Sub New(Optional unc As Boolean = False, Optional history As Boolean = False, Optional showdeleted As Boolean = False)
-    '    _ShowUncommitted = unc
-    '    _ShowHistory = history
-    '    _ShowDeleted = showdeleted
-    'End Sub
 
     Public Sub New()
 
@@ -498,11 +482,6 @@ Module Main
             My.Configger.SaveSetting(NameOf(UserSettings.LastRunVersion), My.Application.Info.Version.ToString)
         End If
 
-        'If Not My.Configger.LoadSetting(NameOf(UserSettings.LastRunVersion), "0.0.0.0") = fvi.FileVersion Then
-        '    ReadChangeLog()
-        '    My.Configger.SaveSetting(NameOf(UserSettings.LastRunVersion), fvi.FileVersion)
-        'End If
-
         ' Main process
         Console.WriteLine()
         CheckS3(True)
@@ -835,6 +814,8 @@ Module Main
 
             If Action = eFileAction.compare Then
                 GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", MyConstants.AutocreateFilename)
+            Else
+                GeneratedOutput = My.Resources.SqlRunLogCreate & GeneratedOutput
             End If
 
             If UserSettings.UseClipboard Then
@@ -1384,15 +1365,6 @@ Module Main
 
 
 
-                    'ElseIf MyCommand.Keyword = eCommandType.[uncommitted].ToString Then
-
-                    '    Textify.Write("Uncommitted changes in ")
-                    '    Textify.Write(WorkingFolder, ConsoleColor.White)
-                    '    Textify.WriteLine(":")
-
-                    '    GitCommandDo(WorkingFolder, "git status -s", "no changes")
-
-                    '    Textify.SayNewLine(2)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[list].ToString Then
@@ -1643,14 +1615,6 @@ Module Main
                 End If
 
                 Textify.SayNewLine()
-
-                'Textify.Write(MyCommand.Keyword)
-                'For Each s As String In MySwitches
-                '    Textify.Write(s)
-                'Next
-
-                'Textify.Write(UserInput)
-
 
             End Try
 
@@ -2576,9 +2540,10 @@ Module Main
                 End If
                 ' Write out error logging section.
                 If Not (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-                    If CBool(Parameter.Item("RunLog")) Then
-                        RuntimeParameters &= vbCrLf & vbTab & vbTab & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',isnull(convert(varchar(1000),@{ParameterName}),'[NULL]'));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
-                    End If
+                    'If CBool(Parameter.Item("RunLog")) Then
+                    'RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',isnull(convert(varchar(1000),@{ParameterName}),'[NULL]'));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
+                    RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
+                    'End If
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
@@ -2691,7 +2656,7 @@ Module Main
                 If genmode = eMode.test Then
                     BeginBlock = My.Resources.SqlBeginProcedureTest
                 Else
-                    BeginBlock = My.Resources.SqlBeginProcedure.Replace("{RuntimeParameters}", RuntimeParameters)
+                    BeginBlock = My.Resources.SqlBeginProcedure
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 Dim Returns As String = Nothing
@@ -2738,7 +2703,13 @@ Module Main
             BeginBlock = BeginBlock.Replace("{WithOptions}", "with " & WithOptions)
         End If
 
-        Block &= BeginBlock.Replace("{SqlrRunLogEnabled}", obj.RunLog.ToString)
+        If obj.RunLog Then
+            BeginBlock = BeginBlock.Replace("{RunLog}", My.Resources.SqlRunLog.Replace("{RuntimeParameters}", RuntimeParameters))
+        Else
+            BeginBlock = BeginBlock.Replace("{RunLog}", String.Empty)
+        End If
+
+        Block &= BeginBlock
 
         ' Code
         Dim InCode As String = String.Empty

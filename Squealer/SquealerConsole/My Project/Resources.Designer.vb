@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  A strongly-typed resource class, for looking up localized strings, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -167,13 +167,13 @@ Namespace My.Resources
         '''
         '''{2}Added SQLSERVER command to save/read a connection string for each project folder.
         '''
-        '''{2}Added KESSEL command to automatically generate stored procedures by reading the table structures in a SQL database.
+        '''{2}Added MAKE command to automatically generate stored procedures by reading the table structures in a SQL database.
         '''
         '''{2}Bug fixes and performance improvements.
         '''
         '''
         '''
-        '''{0} [rest of string was truncated]&quot;;.
+        '''{0}20 [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -588,7 +588,7 @@ Namespace My.Resources
         '''
         '''returns table
         '''
-        '''{WithEncryption}
+        '''{WithOptions}
         '''as
         '''
         '''return.
@@ -603,7 +603,7 @@ Namespace My.Resources
         '''  Looks up a localized string similar to 
         ''')
         '''
-        '''{WithEncryption}
+        '''{WithOptions}
         '''as
         '''begin
         '''set ansi_nulls on;
@@ -636,14 +636,14 @@ Namespace My.Resources
         '''
         '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
         '''
-        '''{WithEncryption}
+        '''{WithOptions}
         '''as
         '''set ansi_nulls on;
         '''set nocount on;
         '''set quoted_identifier on;
         '''
         '''declare @SqlrInternalErrorNumber	int; -- Error code to return to parent process.
-        '''declare @SqlrInternalNestLevel		int; -- Current nested level of procedure [rest of string was truncated]&quot;;.
+        '''declare @SqlrInternalNestLevel		int; -- Current nested level of procedure ca [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlBeginProcedure() As String
             Get
@@ -678,7 +678,7 @@ Namespace My.Resources
         '''
         '''returns {ReturnDataType}
         '''
-        '''{WithEncryption}
+        '''{WithOptions}
         '''as
         '''begin
         '''set ansi_nulls on;
@@ -709,7 +709,7 @@ Namespace My.Resources
         
         '''<summary>
         '''  Looks up a localized string similar to 
-        '''{WithEncryption}
+        '''{WithOptions}
         '''as
         '''.
         '''</summary>
@@ -810,16 +810,8 @@ Namespace My.Resources
         '''		INFORMATION_SCHEMA.VIEWS v
         ''')
         '''select
-        '''	o.ObjectType
-        '''	,o.ObjectSchema
-        '''	,o.ObjectName
-        '''into
-        '''	#AllObjects
-        '''from
-        '''	cteObjects o
-        ''';
-        '''
-        ''' [rest of string was truncated]&quot;;.
+        '''	o.ObjectType collate database_default as ObjectType
+        '''	,o.ObjectSchema collate database_default [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlDropOrphanedRoutines() As String
             Get
@@ -983,6 +975,46 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to 		declare @SqlrRunId int;
+        '''		insert dbo.SqlrRuntimeProcedureLog default values;
+        '''		set @SqlrRunId = scope_identity();{RuntimeParameters}
+        '''
+        '''.
+        '''</summary>
+        Friend ReadOnly Property SqlRunLog() As String
+            Get
+                Return ResourceManager.GetString("SqlRunLog", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to if object_id(&apos;dbo.SqlrRuntimeProcedureLog&apos;) is null
+        '''begin
+        '''
+        '''	create table
+        '''		[dbo].[SqlrRuntimeProcedureLog]
+        '''	(
+        '''		RunId int not null primary key identity(1,1)
+        '''		,SchemaName varchar(50) null default object_schema_name(@@procid)
+        '''		,ProcName varchar(50) null default object_name(@@procid)
+        '''		,RunDate datetime not null default getdate()
+        '''		,NestLevel int not null default @@nestlevel
+        '''	);
+        '''
+        '''	create table
+        '''		[dbo].[SqlrRuntimeParameterLog]
+        '''	(
+        '''		RunId int not null
+        '''		,ParameterNumber int not null
+        '''		,Param [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property SqlRunLogCreate() As String
+            Get
+                Return ResourceManager.GetString("SqlRunLogCreate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to 
         ''')
         '''
@@ -1121,12 +1153,9 @@ Namespace My.Resources
         '''		&lt;User Name=&quot;User1&quot; /&gt;
         '''		&lt;User Name=&quot;User2&quot; /&gt;
         '''	&lt;/DefaultUsers&gt;
-        '''&lt;!-- String replacements are case-sensitive. --&gt;
-        '''	&lt;!--StringReplacements&gt;
-        '''		&lt;String Original=&quot;String 1&quot; Replacement=&quot;Replacement text 1&quot;/&gt;
-        '''		&lt;String Original=&quot;String 2&quot; Replacement=&quot;Replacement text 2&quot;/&gt;
-        '''	&lt;/StringReplacements--&gt;
-        '''&lt;/Settings&gt;.
+        '''&lt;!-- String replacements are case-sensitive and applied sequentially. Format &quot;$TEXT$&quot; is not required but recommended as a visual cue. --&gt;
+        '''	&lt;StringReplacements&gt;
+        '''		&lt;String Original=&quot;$YODA-QUOTE$&quot; Replacement=&quot;$AFFIRMATIVE$ or $NEGATORY$. There is no Try.&quot; Comment=&quot;&quot; / [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property UserConfig() As String
             Get

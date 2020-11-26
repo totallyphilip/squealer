@@ -214,6 +214,8 @@
     <Content Include="Resources\Sql\SqlEndScalarFunctionTest.txt" />
     <Content Include="Resources\Sql\SqlGrantExecute.txt" />
     <Content Include="Resources\Sql\SqlGrantSelect.txt" />
+    <Content Include="Resources\Sql\SqlRunLog.txt" />
+    <None Include="Resources\Sql\SqlRunLogCreate.txt" />
     <Content Include="Resources\Sql\SqlTableMultiStatementTableFunctionTest.txt" />
     <Content Include="Resources\Sql\SqlTableMultiStatementTableFunction.txt" />
     <Content Include="Resources\Sql\SqlTemplateInlineTableFunction.txt" />

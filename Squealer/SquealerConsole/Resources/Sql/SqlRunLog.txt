@@ -1,0 +1,4 @@
+		declare @SqlrRunId int;
+		insert dbo.SqlrRuntimeProcedureLog default values;
+		set @SqlrRunId = scope_identity();{RuntimeParameters}
+
