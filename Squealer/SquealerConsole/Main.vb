@@ -2535,7 +2535,7 @@ Module Main
                 End If
                 If Parameter.Item("Output").ToString = Boolean.TrueString Then
                     def = def & " output"
-                    RuntimeOutputParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue,OutputValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}),'true');".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
+                    RuntimeOutputParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue,IsOutput) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}),'true');".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
                 End If
                 If Not Parameter.Item("Comments").ToString = String.Empty Then
                     def = def & " -- " & Parameter.Item("Comments").ToString
