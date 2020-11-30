@@ -295,7 +295,7 @@ Public Class SquealerObject
         _Type.LongType = SquealerObjectType.eType.Invalid
         _Flags = String.Empty
         _WithOptions = String.Empty
-        _RunLog = True
+        _RunLog = False
 
         Dim Reader As New Xml.XmlDocument
 

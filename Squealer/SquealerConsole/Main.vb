@@ -2541,7 +2541,11 @@ Module Main
                     def = def & " -- " & Parameter.Item("Comments").ToString
                 End If
                 ' Write out error logging section.
-                If Not (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
+                If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
+                    Dim whynot As String = vbCrLf & vbTab & vbTab & "--parameter @" & Parameter.Item("Name").ToString & " cannot be logged due to its 'max' or 'readonly' definition"
+                    RuntimeParameters &= whynot
+                    ErrorLogParameters &= whynot
+                Else
                     RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert dbo.SqlrRuntimeParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
