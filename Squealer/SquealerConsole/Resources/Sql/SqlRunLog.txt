@@ -1,4 +1,4 @@
 		declare @SqlrRunId int;
-		insert dbo.SqlrRuntimeProcedureLog default values;
+		insert squealer.ExecutionLog default values;
 		set @SqlrRunId = scope_identity();{RuntimeParameters}
 

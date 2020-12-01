@@ -2,21 +2,32 @@
 	Generate the runtime log tables if they are missing.
 ***********************************************************************/
 
-if object_id('dbo.SqlrRuntimeProcedureLog') is null
+if schema_id('squealer') is null exec ('create schema squealer');
+
+/*
+-- uncomment to reset the runtime log
+if object_id('squealer.ParameterLog') is not null drop table squealer.ParameterLog;
+if object_id('squealer.ExecutionLog') is not null drop table squealer.ExecutionLog;
+*/
+
+go
+
+if object_id('squealer.ExecutionLog') is null
 begin
 
 	create table
-		[dbo].[SqlrRuntimeProcedureLog]
+		[squealer].[ExecutionLog]
 	(
 		RunId int not null primary key identity(1,1)
 		,SchemaName varchar(50) null default object_schema_name(@@procid)
-		,ProcName varchar(50) null default object_name(@@procid)
+		,ProcedureName varchar(250) null default object_name(@@procid)
+		,ObjectId int null default @@procid
 		,RunDate datetime not null default getdate()
 		,NestLevel int not null default @@nestlevel
 	);
 
 	create table
-		[dbo].[SqlrRuntimeParameterLog]
+		[squealer].[ParameterLog]
 	(
 		RunId int not null
 		,ParameterNumber int not null
@@ -25,7 +36,7 @@ begin
 		,IsOutput bit null default 'false'
 	);
 
-	alter table [dbo].[SqlrRuntimeParameterLog] add constraint [Fk_SqlrRuntime_Parameters] foreign key ([RunId]) references [dbo].[SqlrRuntimeProcedureLog] ([RunId]) on delete cascade;
+	alter table [squealer].[ParameterLog] add constraint [Fk_Squealer_Parameters] foreign key ([RunId]) references [squealer].[ExecutionLog] ([RunId]) on delete cascade;
 
 end
 
