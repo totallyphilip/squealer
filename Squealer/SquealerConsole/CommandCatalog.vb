@@ -431,7 +431,7 @@
 
             If Me.CanFileSearch Then
                 Dim temp As New UserSettingsClass() ' need an instance to expose a property name
-                Textify.WriteLine(String.Format("This command respects the {0} setting. I.E. mytext may be treated as *mytext*", NameOf(temp.AutoSearch)))
+                Textify.WriteLine(String.Format("This command respects the {0} setting. I.E. foo may be treated as *foo*", NameOf(temp.AutoSearch)))
                 Console.WriteLine()
             End If
 

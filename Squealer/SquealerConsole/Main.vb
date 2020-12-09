@@ -46,6 +46,8 @@ End Class
 
 Module Main
 
+#Region " All The Definitions "
+
     Private MyCommands As New CommandCatalog.CommandDefinitionList
     Private StarWars As New StarWarsClass
     Private BadCommandMessage As String = "Bad command or options."
@@ -104,16 +106,6 @@ Module Main
             End Get
             Set(value As String)
                 _TextEditorSwitches = value
-            End Set
-        End Property
-
-        Private _ShowClock As Boolean
-        Public Property ShowClock As Boolean
-            Get
-                Return _ShowClock
-            End Get
-            Set(value As Boolean)
-                _ShowClock = value
             End Set
         End Property
 
@@ -188,6 +180,49 @@ Module Main
 
     End Class
 
+    Private Class BatchParametersClass
+
+        Public Enum eRunlogMode
+            forceTrue
+            forceFalse
+            normal
+        End Enum
+
+        Private _RunlogMode As eRunlogMode = eRunlogMode.normal
+        Public Property RunlogMode As eRunlogMode
+            Get
+                Return _RunlogMode
+            End Get
+            Set(value As eRunlogMode)
+                _RunlogMode = value
+            End Set
+        End Property
+
+        Public Enum eOutputMode
+            normal
+            flags
+            encrypt
+            test
+            alter
+            convert
+            permanent
+            [string]
+        End Enum
+
+        Private _OutputMode As eOutputMode = eOutputMode.normal
+        Public Property OutputMode As eOutputMode
+            Get
+                Return _OutputMode
+            End Get
+            Set(value As eOutputMode)
+                _OutputMode = value
+            End Set
+        End Property
+
+    End Class
+
+#End Region
+
 #Region " Enums "
 
     Public Enum eDirectoryStyle
@@ -204,17 +239,6 @@ Module Main
         fix
         compare
         delete
-    End Enum
-
-    Private Enum eMode
-        normal
-        flags
-        encrypt
-        test
-        alter
-        convert
-        permanent
-        [string]
     End Enum
 
     Private Enum eCommandType
@@ -441,7 +465,6 @@ Module Main
         UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
         UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
         UserSettings.TextEditorSwitches = My.Configger.LoadSetting(NameOf(UserSettings.TextEditorSwitches), "")
-        UserSettings.ShowClock = My.Configger.LoadSetting(NameOf(UserSettings.ShowClock), False)
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
         UserSettings.EditNew = My.Configger.LoadSetting(NameOf(UserSettings.EditNew), True)
         UserSettings.UseClipboard = My.Configger.LoadSetting(NameOf(UserSettings.UseClipboard), True)
@@ -626,13 +649,13 @@ Module Main
     End Function
 
     ' Enumerate through files in the working folder and take some action on them.
-    Private Sub ProcessFiles(ByVal FileListing As List(Of String), ByVal Action As eFileAction, mode As eMode, ByVal TargetFileType As SquealerObjectType.eType, git As GitFlags, MakePretty As Boolean)
+    Private Sub ProcessFiles(ByVal FileListing As List(Of String), ByVal Action As eFileAction, bp As BatchParametersClass, ByVal TargetFileType As SquealerObjectType.eType, git As GitFlags, MakePretty As Boolean)
 
         Dim FileCount As Integer = 0
         Dim SkippedFiles As Integer = 0
         Dim GeneratedOutput As String = String.Empty
 
-        If mode = eMode.string Then
+        If bp.OutputMode = BatchParametersClass.eOutputMode.string Then
             Console.Write(eCommandType.directory.ToString.ToLower & " - x ")
         Else
 
@@ -669,7 +692,7 @@ Module Main
 
             Dim obj As New SquealerObject(FileName)
 
-            If mode = eMode.string Then
+            If bp.OutputMode = BatchParametersClass.eOutputMode.string Then
                 If FileCount > 0 Then
                     Console.Write("|")
                 End If
@@ -734,7 +757,7 @@ Module Main
 
                 Select Case Action
                     Case eFileAction.directory
-                        If mode = eMode.flags AndAlso obj.FlagsList.Count > 0 Then
+                        If bp.OutputMode = BatchParametersClass.eOutputMode.flags AndAlso obj.FlagsList.Count > 0 Then
                             Console.WriteLine()
                             Console.WriteLine("           {")
                             For Each s As String In obj.FlagsList
@@ -743,7 +766,7 @@ Module Main
                             Console.Write("           }")
                         End If
                     Case eFileAction.fix
-                        If mode = eMode.normal Then
+                        If bp.OutputMode = BatchParametersClass.eOutputMode.normal Then
                             If RepairXmlFile(False, info.FullName, MakePretty) Then
                                 Textify.Write(String.Format(" ... {0}", eCommandType.fix.ToString.ToUpper), ConsoleColor.Green)
                             Else
@@ -751,7 +774,7 @@ Module Main
                             End If
                         Else
                             If ConvertXmlFile(info.FullName, TargetFileType, MakePretty) Then
-                                Textify.Write(String.Format(" ... {0}", eMode.convert.ToString.ToUpper))
+                                Textify.Write(String.Format(" ... {0}", BatchParametersClass.eOutputMode.convert.ToString.ToUpper))
                             Else
                                 SkippedFiles += 1
                             End If
@@ -760,18 +783,18 @@ Module Main
                     Case eFileAction.edit
                         FileEdit(info.FullName)
                     Case eFileAction.generate
-                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), mode)
+                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp)
                     Case eFileAction.compare
                         Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
                         GeneratedOutput &= String.Format("insert #CodeToDrop ([Type], [Schema], [Name]) values ('{0}','{1}','{2}');", obj.Type.GeneralType, SchemaName(RootName), RoutineName(RootName)) & vbCrLf
                     Case eFileAction.delete
                         Dim trashcan As FileIO.RecycleOption = FileIO.RecycleOption.SendToRecycleBin
-                        If mode = eMode.permanent Then
+                        If bp.OutputMode = BatchParametersClass.eOutputMode.permanent Then
                             trashcan = FileIO.RecycleOption.DeletePermanently
                         End If
                         My.Computer.FileSystem.DeleteFile(info.FullName, FileIO.UIOption.OnlyErrorDialogs, trashcan)
                 End Select
-                If Not mode = eMode.string Then
+                If Not bp.OutputMode = BatchParametersClass.eOutputMode.string Then
 
                     If git.ShowUncommitted Then
                         'Try
@@ -797,7 +820,7 @@ Module Main
         Next
 
         If FileCount > 0 Then
-            If mode = eMode.string Then
+            If bp.OutputMode = BatchParametersClass.eOutputMode.string Then
                 Textify.SayNewLine()
             End If
             Textify.SayNewLine()
@@ -808,13 +831,13 @@ Module Main
             SummaryLine = "{0} files (action:{1}, mode:{2})"
         End If
 
-        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format(SummaryLine, FileCount.ToString, Action.ToString, mode.ToString, SkippedFiles.ToString, (FileCount - SkippedFiles).ToString))
+        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format(SummaryLine, FileCount.ToString, Action.ToString, bp.OutputMode.ToString, SkippedFiles.ToString, (FileCount - SkippedFiles).ToString))
 
         If (Action = eFileAction.generate OrElse Action = eFileAction.compare) AndAlso FileCount > 0 Then
 
             If Action = eFileAction.compare Then
                 GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", MyConstants.AutocreateFilename)
-            ElseIf Not mode = eMode.test Then
+            ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                 GeneratedOutput = My.Resources.SqlRunLogCreate & GeneratedOutput
             End If
 
@@ -927,6 +950,10 @@ Module Main
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("t;test script, limit 1 object"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("e;with encryption"))
         cmd.Options.Items.Add(opt)
+        opt = New CommandCatalog.CommandSwitch("runlog;override runlog settings")
+        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("true;force on"))
+        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("false;force off"))
+        cmd.Options.Items.Add(opt)
         cmd.Examples.Add("% dbo.*")
         cmd.Examples.Add("% -alt -v dbo.* -- generate ALTER scripts for dbo.* VIEW objects")
         MyCommands.Items.Add(cmd)
@@ -979,7 +1006,6 @@ Module Main
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.UseClipboard).ToLower & ";output to clipboard"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.WildcardSpaces).ToLower & ";spaces for asterisks"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.AutoSearch).ToLower & ";auto-search expansion"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowClock).ToLower & ";clock display"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.TextEditor).ToLower & ";text editor program"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.EditNew).ToLower & ";edit on new file"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowBranch).ToLower & ";show Git branch"))
@@ -988,7 +1014,7 @@ Module Main
         cmd.Options.Items.Add(opt)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("switches;define text editor command line switches, cannot be used with any other switches"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("noswitches;clear any text editor command line switches, cannot be used with any other switches"))
-        cmd.Examples.Add(String.Format("% -u:{0} false -- turn off the clock display", (NameOf(UserSettings.ShowClock).ToLower)))
+        cmd.Examples.Add(String.Format("% -u:{0} false -- turn off beeps", (NameOf(Textify.ErrorAlert.Beep).ToLower)))
         cmd.Examples.Add(String.Format("% -u:{0} c:\windows\notepad.exe -- set Notepad as your text editor", (NameOf(UserSettings.TextEditor).ToLower)))
         cmd.Examples.Add("% -switches -- open the switch configurator")
         MyCommands.Items.Add(cmd)
@@ -1231,7 +1257,7 @@ Module Main
 
                     Dim FileLimit As Integer = Integer.MaxValue
                     Dim action As eFileAction = eFileAction.directory
-                    Dim mode As eMode = eMode.normal
+                    Dim bp As New BatchParametersClass
                     Dim targetftype As SquealerObjectType.eType = SquealerObjectType.eType.Invalid ' for object conversion only
                     Dim todayonly As Boolean = StringInList(MySwitches, "today")
                     Dim gf As New GitFlags()
@@ -1255,7 +1281,7 @@ Module Main
                         action = eFileAction.delete
 
                         If StringInList(MySwitches, "e") Then
-                            mode = eMode.permanent
+                            bp.OutputMode = BatchParametersClass.eOutputMode.permanent
                         End If
 
                         FileLimit = 20
@@ -1270,9 +1296,9 @@ Module Main
                             gf.ShowHistory = True
                         End If
                         If StringInList(MySwitches, "f") Then
-                            mode = eMode.flags
+                            bp.OutputMode = BatchParametersClass.eOutputMode.flags
                         ElseIf StringInList(MySwitches, "str") Then
-                            mode = eMode.string
+                            bp.OutputMode = BatchParametersClass.eOutputMode.string
                         End If
 
 
@@ -1288,13 +1314,20 @@ Module Main
                         action = eFileAction.generate
 
                         If StringInList(MySwitches, "m:t") Then
-                            mode = eMode.test
+                            bp.OutputMode = BatchParametersClass.eOutputMode.test
                             FileLimit = 1
                         ElseIf StringInList(MySwitches, "m:e") Then
-                            mode = eMode.encrypt
+                            bp.OutputMode = BatchParametersClass.eOutputMode.encrypt
                         ElseIf StringInList(MySwitches, "m:alt") Then
-                            mode = eMode.alter
+                            bp.OutputMode = BatchParametersClass.eOutputMode.alter
                         End If
+
+                        If StringInList(MySwitches, "runlog:true") Then
+                            bp.RunlogMode = BatchParametersClass.eRunlogMode.forceTrue
+                        ElseIf StringInList(MySwitches, "runlog:false") Then
+                            bp.RunlogMode = BatchParametersClass.eRunlogMode.forceFalse
+                        End If
+
 
                     ElseIf MyCommand.Keyword = eCommandType.fix.ToString Then
 
@@ -1310,7 +1343,7 @@ Module Main
                         End If
 
                         If Not targetftype = SquealerObjectType.eType.Invalid Then
-                            mode = eMode.convert
+                            bp.OutputMode = BatchParametersClass.eOutputMode.convert
                         End If
 
                     ElseIf MyCommand.Keyword = eCommandType.compare.ToString Then
@@ -1331,7 +1364,7 @@ Module Main
 
                     ThrowErrorIfOverFileLimit(FileLimit, SelectedFiles.Count, ignorefilelimit)
 
-                    ProcessFiles(SelectedFiles, action, mode, targetftype, gf, pretty)
+                    ProcessFiles(SelectedFiles, action, bp, targetftype, gf, pretty)
 
 
 
@@ -1506,7 +1539,7 @@ Module Main
                         Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
                         Dim gf As New GitFlags ' all defaults to false
                         Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False, gf)
-                        ProcessFiles(SelectedFiles, eFileAction.generate, eMode.normal, SquealerObjectType.eType.Invalid, New GitFlags(), False)
+                        ProcessFiles(SelectedFiles, eFileAction.generate, New BatchParametersClass, SquealerObjectType.eType.Invalid, New GitFlags(), False)
                         NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
 
                     ElseIf StringInList(MySwitches, "nuke") Then
@@ -1622,7 +1655,7 @@ Module Main
 
             Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
 
-            Textify.Write(String.Format("{1}[{0}]", ProjectName, IIf(UserSettings.ShowClock, Now.ToString("(hh:mmtt) "), "")), ConsoleColor.DarkYellow)
+            Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
             If UserSettings.ShowBranch Then
                 Textify.Write(CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
             End If
@@ -1763,6 +1796,10 @@ Module Main
 
     Private Sub SettingsView()
 
+        SettingViewOne(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep.ToString)
+        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to enable beeps, FALSE for silent operation.")
+        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, any errors displayed on the console will be accompanied by an audible beep.")
+        Textify.SayNewLine()
         SettingViewOne(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch.ToString)
         Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE for automatic wildcards, FALSE for strict filename searches.")
         Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, filename input is treated as if surrounded by asterisks (ex: *filename*).")
@@ -1770,10 +1807,6 @@ Module Main
         SettingViewOne(NameOf(UserSettings.WildcardSpaces), UserSettings.WildcardSpaces.ToString)
         Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to treat spaces as asterisks, FALSE for literal spaces.")
         Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, spaces in filenames are treated as wildcards (ex: ""foo bar"" = ""foo*bar"".")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.ShowClock), UserSettings.ShowClock.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to show the clock, FALSE to hide.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, the clock will display in the command prompt.")
         Textify.SayNewLine()
         SettingViewOne(NameOf(UserSettings.EditNew), UserSettings.EditNew.ToString)
         Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to edit new files, FALSE to create only.")
@@ -1838,11 +1871,6 @@ Module Main
                     Textify.SayError("Cannot find " & value, Textify.eSeverity.warning)
                     Textify.SayNewLine()
                 End If
-
-            Case NameOf(UserSettings.ShowClock).ToLower
-                previous = UserSettings.ShowClock.ToString
-                UserSettings.ShowClock = CBool(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.ShowClock), CBool(value))
 
             Case NameOf(UserSettings.EditNew).ToLower
                 previous = UserSettings.EditNew.ToString
@@ -2432,7 +2460,7 @@ Module Main
 #Region " Proc Generation "
 
     ' Expand one root file.
-    Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, genmode As eMode) As String
+    Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass) As String
 
         Dim oType As SquealerObjectType.eType = SquealerObjectType.Eval(XmlGetObjectType(info.FullName))
         Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
@@ -2445,7 +2473,7 @@ Module Main
 
 
         ' Pre-Code
-        If Not genmode = eMode.test Then
+        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
             Dim InPreCode As String = String.Empty
             Try
                 InPreCode = InRoot.SelectSingleNode("PreCode").InnerText
@@ -2461,7 +2489,7 @@ Module Main
 
 
         ' Drop 
-        If Not genmode = eMode.test AndAlso Not genmode = eMode.alter Then
+        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
             CodeBlocks.Add(My.Resources.SqlDrop.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName)).ToString)
         End If
 
@@ -2475,7 +2503,7 @@ Module Main
         Block = My.Resources.SqlComment.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Comments}", OutComments).Replace("{Schema}", SchemaName(RootName))
 
         ' Create
-        If Not genmode = eMode.test Then
+        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
             Dim SqlCreate As String = String.Empty
             Select Case oType
                 Case SquealerObjectType.eType.StoredProcedure
@@ -2485,7 +2513,7 @@ Module Main
                 Case SquealerObjectType.eType.View
                     SqlCreate = My.Resources.SqlCreateView
             End Select
-            If genmode = eMode.alter Then
+            If bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
                 SqlCreate = SqlCreate.Replace("create", "alter")
             End If
             Block &= SqlCreate.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName))
@@ -2505,7 +2533,7 @@ Module Main
 
             Dim def As String = Nothing
 
-            If genmode = eMode.test Then
+            If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
 
                 def = "declare @" & Parameter.Item("Name").ToString & " " & Parameter.Item("Type").ToString
                 If Parameter.Item("DefaultValue").ToString = String.Empty Then
@@ -2568,7 +2596,7 @@ Module Main
 
             Dim InColumns As DataTable = GetColumns(InXml)
 
-            If InColumns.Rows.Count > 0 AndAlso Not genmode = eMode.test Then
+            If InColumns.Rows.Count > 0 AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
 
                 Block &= vbCrLf & "(" & vbCrLf
 
@@ -2603,7 +2631,7 @@ Module Main
         ' Table (MultiStatementTableFunction)
         If oType = SquealerObjectType.eType.MultiStatementTableFunction Then
 
-            If genmode = eMode.test Then
+            If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                 Block = Block & My.Resources.SqlTableMultiStatementTableFunctionTest
             Else
                 Block = Block & My.Resources.SqlTableMultiStatementTableFunction
@@ -2656,7 +2684,7 @@ Module Main
         Dim BeginBlock As String = Nothing
         Select Case oType
             Case SquealerObjectType.eType.StoredProcedure
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = My.Resources.SqlBeginProcedureTest
                 Else
                     BeginBlock = My.Resources.SqlBeginProcedure
@@ -2664,25 +2692,25 @@ Module Main
             Case SquealerObjectType.eType.ScalarFunction
                 Dim Returns As String = Nothing
                 Returns = DirectCast(InRoot.SelectSingleNode("Returns"), Xml.XmlElement).GetAttribute("Type")
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = My.Resources.SqlBeginScalarFunctionTest.Replace("{ReturnDataType}", Returns)
                 Else
                     BeginBlock = My.Resources.SqlBeginScalarFunction.Replace("{ReturnDataType}", Returns)
                 End If
             Case SquealerObjectType.eType.InlineTableFunction
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = String.Empty
                 Else
                     BeginBlock = My.Resources.SqlBeginInlineTableFunction
                 End If
             Case SquealerObjectType.eType.MultiStatementTableFunction
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = My.Resources.SqlBeginMultiStatementTableFunctionTest
                 Else
                     BeginBlock = My.Resources.SqlBeginMultiStatementTableFunction
                 End If
             Case SquealerObjectType.eType.View
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = String.Empty
                 Else
                     BeginBlock = My.Resources.SqlBeginView
@@ -2692,7 +2720,7 @@ Module Main
 
         Dim obj As New SquealerObject(info.FullName)
         Dim WithOptions As String = obj.WithOptions
-        If genmode = eMode.encrypt Then
+        If bp.OutputMode = BatchParametersClass.eOutputMode.encrypt Then
             If String.IsNullOrWhiteSpace(obj.WithOptions) Then
                 WithOptions = "encryption"
             ElseIf Not WithOptions.ToLower.Contains("encryption") Then
@@ -2706,7 +2734,10 @@ Module Main
             BeginBlock = BeginBlock.Replace("{WithOptions}", "with " & WithOptions)
         End If
 
-        If obj.RunLog Then
+        ' Runlogging
+        Dim doRunlogging As Boolean = (obj.RunLog OrElse bp.RunlogMode = BatchParametersClass.eRunlogMode.forceTrue) AndAlso Not bp.RunlogMode = BatchParametersClass.eRunlogMode.forceFalse
+
+        If doRunlogging Then
             BeginBlock = BeginBlock.Replace("{RunLog}", My.Resources.SqlRunLog.Replace("{RuntimeParameters}", RuntimeParameters))
         Else
             BeginBlock = BeginBlock.Replace("{RunLog}", String.Empty)
@@ -2725,11 +2756,11 @@ Module Main
         ' End
         Select Case oType
             Case SquealerObjectType.eType.StoredProcedure
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     Block &= My.Resources.SqlEndProcedureTest
                 Else
                     Block &= My.Resources.SqlEndProcedure1 & ErrorLogParameters & My.Resources.SqlEndProcedure3
-                    If obj.RunLog Then
+                    If doRunlogging Then
                         Block = Block.Replace("{RuntimeParameters}", RuntimeOutputParameters)
                     Else
                         Block = Block.Replace("{RuntimeParameters}", String.Empty)
@@ -2737,13 +2768,13 @@ Module Main
 
                 End If
             Case SquealerObjectType.eType.ScalarFunction
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     Block = Block & My.Resources.SqlEndScalarFunctionTest
                 Else
                     Block = Block & My.Resources.SqlEndScalarFunction
                 End If
             Case SquealerObjectType.eType.MultiStatementTableFunction
-                If genmode = eMode.test Then
+                If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     Block = Block & My.Resources.SqlEndMultiStatementTableFunctionTest
                 Else
                     Block = Block & My.Resources.SqlEndMultiStatementTableFunction
@@ -2755,7 +2786,7 @@ Module Main
         ' Save the block.
         CodeBlocks.Add(Block)
 
-        If Not genmode = eMode.test AndAlso Not genmode = eMode.alter Then
+        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
 
             Block = String.Empty
 
@@ -2778,7 +2809,7 @@ Module Main
 
 
         ' Post-Code
-        If Not genmode = eMode.test Then
+        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
             Dim InPostCode As String = String.Empty
             Try
                 InPostCode = InRoot.SelectSingleNode("PostCode").InnerText
@@ -2797,7 +2828,7 @@ Module Main
         ExpandIndividual = String.Empty
         For Each s As String In CodeBlocks
             ExpandIndividual &= s & vbCrLf
-            If Not genmode = eMode.test Then
+            If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                 ExpandIndividual &= "go" & vbCrLf
             End If
         Next
