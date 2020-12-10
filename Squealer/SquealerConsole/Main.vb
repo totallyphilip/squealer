@@ -246,7 +246,6 @@ Module Main
         [nerfherder]
         [about]
         [contact]
-        [changelog]
         [clear]
         [config]
         [delete]
@@ -267,7 +266,6 @@ Module Main
         [connection]
         [compare]
         [test]
-        [update]
         [use]
         [usetheforce]
         make
@@ -1044,16 +1042,9 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' about
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"About this program."}, CommandCatalog.eCommandCategory.other)
-        MyCommands.Items.Add(cmd)
-
-        ' check for updates
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.update.ToString}, {"Check for updates."}, CommandCatalog.eCommandCategory.other)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("get;download the latest version"))
-        MyCommands.Items.Add(cmd)
-
-        ' change log
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.changelog.ToString}, {"View the change log."}, CommandCatalog.eCommandCategory.other)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"Check for updates and display program information."}, CommandCatalog.eCommandCategory.other)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("download;download latest version"))
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("changelog;display the changelog"))
         MyCommands.Items.Add(cmd)
 
         ' exit
@@ -1183,18 +1174,25 @@ Module Main
 
                     AboutInfo()
 
-
-                ElseIf MyCommand.Keyword = eCommandType.update.ToString Then
-
-                    If StringInList(MySwitches, "get") Then
+                    If StringInList(MySwitches, "download") Then
+                        Textify.SayBulletLine(Textify.eBullet.Hash, "Opening remote file...")
+                        Console.WriteLine()
                         Dim wc As New Net.WebClient
                         Dim fn As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\Squealer.zip"
                         wc.DownloadFile(s3ZipFile, fn)
-                        Textify.SayBulletLine(Textify.eBullet.Hash, "File downloaded to " & fn)
+                        Textify.SayBulletLine(Textify.eBullet.Hash, "File downloaded to " & fn, ConsoleColor.White)
                         Textify.SayNewLine()
-                    Else
-                        CheckS3(False)
+                        Textify.SayBulletLine(Textify.eBullet.Hash, "Opening local folder...")
+                        Console.WriteLine()
+                        OpenExplorer("Squealer.zip", My.Computer.FileSystem.SpecialDirectories.MyDocuments)
                     End If
+
+                    If StringInList(MySwitches, "changelog") Then
+                        ReadChangeLog()
+                    End If
+
+
+
 
 
                 ElseIf MyCommand.Keyword = eCommandType.contact.ToString Then 'AndAlso Command.SwitchesOK(CommandSwitches) AndAlso CommandParameters.Count = 0 Then
@@ -1204,9 +1202,6 @@ Module Main
                     End With
 
 
-                ElseIf MyCommand.Keyword = eCommandType.[changelog].ToString Then
-
-                    ReadChangeLog()
 
 
                 ElseIf MyCommand.Keyword = eCommandType.clear.ToString Then
@@ -1550,6 +1545,19 @@ Module Main
 
 
                 ElseIf MyCommand.Keyword = "test" Then
+
+                    Dim av As New Version("1.45.3.2")
+
+                    'Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("A new version of {0} is available. Use {1} -{2} to download.", My.Application.Info.ProductName, eCommandType.update.ToString.ToUpper, MyCommands.FindCommand(eCommandType.update.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
+                    'Console.BackgroundColor = ConsoleColor.Black
+                    'Textify.SayBulletLine(Textify.eBullet.Arrow, s3ZipFile)
+                    'Console.WriteLine()
+                    'Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Latest version: {0}", av.ToString))
+                    'Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Your version: {0}", My.Application.Info.Version.ToString))
+
+                    Console.WriteLine()
+                    Console.WriteLine()
+                    Console.WriteLine()
 
                     For Each s As String In GitChangedFiles(WorkingFolder, "git status -s", "*", True).FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
                         Textify.WriteLine(s)
@@ -3060,6 +3068,7 @@ Module Main
         Textify.SayNewLine()
         Textify.SayBulletLine(Textify.eBullet.Hash, "SQL formatting by https://github.com/TaoK/PoorMansTSqlFormatter")
         Textify.SayNewLine()
+        CheckS3(False)
         Textify.SayBulletLine(Textify.eBullet.Hash, "May the Force be with you.")
         Textify.SayNewLine()
     End Sub
@@ -3773,14 +3782,15 @@ Module Main
                 Dim av As New Version(reader.ReadToEnd)
 
                 If My.Application.Info.Version.CompareTo(av) < 0 Then
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("{0} version {1} is available. Use {2} -{3} to download.", My.Application.Info.ProductName, av.ToString, eCommandType.update.ToString.ToUpper, MyCommands.FindCommand(eCommandType.update.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
+                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("A new version of {0} is available. Use {1} -{2} to download.", My.Application.Info.ProductName, eCommandType.about.ToString.ToUpper, MyCommands.FindCommand(eCommandType.about.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
                     Console.BackgroundColor = ConsoleColor.Black
                     Textify.SayBulletLine(Textify.eBullet.Arrow, s3ZipFile)
+                    Console.WriteLine()
                 ElseIf My.Application.Info.Version.CompareTo(av) = 0 AndAlso Not silent Then
-                    Textify.SayBullet(Textify.eBullet.Hash, String.Format("You have the latest version of {0}.", My.Application.Info.ProductName))
-                ElseIf My.Application.Info.Version.CompareTo(av) > 0 AndAlso Not silent Then
+                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of {0}.", My.Application.Info.ProductName), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
+                ElseIf My.Application.Info.Version.CompareTo(av) < 0 OrElse (My.Application.Info.Version.CompareTo(av) > 0 AndAlso Not silent) Then
+                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Latest version: {0}", av.ToString))
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Your version: {0}", My.Application.Info.Version.ToString))
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Public version: {0}", av.ToString))
                 End If
 
             End Using

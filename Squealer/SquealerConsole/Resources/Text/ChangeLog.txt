@@ -230,5 +230,10 @@
 
 
 
+{0}2020-12-10{1}
+
+{2}Added GENERATE -RUNLOG switch to override runlog settings of individual stored procedures.
+
+{2}Merged several functions into the ABOUT command.
 
 
