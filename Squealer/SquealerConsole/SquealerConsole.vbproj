@@ -126,6 +126,12 @@
   <ItemGroup>
     <Compile Include="Configger.vb" />
     <Compile Include="CommandCatalog.vb" />
+    <Compile Include="SquealerSettings.Designer.vb">
+      <DependentUpon>SquealerSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SquealerSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ObjectType.vb" />
     <Compile Include="Textify.vb" />
     <Compile Include="ForceCommand.vb" />
@@ -153,6 +159,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SquealerSettings.resx">
+      <DependentUpon>SquealerSettings.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

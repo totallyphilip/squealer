@@ -998,23 +998,23 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' setting
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.setting.ToString, "set"}, {"Display or change application settings."}, CommandCatalog.eCommandCategory.other, "<new setting>", False)
-        opt = New CommandCatalog.CommandSwitch("u;update setting, cannot be used with any other switches")
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(Textify.ErrorAlert.Beep).ToLower & ";beep on error"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.UseClipboard).ToLower & ";output to clipboard"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.WildcardSpaces).ToLower & ";spaces for asterisks"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.AutoSearch).ToLower & ";auto-search expansion"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.TextEditor).ToLower & ";text editor program"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.EditNew).ToLower & ";edit on new file"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowBranch).ToLower & ";show Git branch"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.RecentFolders).ToLower & ";maximum recent folders"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.DirStyle).ToLower & ";directory style"))
-        cmd.Options.Items.Add(opt)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("switches;define text editor command line switches, cannot be used with any other switches"))
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("noswitches;clear any text editor command line switches, cannot be used with any other switches"))
-        cmd.Examples.Add(String.Format("% -u:{0} false -- turn off beeps", (NameOf(Textify.ErrorAlert.Beep).ToLower)))
-        cmd.Examples.Add(String.Format("% -u:{0} c:\windows\notepad.exe -- set Notepad as your text editor", (NameOf(UserSettings.TextEditor).ToLower)))
-        cmd.Examples.Add("% -switches -- open the switch configurator")
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.setting.ToString, "set"}, {"Display application settings."}, CommandCatalog.eCommandCategory.other)
+        'opt = New CommandCatalog.CommandSwitch("u;update setting, cannot be used with any other switches")
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(Textify.ErrorAlert.Beep).ToLower & ";beep on error"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.UseClipboard).ToLower & ";output to clipboard"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.WildcardSpaces).ToLower & ";spaces for asterisks"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.AutoSearch).ToLower & ";auto-search expansion"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.TextEditor).ToLower & ";text editor program"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.EditNew).ToLower & ";edit on new file"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowBranch).ToLower & ";show Git branch"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.RecentFolders).ToLower & ";maximum recent folders"))
+        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.DirStyle).ToLower & ";directory style"))
+        'cmd.Options.Items.Add(opt)
+        'cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("switches;define text editor command line switches, cannot be used with any other switches"))
+        'cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("noswitches;clear any text editor command line switches, cannot be used with any other switches"))
+        'cmd.Examples.Add(String.Format("% -u:{0} false -- turn off beeps", (NameOf(Textify.ErrorAlert.Beep).ToLower)))
+        'cmd.Examples.Add(String.Format("% -u:{0} c:\windows\notepad.exe -- set Notepad as your text editor", (NameOf(UserSettings.TextEditor).ToLower)))
+        'cmd.Examples.Add("% -switches -- open the switch configurator")
         MyCommands.Items.Add(cmd)
 
         ' connection string
@@ -1426,15 +1426,18 @@ Module Main
                     Console.WriteLine(My.Resources.RaiseErrors)
 
 
-                ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso MySwitches.Count = 0 AndAlso String.IsNullOrWhiteSpace(UserInput) Then
+                    'ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso MySwitches.Count = 0 AndAlso String.IsNullOrWhiteSpace(UserInput) Then
 
-                    SettingsView()
+                ElseIf MyCommand.Keyword = eCommandType.setting.ToString Then
+
+                    'SettingsView()
+                    ShowSettingsDialog()
 
 
-                ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso Not String.IsNullOrWhiteSpace(UserInput) Then
+                    'ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso Not String.IsNullOrWhiteSpace(UserInput) Then
 
-                    SettingChange(MySwitches(0).Split(New Char() {":"c})(1), UserInput)
-                    Textify.SayNewLine()
+                    '    SettingChange(MySwitches(0).Split(New Char() {":"c})(1), UserInput)
+                    '    Textify.SayNewLine()
 
 
                 ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso StringInList(MySwitches, "switches") Then
@@ -1544,73 +1547,9 @@ Module Main
                     End If
 
 
-                ElseIf MyCommand.Keyword = "test" Then
-
-                    Dim av As New Version("1.45.3.2")
-
-                    'Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("A new version of {0} is available. Use {1} -{2} to download.", My.Application.Info.ProductName, eCommandType.update.ToString.ToUpper, MyCommands.FindCommand(eCommandType.update.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
-                    'Console.BackgroundColor = ConsoleColor.Black
-                    'Textify.SayBulletLine(Textify.eBullet.Arrow, s3ZipFile)
-                    'Console.WriteLine()
-                    'Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Latest version: {0}", av.ToString))
-                    'Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Your version: {0}", My.Application.Info.Version.ToString))
-
-                    Console.WriteLine()
-                    Console.WriteLine()
-                    Console.WriteLine()
-
-                    For Each s As String In GitChangedFiles(WorkingFolder, "git status -s", "*", True).FindAll(Function(x) x.EndsWith(MyConstants.ObjectFileExtension))
-                        Textify.WriteLine(s)
-                    Next
+                ElseIf MyCommand.Keyword = "test" Then 'footest
 
 
-
-
-
-
-                    ' footest
-
-
-                    'Textify.SayNewLine()
-                    'Textify.SayNewLine()
-                    'Dim command As String = "cmd.exe"
-                    'Dim arguments As String = String.Format("/c git symbolic-ref HEAD")
-                    'Textify.Write(String.Format("{0} {1}", command, arguments))
-                    'Dim ps As New ProcessStartInfo
-                    'ps.WorkingDirectory = WorkingFolder
-                    'ps.FileName = command
-                    'ps.Arguments = arguments
-                    'ps.WindowStyle = ProcessWindowStyle.Hidden
-                    'Dim oProcess As New Process()
-                    'ps.RedirectStandardOutput = True
-                    'ps.UseShellExecute = False
-                    'oProcess.StartInfo = ps
-                    'oProcess.Start()
-                    'Textify.SayNewLine()
-                    'Textify.SayNewLine()
-
-                    'Dim sOutput As String
-                    'Using oStreamReader As System.IO.StreamReader = oProcess.StandardOutput
-                    '    sOutput = oStreamReader.ReadToEnd()
-                    'End Using
-                    'Console.WriteLine(sOutput)
-
-                    'Textify.SayNewLine()
-                    'Textify.SayNewLine()
-
-
-
-                    Textify.SayBullet(Textify.eBullet.Hash, "--for debugging only - hidden command--")
-                    Textify.SayBullet(Textify.eBullet.Hash, "random guid: " & Guid.NewGuid.ToString)
-
-                    Dim fileName$ = System.Reflection.Assembly.GetExecutingAssembly().Location
-                    'Dim fileName2$ = Application.ExecutablePath ' this grabs the filename too,
-                    ' but #2 ends with ".EXE" while the 1st ends with ".exe" in my Windows 7.
-                    ' either fileName or fileName2 works for me.
-                    Dim fvi As FileVersionInfo = FileVersionInfo.GetVersionInfo(fileName)
-                    ' now this fvi has all the properties for the FileVersion information.
-                    Dim fvAsString$ = fvi.FileVersion ' but other useful properties exist too.
-                    'Console.WriteLine(fvAsString$)
 
 
 
@@ -1623,18 +1562,6 @@ Module Main
                         Console.WriteLine()
                     End If
 
-
-                    'dbcc opentran (odindev15) with tableresults
-
-                    'Using DbTables As SqlClient.SqlConnection = New SqlClient.SqlConnection(GetConnectionString(WorkingFolder))
-                    '    DbTables.Open()
-                    '    Dim TableReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand("dbcc opentran with tableresults", DbTables).ExecuteReader
-                    '    If TableReader.HasRows Then
-                    '        Console.WriteLine("uncommitted transactions")
-                    '    Else
-                    '        Console.WriteLine("all good")
-                    '    End If
-                    'End Using
 
 
 
@@ -1802,120 +1729,162 @@ Module Main
         Console.WriteLine()
     End Sub
 
-    Private Sub SettingsView()
+    Private Sub ShowSettingsDialog()
 
-        SettingViewOne(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to enable beeps, FALSE for silent operation.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, any errors displayed on the console will be accompanied by an audible beep.")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE for automatic wildcards, FALSE for strict filename searches.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, filename input is treated as if surrounded by asterisks (ex: *filename*).")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.WildcardSpaces), UserSettings.WildcardSpaces.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to treat spaces as asterisks, FALSE for literal spaces.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, spaces in filenames are treated as wildcards (ex: ""foo bar"" = ""foo*bar"".")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.EditNew), UserSettings.EditNew.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to edit new files, FALSE to create only.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, new files will automatically be opened in the configured text editor.")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.UseClipboard), UserSettings.UseClipboard.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to save output to clipboard, FALSE to open in text editor.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, output will be copied directly to the Windows clipboard instead of into a temp file.")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Specify the full path and file name of your preferred text editor.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "The path may be omitted if the executable is in your Windows environment search path.")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.TextEditorSwitches), UserSettings.TextEditorSwitches)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Specify any switches (optional) you want to pass to your text editor.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, UserSettings.TextEditor & " " & PadRightIfNotEmpty(UserSettings.TextEditorSwitches) & "<FileName>")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.ShowBranch), UserSettings.ShowBranch.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to show the branch, FALSE to hide.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, the checked-out Git branch will display in the command prompt.")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set the maximum number of recent folders to remember.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, "When set to 0, no folders will be remembered.")
-        Textify.SayNewLine()
-        SettingViewOne(NameOf(UserSettings.DirStyle), UserSettings.DirStyle.ToString)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Set the directory style.")
-        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Available styles are '{0}', '{1}', and '{2}'.", eDirectoryStyle.compact.ToString, eDirectoryStyle.full.ToString, eDirectoryStyle.symbolic.ToString))
-        Textify.SayNewLine()
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Try: " & eCommandType.help.ToString.ToUpper & " " & eCommandType.setting.ToString.ToUpper)
-        Textify.SayNewLine()
-
-    End Sub
-
-    Private Sub SettingChange(ByVal name As String, ByVal value As String)
-
-        Dim previous As String = String.Empty
-
-        Select Case name.ToLower
-
-            Case NameOf(Textify.ErrorAlert.Beep).ToLower
-                previous = Textify.ErrorAlert.Beep.ToString
-                Textify.ErrorAlert.Beep = CBool(value)
-                My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), CBool(value))
-
-            Case NameOf(UserSettings.DirStyle).ToLower
-                previous = UserSettings.DirStyle.ToString
-                If ValidDirectoryStyle(value) Then
-                    UserSettings.DirStyle = value
-                    My.Configger.SaveSetting(NameOf(UserSettings.DirStyle), value)
-                Else
-                    Textify.SayError("Invalid directory style: " & value, Textify.eSeverity.warning)
-                    Textify.SayNewLine()
-                    value = previous
-                End If
-
-            Case NameOf(UserSettings.TextEditor).ToLower
-                previous = UserSettings.TextEditor
-                My.Configger.SaveSetting(name, value)
-                UserSettings.TextEditor = value
-                If Not My.Computer.FileSystem.FileExists(value) Then
-                    Textify.SayError("Cannot find " & value, Textify.eSeverity.warning)
-                    Textify.SayNewLine()
-                End If
-
-            Case NameOf(UserSettings.EditNew).ToLower
-                previous = UserSettings.EditNew.ToString
-                UserSettings.EditNew = CBool(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.EditNew), CBool(value))
-
-            Case NameOf(UserSettings.RecentFolders).ToLower
-                previous = UserSettings.RecentFolders.ToString
-                UserSettings.RecentFolders = CInt(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), CInt(value))
-
-            Case NameOf(UserSettings.WildcardSpaces).ToLower
-                previous = UserSettings.WildcardSpaces.ToString
-                UserSettings.WildcardSpaces = CBool(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.WildcardSpaces), CBool(value))
-
-            Case NameOf(UserSettings.ShowBranch).ToLower
-                previous = UserSettings.ShowBranch.ToString
-                UserSettings.ShowBranch = CBool(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.ShowBranch), CBool(value))
-
-            Case NameOf(UserSettings.AutoSearch).ToLower
-                previous = UserSettings.AutoSearch.ToString
-                UserSettings.AutoSearch = CBool(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), CBool(value))
-
-            Case NameOf(UserSettings.UseClipboard).ToLower
-                previous = UserSettings.UseClipboard.ToString
-                UserSettings.UseClipboard = CBool(value)
-                My.Configger.SaveSetting(NameOf(UserSettings.UseClipboard), CBool(value))
-
+        Dim f As New SquealerSettings
+        f.txtTextEditorProgram.Text = UserSettings.TextEditor
+        f.updnFolderSaves.Value = UserSettings.RecentFolders
+        f.txtTextEditorSwitches.Text = UserSettings.TextEditorSwitches
+        f.optUseWildcards.Checked = UserSettings.AutoSearch
+        f.optEditNewFiles.Checked = UserSettings.EditNew
+        f.optGenerateToClipboard.Checked = UserSettings.UseClipboard
+        f.optShowGitBranch.Checked = UserSettings.ShowBranch
+        f.optSpacesAreWildcards.Checked = UserSettings.WildcardSpaces
+        f.optBeep.Checked = Textify.ErrorAlert.Beep
+        Select Case UserSettings.DirStyle
+            Case eDirectoryStyle.compact.ToString
+                f.rbCompact.Checked = True
+            Case eDirectoryStyle.full.ToString
+                f.rbFull.Checked = True
+            Case eDirectoryStyle.symbolic.ToString
+                f.rbSymbolic.Checked = True
         End Select
 
-        Textify.SayBulletLine(Textify.eBullet.Hash, "old setting: " & previous)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "new setting: " & value)
+        f.ShowDialog()
+
+        UserSettings.TextEditor = f.txtTextEditorProgram.Text
+        UserSettings.RecentFolders = CInt(f.updnFolderSaves.Value)
+        UserSettings.TextEditorSwitches = f.txtTextEditorSwitches.Text
+        UserSettings.AutoSearch = f.optUseWildcards.Checked
+        UserSettings.EditNew = f.optEditNewFiles.Checked
+        UserSettings.UseClipboard = f.optGenerateToClipboard.Checked
+        UserSettings.ShowBranch = f.optShowGitBranch.Checked
+        UserSettings.WildcardSpaces = f.optSpacesAreWildcards.Checked
+        Textify.ErrorAlert.Beep = f.optBeep.Checked
+        If f.rbCompact.Checked Then
+            UserSettings.DirStyle = eDirectoryStyle.compact.ToString
+        ElseIf f.rbFull.Checked Then
+            UserSettings.DirStyle = eDirectoryStyle.full.ToString
+        Else
+            UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString
+        End If
 
     End Sub
+
+    'Private Sub SettingsView()
+
+    '    SettingViewOne(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to enable beeps, FALSE for silent operation.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, any errors displayed on the console will be accompanied by an audible beep.")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE for automatic wildcards, FALSE for strict filename searches.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, filename input is treated as if surrounded by asterisks (ex: *filename*).")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.WildcardSpaces), UserSettings.WildcardSpaces.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to treat spaces as asterisks, FALSE for literal spaces.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, spaces in filenames are treated as wildcards (ex: ""foo bar"" = ""foo*bar"".")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.EditNew), UserSettings.EditNew.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to edit new files, FALSE to create only.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, new files will automatically be opened in the configured text editor.")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.UseClipboard), UserSettings.UseClipboard.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to save output to clipboard, FALSE to open in text editor.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, output will be copied directly to the Windows clipboard instead of into a temp file.")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Specify the full path and file name of your preferred text editor.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "The path may be omitted if the executable is in your Windows environment search path.")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.TextEditorSwitches), UserSettings.TextEditorSwitches)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Specify any switches (optional) you want to pass to your text editor.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, UserSettings.TextEditor & " " & PadRightIfNotEmpty(UserSettings.TextEditorSwitches) & "<FileName>")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.ShowBranch), UserSettings.ShowBranch.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set TRUE to show the branch, FALSE to hide.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to true, the checked-out Git branch will display in the command prompt.")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set the maximum number of recent folders to remember.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "When set to 0, no folders will be remembered.")
+    '    Textify.SayNewLine()
+    '    SettingViewOne(NameOf(UserSettings.DirStyle), UserSettings.DirStyle.ToString)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Set the directory style.")
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Available styles are '{0}', '{1}', and '{2}'.", eDirectoryStyle.compact.ToString, eDirectoryStyle.full.ToString, eDirectoryStyle.symbolic.ToString))
+    '    Textify.SayNewLine()
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "Try: " & eCommandType.help.ToString.ToUpper & " " & eCommandType.setting.ToString.ToUpper)
+    '    Textify.SayNewLine()
+
+    'End Sub
+
+    'Private Sub SettingChange(ByVal name As String, ByVal value As String)
+
+    '    Dim previous As String = String.Empty
+
+    '    Select Case name.ToLower
+
+    '        Case NameOf(Textify.ErrorAlert.Beep).ToLower
+    '            previous = Textify.ErrorAlert.Beep.ToString
+    '            Textify.ErrorAlert.Beep = CBool(value)
+    '            My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), CBool(value))
+
+    '        Case NameOf(UserSettings.DirStyle).ToLower
+    '            previous = UserSettings.DirStyle.ToString
+    '            If ValidDirectoryStyle(value) Then
+    '                UserSettings.DirStyle = value
+    '                My.Configger.SaveSetting(NameOf(UserSettings.DirStyle), value)
+    '            Else
+    '                Textify.SayError("Invalid directory style: " & value, Textify.eSeverity.warning)
+    '                Textify.SayNewLine()
+    '                value = previous
+    '            End If
+
+    '        Case NameOf(UserSettings.TextEditor).ToLower
+    '            previous = UserSettings.TextEditor
+    '            My.Configger.SaveSetting(name, value)
+    '            UserSettings.TextEditor = value
+    '            If Not My.Computer.FileSystem.FileExists(value) Then
+    '                Textify.SayError("Cannot find " & value, Textify.eSeverity.warning)
+    '                Textify.SayNewLine()
+    '            End If
+
+    '        Case NameOf(UserSettings.EditNew).ToLower
+    '            previous = UserSettings.EditNew.ToString
+    '            UserSettings.EditNew = CBool(value)
+    '            My.Configger.SaveSetting(NameOf(UserSettings.EditNew), CBool(value))
+
+    '        Case NameOf(UserSettings.RecentFolders).ToLower
+    '            previous = UserSettings.RecentFolders.ToString
+    '            UserSettings.RecentFolders = CInt(value)
+    '            My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), CInt(value))
+
+    '        Case NameOf(UserSettings.WildcardSpaces).ToLower
+    '            previous = UserSettings.WildcardSpaces.ToString
+    '            UserSettings.WildcardSpaces = CBool(value)
+    '            My.Configger.SaveSetting(NameOf(UserSettings.WildcardSpaces), CBool(value))
+
+    '        Case NameOf(UserSettings.ShowBranch).ToLower
+    '            previous = UserSettings.ShowBranch.ToString
+    '            UserSettings.ShowBranch = CBool(value)
+    '            My.Configger.SaveSetting(NameOf(UserSettings.ShowBranch), CBool(value))
+
+    '        Case NameOf(UserSettings.AutoSearch).ToLower
+    '            previous = UserSettings.AutoSearch.ToString
+    '            UserSettings.AutoSearch = CBool(value)
+    '            My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), CBool(value))
+
+    '        Case NameOf(UserSettings.UseClipboard).ToLower
+    '            previous = UserSettings.UseClipboard.ToString
+    '            UserSettings.UseClipboard = CBool(value)
+    '            My.Configger.SaveSetting(NameOf(UserSettings.UseClipboard), CBool(value))
+
+    '    End Select
+
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "old setting: " & previous)
+    '    Textify.SayBulletLine(Textify.eBullet.Hash, "new setting: " & value)
+
+    'End Sub
 
 #End Region
 
