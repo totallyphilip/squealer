@@ -230,7 +230,9 @@
 
 
 
-{0}2020-12-10{1}
+{0}2020-12-11{1}
+
+{2}Settings are WAY easier to understand now! Type SET command and see for yourself!
 
 {2}Added GENERATE -RUNLOG switch to override runlog settings of individual stored procedures.
 
