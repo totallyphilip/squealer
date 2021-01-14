@@ -2822,7 +2822,7 @@ Module Main
         For Each Replacement As DataRow In StringReplacements.Select() '.Select("")
             ExpandIndividual = ExpandIndividual.Replace(Replacement.Item("Original").ToString, Replacement.Item("Replacement").ToString)
         Next
-        ExpandIndividual = ExpandIndividual.Replace("{THIS}", RoutineName(RootName))
+        ExpandIndividual = ExpandIndividual.Replace("{THIS}", String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
 
 
     End Function
