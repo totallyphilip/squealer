@@ -239,3 +239,8 @@
 {2}Merged several functions into the ABOUT command.
 
 
+
+{0}2021-01-28{1}
+
+{2}Settings were not being saved correctly. Fixed.
+

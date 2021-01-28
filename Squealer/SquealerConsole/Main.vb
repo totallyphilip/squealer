@@ -1769,6 +1769,20 @@ Module Main
             UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString
         End If
 
+
+
+        My.Configger.SaveSetting(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
+        My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders)
+        My.Configger.SaveSetting(NameOf(UserSettings.TextEditorSwitches), UserSettings.TextEditorSwitches)
+        My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch)
+        My.Configger.SaveSetting(NameOf(UserSettings.EditNew), UserSettings.EditNew)
+        My.Configger.SaveSetting(NameOf(UserSettings.UseClipboard), UserSettings.UseClipboard)
+        My.Configger.SaveSetting(NameOf(UserSettings.ShowBranch), UserSettings.ShowBranch)
+        My.Configger.SaveSetting(NameOf(UserSettings.WildcardSpaces), UserSettings.WildcardSpaces)
+        My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
+        My.Configger.SaveSetting(NameOf(UserSettings.DirStyle), UserSettings.DirStyle)
+
+
     End Sub
 
     'Private Sub SettingsView()
