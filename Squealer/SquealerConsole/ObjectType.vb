@@ -9,6 +9,12 @@
         Invalid
     End Enum
 
+    Public Enum eRunLogging
+        [True]
+        [False]
+        Ignore
+    End Enum
+
     Public Enum eShortType
         p ' stored procedure
         fn ' scalar function
@@ -258,12 +264,12 @@ Public Class SquealerObject
         End Set
     End Property
 
-    Private _RunLog As Boolean
-    Public Property RunLog As Boolean
+    Private _RunLog As SquealerObjectType.eRunLogging
+    Public Property RunLog As SquealerObjectType.eRunLogging
         Get
             Return _RunLog
         End Get
-        Set(value As Boolean)
+        Set(value As SquealerObjectType.eRunLogging)
             _RunLog = value
         End Set
     End Property
@@ -295,7 +301,7 @@ Public Class SquealerObject
         _Type.LongType = SquealerObjectType.eType.Invalid
         _Flags = String.Empty
         _WithOptions = String.Empty
-        _RunLog = False
+        _RunLog = SquealerObjectType.eRunLogging.False
 
         Dim Reader As New Xml.XmlDocument
 
@@ -322,7 +328,11 @@ Public Class SquealerObject
         End Try
 
         Try
-            _RunLog = CBool(Node.Attributes("RunLog").Value)
+            Dim s As String = Node.Attributes("RunLog").Value.Trim
+            s = Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(s)
+
+            _RunLog = DirectCast([Enum].Parse(GetType(SquealerObjectType.eRunLogging), s), SquealerObjectType.eRunLogging)
+            '_RunLog = CBool(Node.Attributes("RunLog").Value)
         Catch ex As Exception
         End Try
 

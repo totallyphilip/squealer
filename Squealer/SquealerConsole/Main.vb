@@ -747,8 +747,8 @@ Module Main
                     Textify.Write(symbol, ConsoleColor.Green)
                 End If
 
-                If obj.Type.ShortType = SquealerObjectType.eShortType.p AndAlso info.Name.ToLower.Contains("delete") AndAlso Not obj.RunLog Then
-                    Textify.Write(String.Format(" <{0} is off>", NameOf(obj.RunLog)), ConsoleColor.Red)
+                If obj.Type.ShortType = SquealerObjectType.eShortType.p AndAlso info.Name.ToLower.Contains("delete") AndAlso obj.RunLog = SquealerObjectType.eRunLogging.False Then
+                    Textify.Write(String.Format(" <{0}={1}>", NameOf(obj.RunLog), obj.RunLog.ToString), ConsoleColor.Red)
                     RunLogWarnings += 1
                 End If
 
@@ -842,7 +842,7 @@ Module Main
 
         If RunLogWarnings > 0 Then
             Textify.SayNewLine()
-            Textify.WriteLine(String.Format("It looks like {0} delete proc(s) should have runlogging enabled.", RunLogWarnings), ConsoleColor.Red)
+            Textify.WriteLine(String.Format("It looks like {0} delete proc(s) should have runlogging enabled. Edit the proc(s) and set runlogging to ""{1}"" to enable, or ""{2}"" to suppress this warning.", RunLogWarnings, SquealerObjectType.eRunLogging.True.ToString, SquealerObjectType.eRunLogging.Ignore.ToString), ConsoleColor.Red)
         End If
 
 
@@ -2741,7 +2741,7 @@ Module Main
         End If
 
         ' Runlogging
-        Dim doRunlogging As Boolean = (obj.RunLog OrElse bp.RunlogMode = BatchParametersClass.eRunlogMode.forceTrue) AndAlso Not bp.RunlogMode = BatchParametersClass.eRunlogMode.forceFalse
+        Dim doRunlogging As Boolean = (obj.RunLog = SquealerObjectType.eRunLogging.True OrElse bp.RunlogMode = BatchParametersClass.eRunlogMode.forceTrue) AndAlso Not bp.RunlogMode = BatchParametersClass.eRunlogMode.forceFalse
 
         If doRunlogging Then
             BeginBlock = BeginBlock.Replace("{RunLog}", My.Resources.SqlRunLog.Replace("{RuntimeParameters}", RuntimeParameters))
