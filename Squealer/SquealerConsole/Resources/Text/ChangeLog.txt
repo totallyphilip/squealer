@@ -244,3 +244,9 @@
 
 {2}Settings were not being saved correctly. Fixed.
 
+
+
+{0}2021-07-22{1}
+
+{2}Added a reminder to enable runlogging on any proc with "delete" in the name.
+

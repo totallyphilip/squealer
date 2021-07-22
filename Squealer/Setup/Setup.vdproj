@@ -33,12 +33,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_11C87E42FC97D90A3F4D7C9454D036D1"
-        "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1495A3E24CB705A5EA6C6704BD9F75AF"
         "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
         "MsmSig" = "8:_UNDEFINED"
@@ -76,7 +70,7 @@
         "Entry"
         {
         "MsmKey" = "8:_26300E2B382FAFEB9091120D0C6C2730"
-        "OwnerKey" = "8:_11C87E42FC97D90A3F4D7C9454D036D1"
+        "OwnerKey" = "8:_456C9AE8C4B1B9EF2CC1FC4174A63428"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -105,6 +99,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_456C9AE8C4B1B9EF2CC1FC4174A63428"
+        "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_46D127F8F3565A74750C141082A3DF84"
         "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
         "MsmSig" = "8:_UNDEFINED"
@@ -112,7 +112,7 @@
         "Entry"
         {
         "MsmKey" = "8:_46D127F8F3565A74750C141082A3DF84"
-        "OwnerKey" = "8:_11C87E42FC97D90A3F4D7C9454D036D1"
+        "OwnerKey" = "8:_456C9AE8C4B1B9EF2CC1FC4174A63428"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -183,6 +183,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6DFCFF2D26E759045752D507A3C33F61"
+        "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_79890B136A78B7A96B078DA527DAE223"
         "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
         "MsmSig" = "8:_UNDEFINED"
@@ -232,7 +238,7 @@
         "Entry"
         {
         "MsmKey" = "8:_9E8615B0E5EC0E645CBF3A4B31D1B1AF"
-        "OwnerKey" = "8:_11C87E42FC97D90A3F4D7C9454D036D1"
+        "OwnerKey" = "8:_456C9AE8C4B1B9EF2CC1FC4174A63428"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -250,13 +256,7 @@
         "Entry"
         {
         "MsmKey" = "8:_A11BB9FD97BF2E43BF2526FD6150B42F"
-        "OwnerKey" = "8:_11C87E42FC97D90A3F4D7C9454D036D1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A2F965C0DE42675577A39E73B500DBE5"
-        "OwnerKey" = "8:_6733BD3A74D04579B8ECEBB925119E20"
+        "OwnerKey" = "8:_456C9AE8C4B1B9EF2CC1FC4174A63428"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -340,7 +340,7 @@
         "Entry"
         {
         "MsmKey" = "8:_E08036423206FC5171C0C427E98ECC12"
-        "OwnerKey" = "8:_11C87E42FC97D90A3F4D7C9454D036D1"
+        "OwnerKey" = "8:_456C9AE8C4B1B9EF2CC1FC4174A63428"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -394,7 +394,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A2F965C0DE42675577A39E73B500DBE5"
+        "OwnerKey" = "8:_6DFCFF2D26E759045752D507A3C33F61"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -897,37 +897,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_11C87E42FC97D90A3F4D7C9454D036D1"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PoorMansTSqlFormatterNetStandardLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_11C87E42FC97D90A3F4D7C9454D036D1"
-                    {
-                    "Name" = "8:PoorMansTSqlFormatterNetStandardLib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:PoorMansTSqlFormatterNetStandardLib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_00E97A53D0334A729EBD730773E00C1D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1495A3E24CB705A5EA6C6704BD9F75AF"
             {
             "AssemblyRegister" = "3:1"
@@ -1210,6 +1179,37 @@
                     }
                 }
             "SourcePath" = "8:System.Net.NetworkInformation.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_00E97A53D0334A729EBD730773E00C1D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_456C9AE8C4B1B9EF2CC1FC4174A63428"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:PoorMansTSqlFormatterNetStandardLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_456C9AE8C4B1B9EF2CC1FC4174A63428"
+                    {
+                    "Name" = "8:PoorMansTSqlFormatterNetStandardLib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:PoorMansTSqlFormatterNetStandardLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_00E97A53D0334A729EBD730773E00C1D"
@@ -1568,6 +1568,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6DFCFF2D26E759045752D507A3C33F61"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_6DFCFF2D26E759045752D507A3C33F61"
+                    {
+                    "Name" = "8:GoldLeader.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:GoldLeader.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_00E97A53D0334A729EBD730773E00C1D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_79890B136A78B7A96B078DA527DAE223"
             {
             "AssemblyRegister" = "3:1"
@@ -1861,37 +1892,6 @@
                     }
                 }
             "SourcePath" = "8:System.Linq.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_00E97A53D0334A729EBD730773E00C1D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A2F965C0DE42675577A39E73B500DBE5"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_A2F965C0DE42675577A39E73B500DBE5"
-                    {
-                    "Name" = "8:GoldLeader.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:GoldLeader.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_00E97A53D0334A729EBD730773E00C1D"
@@ -2596,15 +2596,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer 2018"
-        "ProductCode" = "8:{79D631EB-AC08-4EDC-BB7F-BC24A391F502}"
-        "PackageCode" = "8:{13AE7F33-7144-4BD8-BD26-B24EB9B724D6}"
+        "ProductCode" = "8:{9DDF2522-9213-4E43-A6F5-F382FF20A503}"
+        "PackageCode" = "8:{523F007B-7DA4-4967-AFBC-D8DBCFEA5DDE}"
         "UpgradeCode" = "8:{1D6B365A-8443-4FE0-BF17-8DD0D6C149E0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.18"
+        "ProductVersion" = "8:1.1.19"
         "Manufacturer" = "8:Philip Wright"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
