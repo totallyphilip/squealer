@@ -678,6 +678,8 @@ Module Main
 
         End If
 
+        Dim RunLogWarnings As Integer = 0
+
         For Each FileName As String In FileListing
 
             If Console.KeyAvailable() Then
@@ -689,6 +691,7 @@ Module Main
             Dim info As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(FileName)
 
             Dim obj As New SquealerObject(FileName)
+
 
             If bp.OutputMode = BatchParametersClass.eOutputMode.string Then
                 If FileCount > 0 Then
@@ -723,6 +726,7 @@ Module Main
                     End If
                 End If
 
+
                 Textify.Write(info.Name.Replace(MyConstants.ObjectFileExtension, ""), fg)
 
                 Dim symbol As String = String.Empty
@@ -743,6 +747,10 @@ Module Main
                     Textify.Write(symbol, ConsoleColor.Green)
                 End If
 
+                If obj.Type.ShortType = SquealerObjectType.eShortType.p AndAlso info.Name.ToLower.Contains("delete") AndAlso Not obj.RunLog Then
+                    Textify.Write(String.Format(" <{0} is off>", NameOf(obj.RunLog)), ConsoleColor.Red)
+                    RunLogWarnings += 1
+                End If
 
             End If
 
@@ -830,6 +838,13 @@ Module Main
         End If
 
         Textify.SayBulletLine(Textify.eBullet.Hash, String.Format(SummaryLine, FileCount.ToString, Action.ToString, bp.OutputMode.ToString, SkippedFiles.ToString, (FileCount - SkippedFiles).ToString))
+
+
+        If RunLogWarnings > 0 Then
+            Textify.SayNewLine()
+            Textify.WriteLine(String.Format("It looks like {0} delete proc(s) should have runlogging enabled.", RunLogWarnings), ConsoleColor.Red)
+        End If
+
 
         If (Action = eFileAction.generate OrElse Action = eFileAction.compare) AndAlso FileCount > 0 Then
 
