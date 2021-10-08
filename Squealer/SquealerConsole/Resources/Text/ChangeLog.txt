@@ -250,3 +250,10 @@
 
 {2}Added a reminder to enable runlogging on any proc with "delete" in the name.
 
+
+
+{0}2021-10-08{1}
+
+{2}Added CHECKOUT Git command.
+
+

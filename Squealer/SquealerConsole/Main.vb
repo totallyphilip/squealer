@@ -239,6 +239,7 @@ Module Main
         fix
         compare
         delete
+        checkout
     End Enum
 
     Private Enum eCommandType
@@ -266,6 +267,7 @@ Module Main
         [connection]
         [compare]
         [test]
+        [checkout]
         [use]
         [usetheforce]
         make
@@ -788,6 +790,8 @@ Module Main
 
                     Case eFileAction.edit
                         FileEdit(info.FullName)
+                    Case eFileAction.checkout
+                        GitCommandDo(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)", Action)
                     Case eFileAction.generate
                         GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp)
                     Case eFileAction.compare
@@ -811,7 +815,7 @@ Module Main
                         'End Try
                     End If
                     If git.ShowHistory Then
-                        GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
+                        GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)", Action)
                     End If
 
                     Console.WriteLine()
@@ -917,6 +921,9 @@ Module Main
         cmd = New CommandCatalog.CommandDefinition({eCommandType.command.ToString, "cmd"}, {"Open a command prompt."}, CommandCatalog.eCommandCategory.folder)
         MyCommands.Items.Add(cmd)
 
+        ' checkout
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.checkout.ToString, "undo"}, {"Git checkout.", "Checkout objects from Git and discard local changes."}, CommandCatalog.eCommandCategory.file, True, True)
+        MyCommands.Items.Add(cmd)
 
         ' dir
         cmd = New CommandCatalog.CommandDefinition({eCommandType.directory.ToString, "dir"}, {"Directory.", String.Format("List {0} objects in the current working folder.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
@@ -1259,6 +1266,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.[delete].ToString _
                     OrElse MyCommand.Keyword = eCommandType.directory.ToString _
+                    OrElse MyCommand.Keyword = eCommandType.checkout.ToString _
                     OrElse MyCommand.Keyword = eCommandType.[generate].ToString _
                     OrElse MyCommand.Keyword = eCommandType.edit.ToString _
                     OrElse MyCommand.Keyword = eCommandType.fix.ToString _
@@ -1295,6 +1303,19 @@ Module Main
                         End If
 
                         FileLimit = 20
+
+
+
+                    ElseIf MyCommand.Keyword = eCommandType.checkout.ToString Then
+
+                        action = eFileAction.checkout
+                        gf.ShowUncommitted = True
+                        gf.ShowDeleted = True
+
+
+                        'FileLimit = 20
+
+
 
 
                     ElseIf MyCommand.Keyword = eCommandType.directory.ToString Then
@@ -1563,9 +1584,6 @@ Module Main
 
 
                 ElseIf MyCommand.Keyword = "test" Then 'footest
-
-
-
 
 
                     If StringInList(MySwitches, "release") Then
@@ -2911,7 +2929,7 @@ Module Main
     End Function
 
 
-    Private Sub GitCommandDo(folder As String, gc As String, errormessage As String)
+    Private Sub GitCommandDo(folder As String, gc As String, errormessage As String, action As eFileAction)
 
         Try
             Dim command As String = "cmd.exe"
@@ -2929,7 +2947,7 @@ Module Main
             oProcess.Start()
 
             Using oStreamReader As System.IO.StreamReader = oProcess.StandardOutput
-                If oStreamReader.EndOfStream Then
+                If oStreamReader.EndOfStream AndAlso Not action = eFileAction.checkout Then
                     Textify.Write(errormessage, ConsoleColor.Red)
                 End If
                 While Not oStreamReader.EndOfStream
