@@ -257,3 +257,9 @@
 {2}Added CHECKOUT Git command.
 
 
+
+{0}2022-01-12{1}
+
+{2}Fixed the bug that always resulted in the error message "The current transaction cannot be committed and cannot support operations that write to the log file. Roll back the transaction." whenever an error was caught during a nested procedure call. The error handler code block was trying to decrement the transaction level by performing an uncommittable commit.
+
+

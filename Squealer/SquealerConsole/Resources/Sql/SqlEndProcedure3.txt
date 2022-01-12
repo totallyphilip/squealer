@@ -10,12 +10,14 @@
 	if @SqlrInternalNestLevel =	0
 	-- We're at the outermost procedure, so rollback the whole transaction.
 	begin
-		rollback transaction
+		if xact_state() = -1
+			rollback transaction
 	end
 	else
 	-- We are still	within a nested	procedure, so just decrement the transaction count.
 	begin
-		commit transaction
+		if xact_state() != -1
+			commit transaction
 	end
 
 end catch
