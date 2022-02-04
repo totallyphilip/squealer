@@ -14,6 +14,7 @@ set quoted_identifier on;
 declare @SqlrInternalErrorNumber	int; -- Error code to return to parent process.
 declare @SqlrInternalNestLevel		int; -- Current nested level of procedure calls.
 set @SqlrInternalNestLevel = @@trancount;
+print concat('begin - nest level is ',@SqlrInternalNestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 SquealerDeadlock:
 begin try

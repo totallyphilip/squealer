@@ -263,3 +263,10 @@
 {2}Fixed the bug that always resulted in the error message "The current transaction cannot be committed and cannot support operations that write to the log file. Roll back the transaction." whenever an error was caught during a nested procedure call. The error handler code block was trying to decrement the transaction level by performing an uncommittable commit.
 
 
+
+{0}2022-02-04{1}
+
+{2}The xact_state variable wasn't being used correctly when checking for active/commitable transactions. Fixed.
+{2}Added debug print statements to track procedure nest level, transaction count, and xact_state variable.
+
+

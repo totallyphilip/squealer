@@ -12,6 +12,7 @@
 ***********************************************************************/
 
               -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+	print concat('commit - nest level is ',@SqlrInternalNestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 	commit transaction
 end try
