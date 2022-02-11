@@ -270,3 +270,9 @@
 {2}Added debug print statements to track procedure nest level, transaction count, and xact_state variable.
 
 
+
+{0}2022-02-11{1}
+
+{2}Default proc/function/view now contains, "hello world! love, {THIS}". The {THIS} keyword is replaced with [schema].[object] in generated output.
+
+

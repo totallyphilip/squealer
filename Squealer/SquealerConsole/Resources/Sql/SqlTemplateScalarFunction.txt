@@ -6,7 +6,7 @@
 	Comments.
 ***********************************************************************/
 
-set @Result = 'hello world'
+set @Result = 'hello world! love, {THIS}'
 
 </Code>
 </Squealer>

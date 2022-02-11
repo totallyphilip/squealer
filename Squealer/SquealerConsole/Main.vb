@@ -56,6 +56,7 @@ Module Main
     Const cDefaultConnectionString As String = "Server=MySqlServer;Initial Catalog=AdventureWorks;Trusted_Connection=True"
     Const s3VersionText As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/ver.txt"
     Const s3ZipFile As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/Squealer.zip"
+    Const MyThis As String = "``this``"
 
     Public Class UserSettingsClass
 
@@ -2144,7 +2145,7 @@ Module Main
         Try
             InPreCode = InRoot.SelectSingleNode("PreCode").InnerText
         Catch ex As Exception
-            InPreCode = ""
+            InPreCode = "-- print 'getting " & MyThis & " ready'"
         End Try
 
         CDataPreCode.InnerText = String.Concat(vbCrLf, vbCrLf, InPreCode.Trim, vbCrLf, vbCrLf)
@@ -2445,7 +2446,7 @@ Module Main
             Case SquealerObjectType.eType.View
                 Template = My.Resources.SqlTemplateView
         End Select
-        Template = Template.Replace("{RootType}", FileType.ToString)
+        Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", MyThis)
 
         ' Did user forget the "-" prefix before the object type switch? ex: tf instead of -tf
         For Each s As String In System.Enum.GetNames(GetType(SquealerObjectType.eShortType))
@@ -2869,7 +2870,7 @@ Module Main
         For Each Replacement As DataRow In StringReplacements.Select() '.Select("")
             ExpandIndividual = ExpandIndividual.Replace(Replacement.Item("Original").ToString, Replacement.Item("Replacement").ToString)
         Next
-        ExpandIndividual = ExpandIndividual.Replace("{THIS}", String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
+        ExpandIndividual = ExpandIndividual.Replace(MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
 
 
     End Function
@@ -3060,7 +3061,7 @@ Module Main
 
         Dim sr As New IO.StringReader(My.Resources.ChangeLog.TrimEnd)
         While sr.Peek <> -1
-            Dim s As String = sr.ReadLine
+            Dim s As String = sr.ReadLine.Replace("{THIS}", MyThis)
             Textify.WriteLine(String.Format(s, ">>>> ", " <<<<", " - "))
         End While
         Textify.SayNewLine()

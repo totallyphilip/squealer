@@ -8,7 +8,7 @@
 insert
     @TableValue
 select
-    'hello world'
+    'hello world! love, {THIS}'
 
 </Code>
 </Squealer>
