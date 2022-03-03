@@ -1,44 +1,39 @@
 /***********************************************************************
-	Generate the runtime log tables if they are missing.
+	Delete deprecated squealer log tables.
 ***********************************************************************/
 
-if schema_id('squealer') is null exec ('create schema squealer');
+select 
+	s.name
+	,o.name
+	,o.type_desc
+from
+	sys.objects o
+join
+	sys.schemas s
+	on s.schema_id = o.schema_id
+where
+	o.name like '%squealer%'
+	or s.name = 'squealer'
+union
+select
+	s.name
+	,null
+	,'SCHEMA'
+from
+	sys.schemas s
+where
+	s.name = 'squealer'
+union
+select
+	'!!!'
+	,'DROP THESE OBJECTS'
+	,'!!!'
+where
+	exists (select 1 from sys.objects where name like '%squealer%')
+	or exists (select 1 from sys.schemas where name = 'squealer')
+order by
+	s.name;
 
-/*
--- uncomment to reset the runtime log
-if object_id('squealer.ParameterLog') is not null drop table squealer.ParameterLog;
-if object_id('squealer.ExecutionLog') is not null drop table squealer.ExecutionLog;
-*/
-
-go
-
-if object_id('squealer.ExecutionLog') is null
-begin
-
-	create table
-		[squealer].[ExecutionLog]
-	(
-		RunId int not null primary key identity(1,1)
-		,SchemaName varchar(50) null default object_schema_name(@@procid)
-		,ProcedureName varchar(250) null default object_name(@@procid)
-		,ObjectId int null default @@procid
-		,RunDate datetime not null default getdate()
-		,NestLevel int not null default @@nestlevel
-	);
-
-	create table
-		[squealer].[ParameterLog]
-	(
-		RunId int not null
-		,ParameterNumber int not null
-		,ParameterName varchar(150) not null
-		,ParameterValue varchar(1000) null
-		,IsOutput bit null default 'false'
-	);
-
-	alter table [squealer].[ParameterLog] add constraint [Fk_Squealer_Parameters] foreign key ([RunId]) references [squealer].[ExecutionLog] ([RunId]) on delete cascade;
-
-end
 
 go
 
