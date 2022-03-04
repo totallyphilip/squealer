@@ -1,4 +1,4 @@
-		declare @SqlrRunId int;
-		insert squealer.ExecutionLog default values;
-		set @SqlrRunId = scope_identity();{RuntimeParameters}
+		-- save info to [Server] > Management > SQL Server Logs
+		declare @SqlrRunlogMessage varchar(2048) = concat('``this``; nest level is ',@SqlrInternalNestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+		exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';{RuntimeParameters}
 

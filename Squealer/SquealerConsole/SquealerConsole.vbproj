@@ -95,10 +95,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GoldLeader">
-      <HintPath>..\..\..\totallyphilip\goldleader\GoldLeader\GoldLeader\bin\Release\GoldLeader.dll</HintPath>
+      <HintPath>..\..\..\bin\GoldLeader.dll</HintPath>
     </Reference>
     <Reference Include="PoorMansTSqlFormatterNetStandardLib">
-      <HintPath>..\..\..\PoorMansTSqlFormatter\PoorMansTSqlFormatterNetStandardLib\bin\Release\netstandard1.0\PoorMansTSqlFormatterNetStandardLib.dll</HintPath>
+      <HintPath>..\..\..\bin\PoorMansTSqlFormatterNetStandardLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -2595,11 +2595,12 @@ Module Main
                 End If
                 ' Write out error logging section.
                 If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-                    Dim whynot As String = vbCrLf & vbTab & vbTab & "--parameter @" & Parameter.Item("Name").ToString & " cannot be logged due to its 'max' or 'readonly' definition"
+                    '		exec xp_logevent 50001, '``this`` runlog' , 'informational';
+                    Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--@{0} is MAX or READONLY", Parameter.Item("Name").ToString)
                     RuntimeParameters &= whynot
                     ErrorLogParameters &= whynot
                 Else
-                    RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert squealer.ParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}));".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
+                    RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & String.Format("set @SqlrRunlogMessage = concat('@{0}=',convert(varchar(1000),@{0})); exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';", Parameter.Item("Name").ToString, ParameterCount.ToString)
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
