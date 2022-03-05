@@ -1,4 +1,4 @@
-		-- save info to [Server] > Management > SQL Server Logs
-		declare @SqlrRunlogMessage varchar(2048) = concat('``this``; nest level is ',@SqlrInternalNestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
-		exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';{RuntimeParameters}
+
+declare @SqlrRunlogMessage varchar(2048) = concat('``this`` Squealer RunLog, user ',user_name(),', sid ',suser_sname());
+exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';{RuntimeParameters}
 
