@@ -5,7 +5,7 @@
 	Comments.
 ***********************************************************************/
 
-select 'hello world! love, {THIS}'
+select 'hello world! love, {THIS}' as hello
 
 </Code>
 </Squealer>
