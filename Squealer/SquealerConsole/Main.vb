@@ -681,8 +681,6 @@ Module Main
 
         End If
 
-        Dim RunLogWarnings As Integer = 0
-
         For Each FileName As String In FileListing
 
             If Console.KeyAvailable() Then
@@ -748,11 +746,6 @@ Module Main
 
                 If UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
                     Textify.Write(symbol, ConsoleColor.Green)
-                End If
-
-                If obj.Type.ShortType = SquealerObjectType.eShortType.p AndAlso info.Name.ToLower.Contains("delete") AndAlso obj.RunLog = SquealerObjectType.eRunLogging.False Then
-                    Textify.Write(String.Format(" <{0}={1}>", NameOf(obj.RunLog), obj.RunLog.ToString), ConsoleColor.Red)
-                    RunLogWarnings += 1
                 End If
 
             End If
@@ -843,12 +836,6 @@ Module Main
         End If
 
         Textify.SayBulletLine(Textify.eBullet.Hash, String.Format(SummaryLine, FileCount.ToString, Action.ToString, bp.OutputMode.ToString, SkippedFiles.ToString, (FileCount - SkippedFiles).ToString))
-
-
-        If RunLogWarnings > 0 Then
-            Textify.SayNewLine()
-            Textify.WriteLine(String.Format("It looks like {0} delete proc(s) should have runlogging enabled. Edit the proc(s) and set runlogging to ""{1}"" to enable, or ""{2}"" to suppress this warning.", RunLogWarnings, SquealerObjectType.eRunLogging.True.ToString, SquealerObjectType.eRunLogging.Ignore.ToString), ConsoleColor.Red)
-        End If
 
 
         If (Action = eFileAction.generate OrElse Action = eFileAction.compare) AndAlso FileCount > 0 Then
@@ -2143,8 +2130,7 @@ Module Main
 
         Dim InPreCode As String = String.Empty
         Try
-            InPreCode = String.Format("print 'creating {1} {0}'", obj.Type.ShortType.ToString, MyThis)
-            InPreCode &= vbCrLf & "go" & vbCrLf & InRoot.SelectSingleNode("PreCode").InnerText
+            InPreCode = InRoot.SelectSingleNode("PreCode").InnerText
         Catch ex As Exception
             InPreCode = ""
         End Try
@@ -2500,9 +2486,9 @@ Module Main
 
         ' Pre-Code
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-            Dim InPreCode As String = String.Empty
+            Dim InPreCode As String = String.Format("print 'creating {0}, {1}'", MyThis, oType.ToString) & vbCrLf & "go" & vbCrLf
             Try
-                InPreCode = InRoot.SelectSingleNode("PreCode").InnerText
+                InPreCode &= InRoot.SelectSingleNode("PreCode").InnerText
             Catch ex As Exception
             End Try
 
@@ -2589,7 +2575,7 @@ Module Main
                 End If
                 If Parameter.Item("Output").ToString = Boolean.TrueString Then
                     def = def & " output"
-                    RuntimeOutputParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & "insert squealer.ParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue,IsOutput) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}),'true');".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
+                    RuntimeOutputParameters &= vbCrLf & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & String.Format("set @SqlrRunlogMessage = concat('@{0}(output)=',convert(varchar(1000),@{0})); exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';", Parameter.Item("Name").ToString, ParameterCount.ToString)   '"insert squealer.ParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue,IsOutput) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}),'true');".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
                 End If
                 If Not Parameter.Item("Comments").ToString = String.Empty Then
                     def = def & " -- " & Parameter.Item("Comments").ToString
