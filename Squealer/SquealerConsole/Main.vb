@@ -2130,7 +2130,7 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
-        If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
+        If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure OrElse obj.Type.LongType = SquealerObjectType.eType.ScalarFunction OrElse obj.Type.LongType = SquealerObjectType.eType.MultiStatementTableFunction Then
             OutRoot.SetAttribute("RunLog", obj.RunLog.ToString)
         End If
 
@@ -2595,12 +2595,11 @@ Module Main
                 End If
                 ' Write out error logging section.
                 If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-                    '		exec xp_logevent 50001, '``this`` runlog' , 'informational';
-                    Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--@{0} is MAX or READONLY", Parameter.Item("Name").ToString)
+                    Dim whynot As String = vbCrLf & String.Format("--@{0} is MAX or READONLY", Parameter.Item("Name").ToString)
                     RuntimeParameters &= whynot
                     ErrorLogParameters &= whynot
                 Else
-                    RuntimeParameters &= vbCrLf & vbTab & vbTab & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & String.Format("set @SqlrRunlogMessage = concat('@{0}=',convert(varchar(1000),@{0})); exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';", Parameter.Item("Name").ToString, ParameterCount.ToString)
+                    RuntimeParameters &= vbCrLf & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & String.Format("set @SqlrRunlogMessage = concat('@{0}=',convert(varchar(1000),@{0})); exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';", Parameter.Item("Name").ToString, ParameterCount.ToString)
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
