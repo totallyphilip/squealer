@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  A strongly-typed resource class, for looking up localized strings, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -607,6 +607,7 @@ Namespace My.Resources
         '''as
         '''begin
         '''set ansi_nulls on;
+        '''{RunLog}
         '''.
         '''</summary>
         Friend ReadOnly Property SqlBeginMultiStatementTableFunction() As String
@@ -682,7 +683,7 @@ Namespace My.Resources
         '''as
         '''begin
         '''set ansi_nulls on;
-        '''
+        '''{RunLog}
         '''declare @Result {ReturnDataType}
         '''
         ''';.
@@ -845,14 +846,13 @@ Namespace My.Resources
         '''/*######################################################################
         '''                          YOUR CODE ENDS HERE.
         '''######################################################################*/
-        '''
+        '''{RuntimeParameters}
         '''
         '''/***********************************************************************
         '''	Commit the transaction. If this is the parent process, then all
         '''	pending work will be written to the database. If this is a child
         '''    process, then the commit statement will merely decrement the
-        '''	@@trancount system variable.
-        '''****** [rest of string was truncated]&quot;;.
+        '''	@@trancount syste [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlEndProcedure1() As String
             Get
@@ -882,22 +882,16 @@ Namespace My.Resources
         '''		set @SqlrInternalErrorMessage = error_message();
         '''	end
         '''
+        '''	print concat(&apos;exception - nest level is &apos;,@SqlrInternalNestLevel,&apos;; tran count is &apos;,@@trancount,&apos;; xact state is &apos;,xact_state());
         '''
         '''	if @SqlrInternalNestLevel =	0
         '''	-- We&apos;re at the outermost procedure, so rollback the whole transaction.
         '''	begin
-        '''		rollback transaction
+        '''		if xact_state() in (1,-1)
+        '''			rollback transaction
         '''	end
         '''	else
-        '''	-- We are still	within a nested	procedure, so just decrement the transaction count.
-        '''	begin
-        '''		commit transaction
-        '''	end
-        '''
-        '''end catch
-        '''
-        '''
-        '''/************************* [rest of string was truncated]&quot;;.
+        '''	-- [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlEndProcedure3() As String
             Get
@@ -975,42 +969,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 		declare @SqlrRunId int;
-        '''		insert dbo.SqlrRuntimeProcedureLog default values;
-        '''		set @SqlrRunId = scope_identity();{RuntimeParameters}
+        '''  Looks up a localized string similar to 
+        '''declare @SqlrRunlogMessage varchar(2048) = concat(&apos;``this`` Squealer RunLog, user &apos;,user_name(),&apos;, sid &apos;,suser_sname());
+        '''exec xp_logevent 50001, @SqlrRunlogMessage, &apos;informational&apos;;{RuntimeParameters}
         '''
         '''.
         '''</summary>
         Friend ReadOnly Property SqlRunLog() As String
             Get
                 Return ResourceManager.GetString("SqlRunLog", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to if object_id(&apos;dbo.SqlrRuntimeProcedureLog&apos;) is null
-        '''begin
-        '''
-        '''	create table
-        '''		[dbo].[SqlrRuntimeProcedureLog]
-        '''	(
-        '''		RunId int not null primary key identity(1,1)
-        '''		,SchemaName varchar(50) null default object_schema_name(@@procid)
-        '''		,ProcName varchar(50) null default object_name(@@procid)
-        '''		,RunDate datetime not null default getdate()
-        '''		,NestLevel int not null default @@nestlevel
-        '''	);
-        '''
-        '''	create table
-        '''		[dbo].[SqlrRuntimeParameterLog]
-        '''	(
-        '''		RunId int not null
-        '''		,ParameterNumber int not null
-        '''		,Param [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlRunLogCreate() As String
-            Get
-                Return ResourceManager.GetString("SqlRunLogCreate", resourceCulture)
             End Get
         End Property
         
@@ -1049,7 +1016,7 @@ Namespace My.Resources
         '''	Comments.
         '''***********************************************************************/
         '''
-        '''select &apos;hello world&apos; as [MyColumn]
+        '''select &apos;hello world! love, {THIS}&apos; as [MyColumn]
         '''
         '''&lt;/Code&gt;
         '''&lt;/Squealer&gt;
@@ -1072,7 +1039,7 @@ Namespace My.Resources
         '''insert
         '''    @TableValue
         '''select
-        '''    &apos;hello world&apos;
+        '''    &apos;hello world! love, {THIS}&apos;
         '''
         '''&lt;/Code&gt;
         '''&lt;/Squealer&gt;
@@ -1092,7 +1059,7 @@ Namespace My.Resources
         '''	Comments.
         '''***********************************************************************/
         '''
-        '''select &apos;hello world&apos;
+        '''select &apos;hello world! love, {THIS}&apos;
         '''
         '''&lt;/Code&gt;
         '''&lt;/Squealer&gt;
@@ -1113,7 +1080,7 @@ Namespace My.Resources
         '''	Comments.
         '''***********************************************************************/
         '''
-        '''set @Result = &apos;hello world&apos;
+        '''set @Result = &apos;hello world! love, {THIS}&apos;
         '''
         '''&lt;/Code&gt;
         '''&lt;/Squealer&gt;
@@ -1133,7 +1100,7 @@ Namespace My.Resources
         '''	Comments.
         '''***********************************************************************/
         '''
-        '''select &apos;hello world&apos;
+        '''select &apos;hello world! love, {THIS}&apos; as hello
         '''
         '''&lt;/Code&gt;
         '''&lt;/Squealer&gt;
@@ -1142,6 +1109,34 @@ Namespace My.Resources
         Friend ReadOnly Property SqlTemplateView() As String
             Get
                 Return ResourceManager.GetString("SqlTemplateView", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to /***********************************************************************
+        '''	Delete deprecated squealer log tables.
+        '''***********************************************************************/
+        '''
+        '''if exists (select 1 from sys.objects where name like &apos;%squealer%&apos;)
+        '''	or exists (select 1 from sys.schemas where name = &apos;squealer&apos;)
+        '''select 
+        '''	s.name
+        '''	,o.name
+        '''	,o.type_desc
+        '''from
+        '''	sys.objects o
+        '''join
+        '''	sys.schemas s
+        '''	on s.schema_id = o.schema_id
+        '''where
+        '''	o.name like &apos;%squealer%&apos;
+        '''	or s.name = &apos;squealer&apos;
+        '''union
+        '''selec [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property SqlTopScript() As String
+            Get
+                Return ResourceManager.GetString("SqlTopScript", resourceCulture)
             End Get
         End Property
         

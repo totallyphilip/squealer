@@ -856,7 +856,7 @@ Module Main
             If Action = eFileAction.compare Then
                 GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", MyConstants.AutocreateFilename)
             ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                GeneratedOutput = My.Resources.SqlRunLogCreate & GeneratedOutput
+                GeneratedOutput = My.Resources.SqlTopScript & GeneratedOutput
             End If
 
             If UserSettings.UseClipboard Then
@@ -2143,9 +2143,10 @@ Module Main
 
         Dim InPreCode As String = String.Empty
         Try
-            InPreCode = InRoot.SelectSingleNode("PreCode").InnerText
+            InPreCode = String.Format("print 'creating {1} {0}'", obj.Type.ShortType.ToString, MyThis)
+            InPreCode &= vbCrLf & "go" & vbCrLf & InRoot.SelectSingleNode("PreCode").InnerText
         Catch ex As Exception
-            InPreCode = "-- print 'getting " & MyThis & " ready'"
+            InPreCode = ""
         End Try
 
         CDataPreCode.InnerText = String.Concat(vbCrLf, vbCrLf, InPreCode.Trim, vbCrLf, vbCrLf)
