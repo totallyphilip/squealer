@@ -1,4 +1,0 @@
-
-declare @SqlrRunlogMessage varchar(2048) = concat('``this`` Squealer RunLog, user ',user_name(),', sid ',suser_sname());
-exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';{RuntimeParameters}
-

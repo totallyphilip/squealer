@@ -970,19 +970,6 @@ Namespace My.Resources
         
         '''<summary>
         '''  Looks up a localized string similar to 
-        '''declare @SqlrRunlogMessage varchar(2048) = concat(&apos;``this`` Squealer RunLog, user &apos;,user_name(),&apos;, sid &apos;,suser_sname());
-        '''exec xp_logevent 50001, @SqlrRunlogMessage, &apos;informational&apos;;{RuntimeParameters}
-        '''
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlRunLog() As String
-            Get
-                Return ResourceManager.GetString("SqlRunLog", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
         ''')
         '''
         '''returns @TableValue table

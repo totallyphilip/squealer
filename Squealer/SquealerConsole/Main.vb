@@ -183,22 +183,6 @@ Module Main
 
     Private Class BatchParametersClass
 
-        Public Enum eRunlogMode
-            forceTrue
-            forceFalse
-            normal
-        End Enum
-
-        Private _RunlogMode As eRunlogMode = eRunlogMode.normal
-        Public Property RunlogMode As eRunlogMode
-            Get
-                Return _RunlogMode
-            End Get
-            Set(value As eRunlogMode)
-                _RunlogMode = value
-            End Set
-        End Property
-
         Public Enum eOutputMode
             normal
             flags
@@ -787,7 +771,7 @@ Module Main
                     Case eFileAction.checkout
                         GitCommandDo(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)", Action)
                     Case eFileAction.generate
-                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp)
+                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count)
                     Case eFileAction.compare
                         Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
                         GeneratedOutput &= String.Format("insert #CodeToDrop ([Type], [Schema], [Name]) values ('{0}','{1}','{2}');", obj.Type.GeneralType, SchemaName(RootName), RoutineName(RootName)) & vbCrLf
@@ -957,10 +941,6 @@ Module Main
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("alt;alter, do not drop original"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("t;test script, limit 1 object"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("e;with encryption"))
-        cmd.Options.Items.Add(opt)
-        opt = New CommandCatalog.CommandSwitch("runlog;override runlog settings")
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("true;force on"))
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("false;force off"))
         cmd.Options.Items.Add(opt)
         cmd.Examples.Add("% dbo.*")
         cmd.Examples.Add("% -alt -v dbo.* -- generate ALTER scripts for dbo.* VIEW objects")
@@ -1339,12 +1319,6 @@ Module Main
                             bp.OutputMode = BatchParametersClass.eOutputMode.encrypt
                         ElseIf StringInList(MySwitches, "m:alt") Then
                             bp.OutputMode = BatchParametersClass.eOutputMode.alter
-                        End If
-
-                        If StringInList(MySwitches, "runlog:true") Then
-                            bp.RunlogMode = BatchParametersClass.eRunlogMode.forceTrue
-                        ElseIf StringInList(MySwitches, "runlog:false") Then
-                            bp.RunlogMode = BatchParametersClass.eRunlogMode.forceFalse
                         End If
 
 
@@ -2117,9 +2091,6 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
-        If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure OrElse obj.Type.LongType = SquealerObjectType.eType.ScalarFunction OrElse obj.Type.LongType = SquealerObjectType.eType.MultiStatementTableFunction Then
-            OutRoot.SetAttribute("RunLog", obj.RunLog.ToString)
-        End If
 
         ' Pre-Code.
         Dim OutPreCode As Xml.XmlElement = OutputXml.CreateElement("PreCode")
@@ -2472,7 +2443,7 @@ Module Main
 #Region " Proc Generation "
 
     ' Expand one root file.
-    Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass) As String
+    Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass, cur As Integer, tot As Integer) As String
 
         Dim oType As SquealerObjectType.eType = SquealerObjectType.Eval(XmlGetObjectType(info.FullName))
         Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
@@ -2486,7 +2457,7 @@ Module Main
 
         ' Pre-Code
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-            Dim InPreCode As String = String.Format("print 'creating {0}, {1}'", MyThis, oType.ToString) & vbCrLf & "go" & vbCrLf
+            Dim InPreCode As String = String.Format("print '{2}/{3} creating {0}, {1}'", MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
             Try
                 InPreCode &= InRoot.SelectSingleNode("PreCode").InnerText
             Catch ex As Exception
@@ -2537,7 +2508,6 @@ Module Main
         Dim DeclareList As New ArrayList
         Dim SetList As New ArrayList
         Dim OutputParameters As String = String.Empty
-        Dim RuntimeParameters As String = String.Empty
         Dim RuntimeOutputParameters As String = String.Empty
         Dim ErrorLogParameters As String = String.Empty
 
@@ -2582,11 +2552,9 @@ Module Main
                 End If
                 ' Write out error logging section.
                 If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-                    Dim whynot As String = vbCrLf & String.Format("--@{0} is MAX or READONLY", Parameter.Item("Name").ToString)
-                    RuntimeParameters &= whynot
+                    Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
                     ErrorLogParameters &= whynot
                 Else
-                    RuntimeParameters &= vbCrLf & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & String.Format("set @SqlrRunlogMessage = concat('@{0}=',convert(varchar(1000),@{0})); exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';", Parameter.Item("Name").ToString, ParameterCount.ToString)
                     ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
@@ -2746,15 +2714,6 @@ Module Main
             BeginBlock = BeginBlock.Replace("{WithOptions}", "with " & WithOptions)
         End If
 
-        ' Runlogging
-        Dim doRunlogging As Boolean = (obj.RunLog = SquealerObjectType.eRunLogging.True OrElse bp.RunlogMode = BatchParametersClass.eRunlogMode.forceTrue) AndAlso Not bp.RunlogMode = BatchParametersClass.eRunlogMode.forceFalse
-
-        If doRunlogging Then
-            BeginBlock = BeginBlock.Replace("{RunLog}", My.Resources.SqlRunLog.Replace("{RuntimeParameters}", RuntimeParameters))
-        Else
-            BeginBlock = BeginBlock.Replace("{RunLog}", String.Empty)
-        End If
-
         Block &= BeginBlock
 
         ' Code
@@ -2772,12 +2731,6 @@ Module Main
                     Block &= My.Resources.SqlEndProcedureTest
                 Else
                     Block &= My.Resources.SqlEndProcedure1 & ErrorLogParameters & My.Resources.SqlEndProcedure3
-                    If doRunlogging Then
-                        Block = Block.Replace("{RuntimeParameters}", RuntimeOutputParameters)
-                    Else
-                        Block = Block.Replace("{RuntimeParameters}", String.Empty)
-                    End If
-
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
@@ -2804,15 +2757,23 @@ Module Main
 
             ' Grant Execute
             Dim InUsers As DataTable = GetUsers(InXml)
-            For Each User As DataRow In InUsers.Select("", "Name asc")
-                Dim GrantStatement As String
-                If oType = SquealerObjectType.eType.StoredProcedure OrElse oType = SquealerObjectType.eType.ScalarFunction Then
-                    GrantStatement = My.Resources.SqlGrantExecute
-                Else
-                    GrantStatement = My.Resources.SqlGrantSelect
-                End If
-                Block = Block & vbCrLf & GrantStatement.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{User}", User.Item("Name").ToString).Replace("{Schema}", SchemaName(RootName))
-            Next
+
+            If InUsers.Rows.Count > 0 Then
+                Block = String.Format("if object_id('``this``','{0}') is not null", SquealerObjectType.ToShortType(oType))
+                Block &= vbCrLf & "begin"
+                For Each User As DataRow In InUsers.Select("", "Name asc")
+                    Dim GrantStatement As String
+                    If oType = SquealerObjectType.eType.StoredProcedure OrElse oType = SquealerObjectType.eType.ScalarFunction Then
+                        GrantStatement = My.Resources.SqlGrantExecute
+                    Else
+                        GrantStatement = My.Resources.SqlGrantSelect
+                    End If
+                    Block = Block & vbCrLf & GrantStatement.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{User}", User.Item("Name").ToString).Replace("{Schema}", SchemaName(RootName))
+                Next
+                Block &= vbCrLf & "end" _
+                    & vbCrLf & "else print 'Permissions not granted.'"
+            End If
+
             If Not Block = String.Empty Then
                 CodeBlocks.Add(Block)
             End If
@@ -2829,7 +2790,14 @@ Module Main
             End Try
 
             If Not String.IsNullOrWhiteSpace(InPostCode) Then
-                InPostCode = vbCrLf & "-- additional code to execute after " & oType.ToString & " is created" & vbCrLf & InPostCode
+
+                InPostCode = vbCrLf & "-- additional code to execute after " & oType.ToString & " is created" _
+                    & vbCrLf & String.Format("if object_id('``this``','{0}') is not null", SquealerObjectType.ToShortType(oType)) _
+                    & vbCrLf & "begin" _
+                    & vbCrLf & InPostCode _
+                    & vbCrLf & "end" _
+                    & vbCrLf & "else print 'PostCode not executed.'"
+
                 CodeBlocks.Add(InPostCode)
             End If
 

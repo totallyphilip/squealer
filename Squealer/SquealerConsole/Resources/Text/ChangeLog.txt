@@ -273,6 +273,13 @@
 
 {0}2022-02-11{1}
 
-{2}Default proc/function/view now contains, "hello world! love, {THIS}". The {THIS} keyword is replaced with [schema].[object] in generated output.
+{2}Default proc/function/view now contains, "hello world! love, ``THIS``". The ``THIS`` keyword (four backquotes, not case sensitive) is replaced with [schema].[object] in generated output. Use this anywhere you need to reference the resolved name of the object from itself.
+
+
+
+{0}2022-??-??{1}
+
+{2}Removed runlogging feature. It created too many complications.
+{2}If proc/function/view creation fails, GRANT statements and PostCode will not be attempted. This helps reduce cascading failures.
 
 

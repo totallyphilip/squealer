@@ -7,7 +7,7 @@ returns {ReturnDataType}
 as
 begin
 set ansi_nulls on;
-{RunLog}
+
 declare @Result {ReturnDataType}
 
 ;
