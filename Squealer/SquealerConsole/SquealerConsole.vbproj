@@ -133,6 +133,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ObjectType.vb" />
+    <Compile Include="TempFileHandler.vb" />
     <Compile Include="Textify.vb" />
     <Compile Include="ForceCommand.vb" />
     <Compile Include="Main.vb" />

@@ -26,29 +26,34 @@ Partial Class SquealerSettings
         Me.optUseWildcards = New System.Windows.Forms.CheckBox()
         Me.optSpacesAreWildcards = New System.Windows.Forms.CheckBox()
         Me.optEditNewFiles = New System.Windows.Forms.CheckBox()
-        Me.optGenerateToClipboard = New System.Windows.Forms.CheckBox()
         Me.txtTextEditorProgram = New System.Windows.Forms.TextBox()
         Me.optShowGitBranch = New System.Windows.Forms.CheckBox()
         Me.rbCompact = New System.Windows.Forms.RadioButton()
         Me.rbFull = New System.Windows.Forms.RadioButton()
         Me.rbSymbolic = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.updnFolderSaves = New System.Windows.Forms.NumericUpDown()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.txtWildcardExample = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.txtTextEditorSwitches = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.updnFolderSaves = New System.Windows.Forms.NumericUpDown()
         Me.btnOK = New System.Windows.Forms.Button()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.rbClipboard = New System.Windows.Forms.RadioButton()
+        Me.rbTempFile = New System.Windows.Forms.RadioButton()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
-        CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -90,16 +95,6 @@ Partial Class SquealerSettings
         Me.optEditNewFiles.TabIndex = 6
         Me.optEditNewFiles.Text = "Automatically run EDIT command after NEW command"
         Me.optEditNewFiles.UseVisualStyleBackColor = True
-        '
-        'optGenerateToClipboard
-        '
-        Me.optGenerateToClipboard.AutoSize = True
-        Me.optGenerateToClipboard.Location = New System.Drawing.Point(6, 65)
-        Me.optGenerateToClipboard.Name = "optGenerateToClipboard"
-        Me.optGenerateToClipboard.Size = New System.Drawing.Size(369, 17)
-        Me.optGenerateToClipboard.TabIndex = 7
-        Me.optGenerateToClipboard.Text = "Send GENERATE output to the Windows clipboard instead of a temp file"
-        Me.optGenerateToClipboard.UseVisualStyleBackColor = True
         '
         'txtTextEditorProgram
         '
@@ -161,7 +156,6 @@ Partial Class SquealerSettings
         Me.GroupBox1.Controls.Add(Me.updnFolderSaves)
         Me.GroupBox1.Controls.Add(Me.Label5)
         Me.GroupBox1.Controls.Add(Me.optShowGitBranch)
-        Me.GroupBox1.Controls.Add(Me.optGenerateToClipboard)
         Me.GroupBox1.Controls.Add(Me.optEditNewFiles)
         Me.GroupBox1.Controls.Add(Me.rbFull)
         Me.GroupBox1.Controls.Add(Me.optBeep)
@@ -174,10 +168,26 @@ Partial Class SquealerSettings
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "General"
         '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(6, 146)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(151, 13)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Number of folders to remember"
+        '
+        'updnFolderSaves
+        '
+        Me.updnFolderSaves.Location = New System.Drawing.Point(166, 144)
+        Me.updnFolderSaves.Name = "updnFolderSaves"
+        Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
+        Me.updnFolderSaves.TabIndex = 0
+        '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(6, 116)
+        Me.Label5.Location = New System.Drawing.Point(6, 114)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(81, 13)
         Me.Label5.TabIndex = 14
@@ -192,12 +202,12 @@ Partial Class SquealerSettings
         Me.GroupBox2.Controls.Add(Me.optUseWildcards)
         Me.GroupBox2.Controls.Add(Me.txtWildcardExample)
         Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 202)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 327)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(543, 73)
         Me.GroupBox2.TabIndex = 15
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "File searches"
+        Me.GroupBox2.Text = "Filename matching"
         '
         'TextBox1
         '
@@ -208,6 +218,14 @@ Partial Class SquealerSettings
         Me.TextBox1.TabIndex = 16
         Me.TextBox1.Text = "DIR your file search"
         '
+        'txtWildcardExample
+        '
+        Me.txtWildcardExample.Location = New System.Drawing.Point(357, 29)
+        Me.txtWildcardExample.Name = "txtWildcardExample"
+        Me.txtWildcardExample.ReadOnly = True
+        Me.txtWildcardExample.Size = New System.Drawing.Size(124, 20)
+        Me.txtWildcardExample.TabIndex = 14
+        '
         'Label4
         '
         Me.Label4.AutoSize = True
@@ -217,14 +235,6 @@ Partial Class SquealerSettings
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "="
         '
-        'txtWildcardExample
-        '
-        Me.txtWildcardExample.Location = New System.Drawing.Point(357, 29)
-        Me.txtWildcardExample.Name = "txtWildcardExample"
-        Me.txtWildcardExample.ReadOnly = True
-        Me.txtWildcardExample.Size = New System.Drawing.Size(124, 20)
-        Me.txtWildcardExample.TabIndex = 14
-        '
         'GroupBox3
         '
         Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -233,7 +243,7 @@ Partial Class SquealerSettings
         Me.GroupBox3.Controls.Add(Me.Label2)
         Me.GroupBox3.Controls.Add(Me.Label1)
         Me.GroupBox3.Controls.Add(Me.txtTextEditorProgram)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 281)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 406)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(543, 90)
         Me.GroupBox3.TabIndex = 16
@@ -267,39 +277,78 @@ Partial Class SquealerSettings
         Me.Label1.TabIndex = 9
         Me.Label1.Text = "Program"
         '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(6, 146)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(151, 13)
-        Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Number of folders to remember"
-        '
-        'updnFolderSaves
-        '
-        Me.updnFolderSaves.Location = New System.Drawing.Point(166, 144)
-        Me.updnFolderSaves.Name = "updnFolderSaves"
-        Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
-        Me.updnFolderSaves.TabIndex = 0
-        '
         'btnOK
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(480, 377)
+        Me.btnOK.Location = New System.Drawing.Point(480, 502)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
         Me.btnOK.Text = "OK"
         Me.btnOK.UseVisualStyleBackColor = True
         '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.rbTempFile)
+        Me.GroupBox4.Controls.Add(Me.rbClipboard)
+        Me.GroupBox4.Controls.Add(Me.Label6)
+        Me.GroupBox4.Controls.Add(Me.optDetectOldSquealerObjects)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 202)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(543, 119)
+        Me.GroupBox4.TabIndex = 19
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Proc/Function/View output"
+        '
+        'optDetectOldSquealerObjects
+        '
+        Me.optDetectOldSquealerObjects.AutoSize = True
+        Me.optDetectOldSquealerObjects.Location = New System.Drawing.Point(6, 19)
+        Me.optDetectOldSquealerObjects.Name = "optDetectOldSquealerObjects"
+        Me.optDetectOldSquealerObjects.Size = New System.Drawing.Size(197, 17)
+        Me.optDetectOldSquealerObjects.TabIndex = 8
+        Me.optDetectOldSquealerObjects.Text = "Detect deprecated Squealer objects"
+        Me.optDetectOldSquealerObjects.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(6, 44)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(77, 13)
+        Me.Label6.TabIndex = 9
+        Me.Label6.Text = "Send output to"
+        '
+        'rbClipboard
+        '
+        Me.rbClipboard.AutoSize = True
+        Me.rbClipboard.Location = New System.Drawing.Point(94, 42)
+        Me.rbClipboard.Name = "rbClipboard"
+        Me.rbClipboard.Size = New System.Drawing.Size(68, 17)
+        Me.rbClipboard.TabIndex = 10
+        Me.rbClipboard.TabStop = True
+        Me.rbClipboard.Text = "clipboard"
+        Me.rbClipboard.UseVisualStyleBackColor = True
+        '
+        'rbTempFile
+        '
+        Me.rbTempFile.AutoSize = True
+        Me.rbTempFile.Location = New System.Drawing.Point(168, 42)
+        Me.rbTempFile.Name = "rbTempFile"
+        Me.rbTempFile.Size = New System.Drawing.Size(113, 17)
+        Me.rbTempFile.TabIndex = 11
+        Me.rbTempFile.TabStop = True
+        Me.rbTempFile.Text = "text editor temp file"
+        Me.rbTempFile.UseVisualStyleBackColor = True
+        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(567, 413)
+        Me.ClientSize = New System.Drawing.Size(567, 564)
+        Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
@@ -310,11 +359,13 @@ Partial Class SquealerSettings
         Me.Text = "Settings"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
-        CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -322,7 +373,6 @@ Partial Class SquealerSettings
     Friend WithEvents optUseWildcards As System.Windows.Forms.CheckBox
     Friend WithEvents optSpacesAreWildcards As System.Windows.Forms.CheckBox
     Friend WithEvents optEditNewFiles As System.Windows.Forms.CheckBox
-    Friend WithEvents optGenerateToClipboard As System.Windows.Forms.CheckBox
     Friend WithEvents txtTextEditorProgram As System.Windows.Forms.TextBox
     Friend WithEvents optShowGitBranch As System.Windows.Forms.CheckBox
     Friend WithEvents rbCompact As System.Windows.Forms.RadioButton
@@ -341,4 +391,9 @@ Partial Class SquealerSettings
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents btnOK As System.Windows.Forms.Button
+    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents optDetectOldSquealerObjects As System.Windows.Forms.CheckBox
+    Friend WithEvents rbTempFile As System.Windows.Forms.RadioButton
+    Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
+    Friend WithEvents Label6 As System.Windows.Forms.Label
 End Class

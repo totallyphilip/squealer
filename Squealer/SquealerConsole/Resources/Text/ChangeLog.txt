@@ -267,6 +267,7 @@
 {0}2022-02-04{1}
 
 {2}The xact_state variable wasn't being used correctly when checking for active/commitable transactions. Fixed.
+
 {2}Added debug print statements to track procedure nest level, transaction count, and xact_state variable.
 
 
@@ -280,6 +281,13 @@
 {0}2022-??-??{1}
 
 {2}Removed runlogging feature. It created too many complications.
+
 {2}If proc/function/view creation fails, GRANT statements and PostCode will not be attempted. This helps reduce cascading failures.
+
+{2}Change log now opens in text editor.
+
+{2}Improved settings configuration screen.
+
+{2}Added the option to detect deprecated Squealer objects (tables, views, etc.) since runlogging is no longer supported.
 
 
