@@ -1,0 +1,18 @@
+﻿select
+	concat(s.name,'.',o.name) as object_name
+	,o.type
+	,m.definition
+	,o.object_id
+from
+	sys.objects o
+join
+	sys.sql_modules m
+	on m.object_id = o.object_id
+join
+	sys.schemas s
+	on s.schema_id = o.schema_id
+where
+	o.type in ('P','FN','TF','IF','V')
+order by
+	s.name
+	,o.name

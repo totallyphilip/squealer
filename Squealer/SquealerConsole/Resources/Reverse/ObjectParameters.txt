@@ -1,0 +1,14 @@
+﻿select
+	p.name parameter_name
+	,t.name type_name
+	,p.is_output
+	,p.max_length
+from
+	sys.parameters p
+join
+	sys.types t
+	on t.system_type_id = p.system_type_id
+where
+	p.object_id = @ObjectId
+order by
+	p.parameter_id

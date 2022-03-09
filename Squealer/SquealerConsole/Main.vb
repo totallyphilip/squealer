@@ -1066,6 +1066,7 @@ Module Main
         cmd.Visible = False
         MyCommands.Items.Add(cmd)
 
+
         ' Star Wars commands
         StarWars.AddCommand(New ForceCommand("luke", False, "OK Google, navigate [x-wing] to Tosche Station."))
         StarWars.AddCommand(New ForceCommand("yoda", False, "Shot first, Han did."))
@@ -1575,6 +1576,8 @@ Module Main
                     End If
 
 
+                    ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder)
+
 
 
 
@@ -1897,7 +1900,6 @@ Module Main
             .Add("Type", GetType(String))
             .Add("Output", GetType(Boolean))
             .Add("DefaultValue", GetType(String))
-            .Add("RunLog", GetType(Boolean))
             .Add("Comments", GetType(String))
         End With
 
@@ -1908,7 +1910,6 @@ Module Main
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Type"), String.Empty),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Output"), Boolean.FalseString),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("DefaultValue"), String.Empty),
-                AttributeDefaultString(Node.Attributes.GetNamedItem("RunLog"), Boolean.TrueString),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Comments"), String.Empty)
             )
 
@@ -2061,8 +2062,7 @@ Module Main
             Dim InParameters As DataTable = GetParameters(InputXml)
 
             If InParameters.Rows.Count = 0 Then
-                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name=""MyParameter"" Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" RunLog=""True"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
-                'OutParameters.AppendChild(OutputXml.CreateComment(String.Format("<Parameter {0} Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "RunLog=""True"" DefaultValue="""" Comments="""" />")))
+                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name=""MyParameter"" Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
             Else
                 For Each InParameter As DataRow In InParameters.Select()
                     Dim OutParameter As Xml.XmlElement = OutputXml.CreateElement("Parameter")
@@ -2070,7 +2070,6 @@ Module Main
                     OutParameter.SetAttribute("Type", InParameter.Item("Type").ToString)
                     If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
                         OutParameter.SetAttribute("Output", InParameter.Item("Output").ToString)
-                        OutParameter.SetAttribute("RunLog", InParameter.Item("RunLog").ToString)
                     End If
                     OutParameter.SetAttribute("DefaultValue", InParameter.Item("DefaultValue").ToString)
                     OutParameter.SetAttribute("Comments", InParameter.Item("Comments").ToString)
@@ -2416,7 +2415,6 @@ Module Main
         Dim DeclareList As New ArrayList
         Dim SetList As New ArrayList
         Dim OutputParameters As String = String.Empty
-        Dim RuntimeOutputParameters As String = String.Empty
         Dim ErrorLogParameters As String = String.Empty
 
         For Each Parameter As DataRow In InParameters.Select()
@@ -2453,7 +2451,6 @@ Module Main
                 End If
                 If Parameter.Item("Output").ToString = Boolean.TrueString Then
                     def = def & " output"
-                    RuntimeOutputParameters &= vbCrLf & IIf(CBool(Parameter.Item("RunLog")), "", "--").ToString & String.Format("set @SqlrRunlogMessage = concat('@{0}(output)=',convert(varchar(1000),@{0})); exec xp_logevent 50001, @SqlrRunlogMessage, 'informational';", Parameter.Item("Name").ToString, ParameterCount.ToString)   '"insert squealer.ParameterLog (RunId,ParameterNumber,ParameterName,ParameterValue,IsOutput) values (@SqlrRunId,{ParameterNumber},'{ParameterName}',convert(varchar(1000),@{ParameterName}),'true');".Replace("{ParameterNumber}", ParameterCount.ToString).Replace("{ParameterName}", Parameter.Item("Name").ToString)
                 End If
                 If Not Parameter.Item("Comments").ToString = String.Empty Then
                     def = def & " -- " & Parameter.Item("Comments").ToString
@@ -2875,6 +2872,62 @@ Module Main
 #End Region
 
 #Region " Misc "
+
+    Public Class SpinnyProgress
+
+        Const TicksPerSecond = 10000000 ' 10 million
+
+        Private _Index As Integer = 0
+        Private _SymbolString As String
+        Private _Symbols As New List(Of Char)
+        Private _AnimationsPerSecond As Integer
+        Private _LastTick As Long = DateTime.Now.Ticks
+
+        Public Sub New()
+            Me.New("/—\|", 4)
+        End Sub
+
+        Public Sub New(s As String)
+            Me.New(s, 4)
+        End Sub
+
+        Public Sub New(AnimationsPerSecond As Integer)
+            Me.New("/—\|", AnimationsPerSecond)
+        End Sub
+
+        Public Sub New(s As String, AnimationsPerSecond As Integer)
+            _Symbols.AddRange(s.ToCharArray)
+            _AnimationsPerSecond = AnimationsPerSecond
+            Console.Write(CurrentSymbol)
+        End Sub
+
+        Private Function CurrentSymbol() As String
+
+            If Console.CursorLeft > Console.BufferWidth - 2 Then
+                Return "."
+            Else
+                Return _Symbols(_Index)
+            End If
+
+        End Function
+
+        Public Sub DoStep()
+
+            Console.Write(Chr(8) & ".")
+
+            If DateTime.Now.Ticks - _LastTick > TicksPerSecond / _AnimationsPerSecond Then
+                _LastTick = DateTime.Now.Ticks
+                _Index += 1
+                If _Index >= _Symbols.Count Then
+                    _Index = 0
+                End If
+            End If
+
+            Console.Write(CurrentSymbol)
+
+        End Sub
+
+    End Class
 
     Private Function SpitDashes(s As String, marker As String) As String
         Return New String("-"c, 5) & " " & s & " " & New String("-"c, 100 - s.Length) & " " & marker
@@ -3586,61 +3639,79 @@ Module Main
 
     End Sub
 
-    Public Class SpinnyProgress
+    Private Sub ReverseEngineer(cs As String, WorkingFolder As String)
 
-        Const TicksPerSecond = 10000000 ' 10 million
+        Textify.Write("Reading objects .")
 
-        Private _Index As Integer = 0
-        Private _SymbolString As String
-        Private _Symbols As New List(Of Char)
-        Private _AnimationsPerSecond As Integer
-        Private _LastTick As Long = DateTime.Now.Ticks
+        Dim tempf As New TempFileHandler
 
-        Public Sub New()
-            Me.New("/—\|", 4)
-        End Sub
+        Dim ProcCount As Integer = 0
 
-        Public Sub New(s As String)
-            Me.New(s, 4)
-        End Sub
+        Using DbObjects As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
 
-        Public Sub New(AnimationsPerSecond As Integer)
-            Me.New("/—\|", AnimationsPerSecond)
-        End Sub
+            DbObjects.Open()
 
-        Public Sub New(s As String, AnimationsPerSecond As Integer)
-            _Symbols.AddRange(s.ToCharArray)
-            _AnimationsPerSecond = AnimationsPerSecond
-            Console.Write(CurrentSymbol)
-        End Sub
+            Dim ObjectReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectList, DbObjects).ExecuteReader
 
-        Private Function CurrentSymbol() As String
+            Dim spinny As New SpinnyProgress()
 
-            If Console.CursorLeft > Console.BufferWidth - 2 Then
-                Return "."
-            Else
-                Return _Symbols(_Index)
-            End If
+            While ObjectReader.Read
 
-        End Function
+                Using DbParameters As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
 
-        Public Sub DoStep()
+                    DbParameters.Open()
 
-            Console.Write(Chr(8) & ".")
+                    Dim ObjectName As String = ObjectReader.GetString(0)
+                    Dim ObjectType As String = ObjectReader.GetString(1).ToLower
+                    Dim ObjectDefinition As String = ObjectReader.GetString(2)
+                    Dim ObjectId As Integer = ObjectReader.GetInt32(3)
 
-            If DateTime.Now.Ticks - _LastTick > TicksPerSecond / _AnimationsPerSecond Then
-                _LastTick = DateTime.Now.Ticks
-                _Index += 1
-                If _Index >= _Symbols.Count Then
-                    _Index = 0
+                    tempf.Writeline(ObjectName)
+
+
+                    Dim filetype As SquealerObjectType.eType = SquealerObjectType.Eval(ObjectType)
+
+                    Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName)
+
+
+                    Dim ParameterReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectParameters.Replace("@ObjectId", ObjectId.ToString), DbParameters).ExecuteReader
+
+                    While ParameterReader.Read
+
+                        Dim ParameterName As String = ParameterReader.GetString(0)
+                        Dim ParameterType As String = ParameterReader.GetString(1)
+                        Dim IsOutput As Boolean = ParameterReader.GetBoolean(2)
+                        Dim MaxLength As Int16 = ParameterReader.GetInt16(3)
+
+                        tempf.Writeline(ParameterName & " " & ParameterType & " " & MaxLength.ToString & " " & IIf(IsOutput, " output", "").ToString)
+
+                    End While
+
+                End Using
+
+
+
+                spinny.DoStep()
+
+
+
+                If Console.KeyAvailable() Then
+                    Throw New System.Exception("Keyboard interrupt.")
                 End If
-            End If
 
-            Console.Write(CurrentSymbol)
+            End While
 
-        End Sub
+        End Using
 
-    End Class
+        tempf.Show(UserSettings.TextEditor)
+
+        Textify.Write(" done.")
+
+        Textify.SayBullet(Textify.eBullet.Hash, ProcCount.ToString & " files generated.")
+        Textify.SayNewLine()
+
+    End Sub
+
 
 #End Region
 

@@ -549,6 +549,52 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to select
+        '''	concat(&apos;[&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;) as object_name
+        '''	,o.type
+        '''	,m.definition
+        '''	,o.object_id
+        '''from
+        '''	sys.objects o
+        '''join
+        '''	sys.sql_modules m
+        '''	on m.object_id = o.object_id
+        '''join
+        '''	sys.schemas s
+        '''	on s.schema_id = o.schema_id
+        '''where
+        '''	o.type in (&apos;P&apos;,&apos;FN&apos;,&apos;TF&apos;,&apos;IF&apos;,&apos;V&apos;)
+        '''order by
+        '''	s.name
+        '''	,o.name.
+        '''</summary>
+        Friend ReadOnly Property ObjectList() As String
+            Get
+                Return ResourceManager.GetString("ObjectList", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to select
+        '''	p.name parameter_name
+        '''	,t.name type_name
+        '''	,p.parameter_id
+        '''	,p.object_id
+        '''from
+        '''	sys.parameters p
+        '''join
+        '''	sys.types t
+        '''	on t.system_type_id = p.system_type_id
+        '''where
+        '''	p.object_id = @ObjectList.
+        '''</summary>
+        Friend ReadOnly Property ObjectParameters() As String
+            Get
+                Return ResourceManager.GetString("ObjectParameters", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
         Friend ReadOnly Property PigNose() As System.Drawing.Icon
@@ -607,7 +653,6 @@ Namespace My.Resources
         '''as
         '''begin
         '''set ansi_nulls on;
-        '''{RunLog}
         '''.
         '''</summary>
         Friend ReadOnly Property SqlBeginMultiStatementTableFunction() As String
@@ -683,7 +728,7 @@ Namespace My.Resources
         '''as
         '''begin
         '''set ansi_nulls on;
-        '''{RunLog}
+        '''
         '''declare @Result {ReturnDataType}
         '''
         ''';.
@@ -846,13 +891,13 @@ Namespace My.Resources
         '''/*######################################################################
         '''                          YOUR CODE ENDS HERE.
         '''######################################################################*/
-        '''{RuntimeParameters}
         '''
         '''/***********************************************************************
         '''	Commit the transaction. If this is the parent process, then all
         '''	pending work will be written to the database. If this is a child
         '''    process, then the commit statement will merely decrement the
-        '''	@@trancount syste [rest of string was truncated]&quot;;.
+        '''	@@trancount system variable.
+        '''******** [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlEndProcedure1() As String
             Get

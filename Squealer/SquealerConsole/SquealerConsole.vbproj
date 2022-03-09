@@ -200,6 +200,8 @@
     <Content Include="Resources\Egg\eggRebels.txt" />
     <Content Include="Resources\Egg\eggEmpire.txt" />
     <Content Include="Resources\Egg\eggVictory.txt" />
+    <Content Include="Resources\Reverse\ObjectList.txt" />
+    <Content Include="Resources\Reverse\ObjectParameters.txt" />
     <Content Include="Resources\Sql\SqlBeginMultiStatementTableFunctionTest.txt" />
     <Content Include="Resources\Sql\SqlBeginScalarFunctionTest.txt" />
     <Content Include="Resources\Sql\SqlBeginInlineTableFunction.txt" />
