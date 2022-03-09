@@ -124,6 +124,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParameterClass.vb" />
     <Compile Include="Configger.vb" />
     <Compile Include="CommandCatalog.vb" />
     <Compile Include="SquealerSettings.Designer.vb">

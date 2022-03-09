@@ -2296,7 +2296,12 @@ Module Main
     End Function
 
     ' Create a new proc or function.
+
     Private Function CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String) As String
+        Return CreateNewFile(WorkingFolder, FileType, filename, Nothing, Nothing)
+    End Function
+
+    Private Function CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String, Parameters As ParameterCollection, definition As String) As String
 
         Dim Template As String = String.Empty
         Select Case FileType
@@ -2313,6 +2318,26 @@ Module Main
         End Select
         Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", MyThis)
 
+        Dim silent As Boolean = False
+
+
+        If Parameters IsNot Nothing Then
+
+            silent = True
+
+            If FileType = SquealerObjectType.eType.ScalarFunction Then
+                Template = Template.Replace("{ReturnDataType}", Parameters.ReturnType.Type)
+            End If
+
+            ' for StoredProcedure and ??????
+
+            Dim parms As String = String.Empty
+            For Each p As ParameterClass In Parameters.Items
+                parms &= String.Format("<Parameter Name=""{0}"" Type=""{1}"" Output=""{2}"" />", p.Name, p.Type, p.IsOutput.ToString)
+            Next
+            Template = Template.Replace("<!--Parameters-->", parms)
+        End If
+
         ' Did user forget the "-" prefix before the object type switch? ex: tf instead of -tf
         For Each s As String In System.Enum.GetNames(GetType(SquealerObjectType.eShortType))
             If filename.ToLower.StartsWith(s.ToLower & " ") Then
@@ -2328,19 +2353,29 @@ Module Main
         'Dim fqTemp As String = My.Computer.FileSystem.GetTempFileName
         Dim fqTarget As String = WorkingFolder & "\" & filename & MyConstants.ObjectFileExtension
 
+        If definition IsNot Nothing Then
+            Template = Template.Replace("</Code>", String.Format("<![CDATA[{0}]]></Code>", definition))
+        End If
+
         ' Careful not to overwrite existing file.
         If My.Computer.FileSystem.FileExists(fqTarget) Then
-            Textify.SayError("File already exists.")
+            If Not silent Then
+                Textify.SayError("File already exists.")
+            End If
             CreateNewFile = String.Empty
         Else
             My.Computer.FileSystem.WriteAllText(fqTarget, Template, False, System.Text.Encoding.ASCII)
             RepairXmlFile(True, fqTarget, False)
-            Textify.SayBullet(Textify.eBullet.Hash, "OK")
-            Textify.WriteLine(" (" & filename & ")")
+            If Not silent Then
+                Textify.SayBullet(Textify.eBullet.Hash, "OK")
+                Textify.WriteLine(" (" & filename & ")")
+            End If
             CreateNewFile = fqTarget
         End If
 
-        Textify.SayNewLine()
+        If Not silent Then
+            Textify.SayNewLine()
+        End If
 
     End Function
 
@@ -2911,7 +2946,7 @@ Module Main
 
         End Function
 
-        Public Sub DoStep()
+        Public Sub DoStep(final As Boolean)
 
             Console.Write(Chr(8) & ".")
 
@@ -2923,8 +2958,20 @@ Module Main
                 End If
             End If
 
-            Console.Write(CurrentSymbol)
+            If final Then
+                Console.WriteLine("*")
+            Else
+                Console.Write(CurrentSymbol)
+            End If
 
+        End Sub
+
+        Public Sub DoStep()
+            DoStep(False)
+        End Sub
+
+        Public Sub Finish()
+            DoStep(True)
         End Sub
 
     End Class
@@ -3630,20 +3677,19 @@ Module Main
 
             End While
 
+            spinny.Finish()
+
         End Using
 
-        Textify.Write(" done.")
-
-        Textify.SayBullet(Textify.eBullet.Hash, ProcCount.ToString & " files generated.")
         Textify.SayNewLine()
+        Textify.SayBullet(Textify.eBullet.Hash, String.Format("{0} files automatically created.", ProcCount.ToString))
+        Textify.SayNewLine(2)
 
     End Sub
 
     Private Sub ReverseEngineer(cs As String, WorkingFolder As String)
 
         Textify.Write("Reading objects .")
-
-        Dim tempf As New TempFileHandler
 
         Dim ProcCount As Integer = 0
 
@@ -3666,15 +3712,11 @@ Module Main
                     Dim ObjectDefinition As String = ObjectReader.GetString(2)
                     Dim ObjectId As Integer = ObjectReader.GetInt32(3)
 
-                    tempf.Writeline(ObjectName)
-
-
                     Dim filetype As SquealerObjectType.eType = SquealerObjectType.Eval(ObjectType)
 
-                    Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName)
-
-
                     Dim ParameterReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectParameters.Replace("@ObjectId", ObjectId.ToString), DbParameters).ExecuteReader
+
+                    Dim ParameterList As New ParameterCollection
 
                     While ParameterReader.Read
 
@@ -3683,17 +3725,17 @@ Module Main
                         Dim IsOutput As Boolean = ParameterReader.GetBoolean(2)
                         Dim MaxLength As Int16 = ParameterReader.GetInt16(3)
 
-                        tempf.Writeline(ParameterName & " " & ParameterType & " " & MaxLength.ToString & " " & IIf(IsOutput, " output", "").ToString)
+                        ParameterList.Add(New ParameterClass(ParameterName, ParameterType, MaxLength, IsOutput))
 
                     End While
 
+                    Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName, ParameterList, ObjectDefinition)
+
+                    ProcCount += 1
+
                 End Using
 
-
-
                 spinny.DoStep()
-
-
 
                 If Console.KeyAvailable() Then
                     Throw New System.Exception("Keyboard interrupt.")
@@ -3701,14 +3743,14 @@ Module Main
 
             End While
 
+            spinny.Finish()
+
         End Using
 
-        tempf.Show(UserSettings.TextEditor)
 
-        Textify.Write(" done.")
-
-        Textify.SayBullet(Textify.eBullet.Hash, ProcCount.ToString & " files generated.")
         Textify.SayNewLine()
+        Textify.SayBullet(Textify.eBullet.Hash, String.Format("{0} files reverse engineered.", ProcCount.ToString))
+        Textify.SayNewLine(2)
 
     End Sub
 

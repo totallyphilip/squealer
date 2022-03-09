@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Squealer Type="{RootType}">
-    <Code>
+<Parameters>
+<!--Parameters-->
+</Parameters>
+<Code>
 /***********************************************************************
 	Comments.
 ***********************************************************************/
