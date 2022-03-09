@@ -3,12 +3,5 @@
 <Parameters>
 <!--Parameters-->
 </Parameters>
-<Code>
-/***********************************************************************
-	Comments.
-***********************************************************************/
-
-select 'hello world! love, {THIS}' as [MyColumn]
-
-</Code>
+<Code/>
 </Squealer>

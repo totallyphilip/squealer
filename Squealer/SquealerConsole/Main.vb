@@ -2171,11 +2171,31 @@ Module Main
                 InCode = BeautifiedCode(InCode)
             End If
         Catch ex As Exception
-            InCode = "Code."
+            InCode = String.Empty
         End Try
 
-        'If InCode.Trim = String.Empty Then
-        'End If
+        If InCode.Trim = String.Empty Then
+            InCode = "/***********************************************************************" _
+                & vbCrLf & vbTab & "Comments." _
+                & vbCrLf & "***********************************************************************/" _
+                & vbCrLf & vbCrLf
+            Select Case obj.Type.LongType
+                Case SquealerObjectType.eType.InlineTableFunction
+                    InCode &= "select 'hello world! love, {THIS}' as [MyColumn]"
+                Case SquealerObjectType.eType.MultiStatementTableFunction
+                    InCode &= "insert @TableValue select 'hello world! love, {THIS}'"
+                Case SquealerObjectType.eType.ScalarFunction
+                    InCode &= "set @Result = 'hello world! love, {THIS}'"
+                Case SquealerObjectType.eType.StoredProcedure
+                    InCode &= "select 'hello world! love, {THIS}'"
+                Case SquealerObjectType.eType.View
+                    InCode &= "select 'hello world! love, {THIS}' as hello"
+            End Select
+
+
+
+
+        End If
 
         CDataCode.InnerText = String.Concat(vbCrLf, vbCrLf, InCode.Trim, vbCrLf, vbCrLf)
         OutCode.AppendChild(CDataCode)
@@ -2206,7 +2226,7 @@ Module Main
         Dim OutPostCode As Xml.XmlElement = OutputXml.CreateElement("PostCode")
         Dim CDataPostCode As Xml.XmlCDataSection = OutputXml.CreateCDataSection("") ' CData disables the XML parser so that special characters can exist in the inner text.
 
-        OutRoot.AppendChild(OutputXml.CreateComment(" Optional T-SQL to execute after the main object is created. "))
+        OutRoot.AppendChild(OutputXml.CreateComment(" Optional T-SQL to execute after the main object Is created. "))
         OutRoot.AppendChild(OutPostCode)
 
         Dim InPostCode As String = String.Empty
@@ -2321,7 +2341,9 @@ Module Main
         Dim silent As Boolean = False
 
 
-        If Parameters IsNot Nothing Then
+        If Parameters Is Nothing Then
+            Template = Template.Replace("{ReturnDataType}", "varchar(100)")
+        Else
 
             silent = True
 
@@ -2354,7 +2376,7 @@ Module Main
         Dim fqTarget As String = WorkingFolder & "\" & filename & MyConstants.ObjectFileExtension
 
         If definition IsNot Nothing Then
-            Template = Template.Replace("</Code>", String.Format("<![CDATA[{0}]]></Code>", definition))
+            Template = Template.Replace("<Code/>", String.Format("<Code><![CDATA[{0}]]></Code>", definition))
         End If
 
         ' Careful not to overwrite existing file.

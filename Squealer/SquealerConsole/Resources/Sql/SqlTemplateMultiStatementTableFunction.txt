@@ -3,15 +3,5 @@
 <Parameters>
 <!--Parameters-->
 </Parameters>
-<Code>
-/***********************************************************************
-	Comments.
-***********************************************************************/
-
-insert
-    @TableValue
-select
-    'hello world! love, {THIS}'
-
-</Code>
+<Code/>
 </Squealer>

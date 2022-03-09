@@ -4,12 +4,5 @@
 <!--Parameters-->
 </Parameters>
 <Returns Type="{ReturnDataType}" />
-    <Code>
-/***********************************************************************
-	Comments.
-***********************************************************************/
-
-set @Result = 'hello world! love, {THIS}'
-
-</Code>
+<Code/>
 </Squealer>

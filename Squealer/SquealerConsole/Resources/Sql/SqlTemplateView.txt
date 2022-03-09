@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Squealer Type="{RootType}">
-    <Code>
-/***********************************************************************
-	Comments.
-***********************************************************************/
-
-select 'hello world! love, {THIS}' as hello
-
-</Code>
+<Code/>
 </Squealer>
