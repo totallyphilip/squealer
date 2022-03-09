@@ -549,8 +549,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property Folder() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Folder", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to select
-        '''	concat(&apos;[&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;) as object_name
+        '''	concat(s.name,&apos;.&apos;,o.name) as object_name
         '''	,o.type
         '''	,m.definition
         '''	,o.object_id
@@ -578,15 +588,17 @@ Namespace My.Resources
         '''  Looks up a localized string similar to select
         '''	p.name parameter_name
         '''	,t.name type_name
-        '''	,p.parameter_id
-        '''	,p.object_id
+        '''	,p.is_output
+        '''	,p.max_length
         '''from
         '''	sys.parameters p
         '''join
         '''	sys.types t
         '''	on t.system_type_id = p.system_type_id
         '''where
-        '''	p.object_id = @ObjectList.
+        '''	p.object_id = @ObjectId
+        '''order by
+        '''	p.parameter_id.
         '''</summary>
         Friend ReadOnly Property ObjectParameters() As String
             Get

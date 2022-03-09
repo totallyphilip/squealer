@@ -45,10 +45,12 @@ Partial Class SquealerSettings
         Me.Label1 = New System.Windows.Forms.Label()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.rbClipboard = New System.Windows.Forms.RadioButton()
         Me.rbTempFile = New System.Windows.Forms.RadioButton()
+        Me.rbClipboard = New System.Windows.Forms.RadioButton()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
+        Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -102,7 +104,7 @@ Partial Class SquealerSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTextEditorProgram.Location = New System.Drawing.Point(59, 22)
         Me.txtTextEditorProgram.Name = "txtTextEditorProgram"
-        Me.txtTextEditorProgram.Size = New System.Drawing.Size(478, 20)
+        Me.txtTextEditorProgram.Size = New System.Drawing.Size(438, 20)
         Me.txtTextEditorProgram.TabIndex = 8
         '
         'optShowGitBranch
@@ -239,6 +241,7 @@ Partial Class SquealerSettings
         '
         Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox3.Controls.Add(Me.Button1)
         Me.GroupBox3.Controls.Add(Me.txtTextEditorSwitches)
         Me.GroupBox3.Controls.Add(Me.Label2)
         Me.GroupBox3.Controls.Add(Me.Label1)
@@ -301,24 +304,16 @@ Partial Class SquealerSettings
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Proc/Function/View output"
         '
-        'optDetectOldSquealerObjects
+        'rbTempFile
         '
-        Me.optDetectOldSquealerObjects.AutoSize = True
-        Me.optDetectOldSquealerObjects.Location = New System.Drawing.Point(6, 19)
-        Me.optDetectOldSquealerObjects.Name = "optDetectOldSquealerObjects"
-        Me.optDetectOldSquealerObjects.Size = New System.Drawing.Size(197, 17)
-        Me.optDetectOldSquealerObjects.TabIndex = 8
-        Me.optDetectOldSquealerObjects.Text = "Detect deprecated Squealer objects"
-        Me.optDetectOldSquealerObjects.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(6, 44)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(77, 13)
-        Me.Label6.TabIndex = 9
-        Me.Label6.Text = "Send output to"
+        Me.rbTempFile.AutoSize = True
+        Me.rbTempFile.Location = New System.Drawing.Point(168, 42)
+        Me.rbTempFile.Name = "rbTempFile"
+        Me.rbTempFile.Size = New System.Drawing.Size(113, 17)
+        Me.rbTempFile.TabIndex = 11
+        Me.rbTempFile.TabStop = True
+        Me.rbTempFile.Text = "text editor temp file"
+        Me.rbTempFile.UseVisualStyleBackColor = True
         '
         'rbClipboard
         '
@@ -331,16 +326,39 @@ Partial Class SquealerSettings
         Me.rbClipboard.Text = "clipboard"
         Me.rbClipboard.UseVisualStyleBackColor = True
         '
-        'rbTempFile
+        'Label6
         '
-        Me.rbTempFile.AutoSize = True
-        Me.rbTempFile.Location = New System.Drawing.Point(168, 42)
-        Me.rbTempFile.Name = "rbTempFile"
-        Me.rbTempFile.Size = New System.Drawing.Size(113, 17)
-        Me.rbTempFile.TabIndex = 11
-        Me.rbTempFile.TabStop = True
-        Me.rbTempFile.Text = "text editor temp file"
-        Me.rbTempFile.UseVisualStyleBackColor = True
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(6, 44)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(77, 13)
+        Me.Label6.TabIndex = 9
+        Me.Label6.Text = "Send output to"
+        '
+        'optDetectOldSquealerObjects
+        '
+        Me.optDetectOldSquealerObjects.AutoSize = True
+        Me.optDetectOldSquealerObjects.Location = New System.Drawing.Point(6, 19)
+        Me.optDetectOldSquealerObjects.Name = "optDetectOldSquealerObjects"
+        Me.optDetectOldSquealerObjects.Size = New System.Drawing.Size(197, 17)
+        Me.optDetectOldSquealerObjects.TabIndex = 8
+        Me.optDetectOldSquealerObjects.Text = "Detect deprecated Squealer objects"
+        Me.optDetectOldSquealerObjects.UseVisualStyleBackColor = True
+        '
+        'dlgTextEditor
+        '
+        Me.dlgTextEditor.DefaultExt = "exe"
+        Me.dlgTextEditor.FileName = "OpenFileDialog1"
+        Me.dlgTextEditor.Filter = "*.exe|*.exe"
+        '
+        'Button1
+        '
+        Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
+        Me.Button1.Location = New System.Drawing.Point(503, 15)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(34, 33)
+        Me.Button1.TabIndex = 20
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'SquealerSettings
         '
@@ -396,4 +414,6 @@ Partial Class SquealerSettings
     Friend WithEvents rbTempFile As System.Windows.Forms.RadioButton
     Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 End Class
