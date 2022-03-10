@@ -40,6 +40,7 @@ Partial Class SquealerSettings
         Me.txtWildcardExample = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.txtTextEditorSwitches = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -50,7 +51,6 @@ Partial Class SquealerSettings
         Me.Label6 = New System.Windows.Forms.Label()
         Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -104,13 +104,13 @@ Partial Class SquealerSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTextEditorProgram.Location = New System.Drawing.Point(59, 22)
         Me.txtTextEditorProgram.Name = "txtTextEditorProgram"
-        Me.txtTextEditorProgram.Size = New System.Drawing.Size(438, 20)
+        Me.txtTextEditorProgram.Size = New System.Drawing.Size(396, 20)
         Me.txtTextEditorProgram.TabIndex = 8
         '
         'optShowGitBranch
         '
         Me.optShowGitBranch.AutoSize = True
-        Me.optShowGitBranch.Location = New System.Drawing.Point(6, 88)
+        Me.optShowGitBranch.Location = New System.Drawing.Point(6, 65)
         Me.optShowGitBranch.Name = "optShowGitBranch"
         Me.optShowGitBranch.Size = New System.Drawing.Size(243, 17)
         Me.optShowGitBranch.TabIndex = 9
@@ -120,7 +120,7 @@ Partial Class SquealerSettings
         'rbCompact
         '
         Me.rbCompact.AutoSize = True
-        Me.rbCompact.Location = New System.Drawing.Point(94, 112)
+        Me.rbCompact.Location = New System.Drawing.Point(94, 89)
         Me.rbCompact.Name = "rbCompact"
         Me.rbCompact.Size = New System.Drawing.Size(66, 17)
         Me.rbCompact.TabIndex = 10
@@ -131,7 +131,7 @@ Partial Class SquealerSettings
         'rbFull
         '
         Me.rbFull.AutoSize = True
-        Me.rbFull.Location = New System.Drawing.Point(166, 112)
+        Me.rbFull.Location = New System.Drawing.Point(166, 89)
         Me.rbFull.Name = "rbFull"
         Me.rbFull.Size = New System.Drawing.Size(38, 17)
         Me.rbFull.TabIndex = 12
@@ -142,7 +142,7 @@ Partial Class SquealerSettings
         'rbSymbolic
         '
         Me.rbSymbolic.AutoSize = True
-        Me.rbSymbolic.Location = New System.Drawing.Point(210, 112)
+        Me.rbSymbolic.Location = New System.Drawing.Point(210, 89)
         Me.rbSymbolic.Name = "rbSymbolic"
         Me.rbSymbolic.Size = New System.Drawing.Size(65, 17)
         Me.rbSymbolic.TabIndex = 13
@@ -165,7 +165,7 @@ Partial Class SquealerSettings
         Me.GroupBox1.Controls.Add(Me.rbCompact)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(543, 184)
+        Me.GroupBox1.Size = New System.Drawing.Size(501, 164)
         Me.GroupBox1.TabIndex = 14
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "General"
@@ -173,7 +173,7 @@ Partial Class SquealerSettings
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(6, 146)
+        Me.Label3.Location = New System.Drawing.Point(6, 123)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(151, 13)
         Me.Label3.TabIndex = 1
@@ -181,7 +181,7 @@ Partial Class SquealerSettings
         '
         'updnFolderSaves
         '
-        Me.updnFolderSaves.Location = New System.Drawing.Point(166, 144)
+        Me.updnFolderSaves.Location = New System.Drawing.Point(166, 121)
         Me.updnFolderSaves.Name = "updnFolderSaves"
         Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
         Me.updnFolderSaves.TabIndex = 0
@@ -189,7 +189,7 @@ Partial Class SquealerSettings
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(6, 114)
+        Me.Label5.Location = New System.Drawing.Point(6, 91)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(81, 13)
         Me.Label5.TabIndex = 14
@@ -204,9 +204,9 @@ Partial Class SquealerSettings
         Me.GroupBox2.Controls.Add(Me.optUseWildcards)
         Me.GroupBox2.Controls.Add(Me.txtWildcardExample)
         Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 327)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 278)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(543, 73)
+        Me.GroupBox2.Size = New System.Drawing.Size(501, 73)
         Me.GroupBox2.TabIndex = 15
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Filename matching"
@@ -246,12 +246,22 @@ Partial Class SquealerSettings
         Me.GroupBox3.Controls.Add(Me.Label2)
         Me.GroupBox3.Controls.Add(Me.Label1)
         Me.GroupBox3.Controls.Add(Me.txtTextEditorProgram)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 406)
+        Me.GroupBox3.Location = New System.Drawing.Point(12, 357)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(543, 90)
+        Me.GroupBox3.Size = New System.Drawing.Size(501, 90)
         Me.GroupBox3.TabIndex = 16
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Text editor"
+        '
+        'Button1
+        '
+        Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
+        Me.Button1.Location = New System.Drawing.Point(461, 15)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(34, 33)
+        Me.Button1.TabIndex = 20
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'txtTextEditorSwitches
         '
@@ -259,7 +269,7 @@ Partial Class SquealerSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTextEditorSwitches.Location = New System.Drawing.Point(59, 54)
         Me.txtTextEditorSwitches.Name = "txtTextEditorSwitches"
-        Me.txtTextEditorSwitches.Size = New System.Drawing.Size(478, 20)
+        Me.txtTextEditorSwitches.Size = New System.Drawing.Size(436, 20)
         Me.txtTextEditorSwitches.TabIndex = 11
         '
         'Label2
@@ -284,7 +294,7 @@ Partial Class SquealerSettings
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(480, 502)
+        Me.btnOK.Location = New System.Drawing.Point(438, 453)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
@@ -293,13 +303,15 @@ Partial Class SquealerSettings
         '
         'GroupBox4
         '
+        Me.GroupBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox4.Controls.Add(Me.rbTempFile)
         Me.GroupBox4.Controls.Add(Me.rbClipboard)
         Me.GroupBox4.Controls.Add(Me.Label6)
         Me.GroupBox4.Controls.Add(Me.optDetectOldSquealerObjects)
-        Me.GroupBox4.Location = New System.Drawing.Point(12, 202)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 182)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(543, 119)
+        Me.GroupBox4.Size = New System.Drawing.Size(501, 90)
         Me.GroupBox4.TabIndex = 19
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Proc/Function/View output"
@@ -351,21 +363,12 @@ Partial Class SquealerSettings
         Me.dlgTextEditor.FileName = "OpenFileDialog1"
         Me.dlgTextEditor.Filter = "*.exe|*.exe"
         '
-        'Button1
-        '
-        Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.Button1.Location = New System.Drawing.Point(503, 15)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(34, 33)
-        Me.Button1.TabIndex = 20
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(567, 564)
+        Me.ClientSize = New System.Drawing.Size(525, 490)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.GroupBox3)

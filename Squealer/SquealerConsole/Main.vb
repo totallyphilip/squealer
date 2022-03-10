@@ -252,6 +252,7 @@ Module Main
         [fix]
         [forget]
         [generate]
+        [reverse]
         [help]
         [list]
         [new]
@@ -265,7 +266,7 @@ Module Main
         [checkout]
         [use]
         [usetheforce]
-        make
+        [make]
     End Enum
 
 #End Region
@@ -977,12 +978,16 @@ Module Main
 
 
 
-        ' kessel
+        ' make
         cmd = New CommandCatalog.CommandDefinition({eCommandType.make.ToString}, {String.Format("Automatically create {0} objects.", My.Application.Info.ProductName), "Create default insert, update, read, and delete objects for the target database. Define the target database with the " & eCommandType.connection.ToString.ToUpper & " command."}, CommandCatalog.eCommandCategory.file)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("nosave;generate everything, {0} local output", eCommandType.nuke.ToString.ToUpper)))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("r;replace existing {0} objects only", My.Application.Info.ProductName)))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("nocomment;omit data source and timestamp from comment section"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("nuke;{2} *{0}*{1}", MyConstants.AutocreateFilename, MyConstants.ObjectFileExtension, eCommandType.nuke.ToString.ToUpper)))
+        MyCommands.Items.Add(cmd)
+
+        ' reverse engineer
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.reverse.ToString}, {String.Format("Reverse engineer SQL objects.", My.Application.Info.ProductName), "Reverse engineer existing SQL Server objects from the target database. Define the target database with the " & eCommandType.connection.ToString.ToUpper & " command. Duplicate filenames will not be overwritten."}, CommandCatalog.eCommandCategory.file)
         MyCommands.Items.Add(cmd)
 
 
@@ -1563,6 +1568,15 @@ Module Main
                     End If
 
 
+
+
+                ElseIf MyCommand.Keyword = eCommandType.reverse.ToString Then
+
+                    ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder)
+
+
+
+
                 ElseIf MyCommand.Keyword = "test" Then 'footest
 
 
@@ -1576,7 +1590,7 @@ Module Main
                     End If
 
 
-                    ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder)
+
 
 
 

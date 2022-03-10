@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("Squealer 2022")>
-<Assembly: AssemblyDescription("A tool for managing SQL Server functions, views, and stored procedures with built-in error handling and execution logging.")>
+<Assembly: AssemblyDescription("A tool for creating SQL Server functions, views, and stored procedures with built-in error handling.")>
 <Assembly: AssemblyCompany("Philip Wright")>
 <Assembly: AssemblyProduct("Squealer")>
 <Assembly: AssemblyCopyright("(c) 2022 Philip Wright")>

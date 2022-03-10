@@ -290,4 +290,6 @@
 
 {2}Added the option to detect deprecated Squealer objects (tables, views, etc.) since runlogging is no longer supported.
 
+{2}Added REVERSE command to reverse engineer tables, views, and functions from SQL Server into the working folder.
+
 
