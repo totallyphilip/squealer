@@ -87,10 +87,28 @@
                 Case eType.View
                     Return "View"
                 Case Else
-                    Return "Invalid"
+                    Return eType.Invalid.ToString
             End Select
         End Get
     End Property
+
+    Public Shared Function EvalSimpleType(t As eType) As String
+        Select Case t
+            Case eType.StoredProcedure
+                Return "procedure"
+            Case eType.ScalarFunction
+                Return "function"
+            Case eType.InlineTableFunction
+                Return "function"
+            Case eType.MultiStatementTableFunction
+                Return "function"
+            Case eType.View
+                Return "view"
+            Case Else
+                Return eType.Invalid.ToString
+        End Select
+
+    End Function
 
     Public Shared Function ToShortType(t As SquealerObjectType.eType) As eShortType
         Select Case t

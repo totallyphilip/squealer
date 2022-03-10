@@ -30,7 +30,7 @@ Public Class ParameterClass
         Get
             Dim t As String = _Type
             If t.ToLower.Contains("char") Then
-                t &= String.Format("({0})", _Length.ToString)
+                t &= String.Format("({0})", IIf(_Length = -1, "max", _Length.ToString))
             End If
             Return t
         End Get

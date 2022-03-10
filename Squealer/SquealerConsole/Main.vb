@@ -3474,7 +3474,7 @@ Module Main
 
     Private Sub Automagic(cs As String, WorkingFolder As String, ReplaceOnly As Boolean, datasourcecomment As Boolean)
 
-        Textify.Write("Reading tables .")
+        Textify.Write("Reading tables..")
 
         Dim ProcCount As Integer = 0
 
@@ -3735,9 +3735,11 @@ Module Main
 
     Private Sub ReverseEngineer(cs As String, WorkingFolder As String)
 
-        Textify.Write("Reading objects .")
+        Console.Write("Reading procs, views, functions..")
 
         Dim ProcCount As Integer = 0
+        Dim SkippedCount As Integer = 0
+        Dim tempfile As New TempFileHandler
 
         Using DbObjects As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
 
@@ -3747,7 +3749,7 @@ Module Main
 
             Dim spinny As New SpinnyProgress()
 
-            While ObjectReader.Read
+            While ObjectReader.Read ' loop thru procs, views, functions
 
                 Dim ParameterList As New ParameterCollection
                 Dim UserList As New List(Of String)
@@ -3765,7 +3767,7 @@ Module Main
 
                     Dim ParameterReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectParameters.Replace("@ObjectId", ObjectId.ToString), DbParameters).ExecuteReader
 
-                    While ParameterReader.Read
+                    While ParameterReader.Read ' loop thru parameters
 
                         Dim ParameterName As String = ParameterReader.GetString(0)
                         Dim ParameterType As String = ParameterReader.GetString(1)
@@ -3784,7 +3786,7 @@ Module Main
 
                     Dim UserReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectPermissions.Replace("@ObjectId", ObjectId.ToString), DbUsers).ExecuteReader
 
-                    While UserReader.Read
+                    While UserReader.Read ' loop thru user permissions granted
 
                         Dim UserName As String = UserReader.GetString(0)
 
@@ -3794,9 +3796,63 @@ Module Main
 
                 End Using
 
-                Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName, ParameterList, ObjectDefinition, UserList)
+#Region " strip out squealer crap "
 
-                ProcCount += 1
+                ' delete head
+                Try
+                    Dim s As String = "create " & SquealerObjectType.EvalSimpleType(filetype)
+                    ObjectDefinition = ObjectDefinition.Remove(0, ObjectDefinition.ToLower.IndexOf(s) + s.Length + 1)
+                Catch ex As Exception
+                End Try
+
+                ' delete tail
+                Try
+                    Dim s As String = String.Empty
+                    Select Case filetype
+                        Case SquealerObjectType.eType.StoredProcedure
+                            s = "YOUR CODE ENDS HERE."
+                        Case SquealerObjectType.eType.ScalarFunction
+                            s = "Return the function result."
+                    End Select
+                    If Not String.IsNullOrEmpty(s) Then
+                        ObjectDefinition = ObjectDefinition.Substring(0, ObjectDefinition.IndexOf(s))
+                    End If
+                Catch ex As Exception
+                End Try
+
+                ' delete everything between parameters and beginning of code
+                Try
+
+                    Dim s As String = String.Empty
+                    Dim s2 As String = String.Empty
+                    Select Case filetype
+                        Case SquealerObjectType.eType.StoredProcedure
+                            s = "Begin the transaction. Start the TRY..CATCH wrapper."
+                            s2 = "YOUR CODE BEGINS HERE."
+                        Case SquealerObjectType.eType.ScalarFunction
+                            s = "returns"
+                            s2 = "declare @Result " & ParameterList.ReturnType.Type
+                    End Select
+                    If Not String.IsNullOrEmpty(s) Then
+                        Dim startpos As Integer = ObjectDefinition.IndexOf(s)
+                        Dim charcount As Integer = ObjectDefinition.IndexOf(s2) + s2.Length - startpos
+                        ObjectDefinition = ObjectDefinition.Remove(startpos, charcount)
+                    End If
+                Catch ex As Exception
+                End Try
+
+#End Region
+
+                ObjectDefinition = "-- reverse engineered on " & Now.ToString & vbCrLf & vbCrLf & ObjectDefinition
+
+                Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName, ParameterList, ObjectDefinition, UserList)
+                If f = String.Empty Then
+                    SkippedCount += 1
+                    tempfile.Writeline(ObjectName & " -- OK")
+                Else
+                    ProcCount += 1
+                    tempfile.Writeline(String.Format("{0} -- file already exists ({1})", ObjectName, filetype.ToString))
+                End If
                 spinny.DoStep()
 
                 If Console.KeyAvailable() Then
@@ -3809,10 +3865,13 @@ Module Main
 
         End Using
 
-
         Textify.SayNewLine()
-        Textify.SayBullet(Textify.eBullet.Hash, String.Format("{0} files reverse engineered.", ProcCount.ToString))
+        Textify.SayBullet(Textify.eBullet.Hash, String.Format("{0} files reverse engineered; {1} skipped (duplicate filename).", ProcCount.ToString, SkippedCount.ToString))
+        Textify.SayNewLine()
+        Textify.SayBullet(Textify.eBullet.Hash, "Results not guaranteed!", 0, New Textify.ColorScheme(ConsoleColor.Yellow))
         Textify.SayNewLine(2)
+
+        tempfile.Show(UserSettings.TextEditor)
 
     End Sub
 
