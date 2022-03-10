@@ -2318,10 +2318,10 @@ Module Main
     ' Create a new proc or function.
 
     Private Function CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String) As String
-        Return CreateNewFile(WorkingFolder, FileType, filename, Nothing, Nothing)
+        Return CreateNewFile(WorkingFolder, FileType, filename, Nothing, Nothing, Nothing)
     End Function
 
-    Private Function CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String, Parameters As ParameterCollection, definition As String) As String
+    Private Function CreateNewFile(ByVal WorkingFolder As String, ByVal FileType As SquealerObjectType.eType, ByVal filename As String, Parameters As ParameterCollection, definition As String, userlist As List(Of String)) As String
 
         Dim Template As String = String.Empty
         Select Case FileType
@@ -2338,26 +2338,36 @@ Module Main
         End Select
         Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", MyThis)
 
-        Dim silent As Boolean = False
+        Dim IsNew As Boolean = True
 
 
         If Parameters Is Nothing Then
             Template = Template.Replace("{ReturnDataType}", "varchar(100)")
         Else
 
-            silent = True
+            IsNew = False
 
             If FileType = SquealerObjectType.eType.ScalarFunction Then
                 Template = Template.Replace("{ReturnDataType}", Parameters.ReturnType.Type)
             End If
-
-            ' for StoredProcedure and ??????
 
             Dim parms As String = String.Empty
             For Each p As ParameterClass In Parameters.Items
                 parms &= String.Format("<Parameter Name=""{0}"" Type=""{1}"" Output=""{2}"" />", p.Name, p.Type, p.IsOutput.ToString)
             Next
             Template = Template.Replace("<!--Parameters-->", parms)
+        End If
+
+        If userlist IsNot Nothing Then
+
+            IsNew = False
+
+            Dim users As String = String.Empty
+            For Each s As String In userlist
+                users &= String.Format("<User Name= ""{0}""/>", s)
+            Next
+            Template = Template.Replace("<Users/>", String.Format("<Users>{0}</Users>", users))
+
         End If
 
         ' Did user forget the "-" prefix before the object type switch? ex: tf instead of -tf
@@ -2381,21 +2391,21 @@ Module Main
 
         ' Careful not to overwrite existing file.
         If My.Computer.FileSystem.FileExists(fqTarget) Then
-            If Not silent Then
+            If IsNew Then
                 Textify.SayError("File already exists.")
             End If
             CreateNewFile = String.Empty
         Else
             My.Computer.FileSystem.WriteAllText(fqTarget, Template, False, System.Text.Encoding.ASCII)
-            RepairXmlFile(True, fqTarget, False)
-            If Not silent Then
+            RepairXmlFile(IsNew, fqTarget, False)
+            If IsNew Then
                 Textify.SayBullet(Textify.eBullet.Hash, "OK")
                 Textify.WriteLine(" (" & filename & ")")
             End If
             CreateNewFile = fqTarget
         End If
 
-        If Not silent Then
+        If IsNew Then
             Textify.SayNewLine()
         End If
 
@@ -3725,20 +3735,21 @@ Module Main
 
             While ObjectReader.Read
 
+                Dim ParameterList As New ParameterCollection
+                Dim UserList As New List(Of String)
+
+                Dim ObjectName As String = ObjectReader.GetString(0)
+                Dim ObjectType As String = ObjectReader.GetString(1).ToLower
+                Dim ObjectDefinition As String = ObjectReader.GetString(2)
+                Dim ObjectId As Integer = ObjectReader.GetInt32(3)
+
+                Dim filetype As SquealerObjectType.eType = SquealerObjectType.Eval(ObjectType)
+
                 Using DbParameters As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
 
                     DbParameters.Open()
 
-                    Dim ObjectName As String = ObjectReader.GetString(0)
-                    Dim ObjectType As String = ObjectReader.GetString(1).ToLower
-                    Dim ObjectDefinition As String = ObjectReader.GetString(2)
-                    Dim ObjectId As Integer = ObjectReader.GetInt32(3)
-
-                    Dim filetype As SquealerObjectType.eType = SquealerObjectType.Eval(ObjectType)
-
                     Dim ParameterReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectParameters.Replace("@ObjectId", ObjectId.ToString), DbParameters).ExecuteReader
-
-                    Dim ParameterList As New ParameterCollection
 
                     While ParameterReader.Read
 
@@ -3751,12 +3762,27 @@ Module Main
 
                     End While
 
-                    Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName, ParameterList, ObjectDefinition)
+                End Using
 
-                    ProcCount += 1
+                Using DbUsers As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
+
+                    DbUsers.Open()
+
+                    Dim UserReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectPermissions.Replace("@ObjectId", ObjectId.ToString), DbUsers).ExecuteReader
+
+                    While UserReader.Read
+
+                        Dim UserName As String = UserReader.GetString(0)
+
+                        UserList.Add(UserName)
+
+                    End While
 
                 End Using
 
+                Dim f As String = CreateNewFile(WorkingFolder, filetype, ObjectName, ParameterList, ObjectDefinition, UserList)
+
+                ProcCount += 1
                 spinny.DoStep()
 
                 If Console.KeyAvailable() Then

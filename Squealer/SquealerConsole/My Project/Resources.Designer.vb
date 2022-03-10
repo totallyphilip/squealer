@@ -607,6 +607,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to .
+        '''</summary>
+        Friend ReadOnly Property ObjectPermissions() As String
+            Get
+                Return ResourceManager.GetString("ObjectPermissions", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
         Friend ReadOnly Property PigNose() As System.Drawing.Icon
@@ -1055,14 +1064,10 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
         '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''    &lt;Code&gt;
-        '''/***********************************************************************
-        '''	Comments.
-        '''***********************************************************************/
-        '''
-        '''select &apos;hello world! love, {THIS}&apos; as [MyColumn]
-        '''
-        '''&lt;/Code&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Code/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1075,17 +1080,10 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
         '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''    &lt;Code&gt;
-        '''/***********************************************************************
-        '''	Comments.
-        '''***********************************************************************/
-        '''
-        '''insert
-        '''    @TableValue
-        '''select
-        '''    &apos;hello world! love, {THIS}&apos;
-        '''
-        '''&lt;/Code&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Code/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1098,14 +1096,10 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
         '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''    &lt;Code&gt;
-        '''/***********************************************************************
-        '''	Comments.
-        '''***********************************************************************/
-        '''
-        '''select &apos;hello world! love, {THIS}&apos;
-        '''
-        '''&lt;/Code&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Code/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1118,15 +1112,11 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
         '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''    &lt;Returns Type=&quot;varchar(100)&quot; /&gt;
-        '''    &lt;Code&gt;
-        '''/***********************************************************************
-        '''	Comments.
-        '''***********************************************************************/
-        '''
-        '''set @Result = &apos;hello world! love, {THIS}&apos;
-        '''
-        '''&lt;/Code&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Returns Type=&quot;{ReturnDataType}&quot; /&gt;
+        '''&lt;Code/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1139,14 +1129,7 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
         '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''    &lt;Code&gt;
-        '''/***********************************************************************
-        '''	Comments.
-        '''***********************************************************************/
-        '''
-        '''select &apos;hello world! love, {THIS}&apos; as hello
-        '''
-        '''&lt;/Code&gt;
+        '''&lt;Code/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
