@@ -1,0 +1,60 @@
+﻿/***********************************************
+	INSTRUCTIONS:
+	
+	Paste this script into a database of your choosing.
+	Upon execution, three things will be created:
+	1. dbo.Leaderboard (table)
+	2. dbo.LeaderboardAdd (stored procedure)
+	3. dbo.LeaderboardRead (stored procedure)
+	Make sure all players have permission to execute 
+	the two stored procedures.
+	
+	NOTE: If these objects already exist, they will
+	be dropped and recreated.
+***********************************************/
+
+if object_id('[dbo].[Leaderboard]','U') is not null
+	drop table [dbo].[Leaderboard]
+go
+create table [dbo].[Leaderboard] (
+	[Signature] char(3) not null
+	, [Points] int not null
+	, [ScoreDate] datetime not null
+);
+go
+
+if object_id('[dbo].[LeaderboardAdd]','P') is not null
+	drop procedure [dbo].[LeaderboardAdd]
+go
+create procedure [dbo].[LeaderboardAdd]
+@Signature char(3)
+,@Points int
+as
+begin
+	insert
+		[dbo].[Leaderboard] ([Signature],[Points],[ScoreDate])
+	values
+		(upper(@Signature),@Points,getdate())
+	end
+go
+
+if object_id('[dbo].[LeaderboardRead]','P') is not null
+	drop procedure [dbo].[LeaderboardRead]
+go
+create procedure [dbo].[LeaderboardRead]
+@Limit int
+as
+begin
+	select
+		top (@Limit)
+		l.[Signature]
+		,l.[Points]
+	from
+		[dbo].[Leaderboard] l
+	order by
+		l.Points desc
+		,l.ScoreDate desc
+end
+go
+
+exec [dbo].[LeaderboardAdd] 'AAA',1;

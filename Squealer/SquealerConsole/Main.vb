@@ -49,7 +49,6 @@ Module Main
 #Region " All The Definitions "
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
-    Private StarWars As New StarWarsClass
     Private BadCommandMessage As String = "Bad command or options."
     Private UserSettings As New UserSettingsClass
 
@@ -162,6 +161,16 @@ Module Main
             End Set
         End Property
 
+        Private _LeaderboardConnectionString As String
+        Public Property LeaderboardConnectionString As String
+            Get
+                Return _LeaderboardConnectionString
+            End Get
+            Set(value As String)
+                _LeaderboardConnectionString = value
+            End Set
+        End Property
+
     End Class
 
     Public Class MyConstants
@@ -265,7 +274,7 @@ Module Main
         [test]
         [checkout]
         [use]
-        [usetheforce]
+        [starwars]
         [make]
     End Enum
 
@@ -459,6 +468,7 @@ Module Main
 
         ' Load settings.
         UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
+        UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), "Server=myServerAddress;Database=myDataBase;User Id=myUser;Password=myPassword;")
         UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
         UserSettings.TextEditorSwitches = My.Configger.LoadSetting(NameOf(UserSettings.TextEditorSwitches), "")
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
@@ -485,11 +495,6 @@ Module Main
         End Try
         Console.BufferWidth = Console.WindowWidth
 
-        ' Happy Star Wars day.
-        If StarWars.StarWarsDay Then
-            BeginStarWarsDay()
-        End If
-
         ' Change log.
 
         'Dim fileName$ = System.Reflection.Assembly.GetExecutingAssembly().Location
@@ -505,6 +510,10 @@ Module Main
         ' Main process
         Console.WriteLine()
         CheckS3(True)
+        If IsStarWarsDay() Then
+            Console.WriteLine("May the Fourth be with you! (easter egg revealed - see HELP)")
+            Console.WriteLine()
+        End If
         HandleUserInput(WorkingFolder)
 
         ' Save the window size
@@ -1006,22 +1015,6 @@ Module Main
 
         ' setting
         cmd = New CommandCatalog.CommandDefinition({eCommandType.setting.ToString, "set"}, {"Display application settings."}, CommandCatalog.eCommandCategory.other)
-        'opt = New CommandCatalog.CommandSwitch("u;update setting, cannot be used with any other switches")
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(Textify.ErrorAlert.Beep).ToLower & ";beep on error"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.UseClipboard).ToLower & ";output to clipboard"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.WildcardSpaces).ToLower & ";spaces for asterisks"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.AutoSearch).ToLower & ";auto-search expansion"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.TextEditor).ToLower & ";text editor program"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.EditNew).ToLower & ";edit on new file"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.ShowBranch).ToLower & ";show Git branch"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.RecentFolders).ToLower & ";maximum recent folders"))
-        'opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(NameOf(UserSettings.DirStyle).ToLower & ";directory style"))
-        'cmd.Options.Items.Add(opt)
-        'cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("switches;define text editor command line switches, cannot be used with any other switches"))
-        'cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("noswitches;clear any text editor command line switches, cannot be used with any other switches"))
-        'cmd.Examples.Add(String.Format("% -u:{0} false -- turn off beeps", (NameOf(Textify.ErrorAlert.Beep).ToLower)))
-        'cmd.Examples.Add(String.Format("% -u:{0} c:\windows\notepad.exe -- set Notepad as your text editor", (NameOf(UserSettings.TextEditor).ToLower)))
-        'cmd.Examples.Add("% -switches -- open the switch configurator")
         MyCommands.Items.Add(cmd)
 
         ' connection string
@@ -1058,12 +1051,9 @@ Module Main
         cmd = New CommandCatalog.CommandDefinition({eCommandType.exit.ToString, "x"}, {"Quit."}, CommandCatalog.eCommandCategory.other)
         MyCommands.Items.Add(cmd)
 
-        ' force
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.usetheforce.ToString, "force"}, {"It's not about lifting rocks. Use the force, [Luke]!", "Do not prematurely speak blasphemy. It MUST be the last thing you say."}, CommandCatalog.eCommandCategory.other, "?????", False)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("e;list found easter eggs"))
-        cmd.Examples.Add("% [?????]")
-        cmd.Examples.Add("% 5/4")
-        cmd.Visible = StarWars.StarWarsDay
+        ' star wars
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.starwars.ToString, "r2"}, {"I've got a bad feeling about this.", "Jump in an X-Wing and blow something up!"}, CommandCatalog.eCommandCategory.other)
+        cmd.Visible = IsStarWarsDay()
         MyCommands.Items.Add(cmd)
 
         ' test 
@@ -1071,41 +1061,6 @@ Module Main
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("release;generate version text file"))
         cmd.Visible = False
         MyCommands.Items.Add(cmd)
-
-
-        ' Star Wars commands
-        StarWars.AddCommand(New ForceCommand("luke", False, "OK Google, navigate [x-wing] to Tosche Station."))
-        StarWars.AddCommand(New ForceCommand("yoda", False, "Shot first, Han did."))
-        StarWars.AddCommand(New ForceCommand("greedo", False, "Don't say it!"))
-        StarWars.AddCommand(New ForceCommand("greedo shot first", False, ""))
-        StarWars.AddCommand(New ForceCommand("han", False, "Han who? You mean that scoundrel famous for his speed on the Kessel Run?"))
-        StarWars.AddCommand(New ForceCommand("han solo", False, "Who shot first?"))
-        StarWars.AddCommand(New ForceCommand("han shot first", False, "May the Force be with you! If you ever say [Greedo] shot first, it'll be the *last* thing you do."))
-        StarWars.AddCommand(New ForceCommand("leia", False, "[I love you]."))
-        StarWars.AddCommand(New ForceCommand("c-3po", False, "These aren't the [droids] you're looking for. Might I suggest looking for one with a bad motivator?"))
-        StarWars.AddCommand(New ForceCommand("r2-d2", False, "These aren't the [droids] you're looking for. And this one is filthy."))
-        StarWars.AddCommand(New ForceCommand("r5-d4", False, "POW! fzzzt *smoke*"))
-        StarWars.AddCommand(New ForceCommand("clean r2-d2", False, "(A hologram flickers on.) Help me Obi-Wan Kenobi! You're my only hope."))
-        StarWars.AddCommand(New ForceCommand("obi-wan kenobi", False, "I wonder if you mean old Ben Kenobi?"))
-        StarWars.AddCommand(New ForceCommand("ben kenobi", False, "I'm so powerful, I can make Vader block himself with my lightsaber while I practically stand still."))
-        StarWars.AddCommand(New ForceCommand("darth vader", False, vbCrLf & My.Resources.eggVader))
-        StarWars.AddCommand(New ForceCommand("i love you", False, "I know."))
-        StarWars.AddCommand(New ForceCommand("droids", False, vbCrLf & My.Resources.eggDroids))
-        StarWars.AddCommand(New ForceCommand("empire", False, vbCrLf & My.Resources.eggEmpire))
-        StarWars.AddCommand(New ForceCommand("rebels", False, vbCrLf & My.Resources.eggRebels))
-        StarWars.AddCommand(New ForceCommand("x-wing", False, vbCrLf & My.Resources.eggXwing))
-        StarWars.AddCommand(New ForceCommand("tie fighter", False, ""))
-        StarWars.AddCommand(New ForceCommand("crawl i", True, My.Resources.eggCrawl_I))
-        StarWars.AddCommand(New ForceCommand("crawl ii", True, My.Resources.eggSeagulls))
-        StarWars.AddCommand(New ForceCommand("crawl iii", True, My.Resources.eggCrawl_III))
-        StarWars.AddCommand(New ForceCommand("crawl iv", True, My.Resources.eggCrawl_IV))
-        StarWars.AddCommand(New ForceCommand("crawl v", True, My.Resources.eggCrawl_V))
-        StarWars.AddCommand(New ForceCommand("crawl vi", True, My.Resources.eggCrawl_VI))
-        StarWars.AddCommand(New ForceCommand("crawl vii", True, My.Resources.eggCrawl_VII))
-        StarWars.AddCommand(New ForceCommand("crawl viii", True, My.Resources.eggCrawl_VIII))
-        StarWars.AddCommand(New ForceCommand("hoth", False, "That planet is inhothpitable!"))
-        StarWars.AddCommand(New ForceCommand("tosche station", False, "CLOSED FOR THE SUMMER. And we're sold out of power converters."))
-        StarWars.AddCommand(New ForceCommand("kessel run", False, "Word of the day:" & vbCrLf & vbCrLf & "par·sec" & vbCrLf & "/ˈpärsek/" & vbCrLf & "noun" & vbCrLf & "a unit of distance used in astronomy, equal to about 3.26 light years (3.086 × 1013 kilometers). One parsec corresponds to the distance at which the mean radius of the earth's orbit subtends an angle of one second of arc."))
 
     End Sub
 
@@ -1501,25 +1456,16 @@ Module Main
                     LoadFolder(UserInput, WorkingFolder)
 
 
-                ElseIf MyCommand.Keyword = eCommandType.[usetheforce].ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.starwars.ToString Then
 
-                    If StringInList(MySwitches, "e") Then
+                    Dim fgColor As ConsoleColor = Console.ForegroundColor
+                    Dim bgColor As ConsoleColor = Console.BackgroundColor
+                    Dim fight As New GoldLeader(False)
+                    fight.TryPlay(UserSettings.LeaderboardConnectionString)
+                    Console.ForegroundColor = fgColor
+                    Console.BackgroundColor = bgColor
+                    Console.WriteLine()
 
-                        Textify.SayBullet(Textify.eBullet.Hash, "Easter eggs found so far:")
-                        Textify.SayNewLine()
-                        For Each fc As ForceCommand In StarWars.ForceCommands.Where(Function(x) x.Found)
-                            Textify.SayBullet(Textify.eBullet.Arrow, fc.Keyword)
-                        Next
-                        If Not StarWars.ForceCommands.Exists(Function(x) x.Found) Then
-                            Textify.SayBullet(Textify.eBullet.Arrow, "Commander, tear this app apart until you've found those eggs!")
-                        End If
-                        Textify.SayNewLine()
-                        Textify.SayBullet(Textify.eBullet.Hash, "(Found: " & StarWars.FoundCount & " of " & StarWars.PossibleCount & ")")
-                        Textify.SayNewLine()
-
-                    Else
-                        UseTheForce(UserInput.ToLower)
-                    End If
 
 
                 ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "set") AndAlso Not String.IsNullOrEmpty(UserInput) Then
@@ -1589,6 +1535,7 @@ Module Main
                         Console.WriteLine("generated " & s & " with " & My.Application.Info.Version.ToString)
                         Console.WriteLine()
                     End If
+
 
 
 
@@ -1763,6 +1710,7 @@ Module Main
 
         Dim f As New SquealerSettings
         f.txtTextEditorProgram.Text = UserSettings.TextEditor
+        f.txtLeaderboardCs.Text = UserSettings.LeaderboardConnectionString
         f.updnFolderSaves.Value = UserSettings.RecentFolders
         f.txtTextEditorSwitches.Text = UserSettings.TextEditorSwitches
         f.optUseWildcards.Checked = UserSettings.AutoSearch
@@ -1789,6 +1737,7 @@ Module Main
         f.ShowDialog()
 
         UserSettings.TextEditor = f.txtTextEditorProgram.Text
+        UserSettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
         UserSettings.RecentFolders = CInt(f.updnFolderSaves.Value)
         UserSettings.TextEditorSwitches = f.txtTextEditorSwitches.Text
         UserSettings.AutoSearch = f.optUseWildcards.Checked
@@ -1808,6 +1757,7 @@ Module Main
         End If
 
         My.Configger.SaveSetting(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
+        My.Configger.SaveSetting(NameOf(UserSettings.LeaderboardConnectionString), UserSettings.LeaderboardConnectionString)
         My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders)
         My.Configger.SaveSetting(NameOf(UserSettings.TextEditorSwitches), UserSettings.TextEditorSwitches)
         My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch)
@@ -2955,6 +2905,13 @@ Module Main
 
 #Region " Misc "
 
+    Private Function IsStarWarsDay() As Boolean
+        If Now.Month = 5 AndAlso Now.Day = 4 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
     Public Class SpinnyProgress
 
         Const TicksPerSecond = 10000000 ' 10 million
@@ -3248,142 +3205,6 @@ Module Main
         Catch ex As Exception
             Textify.SayError("File not found.", Textify.eSeverity.info)
         End Try
-
-    End Sub
-
-#End Region
-
-#Region " Star Wars "
-
-    Private Sub BeginStarWarsDay()
-        Console.WriteLine(My.Resources.eggMay4)
-        Textify.SayNewLine()
-        Textify.SayBullet(Textify.eBullet.Hash, "[Help] me, Obi-Wan Kenobi. You're my only hope. [Help]!")
-        Textify.SayNewLine()
-        'Commands.GetCommand("usetheforce").Visible = True
-        MyCommands.FindCommand(eCommandType.usetheforce.ToString).Visible = True
-        BadCommandMessage = "I've got a bad feeling about this."
-    End Sub
-
-    Private Sub UseTheForce(ByVal k As String)
-
-        Dim fc As ForceCommand = StarWars.ForcePowerFind(k)
-
-        If fc.Found Then
-            Textify.SayBullet(Textify.eBullet.Hash, "(You found this one already.)")
-            Textify.SayNewLine()
-        Else
-            fc.Found = True
-        End If
-
-        If k = "awaken" Then ' don't use fc.Keyword because it's not in the list
-            StarWars.StarWarsDay = True
-            BeginStarWarsDay()
-
-        ElseIf fc.Crawl Then
-            StarWarsCrawl(StarWars.ForcePowerFind(k).Response)
-
-        ElseIf fc.Keyword = "greedo shot first" Then
-
-            If StarWars.FoundAll Then
-                StarWarsCrawl(My.Resources.eggVictory)
-            Else
-                BadMotivatorInfiniteLoop()
-            End If
-
-        ElseIf fc.Keyword = "tie fighter" Then
-            Dim fgColor As ConsoleColor = Console.ForegroundColor
-            Dim bgColor As ConsoleColor = Console.BackgroundColor
-            Dim fight As New GoldLeader(False)
-            fight.TryPlay()
-            Console.ForegroundColor = fgColor
-            Console.BackgroundColor = bgColor
-            Console.WriteLine()
-
-        ElseIf fc.Keyword = "error" Then
-            Textify.SayError("Would it help if I got out and pushed?", Textify.eSeverity.info)
-            Textify.SayNewLine()
-
-        Else
-            Textify.SayBullet(Textify.eBullet.Hash, fc.Response)
-            Textify.SayNewLine()
-
-        End If
-
-        Textify.SayBullet(Textify.eBullet.Hash, "(Found: " & StarWars.FoundCount & " of " & StarWars.PossibleCount & ")")
-        Textify.SayNewLine()
-
-    End Sub
-
-    Private Sub BadMotivatorErrorMessage(ByVal s As String)
-        Textify.SayError(s)
-        Threading.Thread.Sleep(1500)
-    End Sub
-
-    ' Infinite loop.
-    Private Sub BadMotivatorInfiniteLoop()
-        BadMotivatorErrorMessage("CIRCUIT FAULT.")
-        BadMotivatorErrorMessage("DIAGNOSTIC TEST STARTED...")
-        BadMotivatorErrorMessage("FAILED.")
-        BadMotivatorErrorMessage("CHECK LIQUID SCHWARTZ...")
-        BadMotivatorErrorMessage("EMPTY.")
-        Textify.SayNewLine()
-        ClearKeyboard()
-        Console.Write("< 0-9 A-F > ")
-        Dim key As Char = Console.ReadKey().KeyChar
-        For i As Integer = 1 To 10
-            Console.Write("^" & key)
-            Threading.Thread.Sleep(100)
-        Next
-        ClearKeyboard()
-        Dim r As New Random
-        While True
-            Console.Write("  BAD_MOTIVATOR:" & r.Next(0, 65535).ToString & "  ")
-            For i As Integer = 1 To r.Next(5, 50)
-                If Not Console.KeyAvailable Then
-                    Console.Write(Chr(r.Next(8, 255))) ' Start at 8 because 7 is a beep
-                    Threading.Thread.Sleep(10)
-                End If
-            Next
-            While Console.KeyAvailable
-                Console.WriteLine()
-                Console.Write("  [CRAWL IV]")
-                If Textify.ErrorAlert.Beep Then
-                    Console.Beep()
-                End If
-                Threading.Thread.Sleep(2000)
-                ClearKeyboard()
-            End While
-
-        End While
-    End Sub
-
-    Private Sub StarWarsCrawl(ByVal crawlText As String)
-
-        ' Intro, then clear the console
-        Textify.SayCentered("A long time ago in a galaxy far, far away....", False)
-        Threading.Thread.Sleep(5000)
-        Textify.SayNewLine(Console.WindowHeight)
-
-        Dim script As New List(Of String)
-
-        ' Double-space the script
-        For Each line As String In crawlText.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
-            script.Add(line)
-            script.Add("")
-        Next
-
-        ClearKeyboard()
-
-        Dim milliseconds As Integer = 1000 ' One second between lines
-        For Each line As String In script
-            Textify.SayCentered(line, False)
-            Threading.Thread.Sleep(milliseconds)
-            Console.WriteLine()
-            If Console.KeyAvailable Then
-                milliseconds = 10 ' 1/100 second between lines (keystroke = hurry up)
-            End If
-        Next
 
     End Sub
 

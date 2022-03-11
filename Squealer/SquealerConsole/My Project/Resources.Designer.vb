@@ -182,379 +182,35 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Episode I
-        '''T H E   P H A N T O M   M E N A C E
-        '''
-        '''George Lucas introduced Jar Jar Binks.
-        '''Millions of Star Wars fans cried out in terror
-        '''and were suddenly silenced.
-        '''
-        '''At least Weird Al made a funny song
-        '''based on this movie.
-        '''It&apos;s better than a poke in the eye
-        '''with a lightsaber..
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_I() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_I", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Episode III
-        '''R E V E N G E   O F   T H E   S I T H
-        '''
-        '''Padmé Amidala is pregnant.
-        '''Nobody knows she is going to have twins,
-        '''not even the Jedi.
-        '''
-        '''Anakin Skywalker freaks out over
-        '''this mysterious woman thing
-        '''and becomes Darth Vader.
-        '''
-        '''The galaxy falls under a reign of terror.
-        '''
-        '''This all happens because
-        '''even though medical droids can fix a guy
-        '''who falls into a pool of lava,
-        '''
-        '''THERE JUST AREN&apos;T ANY OBGYNS IN SPACE..
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_III() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_III", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to S T A R   W A R S
-        '''
-        '''It is a period of civil war.
-        '''Rebel spaceships, striking
-        '''from a hidden base, have won
-        '''their first victory against
-        '''the evil Galactic Empire.
-        '''
-        '''During the battle, Rebel
-        '''spies managed to steal secret
-        '''plans to the Empire&apos;s
-        '''ultimate weapon, the DEATH
-        '''STAR, an armored space
-        '''station with enough power to
-        '''destroy an entire planet.
-        '''
-        '''Pursued by the Empire&apos;s
-        '''sinister agents, Princess
-        '''Leia races home aboard her
-        '''starship, custodian of the
-        '''stolen plans that can save
-        '''her people and res [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_IV() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_IV", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Episode V
-        '''T H E   E M P I R E   S T R I K E S   B A C K
-        '''
-        '''It is a dark time for the
-        '''Rebellion. Although the Death
-        '''Star has been destroyed,
-        '''Imperial troops have driven the
-        '''Rebel forces from their hidden
-        '''base and pursued them across
-        '''the galaxy.
-        '''
-        '''Evading the dreaded Imperial
-        '''Starfleet, a group of freedom
-        '''fighters led by Luke Skywalker
-        '''has established a new secret
-        '''base on the remote ice world
-        '''of Hoth.
-        '''
-        '''The evil lord Darth Vader,
-        '''obsessed with finding young
-        '''Skywalker, has dispatched
-        '''thousands [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_V() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_V", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Episode VI
-        '''R E T U R N   O F   T H E   J E D I
-        '''
-        '''Luke Skywalker has returned to
-        '''his home planet of Tatooine in
-        '''an attempt to rescue his
-        '''friend Han Solo from the
-        '''clutches of the vile gangster
-        '''Jabba the Hutt.
-        '''
-        '''Little does Luke know that the
-        '''GALACTIC EMPIRE has secretly
-        '''begun construction on a new
-        '''armored space station even
-        '''more powerful than the first
-        '''dreaded Death Star.
-        '''
-        '''When completed, this ultimate
-        '''weapon will spell certain doom
-        '''for the small band of rebels
-        '''struggling to restore freedom        ''' [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_VI() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_VI", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Episode VII
-        '''T H E   F O R C E   A W A K E N S
-        '''
-        '''Luke Skywalker has vanished.
-        '''In his absence, the sinister
-        '''FIRST ORDER has risen from
-        '''the ashes of the Empire
-        '''and will not rest until
-        '''Skywalker, the last Jedi,
-        '''has been destroyed.
-        '''
-        '''With the support of the
-        '''REPUBLIC, General Leia Organa
-        '''leads a brave RESISTANCE.
-        '''She is desperate to find her
-        '''brother Luke and gain his
-        '''help in restoring peace
-        '''and justice to the galaxy.
-        '''
-        '''Leia has sent her most daring
-        '''pilot on a secret mission
-        '''to Jakku, where an ol [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_VII() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_VII", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Episode VIII
-        '''T H E   L A S T   J E D I
-        '''
-        '''The FIRST ORDER reigns.
-        '''Having decimated the peaceful
-        '''Republic, Supreme Leader Snoke
-        '''now deploys the merciless
-        '''legions to seize military
-        '''control of the galaxy.
-        '''
-        '''Only General Leia Organa&apos;s
-        '''band of RESISTANCE fighters
-        '''stand against the rising
-        '''tyranny, certain that Jedi
-        '''Master Luke Skywalker will
-        '''return and restore a spark of
-        '''hope to the fight.
-        '''
-        '''But the Resistance has been
-        '''exposed. As the First Order
-        '''speeds toward the rebel base,
-        '''the brave heroes mou [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggCrawl_VIII() As String
-            Get
-                Return ResourceManager.GetString("eggCrawl_VIII", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to         .-.
-        '''       /_ _\
-        '''       |o^o|
-        '''       \ _ /
-        '''      .-&apos;-&apos;-.
-        '''    /`)  .  (`\
-        '''   / /|.-&apos;-.|\ \
-        '''   \ \| (_) |/ /  .-&quot;&quot;-.
-        '''    \_\&apos;-.-&apos;/_/  /[] _ _\
-        '''    /_/ \_/ \_\ _|_o_LII|_
-        '''      |&apos;._.&apos;|  / | ==== | \
-        '''      |  |  |  |_| ==== |_|
-        '''       \_|_/    ||&quot; ||  ||
-        '''       |-|-|    ||LI  o ||
-        '''       |_|_|    ||&apos;----&apos;||
-        '''      /_/ \_\  /__|    |__\.
-        '''</summary>
-        Friend ReadOnly Property eggDroids() As String
-            Get
-                Return ResourceManager.GetString("eggDroids", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to           _
-        '''      ,--&apos;_`--.
-        '''    ,/( \   / )\.
-        '''   //  \ \_/ /  \\
-        '''  |/___/     \___\|
-        '''  ((___       ___))
-        '''  |\   \  _  /   /|
-        '''   \\  / / \ \  //
-        '''    `\(_/___\_)/&apos;
-        '''      `--._.--&apos;.
-        '''</summary>
-        Friend ReadOnly Property eggEmpire() As String
-            Get
-                Return ResourceManager.GetString("eggEmpire", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to           ________   ___   ____
-        '''         / __   __| / _ \ |  _ \
-        '''   ______&gt; \ | |   |  _  ||    /_____________________________
-        '''  / _______/ |_|   |_| |_||_|\______________________________ \
-        ''' / /                                                        \ \
-        '''| |                                                          | |
-        '''| |                 May the 4th be with you.                 | |
-        '''| |                                                          | |
-        ''' \ \____________________________    _   ___   ____   __ [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggMay4() As String
-            Get
-                Return ResourceManager.GetString("eggMay4", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to       _  ,^.  _
-        '''    ,&apos;/ -&apos; &apos;- \`.
-        '''   / |   \ /   | \
-        '''  |  |   | |   |  |
-        '''  |   \_,&apos; `._/   |
-        '''  |               |
-        '''   \             /
-        '''    `.         .&apos;
-        '''      `--._.--&apos;.
-        '''</summary>
-        Friend ReadOnly Property eggRebels() As String
-            Get
-                Return ResourceManager.GetString("eggRebels", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Episode II
-        '''
-        '''or...
-        '''
-        '''S E A G U L L S !
-        '''(STOP IT NOW!)
-        '''
-        '''[Yoda]
-        '''Penny for your thoughts.
-        '''
-        '''[Luke Skywalker]
-        '''I hate Brenda, and a bad guy hit me in the shin, and I peed on all my pants!
-        '''
-        '''[Yoda]
-        '''It&apos;s nothing a little music can&apos;t help.
-        '''
-        '''Rockin&apos;
-        '''Rockin&apos; and rollin&apos;
-        '''Down to the beach I&apos;m strollin&apos;
-        '''But the seagulls poke at my head
-        '''Not fun!
-        '''I said, &quot;Seagulls... mmgh! Stop it now!&quot;
-        '''
-        '''Hmm ha! Hmm hmm ha!
-        '''
-        '''Everyone told me
-        '''Not to stroll on that beach
-        '''Said seagulls gonna come
-        '''Poke me in the cocon [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggSeagulls() As String
-            Get
-                Return ResourceManager.GetString("eggSeagulls", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to                        .-.
-        '''                      |_:_|
-        '''                     /(_Y_)\
-        '''.                   ( \/M\/ )
-        ''' &apos;.               _.&apos;-/&apos;-&apos;\-&apos;._
-        '''   &apos;:           _/.--&apos;[[[[]&apos;--.\_
-        '''     &apos;:        /_&apos;  : |::&quot;| :  &apos;.\
-        '''       &apos;:     //   ./ |oUU| \.&apos;  :\
-        '''         &apos;:  _:&apos;..&apos; \_|___|_/ :   :|
-        '''           &apos;:.  .&apos;  |_[___]_|  :.&apos;:\
-        '''            [::\ |  :  | |  :   ; : \
-        '''             &apos;-&apos;   \/&apos;.| |.&apos; \  .;.&apos; |
-        '''             |\_    \  &apos;-&apos;   :       |
-        '''             |  \    \ .:    :   |   |
-        '''             |   \ [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggVader() As String
-            Get
-                Return ResourceManager.GetString("eggVader", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to V I C T O R Y
-        '''
-        '''Congratulations.
-        '''You found all the eggs.
-        '''Well done.
-        '''
-        '''May The Force Be With You..
-        '''</summary>
-        Friend ReadOnly Property eggVictory() As String
-            Get
-                Return ResourceManager.GetString("eggVictory", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to            __
-        '''.-.__      \ .-.  ___  __
-        '''|_|  &apos;--.-.-(   \/\;;\_\.-._______.-.
-        '''(-)___     \ \ .-\ \;;\(   \       \ \
-        ''' Y    &apos;---._\_((Q)) \;;\\ .-\     __(_)
-        ''' I           __&apos;-&apos; / .--.((Q))---&apos;    \,
-        ''' I     ___.-:    \|  |   \&apos;-&apos;_          \
-        ''' A  .-&apos;      \ .-.\   \   \ \ &apos;--.__     &apos;\
-        ''' |  |____.----((Q))\   \__|--\_      \     &apos;
-        '''    ( )        &apos;-&apos;  \_  :  \-&apos; &apos;--.___\
-        '''     Y                \  \  \       \(_)
-        '''     I                 \  \  \         \,
-        '''     I                  \  \  \          \
-        '''     [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property eggXwing() As String
-            Get
-                Return ResourceManager.GetString("eggXwing", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property Folder() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Folder", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to /***********************************************
+        '''	INSTRUCTIONS:
+        '''	Paste this script into a database of your choosing.
+        '''	Upon execution, three things will be created:
+        '''	1. dbo.Leaderboard (table)
+        '''	2. dbo.LeaderboardAdd (stored procedure)
+        '''	3. dbo.LeaderboardRead (stored procedure)
+        '''	Make sure all players have permission to execute 
+        '''	the two stored procedures.
+        '''***********************************************/
+        '''	
+        '''create table [dbo].[Leaderboard] (
+        '''	[Signature] char(3) not null
+        '''	, [Points] int not null
+        '''	 [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property LeaderboardCreate() As String
+            Get
+                Return ResourceManager.GetString("LeaderboardCreate", resourceCulture)
             End Get
         End Property
         
@@ -607,7 +263,22 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to .
+        '''  Looks up a localized string similar to select
+        '''--	concat(&apos;[&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;) as object_name
+        '''	u.name user_name
+        '''from
+        '''	sys.objects o
+        '''join
+        '''	sys.schemas s
+        '''	on s.schema_id = o.schema_id
+        '''join
+        '''	sys.syspermissions p
+        '''	on p.id = o.object_id
+        '''join
+        '''	sys.sysusers u
+        '''	on u.uid = p.grantee
+        '''where
+        '''	o.object_id = @ObjectId.
         '''</summary>
         Friend ReadOnly Property ObjectPermissions() As String
             Get
@@ -1068,6 +739,7 @@ Namespace My.Resources
         '''&lt;!--Parameters--&gt;
         '''&lt;/Parameters&gt;
         '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1084,6 +756,7 @@ Namespace My.Resources
         '''&lt;!--Parameters--&gt;
         '''&lt;/Parameters&gt;
         '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1100,6 +773,7 @@ Namespace My.Resources
         '''&lt;!--Parameters--&gt;
         '''&lt;/Parameters&gt;
         '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1117,6 +791,7 @@ Namespace My.Resources
         '''&lt;/Parameters&gt;
         '''&lt;Returns Type=&quot;{ReturnDataType}&quot; /&gt;
         '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
@@ -1130,6 +805,7 @@ Namespace My.Resources
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
         '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
         '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>

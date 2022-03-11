@@ -118,12 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="eggVader" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggvader.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggXwing" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggxwing.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="PigNose" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PigNose.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -193,45 +187,6 @@
   <data name="UserConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\text\userconfig.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="eggMay4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggmay4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_I" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_i.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_III" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_iii.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_IV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_iv.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_V" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_v.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_VI" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_vi.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_VII" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_vii.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggCrawl_VIII" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggcrawl_viii.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggSeagulls" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggseagulls.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggDroids" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggdroids.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggEmpire" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggempire.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggRebels" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggrebels.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eggVictory" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\egg\eggvictory.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="SqlDropOrphanedRoutines" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\sql\sqldroporphanedroutines.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -291,5 +246,8 @@
   </data>
   <data name="ObjectPermissions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\reverse\objectpermissions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="LeaderboardCreate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\egg\leaderboardcreate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class SquealerSettings
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class SquealerSettings
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.optBeep = New System.Windows.Forms.CheckBox()
         Me.optUseWildcards = New System.Windows.Forms.CheckBox()
@@ -51,6 +51,9 @@ Partial Class SquealerSettings
         Me.Label6 = New System.Windows.Forms.Label()
         Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.txtLeaderboardCs = New System.Windows.Forms.TextBox()
+        Me.lblLeaderboard = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -104,7 +107,7 @@ Partial Class SquealerSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTextEditorProgram.Location = New System.Drawing.Point(59, 22)
         Me.txtTextEditorProgram.Name = "txtTextEditorProgram"
-        Me.txtTextEditorProgram.Size = New System.Drawing.Size(396, 20)
+        Me.txtTextEditorProgram.Size = New System.Drawing.Size(491, 20)
         Me.txtTextEditorProgram.TabIndex = 8
         '
         'optShowGitBranch
@@ -165,7 +168,7 @@ Partial Class SquealerSettings
         Me.GroupBox1.Controls.Add(Me.rbCompact)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(501, 164)
+        Me.GroupBox1.Size = New System.Drawing.Size(596, 164)
         Me.GroupBox1.TabIndex = 14
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "General"
@@ -206,7 +209,7 @@ Partial Class SquealerSettings
         Me.GroupBox2.Controls.Add(Me.Label4)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 278)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(501, 73)
+        Me.GroupBox2.Size = New System.Drawing.Size(596, 73)
         Me.GroupBox2.TabIndex = 15
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Filename matching"
@@ -248,7 +251,7 @@ Partial Class SquealerSettings
         Me.GroupBox3.Controls.Add(Me.txtTextEditorProgram)
         Me.GroupBox3.Location = New System.Drawing.Point(12, 357)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(501, 90)
+        Me.GroupBox3.Size = New System.Drawing.Size(596, 90)
         Me.GroupBox3.TabIndex = 16
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Text editor"
@@ -257,7 +260,7 @@ Partial Class SquealerSettings
         '
         Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.Button1.Location = New System.Drawing.Point(461, 15)
+        Me.Button1.Location = New System.Drawing.Point(556, 15)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(34, 33)
         Me.Button1.TabIndex = 20
@@ -269,7 +272,7 @@ Partial Class SquealerSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTextEditorSwitches.Location = New System.Drawing.Point(59, 54)
         Me.txtTextEditorSwitches.Name = "txtTextEditorSwitches"
-        Me.txtTextEditorSwitches.Size = New System.Drawing.Size(436, 20)
+        Me.txtTextEditorSwitches.Size = New System.Drawing.Size(531, 20)
         Me.txtTextEditorSwitches.TabIndex = 11
         '
         'Label2
@@ -294,7 +297,7 @@ Partial Class SquealerSettings
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(438, 453)
+        Me.btnOK.Location = New System.Drawing.Point(533, 453)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
@@ -311,7 +314,7 @@ Partial Class SquealerSettings
         Me.GroupBox4.Controls.Add(Me.optDetectOldSquealerObjects)
         Me.GroupBox4.Location = New System.Drawing.Point(12, 182)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(501, 90)
+        Me.GroupBox4.Size = New System.Drawing.Size(596, 90)
         Me.GroupBox4.TabIndex = 19
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Proc/Function/View output"
@@ -363,12 +366,44 @@ Partial Class SquealerSettings
         Me.dlgTextEditor.FileName = "OpenFileDialog1"
         Me.dlgTextEditor.Filter = "*.exe|*.exe"
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(12, 453)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(23, 23)
+        Me.Button2.TabIndex = 20
+        Me.Button2.Text = "?"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'txtLeaderboardCs
+        '
+        Me.txtLeaderboardCs.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtLeaderboardCs.Location = New System.Drawing.Point(198, 456)
+        Me.txtLeaderboardCs.Name = "txtLeaderboardCs"
+        Me.txtLeaderboardCs.Size = New System.Drawing.Size(329, 20)
+        Me.txtLeaderboardCs.TabIndex = 21
+        Me.txtLeaderboardCs.Visible = False
+        '
+        'lblLeaderboard
+        '
+        Me.lblLeaderboard.AutoSize = True
+        Me.lblLeaderboard.Location = New System.Drawing.Point(41, 458)
+        Me.lblLeaderboard.Name = "lblLeaderboard"
+        Me.lblLeaderboard.Size = New System.Drawing.Size(151, 13)
+        Me.lblLeaderboard.TabIndex = 22
+        Me.lblLeaderboard.Text = "Leaderboard ConnectionString"
+        Me.lblLeaderboard.Visible = False
+        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(525, 490)
+        Me.ClientSize = New System.Drawing.Size(620, 486)
+        Me.Controls.Add(Me.lblLeaderboard)
+        Me.Controls.Add(Me.txtLeaderboardCs)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.GroupBox3)
@@ -388,6 +423,7 @@ Partial Class SquealerSettings
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents optBeep As System.Windows.Forms.CheckBox
@@ -419,4 +455,7 @@ Partial Class SquealerSettings
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents txtLeaderboardCs As System.Windows.Forms.TextBox
+    Friend WithEvents lblLeaderboard As System.Windows.Forms.Label
 End Class

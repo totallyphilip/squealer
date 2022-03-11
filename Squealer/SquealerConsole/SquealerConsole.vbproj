@@ -94,8 +94,9 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GoldLeader">
-      <HintPath>..\..\..\bin\GoldLeader.dll</HintPath>
+    <Reference Include="GoldLeader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\goldleader\GoldLeader\GoldLeader\bin\Release\GoldLeader.dll</HintPath>
     </Reference>
     <Reference Include="PoorMansTSqlFormatterNetStandardLib">
       <HintPath>..\..\..\bin\PoorMansTSqlFormatterNetStandardLib.dll</HintPath>
@@ -153,7 +154,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="StarWarsClass.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -186,21 +186,7 @@
     <Content Include="Resources\Auto\AutoGetColumns.txt" />
     <Content Include="Resources\Auto\AutoGetTables.txt" />
     <Content Include="Resources\Auto\AutoProcTemplate.txt" />
-    <Content Include="Resources\Egg\eggCrawl_I.txt" />
-    <Content Include="Resources\Egg\eggCrawl_III.txt" />
-    <Content Include="Resources\Egg\eggCrawl_IV.txt" />
-    <Content Include="Resources\Egg\eggCrawl_V.txt" />
-    <Content Include="Resources\Egg\eggCrawl_VI.txt" />
-    <Content Include="Resources\Egg\eggCrawl_VII.txt" />
-    <Content Include="Resources\Egg\eggCrawl_VIII.txt" />
-    <Content Include="Resources\Egg\eggSeagulls.txt" />
-    <Content Include="Resources\Egg\eggXwing.txt" />
-    <Content Include="Resources\Egg\eggVader.txt" />
-    <Content Include="Resources\Egg\eggMay4.txt" />
-    <Content Include="Resources\Egg\eggDroids.txt" />
-    <Content Include="Resources\Egg\eggRebels.txt" />
-    <Content Include="Resources\Egg\eggEmpire.txt" />
-    <Content Include="Resources\Egg\eggVictory.txt" />
+    <Content Include="Resources\Egg\LeaderboardCreate.txt" />
     <Content Include="Resources\Reverse\ObjectList.txt" />
     <Content Include="Resources\Reverse\ObjectParameters.txt" />
     <Content Include="Resources\Reverse\ObjectPermissions.txt" />

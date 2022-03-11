@@ -22,4 +22,14 @@
             txtTextEditorProgram.Text = dlgTextEditor.FileName
         End If
     End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim f As New TempFileHandler
+        f.Writeline(My.Resources.LeaderboardCreate)
+        f.Show(txtTextEditorProgram.Text)
+        'System.Windows.Forms.MessageBox.Show(My.Resources.LeaderboardCreate)
+        txtLeaderboardCs.Visible = True
+        lblLeaderboard.Visible = True
+    End Sub
+
 End Class
