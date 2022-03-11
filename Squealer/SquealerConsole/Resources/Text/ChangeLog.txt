@@ -280,18 +280,23 @@
 
 {0}2022-03-10{1}
 
+{2}Added REVERSE command to reverse engineer tables, views, and functions from SQL Server into the working folder.
+
+{2}OPEN command now opens Explorer dialog if no path is specified.
+
+{2}Simplified Windows Start menu application name.
+
 {2}Removed runlogging feature. It created too many complications.
 
-{2}If proc/function/view creation fails, GRANT statements and PostCode will not be attempted. This helps reduce cascading failures.
+{2}When executing Squealer output in SQL Server, GRANT statements and PostCode will be skipped if proc/function/view creation failed. This helps reduce cascading errors.
 
-{2}Change log now opens in text editor.
-
-{2}Improved settings configuration screen.
+{2}Improved SETTINGS panel.
 
 {2}Added the option to detect deprecated Squealer objects (tables, views, etc.) since runlogging is no longer supported.
 
-{2}Added REVERSE command to reverse engineer tables, views, and functions from SQL Server into the working folder.
+{2}Change log now opens in text editor.
 
-{2}Easter egg improvement. :)
+{2}Easter egg improvement. :) More information in SETTINGS panel.
+
 
 

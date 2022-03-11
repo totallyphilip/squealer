@@ -2,10 +2,12 @@
 	INSTRUCTIONS:
 	
 	Paste this script into a database of your choosing.
+
 	Upon execution, three things will be created:
 	1. dbo.Leaderboard (table)
 	2. dbo.LeaderboardAdd (stored procedure)
 	3. dbo.LeaderboardRead (stored procedure)
+
 	Make sure all players have permission to execute 
 	the two stored procedures.
 	

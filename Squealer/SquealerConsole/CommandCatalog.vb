@@ -200,6 +200,16 @@
             End Get
         End Property
 
+        Private _IgnoreSwitches As Boolean = False
+        Public Property IgnoreSwitches As Boolean
+            Get
+                Return _IgnoreSwitches
+            End Get
+            Set(value As Boolean)
+                _IgnoreSwitches = value
+            End Set
+        End Property
+
         Private _Keyword As String
         Public ReadOnly Property Keyword As String
             Get

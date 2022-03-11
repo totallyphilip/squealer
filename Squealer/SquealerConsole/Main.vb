@@ -468,7 +468,7 @@ Module Main
 
         ' Load settings.
         UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
-        UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), "Server=myServerAddress;Database=myDataBase;User Id=myUser;Password=myPassword;")
+        UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), cDefaultConnectionString)
         UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
         UserSettings.TextEditorSwitches = My.Configger.LoadSetting(NameOf(UserSettings.TextEditorSwitches), "")
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
@@ -884,9 +884,11 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' open folder
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command."}, CommandCatalog.eCommandCategory.folder, "<path>", True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command. Omit path to open folder dialog."}, CommandCatalog.eCommandCategory.folder, "<path>", False)
         cmd.Examples.Add("% " & My.Computer.FileSystem.SpecialDirectories.MyDocuments)
-        cmd.Examples.Add("% C:\Some Folder\Spaced Are OK")
+        cmd.Examples.Add("% C:\Some Folder\Spaces Are OK, Quotes Not Needed")
+        cmd.Examples.Add("% -- open Windows Explorer to select folder")
+        cmd.IgnoreSwitches = True
         MyCommands.Items.Add(cmd)
 
         ' list folders
@@ -1063,7 +1065,6 @@ Module Main
         MyCommands.Items.Add(cmd)
 
     End Sub
-
 
     Private Function WildcardInterpreter(s As String, FindExact As Boolean) As String
 
@@ -1395,6 +1396,12 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.[open].ToString Then
 
+                    If String.IsNullOrWhiteSpace(UserInput) Then
+                        Dim f As New System.Windows.Forms.FolderBrowserDialog
+                        f.ShowDialog()
+                        UserInput = f.SelectedPath
+                        Textify.SayBulletLine(Textify.eBullet.Carat, UserInput)
+                    End If
                     ChangeFolder(UserInput, WorkingFolder)
 
 
@@ -1403,18 +1410,11 @@ Module Main
                     Console.WriteLine(My.Resources.RaiseErrors)
 
 
-                    'ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso MySwitches.Count = 0 AndAlso String.IsNullOrWhiteSpace(UserInput) Then
 
                 ElseIf MyCommand.Keyword = eCommandType.setting.ToString Then
 
-                    'SettingsView()
                     ShowSettingsDialog()
 
-
-                    'ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso Not String.IsNullOrWhiteSpace(UserInput) Then
-
-                    '    SettingChange(MySwitches(0).Split(New Char() {":"c})(1), UserInput)
-                    '    Textify.SayNewLine()
 
 
                 ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso StringInList(MySwitches, "switches") Then
@@ -1586,6 +1586,11 @@ Module Main
             End If
 
 
+            Dim keyword As String = UserInput.Trim.Split(New Char() {" "c})(0) 'get the first solid word
+            MyCommand = MyCommands.FindCommand(keyword)
+
+
+
             Dim SplitInput As New List(Of String)
             SplitInput.AddRange(UserInput.Trim.Split(New Char() {" "c}))
             UserInput = String.Empty
@@ -1596,7 +1601,7 @@ Module Main
 
                 Dim rawinput As String = SplitInput(0)
 
-                If rawinput.StartsWith("-") Then ' -Ex:Opt:JUNK
+                If rawinput.StartsWith("-") AndAlso Not MyCommand.IgnoreSwitches Then ' -Ex:Opt:JUNK
 
                     Dim switchinput As String = rawinput.Remove(0, 1).ToLower ' -Ex:Opt:JUNK -> ex:opt:junk
 
@@ -1620,12 +1625,20 @@ Module Main
             ' Separate the command from everything after it
             UserInput = UserInput.Trim
             If String.IsNullOrEmpty(UserInput) Then
-                MyCommand = MyCommands.FindCommand(eCommandType.nerfherder.ToString)
+                MyCommand = MyCommands.FindCommand(eCommandType.nerfherder.ToString) 'this is a dummy command just so the command object is not Nothing
             Else
-                Dim keyword As String = UserInput.Split(New Char() {" "c})(0)
-                MyCommand = MyCommands.FindCommand(keyword)
+                'Dim keyword As String = UserInput.Split(New Char() {" "c})(0)
+                keyword = UserInput.Split(New Char() {" "c})(0)
+                'MyCommand = MyCommands.FindCommand(keyword)
                 UserInput = UserInput.Remove(0, keyword.Length).Trim
             End If
+
+
+
+
+
+
+
 
 
             ' Test the switches

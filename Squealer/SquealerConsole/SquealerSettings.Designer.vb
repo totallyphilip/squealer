@@ -22,6 +22,7 @@ Partial Class SquealerSettings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SquealerSettings))
         Me.optBeep = New System.Windows.Forms.CheckBox()
         Me.optUseWildcards = New System.Windows.Forms.CheckBox()
         Me.optSpacesAreWildcards = New System.Windows.Forms.CheckBox()
@@ -50,15 +51,17 @@ Partial Class SquealerSettings
         Me.rbClipboard = New System.Windows.Forms.RadioButton()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.txtLeaderboardCs = New System.Windows.Forms.TextBox()
         Me.lblLeaderboard = New System.Windows.Forms.Label()
+        Me.lblHint = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'optBeep
@@ -360,20 +363,20 @@ Partial Class SquealerSettings
         Me.optDetectOldSquealerObjects.Text = "Detect deprecated Squealer objects"
         Me.optDetectOldSquealerObjects.UseVisualStyleBackColor = True
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(11, 452)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox1.TabIndex = 12
+        Me.PictureBox1.TabStop = False
+        '
         'dlgTextEditor
         '
         Me.dlgTextEditor.DefaultExt = "exe"
         Me.dlgTextEditor.FileName = "OpenFileDialog1"
         Me.dlgTextEditor.Filter = "*.exe|*.exe"
-        '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(12, 453)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(23, 23)
-        Me.Button2.TabIndex = 20
-        Me.Button2.Text = "?"
-        Me.Button2.UseVisualStyleBackColor = True
         '
         'txtLeaderboardCs
         '
@@ -395,15 +398,26 @@ Partial Class SquealerSettings
         Me.lblLeaderboard.Text = "Leaderboard ConnectionString"
         Me.lblLeaderboard.Visible = False
         '
+        'lblHint
+        '
+        Me.lblHint.AutoSize = True
+        Me.lblHint.Location = New System.Drawing.Point(68, 459)
+        Me.lblHint.Name = "lblHint"
+        Me.lblHint.Size = New System.Drawing.Size(187, 13)
+        Me.lblHint.TabIndex = 15
+        Me.lblHint.Text = "?   ?           ? ?    ?             ?       ??   ?"
+        Me.lblHint.Visible = False
+        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
         Me.ClientSize = New System.Drawing.Size(620, 486)
+        Me.Controls.Add(Me.lblHint)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.lblLeaderboard)
         Me.Controls.Add(Me.txtLeaderboardCs)
-        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.GroupBox3)
@@ -422,6 +436,7 @@ Partial Class SquealerSettings
         Me.GroupBox3.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -455,7 +470,8 @@ Partial Class SquealerSettings
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents txtLeaderboardCs As System.Windows.Forms.TextBox
     Friend WithEvents lblLeaderboard As System.Windows.Forms.Label
+    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents lblHint As System.Windows.Forms.Label
 End Class

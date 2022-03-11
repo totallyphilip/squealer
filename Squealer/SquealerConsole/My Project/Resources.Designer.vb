@@ -151,6 +151,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property BlasterFiring() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("BlasterFiring", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to /*********************
         '''      CHANGE LOG
         '''*********************/
@@ -182,6 +191,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property DroidScream() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("DroidScream", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property Folder() As System.Drawing.Bitmap
@@ -194,19 +212,22 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized string similar to /***********************************************
         '''	INSTRUCTIONS:
+        '''	
         '''	Paste this script into a database of your choosing.
+        '''
         '''	Upon execution, three things will be created:
         '''	1. dbo.Leaderboard (table)
         '''	2. dbo.LeaderboardAdd (stored procedure)
         '''	3. dbo.LeaderboardRead (stored procedure)
+        '''
         '''	Make sure all players have permission to execute 
         '''	the two stored procedures.
-        '''***********************************************/
         '''	
-        '''create table [dbo].[Leaderboard] (
-        '''	[Signature] char(3) not null
-        '''	, [Points] int not null
-        '''	 [rest of string was truncated]&quot;;.
+        '''	NOTE: If these objects already exist, they will
+        '''	be dropped and recreated.
+        '''***********************************************/
+        '''
+        '''if obje [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property LeaderboardCreate() As String
             Get
@@ -317,6 +338,16 @@ Namespace My.Resources
         Friend ReadOnly Property RaiseErrors() As String
             Get
                 Return ResourceManager.GetString("RaiseErrors", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property rebel() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("rebel", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         

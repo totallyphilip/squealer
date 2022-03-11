@@ -1,4 +1,6 @@
 ﻿Public Class SquealerSettings
+
+    Private _Blasts As Integer = 0
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Icon = My.Resources.PigNose
         UpdateExample()
@@ -23,13 +25,27 @@
         End If
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim f As New TempFileHandler
-        f.Writeline(My.Resources.LeaderboardCreate)
-        f.Show(txtTextEditorProgram.Text)
-        'System.Windows.Forms.MessageBox.Show(My.Resources.LeaderboardCreate)
-        txtLeaderboardCs.Visible = True
-        lblLeaderboard.Visible = True
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+        Dim blaster As New Microsoft.VisualBasic.Devices.Audio
+        _Blasts += 1
+        If _Blasts < 10 Then
+            blaster.Play(My.Resources.BlasterFiring, AudioPlayMode.Background)
+        End If
+        Select Case _Blasts
+            Case 1
+                lblHint.Visible = True
+            Case 2
+                lblHint.Visible = False
+                txtLeaderboardCs.Visible = True
+            Case 3
+                lblLeaderboard.Visible = True
+            Case 4
+                Dim f As New TempFileHandler
+                f.Writeline(My.Resources.LeaderboardCreate)
+                f.Show(txtTextEditorProgram.Text)
+            Case 10
+                blaster.Play(My.Resources.DroidScream, AudioPlayMode.Background)
+        End Select
     End Sub
 
 End Class
