@@ -278,7 +278,7 @@
 
 
 
-{0}2022-??-??{1}
+{0}2022-03-10{1}
 
 {2}Removed runlogging feature. It created too many complications.
 
@@ -291,5 +291,7 @@
 {2}Added the option to detect deprecated Squealer objects (tables, views, etc.) since runlogging is no longer supported.
 
 {2}Added REVERSE command to reverse engineer tables, views, and functions from SQL Server into the working folder.
+
+{2}Easter egg improvement. :)
 
 
