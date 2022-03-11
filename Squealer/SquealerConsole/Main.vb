@@ -1715,7 +1715,6 @@ Module Main
         f.txtTextEditorSwitches.Text = UserSettings.TextEditorSwitches
         f.optUseWildcards.Checked = UserSettings.AutoSearch
         f.optEditNewFiles.Checked = UserSettings.EditNew
-        'f.optGenerateToClipboard.Checked = UserSettings.UseClipboard
         If UserSettings.UseClipboard Then
             f.rbClipboard.Checked = True
         Else
@@ -1742,7 +1741,6 @@ Module Main
         UserSettings.TextEditorSwitches = f.txtTextEditorSwitches.Text
         UserSettings.AutoSearch = f.optUseWildcards.Checked
         UserSettings.EditNew = f.optEditNewFiles.Checked
-        'UserSettings.UseClipboard = f.optGenerateToClipboard.Checked
         UserSettings.UseClipboard = f.rbClipboard.Checked
         UserSettings.ShowBranch = f.optShowGitBranch.Checked
         UserSettings.WildcardSpaces = f.optSpacesAreWildcards.Checked
