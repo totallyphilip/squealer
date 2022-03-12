@@ -1727,7 +1727,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_949515F21092AD7EB31B82AD6D2DDD5D"
@@ -2596,15 +2596,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer 2022"
-        "ProductCode" = "8:{FC351970-72EE-4DE5-B5E6-9FC83CE01A31}"
-        "PackageCode" = "8:{B5ABC7A5-E067-4459-96ED-46B65E6ACC0B}"
+        "ProductCode" = "8:{7424D859-6376-4A0F-A066-9BDF5C8E6C49}"
+        "PackageCode" = "8:{804C3A54-0649-4011-95E7-3EC400F6C5D1}"
         "UpgradeCode" = "8:{1D6B365A-8443-4FE0-BF17-8DD0D6C149E0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:4.0.3"
+        "ProductVersion" = "8:4.0.6"
         "Manufacturer" = "8:Philip Wright"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

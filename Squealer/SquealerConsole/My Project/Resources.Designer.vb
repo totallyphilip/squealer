@@ -210,10 +210,28 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to To join an existing leaderboard, fill in the connection string.
+        '''
+        '''To create a new leaderboard, find the TOP SECRET script. It&apos;s really hard to find. Then share the connection string with your fellow rebel scum.
+        '''
+        '''If you do not want to connect to a leaderboard, make sure your connection string is blank. Otherwise, the game will attempt to connect and you will have to wait for it to time out.
+        '''
+        '''To play the game, type HELP STARWARS at the command prompt..
+        '''</summary>
+        Friend ReadOnly Property HowToLaunchR2() As String
+            Get
+                Return ResourceManager.GetString("HowToLaunchR2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to /***********************************************
-        '''	INSTRUCTIONS:
+        '''
+        '''	How to create a leaderboard in SQL Server!
+        '''
+        '''	INSTRUCTIONS (THIS IS THE WAY):
         '''	
-        '''	Paste this script into a database of your choosing.
+        '''	Execute this script on a database of your choosing.
         '''
         '''	Upon execution, three things will be created:
         '''	1. dbo.Leaderboard (table)
@@ -221,13 +239,10 @@ Namespace My.Resources
         '''	3. dbo.LeaderboardRead (stored procedure)
         '''
         '''	Make sure all players have permission to execute 
-        '''	the two stored procedures.
+        '''	the two stored procedures, and share your
+        '''	connection string with them!
         '''	
-        '''	NOTE: If these objects already exist, they will
-        '''	be dropped and recreated.
-        '''***********************************************/
-        '''
-        '''if obje [rest of string was truncated]&quot;;.
+        '''	NOTE: If these objects  [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property LeaderboardCreate() As String
             Get

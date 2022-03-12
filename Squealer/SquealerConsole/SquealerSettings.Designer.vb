@@ -32,11 +32,11 @@ Partial Class SquealerSettings
         Me.rbCompact = New System.Windows.Forms.RadioButton()
         Me.rbFull = New System.Windows.Forms.RadioButton()
         Me.rbSymbolic = New System.Windows.Forms.RadioButton()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.gbGeneral = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.updnFolderSaves = New System.Windows.Forms.NumericUpDown()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.gbFilenames = New System.Windows.Forms.GroupBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.txtWildcardExample = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -46,7 +46,7 @@ Partial Class SquealerSettings
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.btnOK = New System.Windows.Forms.Button()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.gbOutput = New System.Windows.Forms.GroupBox()
         Me.rbTempFile = New System.Windows.Forms.RadioButton()
         Me.rbClipboard = New System.Windows.Forms.RadioButton()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -55,13 +55,18 @@ Partial Class SquealerSettings
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
         Me.txtLeaderboardCs = New System.Windows.Forms.TextBox()
         Me.lblLeaderboard = New System.Windows.Forms.Label()
-        Me.lblHint = New System.Windows.Forms.Label()
-        Me.GroupBox1.SuspendLayout()
+        Me.chkShowLeaderboard = New System.Windows.Forms.CheckBox()
+        Me.gbStarwars = New System.Windows.Forms.GroupBox()
+        Me.btnStarwarsHelp = New System.Windows.Forms.Button()
+        Me.btnLeaderboardSql = New System.Windows.Forms.Button()
+        Me.lblLeaveBlank = New System.Windows.Forms.Label()
+        Me.gbGeneral.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox2.SuspendLayout()
+        Me.gbFilenames.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
+        Me.gbOutput.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbStarwars.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -156,25 +161,25 @@ Partial Class SquealerSettings
         Me.rbSymbolic.Text = "symbolic"
         Me.rbSymbolic.UseVisualStyleBackColor = True
         '
-        'GroupBox1
+        'gbGeneral
         '
-        Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.gbGeneral.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Controls.Add(Me.updnFolderSaves)
-        Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.optShowGitBranch)
-        Me.GroupBox1.Controls.Add(Me.optEditNewFiles)
-        Me.GroupBox1.Controls.Add(Me.rbFull)
-        Me.GroupBox1.Controls.Add(Me.optBeep)
-        Me.GroupBox1.Controls.Add(Me.rbSymbolic)
-        Me.GroupBox1.Controls.Add(Me.rbCompact)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(596, 164)
-        Me.GroupBox1.TabIndex = 14
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "General"
+        Me.gbGeneral.Controls.Add(Me.Label3)
+        Me.gbGeneral.Controls.Add(Me.updnFolderSaves)
+        Me.gbGeneral.Controls.Add(Me.Label5)
+        Me.gbGeneral.Controls.Add(Me.optShowGitBranch)
+        Me.gbGeneral.Controls.Add(Me.optEditNewFiles)
+        Me.gbGeneral.Controls.Add(Me.rbFull)
+        Me.gbGeneral.Controls.Add(Me.optBeep)
+        Me.gbGeneral.Controls.Add(Me.rbSymbolic)
+        Me.gbGeneral.Controls.Add(Me.rbCompact)
+        Me.gbGeneral.Location = New System.Drawing.Point(12, 12)
+        Me.gbGeneral.Name = "gbGeneral"
+        Me.gbGeneral.Size = New System.Drawing.Size(596, 164)
+        Me.gbGeneral.TabIndex = 14
+        Me.gbGeneral.TabStop = False
+        Me.gbGeneral.Text = "General"
         '
         'Label3
         '
@@ -201,21 +206,21 @@ Partial Class SquealerSettings
         Me.Label5.TabIndex = 14
         Me.Label5.Text = "Directory format"
         '
-        'GroupBox2
+        'gbFilenames
         '
-        Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.gbFilenames.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox2.Controls.Add(Me.TextBox1)
-        Me.GroupBox2.Controls.Add(Me.optSpacesAreWildcards)
-        Me.GroupBox2.Controls.Add(Me.optUseWildcards)
-        Me.GroupBox2.Controls.Add(Me.txtWildcardExample)
-        Me.GroupBox2.Controls.Add(Me.Label4)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 278)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(596, 73)
-        Me.GroupBox2.TabIndex = 15
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Filename matching"
+        Me.gbFilenames.Controls.Add(Me.TextBox1)
+        Me.gbFilenames.Controls.Add(Me.optSpacesAreWildcards)
+        Me.gbFilenames.Controls.Add(Me.optUseWildcards)
+        Me.gbFilenames.Controls.Add(Me.txtWildcardExample)
+        Me.gbFilenames.Controls.Add(Me.Label4)
+        Me.gbFilenames.Location = New System.Drawing.Point(12, 278)
+        Me.gbFilenames.Name = "gbFilenames"
+        Me.gbFilenames.Size = New System.Drawing.Size(596, 73)
+        Me.gbFilenames.TabIndex = 15
+        Me.gbFilenames.TabStop = False
+        Me.gbFilenames.Text = "Filename matching"
         '
         'TextBox1
         '
@@ -307,20 +312,20 @@ Partial Class SquealerSettings
         Me.btnOK.Text = "OK"
         Me.btnOK.UseVisualStyleBackColor = True
         '
-        'GroupBox4
+        'gbOutput
         '
-        Me.GroupBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.gbOutput.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox4.Controls.Add(Me.rbTempFile)
-        Me.GroupBox4.Controls.Add(Me.rbClipboard)
-        Me.GroupBox4.Controls.Add(Me.Label6)
-        Me.GroupBox4.Controls.Add(Me.optDetectOldSquealerObjects)
-        Me.GroupBox4.Location = New System.Drawing.Point(12, 182)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(596, 90)
-        Me.GroupBox4.TabIndex = 19
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Proc/Function/View output"
+        Me.gbOutput.Controls.Add(Me.rbTempFile)
+        Me.gbOutput.Controls.Add(Me.rbClipboard)
+        Me.gbOutput.Controls.Add(Me.Label6)
+        Me.gbOutput.Controls.Add(Me.optDetectOldSquealerObjects)
+        Me.gbOutput.Location = New System.Drawing.Point(12, 182)
+        Me.gbOutput.Name = "gbOutput"
+        Me.gbOutput.Size = New System.Drawing.Size(596, 90)
+        Me.gbOutput.TabIndex = 19
+        Me.gbOutput.TabStop = False
+        Me.gbOutput.Text = "Proc/Function/View output"
         '
         'rbTempFile
         '
@@ -382,63 +387,111 @@ Partial Class SquealerSettings
         '
         Me.txtLeaderboardCs.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLeaderboardCs.Location = New System.Drawing.Point(198, 456)
+        Me.txtLeaderboardCs.Location = New System.Drawing.Point(163, 19)
         Me.txtLeaderboardCs.Name = "txtLeaderboardCs"
-        Me.txtLeaderboardCs.Size = New System.Drawing.Size(329, 20)
+        Me.txtLeaderboardCs.Size = New System.Drawing.Size(427, 20)
         Me.txtLeaderboardCs.TabIndex = 21
         Me.txtLeaderboardCs.Visible = False
         '
         'lblLeaderboard
         '
         Me.lblLeaderboard.AutoSize = True
-        Me.lblLeaderboard.Location = New System.Drawing.Point(41, 458)
+        Me.lblLeaderboard.Location = New System.Drawing.Point(6, 23)
         Me.lblLeaderboard.Name = "lblLeaderboard"
         Me.lblLeaderboard.Size = New System.Drawing.Size(151, 13)
         Me.lblLeaderboard.TabIndex = 22
         Me.lblLeaderboard.Text = "Leaderboard ConnectionString"
         Me.lblLeaderboard.Visible = False
         '
-        'lblHint
+        'chkShowLeaderboard
         '
-        Me.lblHint.AutoSize = True
-        Me.lblHint.Location = New System.Drawing.Point(68, 459)
-        Me.lblHint.Name = "lblHint"
-        Me.lblHint.Size = New System.Drawing.Size(187, 13)
-        Me.lblHint.TabIndex = 15
-        Me.lblHint.Text = "?   ?           ? ?    ?             ?       ??   ?"
-        Me.lblHint.Visible = False
+        Me.chkShowLeaderboard.AutoSize = True
+        Me.chkShowLeaderboard.Location = New System.Drawing.Point(6, 65)
+        Me.chkShowLeaderboard.Name = "chkShowLeaderboard"
+        Me.chkShowLeaderboard.Size = New System.Drawing.Size(134, 17)
+        Me.chkShowLeaderboard.TabIndex = 23
+        Me.chkShowLeaderboard.Text = "Show scores at startup"
+        Me.chkShowLeaderboard.UseVisualStyleBackColor = True
+        Me.chkShowLeaderboard.Visible = False
+        '
+        'gbStarwars
+        '
+        Me.gbStarwars.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.gbStarwars.Controls.Add(Me.lblLeaveBlank)
+        Me.gbStarwars.Controls.Add(Me.btnStarwarsHelp)
+        Me.gbStarwars.Controls.Add(Me.btnLeaderboardSql)
+        Me.gbStarwars.Controls.Add(Me.chkShowLeaderboard)
+        Me.gbStarwars.Controls.Add(Me.lblLeaderboard)
+        Me.gbStarwars.Controls.Add(Me.txtLeaderboardCs)
+        Me.gbStarwars.Location = New System.Drawing.Point(12, 12)
+        Me.gbStarwars.Name = "gbStarwars"
+        Me.gbStarwars.Size = New System.Drawing.Size(596, 158)
+        Me.gbStarwars.TabIndex = 24
+        Me.gbStarwars.TabStop = False
+        Me.gbStarwars.Text = "May the Force be with you!"
+        Me.gbStarwars.Visible = False
+        '
+        'btnStarwarsHelp
+        '
+        Me.btnStarwarsHelp.Location = New System.Drawing.Point(6, 88)
+        Me.btnStarwarsHelp.Name = "btnStarwarsHelp"
+        Me.btnStarwarsHelp.Size = New System.Drawing.Size(121, 23)
+        Me.btnStarwarsHelp.TabIndex = 25
+        Me.btnStarwarsHelp.Text = "Help me Obi Wan"
+        Me.btnStarwarsHelp.UseVisualStyleBackColor = True
+        Me.btnStarwarsHelp.Visible = False
+        '
+        'btnLeaderboardSql
+        '
+        Me.btnLeaderboardSql.Location = New System.Drawing.Point(6, 117)
+        Me.btnLeaderboardSql.Name = "btnLeaderboardSql"
+        Me.btnLeaderboardSql.Size = New System.Drawing.Size(121, 23)
+        Me.btnLeaderboardSql.TabIndex = 24
+        Me.btnLeaderboardSql.Text = "TOP SECRET"
+        Me.btnLeaderboardSql.UseVisualStyleBackColor = True
+        Me.btnLeaderboardSql.Visible = False
+        '
+        'lblLeaveBlank
+        '
+        Me.lblLeaveBlank.AutoSize = True
+        Me.lblLeaveBlank.Location = New System.Drawing.Point(163, 45)
+        Me.lblLeaveBlank.Name = "lblLeaveBlank"
+        Me.lblLeaveBlank.Size = New System.Drawing.Size(176, 13)
+        Me.lblLeaveBlank.TabIndex = 26
+        Me.lblLeaveBlank.Text = "Leave blank to disable leaderboard."
+        Me.lblLeaveBlank.Visible = False
         '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(620, 486)
-        Me.Controls.Add(Me.lblHint)
+        Me.ClientSize = New System.Drawing.Size(620, 488)
+        Me.Controls.Add(Me.gbStarwars)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.lblLeaderboard)
-        Me.Controls.Add(Me.txtLeaderboardCs)
-        Me.Controls.Add(Me.GroupBox4)
+        Me.Controls.Add(Me.gbOutput)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.GroupBox3)
-        Me.Controls.Add(Me.GroupBox2)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.gbFilenames)
+        Me.Controls.Add(Me.gbGeneral)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SquealerSettings"
         Me.Text = "Settings"
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
+        Me.gbGeneral.ResumeLayout(False)
+        Me.gbGeneral.PerformLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
+        Me.gbFilenames.ResumeLayout(False)
+        Me.gbFilenames.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
+        Me.gbOutput.ResumeLayout(False)
+        Me.gbOutput.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbStarwars.ResumeLayout(False)
+        Me.gbStarwars.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents optBeep As System.Windows.Forms.CheckBox
@@ -450,8 +503,8 @@ Partial Class SquealerSettings
     Friend WithEvents rbCompact As System.Windows.Forms.RadioButton
     Friend WithEvents rbFull As System.Windows.Forms.RadioButton
     Friend WithEvents rbSymbolic As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents gbGeneral As System.Windows.Forms.GroupBox
+    Friend WithEvents gbFilenames As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -463,7 +516,7 @@ Partial Class SquealerSettings
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents btnOK As System.Windows.Forms.Button
-    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents gbOutput As System.Windows.Forms.GroupBox
     Friend WithEvents optDetectOldSquealerObjects As System.Windows.Forms.CheckBox
     Friend WithEvents rbTempFile As System.Windows.Forms.RadioButton
     Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
@@ -473,5 +526,9 @@ Partial Class SquealerSettings
     Friend WithEvents txtLeaderboardCs As System.Windows.Forms.TextBox
     Friend WithEvents lblLeaderboard As System.Windows.Forms.Label
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents lblHint As System.Windows.Forms.Label
+    Friend WithEvents chkShowLeaderboard As System.Windows.Forms.CheckBox
+    Friend WithEvents gbStarwars As System.Windows.Forms.GroupBox
+    Friend WithEvents btnLeaderboardSql As System.Windows.Forms.Button
+    Friend WithEvents btnStarwarsHelp As System.Windows.Forms.Button
+    Friend WithEvents lblLeaveBlank As System.Windows.Forms.Label
 End Class

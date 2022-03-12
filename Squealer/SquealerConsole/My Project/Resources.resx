@@ -259,4 +259,13 @@
   <data name="DroidScream" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\r2d2scream.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="HowToLaunchR2" xml:space="preserve">
+    <value>To join an existing leaderboard, fill in the connection string.
+
+To create a new leaderboard, find the TOP SECRET script. It's really hard to find. Then share the connection string with your fellow rebel scum.
+
+If you do not want to connect to a leaderboard, make sure your connection string is blank. Otherwise, the game will attempt to connect and you will have to wait for it to time out.
+
+To play the game, type HELP STARWARS at the command prompt.</value>
+  </data>
 </root>

@@ -59,6 +59,16 @@ Module Main
 
     Public Class UserSettingsClass
 
+        Private _ShowLeaderboard As Boolean
+        Public Property ShowLeaderboardAtStartup As Boolean
+            Get
+                Return _ShowLeaderboard
+            End Get
+            Set(value As Boolean)
+                _ShowLeaderboard = value
+            End Set
+        End Property
+
         Private _EditNew As Boolean
         Public Property EditNew As Boolean
             Get
@@ -468,12 +478,13 @@ Module Main
 
         ' Load settings.
         UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
-        UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), cDefaultConnectionString)
+        UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), String.Empty)
         UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
         UserSettings.TextEditorSwitches = My.Configger.LoadSetting(NameOf(UserSettings.TextEditorSwitches), "")
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
         UserSettings.EditNew = My.Configger.LoadSetting(NameOf(UserSettings.EditNew), True)
         UserSettings.UseClipboard = My.Configger.LoadSetting(NameOf(UserSettings.UseClipboard), True)
+        UserSettings.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(UserSettings.ShowLeaderboardAtStartup), False)
         UserSettings.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(UserSettings.DetectSquealerObjects), True)
         UserSettings.ShowBranch = My.Configger.LoadSetting(NameOf(UserSettings.ShowBranch), True)
         UserSettings.WildcardSpaces = My.Configger.LoadSetting(NameOf(UserSettings.WildcardSpaces), False)
@@ -513,6 +524,9 @@ Module Main
         If IsStarWarsDay() Then
             Console.WriteLine("May the Fourth be with you! (easter egg revealed - see HELP)")
             Console.WriteLine()
+        End If
+        If UserSettings.ShowLeaderboardAtStartup Then
+            ShowLeaderboard(10)
         End If
         HandleUserInput(WorkingFolder)
 
@@ -1055,6 +1069,7 @@ Module Main
 
         ' star wars
         cmd = New CommandCatalog.CommandDefinition({eCommandType.starwars.ToString, "r2"}, {"I've got a bad feeling about this.", "Jump in an X-Wing and blow something up!"}, CommandCatalog.eCommandCategory.other)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("top;display leaderboard"))
         cmd.Visible = IsStarWarsDay()
         MyCommands.Items.Add(cmd)
 
@@ -1453,13 +1468,17 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.starwars.ToString Then
 
-                    Dim fgColor As ConsoleColor = Console.ForegroundColor
-                    Dim bgColor As ConsoleColor = Console.BackgroundColor
-                    Dim fight As New GoldLeader(False)
-                    fight.TryPlay(UserSettings.LeaderboardConnectionString)
-                    Console.ForegroundColor = fgColor
-                    Console.BackgroundColor = bgColor
-                    Console.WriteLine()
+                    If StringInList(MySwitches, "top") Then
+                        ShowLeaderboard(20)
+                    Else
+                        Dim fgColor As ConsoleColor = Console.ForegroundColor
+                        Dim bgColor As ConsoleColor = Console.BackgroundColor
+                        Dim fight As New GoldLeader(False)
+                        fight.TryPlay(UserSettings.LeaderboardConnectionString)
+                        Console.ForegroundColor = fgColor
+                        Console.BackgroundColor = bgColor
+                        Console.WriteLine()
+                    End If
 
 
 
@@ -1530,8 +1549,6 @@ Module Main
                         Console.WriteLine("generated " & s & " with " & My.Application.Info.Version.ToString)
                         Console.WriteLine()
                     End If
-
-
 
 
 
@@ -1723,6 +1740,7 @@ Module Main
         f.txtTextEditorSwitches.Text = UserSettings.TextEditorSwitches
         f.optUseWildcards.Checked = UserSettings.AutoSearch
         f.optEditNewFiles.Checked = UserSettings.EditNew
+        f.chkShowLeaderboard.Checked = UserSettings.ShowLeaderboardAtStartup
         If UserSettings.UseClipboard Then
             f.rbClipboard.Checked = True
         Else
@@ -1749,6 +1767,7 @@ Module Main
         UserSettings.TextEditorSwitches = f.txtTextEditorSwitches.Text
         UserSettings.AutoSearch = f.optUseWildcards.Checked
         UserSettings.EditNew = f.optEditNewFiles.Checked
+        UserSettings.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
         UserSettings.UseClipboard = f.rbClipboard.Checked
         UserSettings.ShowBranch = f.optShowGitBranch.Checked
         UserSettings.WildcardSpaces = f.optSpacesAreWildcards.Checked
@@ -1768,6 +1787,7 @@ Module Main
         My.Configger.SaveSetting(NameOf(UserSettings.TextEditorSwitches), UserSettings.TextEditorSwitches)
         My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch)
         My.Configger.SaveSetting(NameOf(UserSettings.EditNew), UserSettings.EditNew)
+        My.Configger.SaveSetting(NameOf(UserSettings.ShowLeaderboardAtStartup), UserSettings.ShowLeaderboardAtStartup)
         My.Configger.SaveSetting(NameOf(UserSettings.UseClipboard), UserSettings.UseClipboard)
         My.Configger.SaveSetting(NameOf(UserSettings.DetectSquealerObjects), UserSettings.DetectSquealerObjects)
         My.Configger.SaveSetting(NameOf(UserSettings.ShowBranch), UserSettings.ShowBranch)
@@ -2918,6 +2938,20 @@ Module Main
             Return False
         End If
     End Function
+
+    Private Sub ShowLeaderboard(topN As Integer)
+        Textify.WriteLine("Retrieving scores...")
+        Console.WriteLine()
+        Dim lb As New AsciiEngine.Leaderboard
+        lb.SqlConnectionString = UserSettings.LeaderboardConnectionString
+        lb.SqlLoadScores(topN)
+        Dim i As Integer = 0
+        For Each s As AsciiEngine.Leaderboard.Score In lb.Items
+            i += 1
+            Textify.SayCentered(String.Format("|  {0}  {1}  |", s.Signature, s.Points.ToString("00000#"), i.ToString("0#")))
+        Next
+        Console.WriteLine()
+    End Sub
     Public Class SpinnyProgress
 
         Const TicksPerSecond = 10000000 ' 10 million
