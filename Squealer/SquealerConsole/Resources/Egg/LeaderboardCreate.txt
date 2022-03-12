@@ -9,7 +9,8 @@
 	3. dbo.LeaderboardRead (stored procedure)
 
 	Make sure all players have permission to execute 
-	the two stored procedures.
+	the two stored procedures, and share your
+	connection string with them!
 	
 	NOTE: If these objects already exist, they will
 	be dropped and recreated.

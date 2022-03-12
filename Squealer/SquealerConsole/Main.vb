@@ -3273,7 +3273,14 @@ Module Main
 
             DbTest.Open()
 
-            Dim DbReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand("select @@SERVERNAME,DB_NAME(),@@VERSION,(select count(1) from sys.tables),(select count(1) from sys.objects o where o.type = 'p');", DbTest).ExecuteReader
+            Dim DbReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand("select @@SERVERNAME,DB_NAME(),@@VERSION" _
+                & ",(select count(1) from sys.tables)" _
+                & ",(select count(1) from sys.objects o where o.type = 'p')" _
+                & ",(select count(1) from sys.objects o where o.type = 'fn')" _
+                & ",(select count(1) from sys.objects o where o.type = 'if')" _
+                & ",(select count(1) from sys.objects o where o.type = 'tf')" _
+                & ",(select count(1) from sys.objects o where o.type = 'v')" _
+                & ";", DbTest).ExecuteReader
 
             While DbReader.Read
 
@@ -3283,6 +3290,10 @@ Module Main
                 Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("[{0}].[{1}]", DbReader.GetString(0), DbReader.GetString(1)))
                 Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} table(s)", DbReader.GetInt32(3).ToString))
                 Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} stored procedure(s)", DbReader.GetInt32(4).ToString))
+                Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} scalar function(s)", DbReader.GetInt32(5).ToString))
+                Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} inline table-valued function(s)", DbReader.GetInt32(6).ToString))
+                Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} multi-statement table-valued function(s)", DbReader.GetInt32(7).ToString))
+                Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} views(s)", DbReader.GetInt32(8).ToString))
                 Textify.SayBulletLine(Textify.eBullet.Hash, "OK")
 
             End While
