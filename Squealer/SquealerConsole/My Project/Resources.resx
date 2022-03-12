@@ -241,17 +241,11 @@
   <data name="ObjectParameters" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\reverse\objectparameters.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\..\..\..\..\OneDrive - California Department of Aging\Configs and Floating Files\Pictures\Icons\Axialis\Axialis-Round-Web2-Grey-Png\Png\24x24\Folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ObjectPermissions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\reverse\objectpermissions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="LeaderboardCreate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\egg\leaderboardcreate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="rebel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\..\..\..\..\OneDrive - California Department of Aging\Desktop\rebel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BlasterFiring" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\blasterfiring.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -267,5 +261,11 @@ To create a new leaderboard, find the TOP SECRET script. It's really hard to fin
 If you do not want to connect to a leaderboard, make sure your connection string is blank. Otherwise, the game will attempt to connect and you will have to wait for it to time out.
 
 To play the game, type HELP STARWARS at the command prompt.</value>
+  </data>
+  <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\images\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RebelAlliance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\images\rebelalliance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

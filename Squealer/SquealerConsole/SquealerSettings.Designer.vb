@@ -22,7 +22,6 @@ Partial Class SquealerSettings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SquealerSettings))
         Me.optBeep = New System.Windows.Forms.CheckBox()
         Me.optUseWildcards = New System.Windows.Forms.CheckBox()
         Me.optSpacesAreWildcards = New System.Windows.Forms.CheckBox()
@@ -57,9 +56,9 @@ Partial Class SquealerSettings
         Me.lblLeaderboard = New System.Windows.Forms.Label()
         Me.chkShowLeaderboard = New System.Windows.Forms.CheckBox()
         Me.gbStarwars = New System.Windows.Forms.GroupBox()
+        Me.lblLeaveBlank = New System.Windows.Forms.Label()
         Me.btnStarwarsHelp = New System.Windows.Forms.Button()
         Me.btnLeaderboardSql = New System.Windows.Forms.Button()
-        Me.lblLeaveBlank = New System.Windows.Forms.Label()
         Me.gbGeneral.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbFilenames.SuspendLayout()
@@ -370,7 +369,7 @@ Partial Class SquealerSettings
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Image = Global.Squealer.My.Resources.Resources.RebelAlliance
         Me.PictureBox1.Location = New System.Drawing.Point(11, 452)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
@@ -432,6 +431,16 @@ Partial Class SquealerSettings
         Me.gbStarwars.Text = "May the Force be with you!"
         Me.gbStarwars.Visible = False
         '
+        'lblLeaveBlank
+        '
+        Me.lblLeaveBlank.AutoSize = True
+        Me.lblLeaveBlank.Location = New System.Drawing.Point(163, 45)
+        Me.lblLeaveBlank.Name = "lblLeaveBlank"
+        Me.lblLeaveBlank.Size = New System.Drawing.Size(176, 13)
+        Me.lblLeaveBlank.TabIndex = 26
+        Me.lblLeaveBlank.Text = "Leave blank to disable leaderboard."
+        Me.lblLeaveBlank.Visible = False
+        '
         'btnStarwarsHelp
         '
         Me.btnStarwarsHelp.Location = New System.Drawing.Point(6, 88)
@@ -451,16 +460,6 @@ Partial Class SquealerSettings
         Me.btnLeaderboardSql.Text = "TOP SECRET"
         Me.btnLeaderboardSql.UseVisualStyleBackColor = True
         Me.btnLeaderboardSql.Visible = False
-        '
-        'lblLeaveBlank
-        '
-        Me.lblLeaveBlank.AutoSize = True
-        Me.lblLeaveBlank.Location = New System.Drawing.Point(163, 45)
-        Me.lblLeaveBlank.Name = "lblLeaveBlank"
-        Me.lblLeaveBlank.Size = New System.Drawing.Size(176, 13)
-        Me.lblLeaveBlank.TabIndex = 26
-        Me.lblLeaveBlank.Text = "Leave blank to disable leaderboard."
-        Me.lblLeaveBlank.Visible = False
         '
         'SquealerSettings
         '

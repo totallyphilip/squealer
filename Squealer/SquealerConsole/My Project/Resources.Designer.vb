@@ -164,25 +164,21 @@ Namespace My.Resources
         '''      CHANGE LOG
         '''*********************/
         '''
-        '''{0}2019-02-21{1}
+        '''{0}2022-03-11{1}
         '''
-        '''{2}Added a switch to the GENERATE command to optionally generate test scripts instead of CREATE scripts.
-        '''
-        '''{2}Added a change log. :)
+        '''{2}Change log was broken, either would not display or would result in infinite loop. Fixed.
         '''
         '''
         '''
-        '''{0}2019-03-18{1}
+        '''{0}2022-03-10{1}
         '''
-        '''{2}Added SQLSERVER command to save/read a connection string for each project folder.
+        '''{2}Added REVERSE command to reverse engineer tables, views, and functions from SQL Server into the working folder.
         '''
-        '''{2}Added MAKE command to automatically generate stored procedures by reading the table structures in a SQL database.
+        '''{2}OPEN command now opens Explorer dialog if no path is specified.
         '''
-        '''{2}Bug fixes and performance improvements.
+        '''{2}Simplified Windows Start menu application name.
         '''
-        '''
-        '''
-        '''{0}20 [rest of string was truncated]&quot;;.
+        '''{2}Removed runlogging feature. It created too many complication [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -359,9 +355,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property rebel() As System.Drawing.Bitmap
+        Friend ReadOnly Property RebelAlliance() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("rebel", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("RebelAlliance", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
