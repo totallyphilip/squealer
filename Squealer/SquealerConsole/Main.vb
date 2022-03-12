@@ -503,7 +503,7 @@ Module Main
 
         Dim ver As New Version(My.Configger.LoadSetting(NameOf(UserSettings.LastRunVersion), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
-            ReadChangeLog()
+            DisplayChangelog()
             My.Configger.SaveSetting(NameOf(UserSettings.LastRunVersion), My.Application.Info.Version.ToString)
         End If
 
@@ -1154,12 +1154,7 @@ Module Main
                     End If
 
                     If StringInList(MySwitches, "changelog") Then
-                        Dim f As New TempFileHandler
-                        f.Writeline(AboutInfo)
-                        f.Writeline()
-                        f.Writeline()
-                        f.Writeline(ReadChangeLog)
-                        f.Show(UserSettings.TextEditor)
+                        DisplayChangelog()
                     End If
 
 
@@ -3754,6 +3749,15 @@ Module Main
 
         Console.WriteLine()
 
+    End Sub
+
+    Private Sub DisplayChangelog()
+        Dim f As New TempFileHandler
+        f.Writeline(AboutInfo)
+        f.Writeline()
+        f.Writeline()
+        f.Writeline(ReadChangeLog)
+        f.Show(UserSettings.TextEditor)
     End Sub
 
 #End Region
