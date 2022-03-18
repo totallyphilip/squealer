@@ -95,13 +95,8 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GoldLeader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="GoldLeader">
       <HintPath>..\..\..\goldleader\GoldLeader\GoldLeader\bin\Release\GoldLeader.dll</HintPath>
-    </Reference>
-    <Reference Include="PoorMansTSqlFormatterNetStandardLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\PoorMansTSqlFormatter\PoorMansTSqlFormatterNetStandardLib\bin\Release\netstandard1.0\PoorMansTSqlFormatterNetStandardLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

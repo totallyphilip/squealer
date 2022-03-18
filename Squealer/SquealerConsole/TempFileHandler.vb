@@ -20,14 +20,18 @@
         Dim newname As String = My.Computer.FileSystem.GetFileInfo(_Filename).Name.Replace(".tmp", ext)
         My.Computer.FileSystem.RenameFile(_Filename, newname)
         _Filename = path & "\" & newname
+
+
     End Sub
 
     Sub Show()
-        Dim myprocess As New Process
-        myprocess.StartInfo.FileName = _Filename
-        myprocess.StartInfo.UseShellExecute = True
-        myprocess.StartInfo.RedirectStandardOutput = False
-        myprocess.Start()
+        'Dim myprocess As New Process
+        'myprocess.StartInfo.FileName = _Filename
+        'myprocess.StartInfo.UseShellExecute = True
+        'myprocess.StartInfo.RedirectStandardOutput = False
+        'myprocess.Start()
+
+
     End Sub
 
 End Class

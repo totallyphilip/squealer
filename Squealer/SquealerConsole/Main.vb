@@ -650,7 +650,7 @@ Module Main
     End Function
 
     ' Enumerate through files in the working folder and take some action on them.
-    Private Sub ProcessFiles(ByVal FileListing As List(Of String), ByVal Action As eFileAction, bp As BatchParametersClass, ByVal TargetFileType As SquealerObjectType.eType, git As GitFlags, MakePretty As Boolean)
+    Private Sub ProcessFiles(ByVal FileListing As List(Of String), ByVal Action As eFileAction, bp As BatchParametersClass, ByVal TargetFileType As SquealerObjectType.eType, git As GitFlags)
 
         Dim FileCount As Integer = 0
         Dim SkippedFiles As Integer = 0
@@ -769,13 +769,13 @@ Module Main
                         End If
                     Case eFileAction.fix
                         If bp.OutputMode = BatchParametersClass.eOutputMode.normal Then
-                            If RepairXmlFile(False, info.FullName, MakePretty) Then
+                            If RepairXmlFile(False, info.FullName) Then
                                 Textify.Write(String.Format(" ... {0}", eCommandType.fix.ToString.ToUpper), ConsoleColor.Green)
                             Else
                                 SkippedFiles += 1
                             End If
                         Else
-                            If ConvertXmlFile(info.FullName, TargetFileType, MakePretty) Then
+                            If ConvertXmlFile(info.FullName, TargetFileType) Then
                                 Textify.Write(String.Format(" ... {0}", BatchParametersClass.eOutputMode.convert.ToString.ToUpper))
                             Else
                                 SkippedFiles += 1
@@ -943,7 +943,6 @@ Module Main
             opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(s))
         Next
         cmd.Options.Items.Add(opt)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("format;beautify code"))
         cmd.Examples.Add("% dbo.*")
         cmd.Examples.Add("% -c:p * -- convert everything to stored procedures")
         cmd.Examples.Add("% -v -p -c:if * -- convert views and stored procedures to inline table-valued functions")
@@ -1188,8 +1187,6 @@ Module Main
                     Dim gf As New GitFlags()
                     gf.ShowUncommitted = StringInList(MySwitches, "u")
 
-                    Dim pretty As Boolean = False
-
                     If Not MyCommand.ParameterRequired AndAlso String.IsNullOrWhiteSpace(UserInput) Then
                         UserInput = "*"
                     End If
@@ -1265,10 +1262,6 @@ Module Main
 
                         action = eFileAction.fix
 
-                        If StringInList(MySwitches, "format") Then
-                            pretty = True
-                        End If
-
                         Dim convertswitch As String = MySwitches.Find(Function(x) x.Split(New Char() {":"c})(0).ToLower = "c")
                         If Not String.IsNullOrWhiteSpace(convertswitch) Then
                             targetftype = SquealerObjectType.Eval(convertswitch.Split(New Char() {":"c})(1))
@@ -1296,7 +1289,7 @@ Module Main
 
                     ThrowErrorIfOverFileLimit(FileLimit, SelectedFiles.Count, ignorefilelimit)
 
-                    ProcessFiles(SelectedFiles, action, bp, targetftype, gf, pretty)
+                    ProcessFiles(SelectedFiles, action, bp, targetftype, gf)
 
 
 
@@ -1871,13 +1864,13 @@ Module Main
 #Region " XML Processing "
 
     ' Load and clean up the XML keeping the original file type.
-    Private Function FixedXml(ByVal ApplyDefaultUsers As Boolean, fqfn As String, MakePretty As Boolean) As Xml.XmlDocument
+    Private Function FixedXml(ByVal ApplyDefaultUsers As Boolean, fqfn As String) As Xml.XmlDocument
         Dim obj As New SquealerObject(fqfn)
-        Return FixedXml(ApplyDefaultUsers, fqfn, obj, MakePretty)
+        Return FixedXml(ApplyDefaultUsers, fqfn, obj)
     End Function
 
     ' Load and clean up the XML using the specified target file type.
-    Private Function FixedXml(ByVal ApplyDefaultUsers As Boolean, fqfn As String, ByVal obj As SquealerObject, ByVal MakePretty As Boolean) As Xml.XmlDocument
+    Private Function FixedXml(ByVal ApplyDefaultUsers As Boolean, fqfn As String, ByVal obj As SquealerObject) As Xml.XmlDocument
 
         Dim OutputXml As Xml.XmlDocument = New Xml.XmlDocument
 
@@ -2065,9 +2058,6 @@ Module Main
         Dim InCode As String = String.Empty
         Try
             InCode = InRoot.SelectSingleNode("Code").InnerText
-            If MakePretty Then
-                InCode = BeautifiedCode(InCode)
-            End If
         Catch ex As Exception
             InCode = String.Empty
         End Try
@@ -2142,49 +2132,21 @@ Module Main
 
     End Function
 
-    Private Function BeautifiedCode(code As String) As String
-
-        Dim options As New PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions
-        With options
-            .BreakJoinOnSections = True
-            .ExpandBetweenConditions = True
-            .ExpandBooleanExpressions = True
-            .ExpandCaseStatements = True
-            .ExpandCommaLists = True
-            .ExpandInLists = True
-            .IndentString = vbTab
-            .KeywordStandardization = True
-            .NewClauseLineBreaks = 1
-            .NewStatementLineBreaks = 2
-            .SpacesPerTab = 8
-            .TrailingCommas = False
-            .UppercaseKeywords = False
-        End With
-
-        Dim formatter As New PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter(options)
-
-        Dim beautify As New PoorMansTSqlFormatterLib.SqlFormattingManager(formatter)
-
-        code = beautify.Format(code)
-
-        Return code
-
-    End Function
 
     ' Fix a root file and replace the original.
-    Private Function ConvertXmlFile(fqfn As String, ByVal oType As SquealerObjectType.eType, MakePretty As Boolean) As Boolean
+    Private Function ConvertXmlFile(fqfn As String, ByVal oType As SquealerObjectType.eType) As Boolean
 
         Dim obj As New SquealerObject(fqfn)
         obj.Type.LongType = oType
-        Dim NewXml As Xml.XmlDocument = FixedXml(False, fqfn, obj, MakePretty) ' Fix it.
+        Dim NewXml As Xml.XmlDocument = FixedXml(False, fqfn, obj) ' Fix it.
 
         Return IsXmlReplaced(fqfn, NewXml)
 
     End Function
 
     ' Fix a root file and replace the original.
-    Private Function RepairXmlFile(ByVal IsNew As Boolean, fqfn As String, MakePretty As Boolean) As Boolean
-        Dim NewXml As Xml.XmlDocument = FixedXml(IsNew, fqfn, MakePretty) ' Fix it.
+    Private Function RepairXmlFile(ByVal IsNew As Boolean, fqfn As String) As Boolean
+        Dim NewXml As Xml.XmlDocument = FixedXml(IsNew, fqfn) ' Fix it.
         Return IsXmlReplaced(fqfn, NewXml)
     End Function
 
@@ -2295,7 +2257,7 @@ Module Main
             CreateNewFile = String.Empty
         Else
             My.Computer.FileSystem.WriteAllText(fqTarget, Template, False, System.Text.Encoding.ASCII)
-            RepairXmlFile(IsNew, fqTarget, False)
+            RepairXmlFile(IsNew, fqTarget)
             If IsNew Then
                 Textify.SayBullet(Textify.eBullet.Hash, "OK")
                 Textify.WriteLine(" (" & filename & ")")
@@ -2320,7 +2282,7 @@ Module Main
         Dim oType As SquealerObjectType.eType = SquealerObjectType.Eval(XmlGetObjectType(info.FullName))
         Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
 
-        Dim InXml As Xml.XmlDocument = FixedXml(False, info.FullName, False)
+        Dim InXml As Xml.XmlDocument = FixedXml(False, info.FullName)
         Dim InRoot As Xml.XmlElement = DirectCast(InXml.SelectSingleNode(My.Application.Info.ProductName), Xml.XmlElement)
         Dim Block As String = Nothing
 
@@ -2977,17 +2939,20 @@ Module Main
 
     Private Sub OpenExplorer(ByVal wildcard As String, ByVal WorkingFolder As String)
 
-        Dim files As ObjectModel.ReadOnlyCollection(Of String)
 
-        files = My.Computer.FileSystem.GetFiles(WorkingFolder, FileIO.SearchOption.SearchTopLevelOnly, wildcard)
+        ' disabled until i can think of a better way
 
-        If wildcard = "*" & MyConstants.ObjectFileExtension Then
-            Process.Start("Explorer.exe", WorkingFolder)
-        ElseIf files.Count = 0 Then
-            Throw New Exception("File not found.")
-        Else
-            Process.Start("Explorer.exe", "/select," & WorkingFolder & "\" & My.Computer.FileSystem.GetFileInfo(files(0)).Name)
-        End If
+        'Dim files As ObjectModel.ReadOnlyCollection(Of String)
+
+        'files = My.Computer.FileSystem.GetFiles(WorkingFolder, FileIO.SearchOption.SearchTopLevelOnly, wildcard)
+
+        'If wildcard = "*" & MyConstants.ObjectFileExtension Then
+        '    Process.Start("Explorer.exe", WorkingFolder)
+        'ElseIf files.Count = 0 Then
+        '    Throw New Exception("File not found.")
+        'Else
+        '    Process.Start("Explorer.exe", "/select," & WorkingFolder & "\" & My.Computer.FileSystem.GetFileInfo(files(0)).Name)
+        'End If
 
     End Sub
 
@@ -2996,11 +2961,11 @@ Module Main
         ShellOpenFile(path & "\" & filename)
     End Sub
     Private Sub ShellOpenFile(filename As String)
-        Dim myprocess As New Process()
-        myprocess.StartInfo.FileName = filename
-        myprocess.StartInfo.UseShellExecute = True
-        'myprocess.StartInfo.RedirectStandardOutput = True
-        myprocess.Start()
+        'Dim myprocess As New Process()
+        'myprocess.StartInfo.FileName = filename
+        'myprocess.StartInfo.UseShellExecute = True
+        ''myprocess.StartInfo.RedirectStandardOutput = True
+        'myprocess.Start()
     End Sub
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)
@@ -3466,7 +3431,7 @@ Module Main
                                     .Replace("{Users}", OutputUsers) _
                                 , False) ' Overwrite
 
-                        RepairXmlFile(False, filename, False)
+                        RepairXmlFile(False, filename)
 
                         ProcCount += 1
 
