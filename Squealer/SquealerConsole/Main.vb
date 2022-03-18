@@ -1,5 +1,10 @@
-﻿Imports System.Collections.ObjectModel
+﻿'Imports System.Collections.ObjectModel
 Imports System.Windows.Forms
+Imports System.Collections.ObjectModel
+Imports System.Management.Automation
+Imports System.Management.Automation.Runspaces
+
+
 
 Public Class GitFlags
 
@@ -1453,26 +1458,24 @@ Module Main
                         Console.WriteLine()
                     End If
 
-                    Dim directory As String = WorkingFolder
-
-                    Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
-                        ps.AddScript($"cd {directory}")
-                        'powershell.AddScript("git init")
-                        'powershell.AddScript("git add *")
-                        'powershell.AddScript("git commit -m 'git commit from PowerShell in C#'")
-                        'powershell.AddScript("git push")
-                        'Dim results As Collection(Of PSObject) = powershell.Invoke()
-                        ps.AddScript("dir")
-                        Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
-
-                        Console.WriteLine(r.Count)
-                        For Each o As System.Management.Automation.PSObject In r
-                            Console.WriteLine(o.ToString)
-                        Next
 
 
-                    End Using
+                    Dim scriptText As String = "dir"
 
+                    Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+                    runspace.Open()
+        Dim pipeline As Pipeline = runspace.CreatePipeline()
+                    pipeline.Commands.AddScript(scriptText)
+                    pipeline.Commands.Add("Out-String")
+                    Dim results As Collection(Of PSObject) = pipeline.Invoke()
+                    runspace.Close()
+                    Dim stringBuilder As Text.StringBuilder = New Text.StringBuilder()
+
+                    For Each obj As PSObject In results
+                        stringBuilder.AppendLine(obj.ToString())
+                    Next
+
+                    Console.WriteLine(stringBuilder)
 
 
 
@@ -1973,7 +1976,7 @@ Module Main
             Dim InParameters As DataTable = GetParameters(InputXml)
 
             If InParameters.Rows.Count = 0 Then
-                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name=""MyParameter"" Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
+                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name="" MyParameter"" Type="" varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
             Else
                 For Each InParameter As DataRow In InParameters.Select()
                     Dim OutParameter As Xml.XmlElement = OutputXml.CreateElement("Parameter")
@@ -2039,7 +2042,7 @@ Module Main
                     OutColumn.SetAttribute("Comments", "")
                     OutTable.AppendChild(OutColumn)
                 Else
-                    OutTable.AppendChild(OutputXml.CreateComment("<Column Name=""MyColumn"" Comments="""" />"))
+                    OutTable.AppendChild(OutputXml.CreateComment("<Column Name="" MyColumn"" Comments=""""/>"))
                 End If
             Else
                 For Each InColumn As DataRow In InColumns.Select()
@@ -2123,7 +2126,7 @@ Module Main
         End If
 
         If InUsers.Rows.Count = 0 Then
-            OutUsers.AppendChild(OutputXml.CreateComment(" <User Name= ""MyUser""/> "))
+            OutUsers.AppendChild(OutputXml.CreateComment(" <User Name="" MyUser""/> "))
         Else
             For Each User As DataRow In InUsers.Select("", "Name asc")
                 Dim OutUser As Xml.XmlElement = OutputXml.CreateElement("User")
@@ -2264,7 +2267,7 @@ Module Main
 
             Dim parms As String = String.Empty
             For Each p As ParameterClass In Parameters.Items
-                parms &= String.Format("<Parameter Name=""{0}"" Type=""{1}"" Output=""{2}"" />", p.Name, p.Type, p.IsOutput.ToString)
+                parms &= String.Format("<Parameter Name="" {0}"" Type=""{1}"" Output=""{2}"" />", p.Name, p.Type, p.IsOutput.ToString)
             Next
             Template = Template.Replace("<!--Parameters-->", parms)
         End If
@@ -2275,7 +2278,7 @@ Module Main
 
             Dim users As String = String.Empty
             For Each s As String In userlist
-                users &= String.Format("<User Name= ""{0}""/>", s)
+                users &= String.Format("<User Name="" {0}""/>", s)
             Next
             Template = Template.Replace("<Users/>", String.Format("<Users>{0}</Users>", users))
 
@@ -2415,35 +2418,35 @@ Module Main
             Else
 
                 'def = ""
-                If ParameterCount = 0 Then '< InParameters.Rows.Count Then
-                    def = ""
-                Else
-                    def = ","
+                If ParameterCount = 0 Then '<InParameters.Rows.Count Then
+                    def=""
+                                                Else
+                    def=","
                 End If
 
-                ' Write parameters as actual parameters.
-                ParameterCount += 1
-                def = def & "@" & Parameter.Item("Name").ToString & " " & Parameter.Item("Type").ToString
-                If Not Parameter.Item("DefaultValue").ToString = String.Empty Then
-                    def = def & " = " & Parameter.Item("DefaultValue").ToString
-                End If
-                If Parameter.Item("Output").ToString = Boolean.TrueString Then
-                    def = def & " output"
-                End If
-                If Not Parameter.Item("Comments").ToString = String.Empty Then
-                    def = def & " -- " & Parameter.Item("Comments").ToString
-                End If
-                ' Write out error logging section.
-                If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-                    Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
-                    ErrorLogParameters &= whynot
-                Else
-                    ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
-                End If
+        ' Write parameters as actual parameters.
+        ParameterCount += 1
+        def = def & "@" & Parameter.Item("Name").ToString & " " & Parameter.Item("Type").ToString
+        If Not Parameter.Item("DefaultValue").ToString = String.Empty Then
+            def = def & " = " & Parameter.Item("DefaultValue").ToString
+        End If
+        If Parameter.Item("Output").ToString = Boolean.TrueString Then
+            def = def & " output"
+        End If
+        If Not Parameter.Item("Comments").ToString = String.Empty Then
+            def = def & " -- " & Parameter.Item("Comments").ToString
+        End If
+        ' Write out error logging section.
+        If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
+            Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
+            ErrorLogParameters &= whynot
+        Else
+            ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
+        End If
 
-            End If
+        End If
 
-            DeclareList.Add(def)
+        DeclareList.Add(def)
 
         Next
         For Each s As String In DeclareList
@@ -2737,17 +2740,37 @@ Module Main
 
         Try
 
-            Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
 
-                ps.AddScript($"cd {folder}")
-                ps.AddScript(String.Format("/c {0} glob ""{1}""", gc, glob))
-                Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
 
-                For Each o As System.Management.Automation.PSObject In r
-                    gitstream.Add(o.ToString)
-                Next
 
-            End Using
+            Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+            runspace.Open()
+            Dim pipeline As Pipeline = runspace.CreatePipeline()
+            pipeline.Commands.AddScript($"cd ""{folder}""")
+            pipeline.Commands.AddScript(String.Format("{0} glob ""{1}""", gc, glob))
+            pipeline.Commands.Add("Out-String")
+            Dim results As Collection(Of PSObject) = pipeline.Invoke()
+            runspace.Close()
+
+            For Each obj As PSObject In results
+                gitstream.Add(obj.ToString())
+            Next
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         Catch ex As Exception
             Throw New Exception(ex.Message)
@@ -3129,7 +3152,7 @@ Module Main
         Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
         Dim csbytes As Byte() = System.Text.Encoding.Unicode.GetBytes(cs.Trim)
 
-        Dim encrypted As Byte() = System.Security.Cryptography.ProtectedData.Protect(csbytes, entropy, Security.Cryptography.DataProtectionScope.CurrentUser)
+        Dim encrypted As Byte() = System.Security.Cryptography.ProtectedData.Protect(csbytes, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
         If My.Computer.FileSystem.FileExists(f) Then
             My.Computer.FileSystem.DeleteFile(f)
         End If
@@ -3158,7 +3181,7 @@ Module Main
         End If
 
         Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
-        Dim decrypted As Byte() = System.Security.Cryptography.ProtectedData.Unprotect(My.Computer.FileSystem.ReadAllBytes(f), entropy, Security.Cryptography.DataProtectionScope.CurrentUser)
+        Dim decrypted As Byte() = System.Security.Cryptography.ProtectedData.Unprotect(My.Computer.FileSystem.ReadAllBytes(f), entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
         GetConnectionString = System.Text.Encoding.Unicode.GetString(decrypted)
 
     End Function
