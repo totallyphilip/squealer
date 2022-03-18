@@ -1456,6 +1456,7 @@ Module Main
 
 
 
+
                 Else
                     Throw New System.Exception(BadCommandMessage)
                 End If
@@ -2836,6 +2837,11 @@ Module Main
         'myprocess.StartInfo.UseShellExecute = True
         ''myprocess.StartInfo.RedirectStandardOutput = True
         'myprocess.Start()
+
+        'Console.WriteLine("&&&" & filename & "&&&")
+        'Shell(filename)
+
+        GitShell.DoSomething(filename)
     End Sub
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)

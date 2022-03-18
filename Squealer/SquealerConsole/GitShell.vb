@@ -69,4 +69,14 @@ Public Class GitShell
 
     End Function
 
+
+    Public Shared Sub DoSomething(filename As String)
+        Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+        runspace.Open()
+        Dim pipeline As Pipeline = runspace.CreatePipeline()
+        pipeline.Commands.AddScript(filename)
+        pipeline.Invoke()
+        runspace.Close()
+    End Sub
+
 End Class
