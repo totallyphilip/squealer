@@ -1,10 +1,4 @@
-﻿'Imports System.Collections.ObjectModel
-Imports System.Windows.Forms
-'Imports System.Collections.ObjectModel
-'Imports System.Management.Automation
-'Imports System.Management.Automation.Runspaces
-
-
+﻿Imports System.Windows.Forms
 
 Public Class GitFlags
 
@@ -585,12 +579,6 @@ Module Main
             s = WildcardInterpreter(s.Trim, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
-
-
-            For Each bonk As String In GitShell.ChangedFiles(ProjectFolder, "git status -s", s, gf.ShowDeleted)
-                Console.WriteLine("((" & bonk & "))")
-            Next
-
 
             If gf.GitEnabled Then
 
@@ -2667,13 +2655,6 @@ Module Main
 
 
     End Function
-
-#End Region
-
-#Region " Git "
-
-
-
 
 #End Region
 
