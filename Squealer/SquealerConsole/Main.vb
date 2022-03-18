@@ -1460,22 +1460,6 @@ Module Main
 
 
 
-                    Dim scriptText As String = "dir"
-
-                    Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
-                    runspace.Open()
-        Dim pipeline As Pipeline = runspace.CreatePipeline()
-                    pipeline.Commands.AddScript(scriptText)
-                    pipeline.Commands.Add("Out-String")
-                    Dim results As Collection(Of PSObject) = pipeline.Invoke()
-                    runspace.Close()
-                    Dim stringBuilder As Text.StringBuilder = New Text.StringBuilder()
-
-                    For Each obj As PSObject In results
-                        stringBuilder.AppendLine(obj.ToString())
-                    Next
-
-                    Console.WriteLine(stringBuilder)
 
 
 
@@ -1510,7 +1494,8 @@ Module Main
 
             Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
             If UserSettings.ShowBranch Then
-                Textify.Write(CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
+                'disabled foo
+                'Textify.Write(CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
             End If
             Textify.Write(" > ", ConsoleColor.DarkYellow)
             ClearKeyboard()
@@ -2736,12 +2721,11 @@ Module Main
 
     Private Function GitResults(folder As String, gc As String, glob As String) As List(Of String)
 
+        ' globbing is wildcard matching
+
         Dim gitstream As New List(Of String)
 
         Try
-
-
-
 
             Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
             runspace.Open()
@@ -2753,24 +2737,11 @@ Module Main
             runspace.Close()
 
             For Each obj As PSObject In results
-                gitstream.Add(obj.ToString())
+                Dim s As String = obj.ToString
+                If Not String.IsNullOrEmpty(s) Then
+                    gitstream.Add(s)
+                End If
             Next
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         Catch ex As Exception
             Throw New Exception(ex.Message)
@@ -2785,18 +2756,26 @@ Module Main
 
         Try
 
-            Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
 
-                ps.AddScript($"cd {folder}")
-                ps.AddScript(gc)
-                Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
 
-                For Each o As System.Management.Automation.PSObject In r
+            Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
+            runspace.Open()
+            Dim pipeline As Pipeline = runspace.CreatePipeline()
+            pipeline.Commands.AddScript($"cd ""{folder}""")
+            pipeline.Commands.AddScript(gc)
+            pipeline.Commands.Add("Out-String")
+            Dim results As Collection(Of PSObject) = pipeline.Invoke()
+            runspace.Close()
+
+            For Each obj As PSObject In results
+                Dim s As String = obj.ToString
+                If Not String.IsNullOrEmpty(s) Then
                     Console.WriteLine()
-                    Textify.Write(o.ToString, ConsoleColor.Cyan, Textify.eLineMode.Truncate)
-                Next
+                    Textify.Write(s, ConsoleColor.Cyan, Textify.eLineMode.Truncate)
+                End If
+            Next
 
-            End Using
+
 
         Catch ex As Exception
             Throw New Exception(ex.Message)
@@ -2805,29 +2784,29 @@ Module Main
     End Sub
 
 
-    Private Function CurrentBranch(folder As String, sformat As String) As String
+    Private Function disabled_CurrentBranch(folder As String, sformat As String) As String
 
         Dim s As String = sformat.Replace("{0}", "no git")
 
-        Try
+        'Try
 
-            Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
+        '    Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
 
-                ps.AddScript($"cd {folder}")
-                ps.AddScript("git symbolic-ref HEAD")
-                Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
+        '        ps.AddScript($"cd {folder}")
+        '        ps.AddScript("git symbolic-ref HEAD")
+        '        Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
 
-                For Each o As System.Management.Automation.PSObject In r
-                    s = sformat.Replace("{0}", o.ToString.Trim.Replace("refs/heads/", String.Empty))
-                Next
+        '        For Each o As System.Management.Automation.PSObject In r
+        '            s = sformat.Replace("{0}", o.ToString.Trim.Replace("refs/heads/", String.Empty))
+        '        Next
 
-            End Using
+        '    End Using
 
-        Catch ex As Exception
+        'Catch ex As Exception
 
-            s = sformat.Replace("{0}", "git error!")
+        '    s = sformat.Replace("{0}", "git error!")
 
-        End Try
+        'End Try
 
         Return s
 
