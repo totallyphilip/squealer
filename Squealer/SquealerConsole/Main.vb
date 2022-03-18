@@ -80,16 +80,6 @@ Module Main
             End Set
         End Property
 
-        Private _TextEditor As String
-        Public Property TextEditor As String
-            Get
-                Return _TextEditor
-            End Get
-            Set(value As String)
-                _TextEditor = value
-            End Set
-        End Property
-
         Private _DirStyle As String
         Public Property DirStyle As String
             Get
@@ -107,16 +97,6 @@ Module Main
             End Get
             Set(value As Integer)
                 _RecentFolders = value
-            End Set
-        End Property
-
-        Private _TextEditorSwitches As String
-        Public Property TextEditorSwitches As String
-            Get
-                Return _TextEditorSwitches
-            End Get
-            Set(value As String)
-                _TextEditorSwitches = value
             End Set
         End Property
 
@@ -475,10 +455,8 @@ Module Main
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
         ' Load settings.
-        UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
         UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), String.Empty)
         UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
-        UserSettings.TextEditorSwitches = My.Configger.LoadSetting(NameOf(UserSettings.TextEditorSwitches), "")
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
         UserSettings.EditNew = My.Configger.LoadSetting(NameOf(UserSettings.EditNew), True)
         UserSettings.UseClipboard = My.Configger.LoadSetting(NameOf(UserSettings.UseClipboard), True)
@@ -800,7 +778,7 @@ Module Main
                         End If
 
                     Case eFileAction.edit
-                        FileEdit(info.FullName)
+                        ShellOpenFile(info.FullName)
                     Case eFileAction.checkout
                         GitCommandDo(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)", Action)
                     Case eFileAction.generate
@@ -870,9 +848,9 @@ Module Main
                 Textify.SayBulletLine(Textify.eBullet.Hash, "Output copied to Windows clipboard.")
                 Clipboard.SetText(GeneratedOutput)
             Else
-                Dim tempfile As New TempFileHandler
+                Dim tempfile As New TempFileHandler(".sql")
                 tempfile.Writeline(GeneratedOutput)
-                tempfile.Show(UserSettings.TextEditor)
+                tempfile.Show()
             End If
 
         End If
@@ -1178,7 +1156,7 @@ Module Main
 
                     ' Now edit 
                     If StringInList(MySwitches, "e") Then
-                        FileEdit(WorkingFolder & "\" & MyConstants.ConfigFilename)
+                        OpenInTextEditor(MyConstants.ConfigFilename, WorkingFolder)
                     End If
 
                     ' No switches, so just display
@@ -1366,7 +1344,7 @@ Module Main
                     Dim f As String = CreateNewFile(WorkingFolder, filetype, UserInput)
 
                     If UserSettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
-                        FileEdit(f)
+                        ShellOpenFile(f)
                     End If
 
 
@@ -1392,31 +1370,6 @@ Module Main
                     ShowSettingsDialog()
 
 
-
-                ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso StringInList(MySwitches, "switches") Then
-
-                    Dim switches As String = Microsoft.VisualBasic.Interaction.InputBox("Text Editor Switches", "", UserSettings.TextEditorSwitches).Trim
-                    If String.IsNullOrWhiteSpace(switches) Then
-                        Textify.SayBulletLine(Textify.eBullet.Hash, "no change")
-                        Textify.SayNewLine()
-                        switches = UserSettings.TextEditorSwitches
-                    Else
-                        Textify.SayBulletLine(Textify.eBullet.Hash, "text editor switches updated")
-                        UserSettings.TextEditorSwitches = switches
-                        My.Configger.SaveSetting(NameOf(UserSettings.TextEditorSwitches), switches)
-                    End If
-
-                    Textify.SayBulletLine(Textify.eBullet.Arrow, UserSettings.TextEditor & " " & switches & " <FileName>")
-                    Textify.SayNewLine()
-
-
-                ElseIf MyCommand.Keyword = eCommandType.setting.ToString AndAlso StringInList(MySwitches, "noswitches") Then
-
-                    Textify.SayBulletLine(Textify.eBullet.Hash, "text editor switches cleared")
-
-                    UserSettings.TextEditorSwitches = ""
-                    My.Configger.SaveSetting(NameOf(UserSettings.TextEditorSwitches), "")
-                    Textify.SayNewLine()
 
 
                 ElseIf MyCommand.Keyword = eCommandType.explore.ToString Then
@@ -1707,10 +1660,8 @@ Module Main
     Private Sub ShowSettingsDialog()
 
         Dim f As New SquealerSettings
-        f.txtTextEditorProgram.Text = UserSettings.TextEditor
         f.txtLeaderboardCs.Text = UserSettings.LeaderboardConnectionString
         f.updnFolderSaves.Value = UserSettings.RecentFolders
-        f.txtTextEditorSwitches.Text = UserSettings.TextEditorSwitches
         f.optUseWildcards.Checked = UserSettings.AutoSearch
         f.optEditNewFiles.Checked = UserSettings.EditNew
         f.chkShowLeaderboard.Checked = UserSettings.ShowLeaderboardAtStartup
@@ -1734,10 +1685,8 @@ Module Main
 
         f.ShowDialog()
 
-        UserSettings.TextEditor = f.txtTextEditorProgram.Text
         UserSettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
         UserSettings.RecentFolders = CInt(f.updnFolderSaves.Value)
-        UserSettings.TextEditorSwitches = f.txtTextEditorSwitches.Text
         UserSettings.AutoSearch = f.optUseWildcards.Checked
         UserSettings.EditNew = f.optEditNewFiles.Checked
         UserSettings.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
@@ -1754,10 +1703,8 @@ Module Main
             UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString
         End If
 
-        My.Configger.SaveSetting(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
         My.Configger.SaveSetting(NameOf(UserSettings.LeaderboardConnectionString), UserSettings.LeaderboardConnectionString)
         My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders)
-        My.Configger.SaveSetting(NameOf(UserSettings.TextEditorSwitches), UserSettings.TextEditorSwitches)
         My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch)
         My.Configger.SaveSetting(NameOf(UserSettings.EditNew), UserSettings.EditNew)
         My.Configger.SaveSetting(NameOf(UserSettings.ShowLeaderboardAtStartup), UserSettings.ShowLeaderboardAtStartup)
@@ -3031,14 +2978,15 @@ Module Main
     End Sub
 
     ' Edit one or more files.
-    Private Sub FileEdit(filename As String)
-        Try
-            Process.Start(UserSettings.TextEditor, PadRightIfNotEmpty(UserSettings.TextEditorSwitches) & """" & My.Computer.FileSystem.GetFileInfo(filename).Name & """") ' Surround with quotes for file names with spaces
-        Catch ex As Exception
-            Textify.SayError(ex.Message)
-            Textify.SayBullet(Textify.eBullet.Arrow, UserSettings.TextEditor)
-            Textify.SayNewLine()
-        End Try
+    Private Sub OpenInTextEditor(filename As String, path As String)
+        ShellOpenFile(path & "\" & filename)
+    End Sub
+    Private Sub ShellOpenFile(filename As String)
+        Dim myprocess As New Process()
+        myprocess.StartInfo.FileName = filename
+        myprocess.StartInfo.UseShellExecute = True
+        'myprocess.StartInfo.RedirectStandardOutput = True
+        myprocess.Start()
     End Sub
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)
@@ -3535,7 +3483,7 @@ Module Main
 
         Dim ProcCount As Integer = 0
         Dim SkippedCount As Integer = 0
-        Dim tempfile As New TempFileHandler
+        Dim tempfile As New TempFileHandler(".txt")
 
         Using DbObjects As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
 
@@ -3667,7 +3615,7 @@ Module Main
         Textify.SayBullet(Textify.eBullet.Hash, "Results not guaranteed!", 0, New Textify.ColorScheme(ConsoleColor.Yellow))
         Textify.SayNewLine(2)
 
-        tempfile.Show(UserSettings.TextEditor)
+        tempfile.Show()
 
     End Sub
 
@@ -3709,13 +3657,14 @@ Module Main
     End Sub
 
     Private Sub DisplayChangelog()
-        Dim f As New TempFileHandler
+        Dim f As New TempFileHandler(".txt")
         f.Writeline(AboutInfo)
         f.Writeline()
         f.Writeline()
         f.Writeline(ReadChangeLog)
-        f.Show(UserSettings.TextEditor)
+        f.Show()
     End Sub
+
 
 #End Region
 

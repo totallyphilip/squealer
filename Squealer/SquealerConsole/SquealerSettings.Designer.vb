@@ -26,7 +26,6 @@ Partial Class SquealerSettings
         Me.optUseWildcards = New System.Windows.Forms.CheckBox()
         Me.optSpacesAreWildcards = New System.Windows.Forms.CheckBox()
         Me.optEditNewFiles = New System.Windows.Forms.CheckBox()
-        Me.txtTextEditorProgram = New System.Windows.Forms.TextBox()
         Me.optShowGitBranch = New System.Windows.Forms.CheckBox()
         Me.rbCompact = New System.Windows.Forms.RadioButton()
         Me.rbFull = New System.Windows.Forms.RadioButton()
@@ -39,11 +38,6 @@ Partial Class SquealerSettings
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.txtWildcardExample = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.txtTextEditorSwitches = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.gbOutput = New System.Windows.Forms.GroupBox()
         Me.rbTempFile = New System.Windows.Forms.RadioButton()
@@ -62,7 +56,6 @@ Partial Class SquealerSettings
         Me.gbGeneral.SuspendLayout()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbFilenames.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
         Me.gbOutput.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbStarwars.SuspendLayout()
@@ -107,15 +100,6 @@ Partial Class SquealerSettings
         Me.optEditNewFiles.TabIndex = 6
         Me.optEditNewFiles.Text = "Automatically run EDIT command after NEW command"
         Me.optEditNewFiles.UseVisualStyleBackColor = True
-        '
-        'txtTextEditorProgram
-        '
-        Me.txtTextEditorProgram.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTextEditorProgram.Location = New System.Drawing.Point(59, 22)
-        Me.txtTextEditorProgram.Name = "txtTextEditorProgram"
-        Me.txtTextEditorProgram.Size = New System.Drawing.Size(491, 20)
-        Me.txtTextEditorProgram.TabIndex = 8
         '
         'optShowGitBranch
         '
@@ -246,59 +230,6 @@ Partial Class SquealerSettings
         Me.Label4.Size = New System.Drawing.Size(13, 13)
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "="
-        '
-        'GroupBox3
-        '
-        Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox3.Controls.Add(Me.Button1)
-        Me.GroupBox3.Controls.Add(Me.txtTextEditorSwitches)
-        Me.GroupBox3.Controls.Add(Me.Label2)
-        Me.GroupBox3.Controls.Add(Me.Label1)
-        Me.GroupBox3.Controls.Add(Me.txtTextEditorProgram)
-        Me.GroupBox3.Location = New System.Drawing.Point(12, 357)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(596, 90)
-        Me.GroupBox3.TabIndex = 16
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Text editor"
-        '
-        'Button1
-        '
-        Me.Button1.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.Button1.Location = New System.Drawing.Point(556, 15)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(34, 33)
-        Me.Button1.TabIndex = 20
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'txtTextEditorSwitches
-        '
-        Me.txtTextEditorSwitches.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTextEditorSwitches.Location = New System.Drawing.Point(59, 54)
-        Me.txtTextEditorSwitches.Name = "txtTextEditorSwitches"
-        Me.txtTextEditorSwitches.Size = New System.Drawing.Size(531, 20)
-        Me.txtTextEditorSwitches.TabIndex = 11
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(7, 57)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(50, 13)
-        Me.Label2.TabIndex = 10
-        Me.Label2.Text = "Switches"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(7, 25)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(46, 13)
-        Me.Label1.TabIndex = 9
-        Me.Label1.Text = "Program"
         '
         'btnOK
         '
@@ -471,7 +402,6 @@ Partial Class SquealerSettings
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.gbOutput)
         Me.Controls.Add(Me.btnOK)
-        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.gbFilenames)
         Me.Controls.Add(Me.gbGeneral)
         Me.MaximizeBox = False
@@ -483,8 +413,6 @@ Partial Class SquealerSettings
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbFilenames.ResumeLayout(False)
         Me.gbFilenames.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
         Me.gbOutput.ResumeLayout(False)
         Me.gbOutput.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -497,17 +425,12 @@ Partial Class SquealerSettings
     Friend WithEvents optUseWildcards As System.Windows.Forms.CheckBox
     Friend WithEvents optSpacesAreWildcards As System.Windows.Forms.CheckBox
     Friend WithEvents optEditNewFiles As System.Windows.Forms.CheckBox
-    Friend WithEvents txtTextEditorProgram As System.Windows.Forms.TextBox
     Friend WithEvents optShowGitBranch As System.Windows.Forms.CheckBox
     Friend WithEvents rbCompact As System.Windows.Forms.RadioButton
     Friend WithEvents rbFull As System.Windows.Forms.RadioButton
     Friend WithEvents rbSymbolic As System.Windows.Forms.RadioButton
     Friend WithEvents gbGeneral As System.Windows.Forms.GroupBox
     Friend WithEvents gbFilenames As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents txtTextEditorSwitches As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents updnFolderSaves As System.Windows.Forms.NumericUpDown
     Friend WithEvents txtWildcardExample As System.Windows.Forms.TextBox
@@ -521,7 +444,6 @@ Partial Class SquealerSettings
     Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents txtLeaderboardCs As System.Windows.Forms.TextBox
     Friend WithEvents lblLeaderboard As System.Windows.Forms.Label
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox

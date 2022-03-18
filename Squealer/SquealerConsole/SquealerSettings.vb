@@ -14,17 +14,6 @@
         txtWildcardExample.Text = String.Format("DIR {0}your{1}file{1}search{0}", IIf(optUseWildcards.Checked, "*", "").ToString, IIf(optSpacesAreWildcards.Checked, "*", " ").ToString)
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        dlgTextEditor.FileName = txtTextEditorProgram.Text
-        Try
-            dlgTextEditor.InitialDirectory = My.Computer.FileSystem.GetFileInfo(txtTextEditorProgram.Text).DirectoryName
-        Catch ex As Exception
-        End Try
-        If dlgTextEditor.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
-            txtTextEditorProgram.Text = dlgTextEditor.FileName
-        End If
-    End Sub
-
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
         Dim blaster As New Microsoft.VisualBasic.Devices.Audio
         _Blasts += 1
@@ -59,9 +48,9 @@
     End Sub
 
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles btnLeaderboardSql.Click
-        Dim f As New TempFileHandler
+        Dim f As New TempFileHandler(".sql")
         f.Writeline(My.Resources.LeaderboardCreate)
-        f.Show(txtTextEditorProgram.Text)
+        f.Show()
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnStarwarsHelp.Click
