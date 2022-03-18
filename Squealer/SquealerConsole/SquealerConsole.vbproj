@@ -11,7 +11,7 @@
     <AssemblyName>Squealer</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>\\fs03\Shared\Software\Squealer\</PublishUrl>
@@ -32,6 +32,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -99,12 +100,17 @@
       <HintPath>..\..\..\goldleader\GoldLeader\GoldLeader\bin\Release\GoldLeader.dll</HintPath>
     </Reference>
     <Reference Include="PoorMansTSqlFormatterNetStandardLib">
-      <HintPath>..\..\..\bin\PoorMansTSqlFormatterNetStandardLib.dll</HintPath>
+      <HintPath>..\..\..\..\PoorMansTSqlFormatter\PoorMansTSqlFormatterNetStandardLib\bin\Release\netstandard1.0\PoorMansTSqlFormatterNetStandardLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management.Automation" />
+    <!--Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Management.Automation.7.2.1\runtimes\win\lib\net6.0\System.Management.Automation.dll</HintPath>
+    </Reference-->
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -147,6 +153,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Settings.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -179,6 +186,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\PigNose.ico" />
   </ItemGroup>
   <ItemGroup>

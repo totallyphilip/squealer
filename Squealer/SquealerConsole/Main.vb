@@ -1,4 +1,5 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.Collections.ObjectModel
+Imports System.Windows.Forms
 
 Public Class GitFlags
 
@@ -257,12 +258,12 @@ Module Main
     End Enum
 
     Private Enum eCommandType
-        [command]
-        [nerfherder]
         [about]
-        [contact]
+        [checkout]
         [clear]
+        [compare]
         [config]
+        [connection]
         [delete]
         [directory]
         [edit]
@@ -271,21 +272,18 @@ Module Main
         [fix]
         [forget]
         [generate]
-        [reverse]
         [help]
         [list]
+        [make]
+        [nerfherder]
         [new]
-        [nuke]
         [open]
         [raiserror]
+        [reverse]
         [setting]
-        [connection]
-        [compare]
-        [test]
-        [checkout]
-        [use]
         [starwars]
-        [make]
+        [test]
+        [use]
     End Enum
 
 #End Region
@@ -926,10 +924,6 @@ Module Main
         cmd = New CommandCatalog.CommandDefinition({eCommandType.explore.ToString, "fe"}, {"Open File Explorer.", "Opens the current working folder. If {options} is specified, the first matching " & My.Application.Info.ProductName & " object will be selected."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
         MyCommands.Items.Add(cmd)
 
-        ' command
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.command.ToString, "cmd"}, {"Open a command prompt."}, CommandCatalog.eCommandCategory.folder)
-        MyCommands.Items.Add(cmd)
-
         ' checkout
         cmd = New CommandCatalog.CommandDefinition({eCommandType.checkout.ToString, "undo"}, {"Git checkout.", "Checkout objects from Git and discard local changes."}, CommandCatalog.eCommandCategory.file, True, True)
         MyCommands.Items.Add(cmd)
@@ -995,20 +989,11 @@ Module Main
         cmd.Examples.Add("% dbo.*")
         MyCommands.Items.Add(cmd)
 
-        ' nuke
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.nuke.ToString}, {String.Format("Quick delete {0} objects.", My.Application.Info.ProductName), "This performs an operating system delete command, so it's extremely fast but irreversible and unforgiving."}, CommandCatalog.eCommandCategory.file, CommandCatalog.CommandDefinition.WildcardText, True)
-        cmd.Examples.Add(String.Format("% dbo.* -- delete dbo.*{0}", MyConstants.ObjectFileExtension))
-        cmd.Examples.Add(String.Format("% * -- delete *{0}", MyConstants.ObjectFileExtension))
-        MyCommands.Items.Add(cmd)
-
-
 
         ' make
         cmd = New CommandCatalog.CommandDefinition({eCommandType.make.ToString}, {String.Format("Automatically create {0} objects.", My.Application.Info.ProductName), "Create default insert, update, read, and delete objects for the target database. Define the target database with the " & eCommandType.connection.ToString.ToUpper & " command."}, CommandCatalog.eCommandCategory.file)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("nosave;generate everything, {0} local output", eCommandType.nuke.ToString.ToUpper)))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("r;replace existing {0} objects only", My.Application.Info.ProductName)))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("nocomment;omit data source and timestamp from comment section"))
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("nuke;{2} *{0}*{1}", MyConstants.AutocreateFilename, MyConstants.ObjectFileExtension, eCommandType.nuke.ToString.ToUpper)))
         MyCommands.Items.Add(cmd)
 
         ' reverse engineer
@@ -1042,10 +1027,6 @@ Module Main
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("forget;discard the saved connection string"))
         cmd.Examples.Add("% -set " & cDefaultConnectionString)
         cmd.Examples.Add("% -get")
-        MyCommands.Items.Add(cmd)
-
-        ' email the developer
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.contact.ToString}, {"Email the developer.", "Use this to report a bug or to request a feature."}, CommandCatalog.eCommandCategory.other)
         MyCommands.Items.Add(cmd)
 
         ' cls
@@ -1175,25 +1156,10 @@ Module Main
 
 
 
-                ElseIf MyCommand.Keyword = eCommandType.contact.ToString Then 'AndAlso Command.SwitchesOK(CommandSwitches) AndAlso CommandParameters.Count = 0 Then
-
-                    With My.Application.Info
-                        System.Diagnostics.Process.Start("mailto:philip.bigbang@gmail.com?subject=" & .ProductName & " " & .Version.ToString & " user feedback")
-                    End With
-
-
-
-
                 ElseIf MyCommand.Keyword = eCommandType.clear.ToString Then
 
                     Console.Clear()
 
-
-                ElseIf MyCommand.Keyword = eCommandType.command.ToString Then
-
-                    Dim cw As New ProcessStartInfo("cmd.exe")
-                    cw.WorkingDirectory = WorkingFolder
-                    Process.Start(cw)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[config].ToString Then
@@ -1506,27 +1472,11 @@ Module Main
                     End If
 
 
-                ElseIf MyCommand.Keyword = eCommandType.[nuke].ToString Then
-
-                    NukeFiles(WorkingFolder, UserInput)
-
 
                 ElseIf MyCommand.Keyword = eCommandType.make.ToString Then
 
-                    If StringInList(MySwitches, "nosave") Then
 
-                        NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
-                        Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
-                        Dim gf As New GitFlags ' all defaults to false
-                        Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*", String.Empty, False, ObjectTypeFilter, False, False, False, False, gf)
-                        ProcessFiles(SelectedFiles, eFileAction.generate, New BatchParametersClass, SquealerObjectType.eType.Invalid, New GitFlags(), False)
-                        NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
-
-                    ElseIf StringInList(MySwitches, "nuke") Then
-                        NukeFiles(WorkingFolder, "*" & MyConstants.AutocreateFilename & "*")
-                    Else
-                        Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
-                    End If
+                    Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
 
 
 
@@ -1549,6 +1499,29 @@ Module Main
                         Console.WriteLine("generated " & s & " with " & My.Application.Info.Version.ToString)
                         Console.WriteLine()
                     End If
+
+                    Dim directory As String = WorkingFolder
+
+                    Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
+                        ps.AddScript($"cd {directory}")
+                        'powershell.AddScript("git init")
+                        'powershell.AddScript("git add *")
+                        'powershell.AddScript("git commit -m 'git commit from PowerShell in C#'")
+                        'powershell.AddScript("git push")
+                        'Dim results As Collection(Of PSObject) = powershell.Invoke()
+                        ps.AddScript("dir")
+                        Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
+
+                        Console.WriteLine(r.Count)
+                        For Each o As System.Management.Automation.PSObject In r
+                            Console.WriteLine(o.ToString)
+                        Next
+
+
+                    End Using
+
+
+
 
 
 
@@ -2816,27 +2789,17 @@ Module Main
         Dim gitstream As New List(Of String)
 
         Try
-            Dim command As String = "cmd.exe"
-            Dim arguments As String = String.Format("/c {0} glob ""{1}""", gc, glob)
-            Dim ps As New ProcessStartInfo With {
-                .WorkingDirectory = folder,
-                .FileName = command,
-                .Arguments = arguments,
-                .WindowStyle = ProcessWindowStyle.Hidden,
-                .RedirectStandardError = True,
-                .RedirectStandardOutput = True,
-                .UseShellExecute = False
-            }
-            Dim oProcess As New Process() With {.StartInfo = ps}
-            oProcess.Start()
 
-            Using oStreamReader As System.IO.StreamReader = oProcess.StandardOutput
-                'If oStreamReader.EndOfStream Then
-                '    gitstream = ""
-                'End If
-                While Not oStreamReader.EndOfStream
-                    gitstream.Add(oStreamReader.ReadLine())
-                End While
+            Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
+
+                ps.AddScript($"cd {folder}")
+                ps.AddScript(String.Format("/c {0} glob ""{1}""", gc, glob))
+                Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
+
+                For Each o As System.Management.Automation.PSObject In r
+                    gitstream.Add(o.ToString)
+                Next
+
             End Using
 
         Catch ex As Exception
@@ -2851,28 +2814,18 @@ Module Main
     Private Sub GitCommandDo(folder As String, gc As String, errormessage As String, action As eFileAction)
 
         Try
-            Dim command As String = "cmd.exe"
-            Dim arguments As String = String.Format("/c " & gc)
-            Dim ps As New ProcessStartInfo
-            ps.WorkingDirectory = folder
-            ps.FileName = command
-            ps.Arguments = arguments
-            ps.WindowStyle = ProcessWindowStyle.Hidden
-            Dim oProcess As New Process()
-            ps.RedirectStandardOutput = True
-            ps.RedirectStandardError = True
-            ps.UseShellExecute = False
-            oProcess.StartInfo = ps
-            oProcess.Start()
 
-            Using oStreamReader As System.IO.StreamReader = oProcess.StandardOutput
-                If oStreamReader.EndOfStream AndAlso Not action = eFileAction.checkout Then
-                    Textify.Write(errormessage, ConsoleColor.Red)
-                End If
-                While Not oStreamReader.EndOfStream
+            Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
+
+                ps.AddScript($"cd {folder}")
+                ps.AddScript(gc)
+                Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
+
+                For Each o As System.Management.Automation.PSObject In r
                     Console.WriteLine()
-                    Textify.Write(oStreamReader.ReadLine(), ConsoleColor.Cyan, Textify.eLineMode.Truncate)
-                End While
+                    Textify.Write(o.ToString, ConsoleColor.Cyan, Textify.eLineMode.Truncate)
+                Next
+
             End Using
 
         Catch ex As Exception
@@ -2884,44 +2837,27 @@ Module Main
 
     Private Function CurrentBranch(folder As String, sformat As String) As String
 
-        Dim s As String
+        Dim s As String = sformat.Replace("{0}", "no git")
 
-        If UserSettings.ShowBranch Then
-            Try
-                Dim command As String = "cmd.exe"
-                Dim arguments As String = String.Format("/c git symbolic-ref HEAD")
-                Dim ps As New ProcessStartInfo
-                ps.WorkingDirectory = folder
-                ps.FileName = command
-                ps.Arguments = arguments
-                ps.WindowStyle = ProcessWindowStyle.Hidden
-                Dim oProcess As New Process()
-                ps.RedirectStandardOutput = True
-                ps.RedirectStandardError = True
-                ps.UseShellExecute = False
-                oProcess.StartInfo = ps
-                oProcess.Start()
+        Try
 
-                Dim sOutput As String
-                Using oStreamReader As System.IO.StreamReader = oProcess.StandardOutput
-                    sOutput = oStreamReader.ReadToEnd()
-                End Using
+            Using ps As System.Management.Automation.PowerShell = System.Management.Automation.PowerShell.Create()
 
-                If String.IsNullOrEmpty(oProcess.StandardError.ReadToEnd) Then
-                    s = sformat.Replace("{0}", sOutput.Trim.Replace("refs/heads/", String.Empty))
-                Else
-                    s = sformat.Replace("{0}", "no git")
-                End If
+                ps.AddScript($"cd {folder}")
+                ps.AddScript("git symbolic-ref HEAD")
+                Dim r As Collection(Of System.Management.Automation.PSObject) = ps.Invoke()
 
-            Catch ex As Exception
+                For Each o As System.Management.Automation.PSObject In r
+                    s = sformat.Replace("{0}", o.ToString.Trim.Replace("refs/heads/", String.Empty))
+                Next
 
-                s = sformat.Replace("{0}", "git error!")
+            End Using
 
-            End Try
+        Catch ex As Exception
 
-        Else
-            s = String.Empty
-        End If
+            s = sformat.Replace("{0}", "git error!")
+
+        End Try
 
         Return s
 
@@ -3050,19 +2986,6 @@ Module Main
             Return s & " "
         End If
     End Function
-
-    Private Sub NukeFiles(folder As String, wildcard As String)
-        Dim command As String = "cmd.exe"
-        Dim arguments As String = String.Format("/c del {0}{1}", wildcard, MyConstants.ObjectFileExtension)
-        Textify.Write(String.Format("{0} {1}", command, arguments))
-        Dim ps As New ProcessStartInfo
-        ps.WorkingDirectory = folder
-        ps.FileName = command
-        ps.Arguments = arguments
-        ps.WindowStyle = ProcessWindowStyle.Hidden
-        Process.Start(ps)
-        Textify.SayNewLine()
-    End Sub
 
     Private Function ReadChangeLog() As String
 
