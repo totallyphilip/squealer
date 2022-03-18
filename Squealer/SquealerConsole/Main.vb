@@ -1,8 +1,8 @@
 ﻿'Imports System.Collections.ObjectModel
 Imports System.Windows.Forms
-Imports System.Collections.ObjectModel
-Imports System.Management.Automation
-Imports System.Management.Automation.Runspaces
+'Imports System.Collections.ObjectModel
+'Imports System.Management.Automation
+'Imports System.Management.Automation.Runspaces
 
 
 
@@ -587,6 +587,11 @@ Module Main
             comma = ", "
 
 
+            For Each bonk As String In GitShell.ChangedFiles(ProjectFolder, "git status -s", s, gf.ShowDeleted)
+                Console.WriteLine("((" & bonk & "))")
+            Next
+
+
             If gf.GitEnabled Then
 
                 If Not String.IsNullOrEmpty(SearchText) Then
@@ -595,7 +600,7 @@ Module Main
 
                 Dim FoundFiles As New List(Of String)
 
-                FoundFiles.AddRange(GitChangedFiles(ProjectFolder, "git status -s", s, gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
+                FoundFiles.AddRange(GitShell.ChangedFiles(ProjectFolder, "git status -s", s, gf.ShowDeleted).FindAll(Function(x) x.ToLower Like s.ToLower))
 
                 ' Remove any results that don't contain the search text
                 If gf.GitEnabled AndAlso Not String.IsNullOrEmpty(SearchText) Then
@@ -754,7 +759,7 @@ Module Main
 
                 Dim gitstatuscode As String = String.Empty
                 If git.ShowUncommitted Then
-                    gitstatuscode = " " & GitResults(info.DirectoryName, "git status -s ", info.Name)(0).Replace(info.Name, "").TrimStart
+                    gitstatuscode = " " & GitShell.FileSearch(info.DirectoryName, "git status -s ", info.Name)(0).Replace(info.Name, "").TrimStart
                 End If
 
                 Select Case Action
@@ -785,7 +790,7 @@ Module Main
                     Case eFileAction.edit
                         ShellOpenFile(info.FullName)
                     Case eFileAction.checkout
-                        GitCommandDo(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)", Action)
+                        GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
                     Case eFileAction.generate
                         GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count)
                     Case eFileAction.compare
@@ -809,7 +814,7 @@ Module Main
                         'End Try
                     End If
                     If git.ShowHistory Then
-                        GitCommandDo(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)", Action)
+                        GitShell.DisplayResults(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
                     End If
 
                     Console.WriteLine()
@@ -1487,7 +1492,8 @@ Module Main
 
             Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
             If UserSettings.ShowBranch Then
-                Textify.Write(CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
+                'Textify.Write(GitShell.CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
+                Textify.Write(String.Format(" ({0})", GitShell.CurrentBranch(WorkingFolder)), ConsoleColor.DarkGreen)
             End If
             Textify.Write(" > ", ConsoleColor.DarkYellow)
             ClearKeyboard()
@@ -2666,125 +2672,8 @@ Module Main
 
 #Region " Git "
 
-    Private Function GitChangedFiles(folder As String, gc As String, glob As String, includeDeleted As Boolean) As List(Of String)
-
-        Dim gitstream As New List(Of String)
-        For Each s As String In GitResults(folder, gc, glob)
-            Dim f As String = folder & "\" & s.Substring(3)
-            If My.Computer.FileSystem.FileExists(f) OrElse includeDeleted Then
-                gitstream.Add(f)
-            End If
-        Next
-
-        Return gitstream
-
-    End Function
-
-    Private Function GitResults(folder As String, gc As String, glob As String) As List(Of String)
-
-        ' globbing is wildcard matching
-
-        Dim gitstream As New List(Of String)
-
-        Try
-
-            Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
-            runspace.Open()
-            Dim pipeline As Pipeline = runspace.CreatePipeline()
-            pipeline.Commands.AddScript($"cd ""{folder}""")
-            pipeline.Commands.AddScript(String.Format("{0} glob ""{1}""", gc, glob))
-            pipeline.Commands.Add("Out-String")
-            Dim results As Collection(Of PSObject) = pipeline.Invoke()
-            runspace.Close()
-
-            For Each obj As PSObject In results
-                Dim s As String = obj.ToString
-                If Not String.IsNullOrEmpty(s) Then
-                    gitstream.Add(s)
-                End If
-            Next
-
-        Catch ex As Exception
-            Throw New Exception(ex.Message)
-        End Try
-
-        Return gitstream
-
-    End Function
 
 
-    Private Sub GitCommandDo(folder As String, gc As String, errormessage As String, action As eFileAction)
-
-        Try
-
-
-
-            Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
-            runspace.Open()
-            Dim pipeline As Pipeline = runspace.CreatePipeline()
-            pipeline.Commands.AddScript($"cd ""{folder}""")
-            pipeline.Commands.AddScript(gc)
-            pipeline.Commands.Add("Out-String")
-            Dim results As Collection(Of PSObject) = pipeline.Invoke()
-            runspace.Close()
-
-            For Each obj As PSObject In results
-                Dim s As String = obj.ToString
-                If Not String.IsNullOrEmpty(s) Then
-                    Console.WriteLine()
-                    Textify.Write(s, ConsoleColor.Cyan, Textify.eLineMode.Truncate)
-                End If
-            Next
-
-
-
-        Catch ex As Exception
-            Throw New Exception(ex.Message)
-        End Try
-
-    End Sub
-
-
-    Private Function CurrentBranch(folder As String, sformat As String) As String
-
-        Dim s As String = String.Empty
-
-        Try
-
-
-            Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
-            runspace.Open()
-            Dim pipeline As Pipeline = runspace.CreatePipeline()
-            pipeline.Commands.AddScript($"cd ""{folder}""")
-            pipeline.Commands.AddScript("git symbolic-ref HEAD")
-            pipeline.Commands.Add("Out-String")
-            Dim results As Collection(Of PSObject) = pipeline.Invoke()
-            runspace.Close()
-
-            For Each obj As PSObject In results
-                s = obj.ToString
-                If String.IsNullOrEmpty(s) Then
-                    s = sformat.Replace("{0}", "no git")
-                Else
-                    s = sformat.Replace("{0}", s.Trim.Replace("refs/heads/", String.Empty))
-                End If
-            Next
-
-
-
-
-
-
-
-        Catch ex As Exception
-
-            s = sformat.Replace("{0}", "git error!")
-
-        End Try
-
-        Return s
-
-    End Function
 
 #End Region
 
