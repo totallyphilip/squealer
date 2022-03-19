@@ -25,13 +25,7 @@
     End Sub
 
     Sub Show()
-        'Dim myprocess As New Process
-        'myprocess.StartInfo.FileName = _Filename
-        'myprocess.StartInfo.UseShellExecute = True
-        'myprocess.StartInfo.RedirectStandardOutput = False
-        'myprocess.Start()
-
-
+        EasyShell.StartProcess(_Filename)
     End Sub
 
 End Class

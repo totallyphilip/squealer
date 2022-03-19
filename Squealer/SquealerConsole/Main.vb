@@ -776,7 +776,7 @@ Module Main
                         End If
 
                     Case eFileAction.edit
-                        ShellOpenFile(info.FullName)
+                        OpenInTextEditor(info.FullName)
                     Case eFileAction.checkout
                         GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
                     Case eFileAction.generate
@@ -1335,7 +1335,7 @@ Module Main
                     Dim f As String = CreateNewFile(WorkingFolder, filetype, UserInput)
 
                     If UserSettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
-                        ShellOpenFile(f)
+                        OpenInTextEditor(f)
                     End If
 
 
@@ -2360,34 +2360,34 @@ Module Main
 
                 'def = ""
                 If ParameterCount = 0 Then '<InParameters.Rows.Count Then
-                    def=""
-                                                Else
-                    def=","
+                    def = ""
+                Else
+                    def = ","
                 End If
 
-        ' Write parameters as actual parameters.
-        ParameterCount += 1
-        def = def & "@" & Parameter.Item("Name").ToString & " " & Parameter.Item("Type").ToString
-        If Not Parameter.Item("DefaultValue").ToString = String.Empty Then
-            def = def & " = " & Parameter.Item("DefaultValue").ToString
-        End If
-        If Parameter.Item("Output").ToString = Boolean.TrueString Then
-            def = def & " output"
-        End If
-        If Not Parameter.Item("Comments").ToString = String.Empty Then
-            def = def & " -- " & Parameter.Item("Comments").ToString
-        End If
-        ' Write out error logging section.
-        If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
-            Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
-            ErrorLogParameters &= whynot
-        Else
-            ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
-        End If
+                ' Write parameters as actual parameters.
+                ParameterCount += 1
+                def = def & "@" & Parameter.Item("Name").ToString & " " & Parameter.Item("Type").ToString
+                If Not Parameter.Item("DefaultValue").ToString = String.Empty Then
+                    def = def & " = " & Parameter.Item("DefaultValue").ToString
+                End If
+                If Parameter.Item("Output").ToString = Boolean.TrueString Then
+                    def = def & " output"
+                End If
+                If Not Parameter.Item("Comments").ToString = String.Empty Then
+                    def = def & " -- " & Parameter.Item("Comments").ToString
+                End If
+                ' Write out error logging section.
+                If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
+                    Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
+                    ErrorLogParameters &= whynot
+                Else
+                    ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
+                End If
 
-        End If
+            End If
 
-        DeclareList.Add(def)
+            DeclareList.Add(def)
 
         Next
         For Each s As String In DeclareList
@@ -2809,39 +2809,18 @@ Module Main
     End Function
 
     Private Sub OpenExplorer(ByVal wildcard As String, ByVal WorkingFolder As String)
-
-
-        ' disabled until i can think of a better way
-
-        'Dim files As ObjectModel.ReadOnlyCollection(Of String)
-
-        'files = My.Computer.FileSystem.GetFiles(WorkingFolder, FileIO.SearchOption.SearchTopLevelOnly, wildcard)
-
-        'If wildcard = "*" & MyConstants.ObjectFileExtension Then
-        '    Process.Start("Explorer.exe", WorkingFolder)
-        'ElseIf files.Count = 0 Then
-        '    Throw New Exception("File not found.")
-        'Else
-        '    Process.Start("Explorer.exe", "/select," & WorkingFolder & "\" & My.Computer.FileSystem.GetFileInfo(files(0)).Name)
-        'End If
-
+        Dim f As New OpenFileDialog
+        f.InitialDirectory = WorkingFolder
+        f.FileName = wildcard
+        f.ShowDialog()
     End Sub
 
     ' Edit one or more files.
     Private Sub OpenInTextEditor(filename As String, path As String)
-        ShellOpenFile(path & "\" & filename)
+        OpenInTextEditor(path & "\" & filename)
     End Sub
-    Private Sub ShellOpenFile(filename As String)
-        'Dim myprocess As New Process()
-        'myprocess.StartInfo.FileName = filename
-        'myprocess.StartInfo.UseShellExecute = True
-        ''myprocess.StartInfo.RedirectStandardOutput = True
-        'myprocess.Start()
-
-        'Console.WriteLine("&&&" & filename & "&&&")
-        'Shell(filename)
-
-        GitShell.DoSomething(filename)
+    Private Sub OpenInTextEditor(filename As String)
+        EasyShell.StartProcess(filename)
     End Sub
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)
