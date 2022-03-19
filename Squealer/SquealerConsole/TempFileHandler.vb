@@ -14,14 +14,16 @@
         My.Computer.FileSystem.WriteAllText(_Filename, s & vbCrLf, True)
     End Sub
 
-    Public Sub New(ext As String) ' ex: ".sql"
+    Public Sub New(ext As String)
+        ' Make sure it starts with a period, ex: .txt, .config
+        If Not ext.StartsWith(".") Then
+            ext = "." & ext
+        End If
         _Filename = My.Computer.FileSystem.GetTempFileName()
         Dim path As String = My.Computer.FileSystem.GetFileInfo(_Filename).DirectoryName
         Dim newname As String = My.Computer.FileSystem.GetFileInfo(_Filename).Name.Replace(".tmp", ext)
         My.Computer.FileSystem.RenameFile(_Filename, newname)
         _Filename = path & "\" & newname
-
-
     End Sub
 
     Sub Show()
