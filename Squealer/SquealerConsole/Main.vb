@@ -2662,7 +2662,9 @@ Module Main
 #Region " Misc "
 
     Private Function IsStarWarsDay() As Boolean
-        If Now.Month = 5 AndAlso Now.Day = 4 Then
+
+        'todo: turn star wars day back on
+        If Now.Month = 5 AndAlso Now.Day = 4 AndAlso False Then ' added false to hide this for now
             Return True
         Else
             Return False

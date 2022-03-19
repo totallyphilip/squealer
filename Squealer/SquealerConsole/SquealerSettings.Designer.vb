@@ -235,7 +235,7 @@ Partial Class SquealerSettings
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(533, 453)
+        Me.btnOK.Location = New System.Drawing.Point(533, 357)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
@@ -300,8 +300,7 @@ Partial Class SquealerSettings
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = Global.Squealer.My.Resources.Resources.RebelAlliance
-        Me.PictureBox1.Location = New System.Drawing.Point(11, 452)
+        Me.PictureBox1.Location = New System.Drawing.Point(11, 356)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
         Me.PictureBox1.TabIndex = 12
@@ -397,7 +396,7 @@ Partial Class SquealerSettings
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(620, 488)
+        Me.ClientSize = New System.Drawing.Size(620, 389)
         Me.Controls.Add(Me.gbStarwars)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.gbOutput)
