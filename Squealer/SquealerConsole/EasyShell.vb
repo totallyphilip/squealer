@@ -8,7 +8,7 @@ Public Class EasyShell
         Dim runspace As Runspace = RunspaceFactory.CreateRunspace()
         runspace.Open()
         Dim pipeline As Pipeline = runspace.CreatePipeline()
-        pipeline.Commands.AddScript("Start-Process " & s)
+        pipeline.Commands.AddScript(String.Format("Start-Process ""{0}""", s))
         pipeline.Invoke()
         runspace.Close()
     End Sub
