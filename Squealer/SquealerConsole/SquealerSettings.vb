@@ -5,7 +5,8 @@
         Me.Icon = My.Resources.PigNose
         UpdateWildcardExample()
         UpdateDirectoryExample()
-        TabControl1.TabPages.Remove(tabEasterEgg)
+        Tabs.TabPages.Remove(tabEasterEgg)
+        SetEditorAccess()
     End Sub
 
     Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles optUseWildcards.CheckedChanged, optSpacesAreWildcards.CheckedChanged, txtTryIt.TextChanged
@@ -25,9 +26,9 @@
         End If
         Select Case _Blasts
             Case 3
-                TabControl1.TabPages.Add(tabEasterEgg)
+                Tabs.TabPages.Add(tabEasterEgg)
             Case 6
-                TabControl1.SelectedTab = tabEasterEgg
+                Tabs.SelectedTab = tabEasterEgg
 
             Case MaxBlasts
                 blaster.Play(My.Resources.DroidScream, AudioPlayMode.Background)
@@ -77,5 +78,24 @@
 
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnEditorDialog.Click
+        dlgTextEditor.FileName = txtEditorProgram.Text
+        Try
+            dlgTextEditor.InitialDirectory = My.Computer.FileSystem.GetFileInfo(txtEditorProgram.Text).DirectoryName
+        Catch ex As Exception
+        End Try
+        If dlgTextEditor.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+            txtEditorProgram.Text = dlgTextEditor.FileName
+        End If
+    End Sub
+
+    Private Sub chkOutputDefaultEditor_CheckedChanged(sender As Object, e As EventArgs) Handles chkOutputDefaultEditor.CheckedChanged, chkConfigDefaultEditor.CheckedChanged, chkSquealerDefaultEditor.CheckedChanged
+        SetEditorAccess()
+    End Sub
+
+    Private Sub SetEditorAccess()
+        txtEditorProgram.Enabled = Not (chkOutputDefaultEditor.Checked AndAlso chkConfigDefaultEditor.Checked AndAlso chkSquealerDefaultEditor.Checked)
+        btnEditorDialog.Enabled = txtEditorProgram.Enabled
+    End Sub
 
 End Class

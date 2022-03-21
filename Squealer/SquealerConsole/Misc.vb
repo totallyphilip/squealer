@@ -13,7 +13,7 @@
         While s.Contains("**")
             s = s.Replace("**", "*")
         End While
-        Return s & MyConstants.ObjectFileExtension
+        Return s & MyConstants.SquealerFileExtension
 
     End Function
 

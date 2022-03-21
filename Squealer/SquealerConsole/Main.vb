@@ -49,120 +49,7 @@ Module Main
 #Region " All The Definitions "
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
-    Private BadCommandMessage As String = "Bad command or options."
     Private UserSettings As New UserSettingsClass
-
-    Const cDefaultConnectionString As String = "Server=MySqlServer;Initial Catalog=AdventureWorks;Trusted_Connection=True"
-    Const s3VersionText As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/ver.txt"
-    Const s3ZipFile As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/Squealer.zip"
-    Const MyThis As String = "``this``"
-
-    Public Class UserSettingsClass
-
-        Private _ShowLeaderboard As Boolean
-        Public Property ShowLeaderboardAtStartup As Boolean
-            Get
-                Return _ShowLeaderboard
-            End Get
-            Set(value As Boolean)
-                _ShowLeaderboard = value
-            End Set
-        End Property
-
-        Private _EditNew As Boolean
-        Public Property EditNew As Boolean
-            Get
-                Return _EditNew
-            End Get
-            Set(value As Boolean)
-                _EditNew = value
-            End Set
-        End Property
-
-        Private _DirStyle As String
-        Public Property DirStyle As String
-            Get
-                Return _DirStyle
-            End Get
-            Set(value As String)
-                _DirStyle = value
-            End Set
-        End Property
-
-        Private _RecentFolders As Integer
-        Public Property RecentFolders As Integer
-            Get
-                Return _RecentFolders
-            End Get
-            Set(value As Integer)
-                _RecentFolders = value
-            End Set
-        End Property
-
-        Private _AutoSearch As Boolean
-        Public Property AutoSearch As Boolean
-            Get
-                Return _AutoSearch
-            End Get
-            Set(value As Boolean)
-                _AutoSearch = value
-            End Set
-        End Property
-
-        Private _UseClipboard As Boolean
-        Public Property UseClipboard As Boolean
-            Get
-                Return _UseClipboard
-            End Get
-            Set(value As Boolean)
-                _UseClipboard = value
-            End Set
-        End Property
-
-        Private _ShowBranch As Boolean
-        Public Property ShowBranch As Boolean
-            Get
-                Return _ShowBranch
-            End Get
-            Set(value As Boolean)
-                _ShowBranch = value
-            End Set
-        End Property
-
-        Private _SpacesAreWildcards As Boolean
-        Public Property WildcardSpaces As Boolean
-            Get
-                Return _SpacesAreWildcards
-            End Get
-            Set(value As Boolean)
-                _SpacesAreWildcards = value
-            End Set
-        End Property
-
-        Public LastRunVersion As String = String.Empty ' this is just to generate an intellisense name
-
-        Private _DetectSquealerObjects As Boolean
-        Public Property DetectSquealerObjects As Boolean
-            Get
-                Return _DetectSquealerObjects
-            End Get
-            Set(value As Boolean)
-                _DetectSquealerObjects = value
-            End Set
-        End Property
-
-        Private _LeaderboardConnectionString As String
-        Public Property LeaderboardConnectionString As String
-            Get
-                Return _LeaderboardConnectionString
-            End Get
-            Set(value As String)
-                _LeaderboardConnectionString = value
-            End Set
-        End Property
-
-    End Class
-
 
     Private Class BatchParametersClass
 
@@ -282,7 +169,7 @@ Module Main
 
         Dim f As String = FolderCollection().Find(Function(x) Not My.Computer.FileSystem.DirectoryExists(x))
         If String.IsNullOrEmpty(f) Then ' couldn't find any bad directories
-            f = FolderCollection().Find(Function(x) My.Computer.FileSystem.GetFiles(x, FileIO.SearchOption.SearchTopLevelOnly, "*" & MyConstants.ObjectFileExtension).Count = 0)
+            f = FolderCollection().Find(Function(x) My.Computer.FileSystem.GetFiles(x, FileIO.SearchOption.SearchTopLevelOnly, "*" & MyConstants.SquealerFileExtension).Count = 0)
             If String.IsNullOrEmpty(f) Then ' couldn't find any unused directories
                 InvalidFolderIndex = -1
             Else
@@ -297,7 +184,7 @@ Module Main
     Private Sub AutoRemoveFolders()
 
         If InvalidFolderIndex() = -1 Then
-            Textify.WriteLine("All folders contain *" & MyConstants.ObjectFileExtension)
+            Textify.WriteLine("All folders contain *" & MyConstants.SquealerFileExtension)
         Else
             While InvalidFolderIndex() > -1
                 Dim i As Integer = InvalidFolderIndex()
@@ -428,6 +315,7 @@ Module Main
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
         ' Load settings.
+        UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
         UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), String.Empty)
         UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
         UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
@@ -546,9 +434,9 @@ Module Main
         comma = ""
 
         For Each s As String In Wildcard.Split((New Char() {"|"c}))
-            If s.ToLower.Contains(MyConstants.ObjectFileExtension.ToLower) Then
+            If s.ToLower.Contains(MyConstants.SquealerFileExtension.ToLower) Then
                 Console.WriteLine()
-                Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & MyConstants.ObjectFileExtension)
+                Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & MyConstants.SquealerFileExtension)
             End If
             s = Misc.WildcardInterpreter(s.Trim, UserSettings.WildcardSpaces, UserSettings.AutoSearch, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
@@ -665,7 +553,7 @@ Module Main
                 If FileCount > 0 Then
                     Console.Write("|")
                 End If
-                Console.Write(info.Name.Replace(MyConstants.ObjectFileExtension, ""))
+                Console.Write(info.Name.Replace(MyConstants.SquealerFileExtension, ""))
             Else
                 Dim fg As ConsoleColor = ConsoleColor.Gray
 
@@ -695,7 +583,7 @@ Module Main
                 End If
 
 
-                Textify.Write(info.Name.Replace(MyConstants.ObjectFileExtension, ""), fg)
+                Textify.Write(info.Name.Replace(MyConstants.SquealerFileExtension, ""), fg)
 
                 Dim symbol As String = String.Empty
                 Select Case obj.Type.LongType
@@ -756,7 +644,7 @@ Module Main
                     Case eFileAction.generate
                         GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count)
                     Case eFileAction.compare
-                        Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
+                        Dim RootName As String = info.Name.Replace(MyConstants.SquealerFileExtension, "")
                         GeneratedOutput &= String.Format("insert #CodeToDrop ([Type], [Schema], [Name]) values ('{0}','{1}','{2}');", obj.Type.GeneralType, SchemaName(RootName), RoutineName(RootName)) & vbCrLf
                     Case eFileAction.delete
                         Dim trashcan As FileIO.RecycleOption = FileIO.RecycleOption.SendToRecycleBin
@@ -864,7 +752,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' forget folder
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & MyConstants.ObjectFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & MyConstants.SquealerFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("auto;detect invalid folders"))
         cmd.Examples.Add("% 3")
         cmd.Examples.Add("% -auto")
@@ -974,7 +862,7 @@ Module Main
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("set;encrypt and save the connection string"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("show;display the connection string"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("forget;discard the saved connection string"))
-        cmd.Examples.Add("% -set " & cDefaultConnectionString)
+        cmd.Examples.Add("% -set " & MyConstants.DefaultConnectionString)
         cmd.Examples.Add("% -get")
         MyCommands.Items.Add(cmd)
 
@@ -1076,7 +964,7 @@ Module Main
 
                 ElseIf MyCommand Is Nothing Then
 
-                    Throw New System.Exception(BadCommandMessage)
+                    Throw New System.Exception(MyConstants.BadCommandMessage)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.about.ToString Then
@@ -1090,7 +978,7 @@ Module Main
                         Console.WriteLine()
                         Dim wc As New Net.WebClient
                         Dim fn As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\Squealer.zip"
-                        wc.DownloadFile(s3ZipFile, fn)
+                        wc.DownloadFile(MyConstants.s3ZipFile, fn)
                         Textify.SayBulletLine(Textify.eBullet.Hash, "File downloaded to " & fn, ConsoleColor.White)
                         Textify.SayNewLine()
                         Textify.SayBulletLine(Textify.eBullet.Hash, "Opening local folder...")
@@ -1380,7 +1268,7 @@ Module Main
                     Try
                         cs = GetConnectionString(WorkingFolder)
                     Catch ex As Exception
-                        cs = cDefaultConnectionString
+                        cs = MyConstants.DefaultConnectionString
                     End Try
                     cs = Microsoft.VisualBasic.Interaction.InputBox("Connection String", "", cs)
                     If Not String.IsNullOrWhiteSpace(cs) Then
@@ -1432,7 +1320,7 @@ Module Main
 
 
                 Else
-                    Throw New System.Exception(BadCommandMessage)
+                    Throw New System.Exception(MyConstants.BadCommandMessage)
                 End If
 
             Catch ex As Exception
@@ -1609,6 +1497,7 @@ Module Main
     Private Sub ShowSettingsDialog()
 
         Dim f As New SquealerSettings
+        f.txtEditorProgram.Text = UserSettings.TextEditor
         f.txtLeaderboardCs.Text = UserSettings.LeaderboardConnectionString
         f.updnFolderSaves.Value = UserSettings.RecentFolders
         f.optUseWildcards.Checked = UserSettings.AutoSearch
@@ -1634,6 +1523,7 @@ Module Main
 
         f.ShowDialog()
 
+        UserSettings.TextEditor = f.txtEditorProgram.Text
         UserSettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
         UserSettings.RecentFolders = CInt(f.updnFolderSaves.Value)
         UserSettings.AutoSearch = f.optUseWildcards.Checked
@@ -1652,6 +1542,7 @@ Module Main
             UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString
         End If
 
+        My.Configger.SaveSetting(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
         My.Configger.SaveSetting(NameOf(UserSettings.LeaderboardConnectionString), UserSettings.LeaderboardConnectionString)
         My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders)
         My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch)
@@ -2165,7 +2056,7 @@ Module Main
             Case SquealerObjectType.eType.View
                 Template = My.Resources.SqlTemplateView
         End Select
-        Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", MyThis)
+        Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", MyConstants.MyThis)
 
         Dim IsNew As Boolean = True
 
@@ -2212,7 +2103,7 @@ Module Main
         End If
 
         'Dim fqTemp As String = My.Computer.FileSystem.GetTempFileName
-        Dim fqTarget As String = WorkingFolder & "\" & filename & MyConstants.ObjectFileExtension
+        Dim fqTarget As String = WorkingFolder & "\" & filename & MyConstants.SquealerFileExtension
 
         If definition IsNot Nothing Then
             Template = Template.Replace("<Code/>", String.Format("<Code><![CDATA[{0}]]></Code>", definition))
@@ -2249,7 +2140,7 @@ Module Main
     Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass, cur As Integer, tot As Integer) As String
 
         Dim oType As SquealerObjectType.eType = SquealerObjectType.Eval(XmlGetObjectType(info.FullName))
-        Dim RootName As String = info.Name.Replace(MyConstants.ObjectFileExtension, "")
+        Dim RootName As String = info.Name.Replace(MyConstants.SquealerFileExtension, "")
 
         Dim InXml As Xml.XmlDocument = FixedXml(False, info.FullName)
         Dim InRoot As Xml.XmlElement = DirectCast(InXml.SelectSingleNode(My.Application.Info.ProductName), Xml.XmlElement)
@@ -2260,7 +2151,7 @@ Module Main
 
         ' Pre-Code
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-            Dim InPreCode As String = String.Format("print '{2}/{3} creating {0}, {1}'", MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
+            Dim InPreCode As String = String.Format("print '{2}/{3} creating {0}, {1}'", MyConstants.MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
             Try
                 InPreCode &= InRoot.SelectSingleNode("PreCode").InnerText
             Catch ex As Exception
@@ -2626,7 +2517,7 @@ Module Main
         For Each Replacement As DataRow In StringReplacements.Select() '.Select("")
             ExpandIndividual = ExpandIndividual.Replace(Replacement.Item("Original").ToString, Replacement.Item("Replacement").ToString)
         Next
-        ExpandIndividual = ExpandIndividual.Replace(MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
+        ExpandIndividual = ExpandIndividual.Replace(MyConstants.MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
 
 
     End Function
@@ -2763,7 +2654,7 @@ Module Main
 
         Dim sr As New IO.StringReader(My.Resources.ChangeLog.TrimEnd)
         While sr.Peek <> -1
-            s &= String.Format(sr.ReadLine.Replace("{THIS}", MyThis), ">>>> ", " <<<<", " - ") & vbCrLf
+            s &= String.Format(sr.ReadLine.Replace("{THIS}", MyConstants.MyThis), ">>>> ", " <<<<", " - ") & vbCrLf
         End While
 
         Return s
@@ -3245,7 +3136,7 @@ Module Main
 
                 If ValidOutput Then
 
-                    Dim filename As String = String.Format("{0}\{1}.{5}{2}{3}{4}", WorkingFolder, SchemaName, TableName, AutoProcType, MyConstants.ObjectFileExtension, MyConstants.AutocreateFilename)
+                    Dim filename As String = String.Format("{0}\{1}.{5}{2}{3}{4}", WorkingFolder, SchemaName, TableName, AutoProcType, MyConstants.SquealerFileExtension, MyConstants.AutocreateFilename)
 
                     If Not ReplaceOnly OrElse My.Computer.FileSystem.FileExists(filename) Then
 
@@ -3438,14 +3329,14 @@ Module Main
 
         Try
             Dim client As Net.WebClient = New Net.WebClient()
-            Using reader As New IO.StreamReader(client.OpenRead(s3VersionText))
+            Using reader As New IO.StreamReader(client.OpenRead(MyConstants.s3VersionText))
 
                 Dim av As New Version(reader.ReadToEnd)
 
                 If My.Application.Info.Version.CompareTo(av) < 0 Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("A new version of {0} is available. Use {1} -{2} to download.", My.Application.Info.ProductName, eCommandType.about.ToString.ToUpper, MyCommands.FindCommand(eCommandType.about.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
                     Console.BackgroundColor = ConsoleColor.Black
-                    Textify.SayBulletLine(Textify.eBullet.Arrow, s3ZipFile)
+                    Textify.SayBulletLine(Textify.eBullet.Arrow, MyConstants.s3ZipFile)
                     Console.WriteLine()
                 ElseIf My.Application.Info.Version.CompareTo(av) = 0 AndAlso Not silent Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of {0}.", My.Application.Info.ProductName), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))

@@ -48,11 +48,12 @@ Partial Class SquealerSettings
         Me.lblLeaveBlank = New System.Windows.Forms.Label()
         Me.btnStarwarsHelp = New System.Windows.Forms.Button()
         Me.btnLeaderboardSql = New System.Windows.Forms.Button()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
         Me.txtDirExample = New System.Windows.Forms.TextBox()
         Me.tabOutput = New System.Windows.Forms.TabPage()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
@@ -60,14 +61,13 @@ Partial Class SquealerSettings
         Me.chkSquealerDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnEditorDialog = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.txtEditorProgram = New System.Windows.Forms.TextBox()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
-        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabControl1.SuspendLayout()
+        Me.Tabs.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.tabOutput.SuspendLayout()
         Me.TabPage3.SuspendLayout()
@@ -128,7 +128,7 @@ Partial Class SquealerSettings
         'rbCompact
         '
         Me.rbCompact.AutoSize = True
-        Me.rbCompact.Location = New System.Drawing.Point(272, 157)
+        Me.rbCompact.Location = New System.Drawing.Point(383, 156)
         Me.rbCompact.Name = "rbCompact"
         Me.rbCompact.Size = New System.Drawing.Size(66, 17)
         Me.rbCompact.TabIndex = 10
@@ -139,7 +139,7 @@ Partial Class SquealerSettings
         'rbFull
         '
         Me.rbFull.AutoSize = True
-        Me.rbFull.Location = New System.Drawing.Point(272, 134)
+        Me.rbFull.Location = New System.Drawing.Point(383, 133)
         Me.rbFull.Name = "rbFull"
         Me.rbFull.Size = New System.Drawing.Size(38, 17)
         Me.rbFull.TabIndex = 12
@@ -150,7 +150,7 @@ Partial Class SquealerSettings
         'rbSymbolic
         '
         Me.rbSymbolic.AutoSize = True
-        Me.rbSymbolic.Location = New System.Drawing.Point(273, 180)
+        Me.rbSymbolic.Location = New System.Drawing.Point(383, 179)
         Me.rbSymbolic.Name = "rbSymbolic"
         Me.rbSymbolic.Size = New System.Drawing.Size(65, 17)
         Me.rbSymbolic.TabIndex = 13
@@ -217,12 +217,12 @@ Partial Class SquealerSettings
         'rbTempFile
         '
         Me.rbTempFile.AutoSize = True
-        Me.rbTempFile.Location = New System.Drawing.Point(166, 41)
+        Me.rbTempFile.Location = New System.Drawing.Point(166, 39)
         Me.rbTempFile.Name = "rbTempFile"
-        Me.rbTempFile.Size = New System.Drawing.Size(113, 17)
+        Me.rbTempFile.Size = New System.Drawing.Size(64, 17)
         Me.rbTempFile.TabIndex = 11
         Me.rbTempFile.TabStop = True
-        Me.rbTempFile.Text = "text editor temp file"
+        Me.rbTempFile.Text = "temp file"
         Me.rbTempFile.UseVisualStyleBackColor = True
         '
         'rbClipboard
@@ -325,21 +325,21 @@ Partial Class SquealerSettings
         Me.btnLeaderboardSql.Text = "TOP SECRET"
         Me.btnLeaderboardSql.UseVisualStyleBackColor = True
         '
-        'TabControl1
+        'Tabs
         '
-        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.Tabs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TabControl1.Controls.Add(Me.tabGeneral)
-        Me.TabControl1.Controls.Add(Me.tabOutput)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Controls.Add(Me.TabPage4)
-        Me.TabControl1.Controls.Add(Me.tabEasterEgg)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 12)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(539, 367)
-        Me.TabControl1.TabIndex = 26
+        Me.Tabs.Controls.Add(Me.tabGeneral)
+        Me.Tabs.Controls.Add(Me.tabOutput)
+        Me.Tabs.Controls.Add(Me.TabPage3)
+        Me.Tabs.Controls.Add(Me.TabPage4)
+        Me.Tabs.Controls.Add(Me.tabEasterEgg)
+        Me.Tabs.Location = New System.Drawing.Point(12, 12)
+        Me.Tabs.Name = "Tabs"
+        Me.Tabs.SelectedIndex = 0
+        Me.Tabs.Size = New System.Drawing.Size(539, 367)
+        Me.Tabs.TabIndex = 26
         '
         'tabGeneral
         '
@@ -367,7 +367,7 @@ Partial Class SquealerSettings
         Me.txtDirExample.Multiline = True
         Me.txtDirExample.Name = "txtDirExample"
         Me.txtDirExample.ReadOnly = True
-        Me.txtDirExample.Size = New System.Drawing.Size(258, 107)
+        Me.txtDirExample.Size = New System.Drawing.Size(369, 107)
         Me.txtDirExample.TabIndex = 15
         '
         'tabOutput
@@ -401,6 +401,15 @@ Partial Class SquealerSettings
         Me.TabPage3.Text = "Wildcards"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(6, 147)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(54, 13)
+        Me.Label4.TabIndex = 19
+        Me.Label4.Text = "Becomes:"
+        '
         'Label8
         '
         Me.Label8.AutoSize = True
@@ -425,9 +434,9 @@ Partial Class SquealerSettings
         Me.TabPage4.Controls.Add(Me.chkSquealerDefaultEditor)
         Me.TabPage4.Controls.Add(Me.chkOutputDefaultEditor)
         Me.TabPage4.Controls.Add(Me.Label7)
-        Me.TabPage4.Controls.Add(Me.Button1)
+        Me.TabPage4.Controls.Add(Me.btnEditorDialog)
         Me.TabPage4.Controls.Add(Me.Label2)
-        Me.TabPage4.Controls.Add(Me.TextBox2)
+        Me.TabPage4.Controls.Add(Me.txtEditorProgram)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
@@ -475,15 +484,15 @@ Partial Class SquealerSettings
         Me.Label7.TabIndex = 4
         Me.Label7.Text = "Use default Windows application to open:"
         '
-        'Button1
+        'btnEditorDialog
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.Button1.Location = New System.Drawing.Point(490, 136)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(35, 35)
-        Me.Button1.TabIndex = 3
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnEditorDialog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnEditorDialog.Image = Global.Squealer.My.Resources.Resources.Folder
+        Me.btnEditorDialog.Location = New System.Drawing.Point(490, 136)
+        Me.btnEditorDialog.Name = "btnEditorDialog"
+        Me.btnEditorDialog.Size = New System.Drawing.Size(35, 35)
+        Me.btnEditorDialog.TabIndex = 3
+        Me.btnEditorDialog.UseVisualStyleBackColor = True
         '
         'Label2
         '
@@ -494,14 +503,15 @@ Partial Class SquealerSettings
         Me.Label2.TabIndex = 2
         Me.Label2.Text = "Custom text editor:"
         '
-        'TextBox2
+        'txtEditorProgram
         '
-        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.txtEditorProgram.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Location = New System.Drawing.Point(11, 144)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(473, 20)
-        Me.TextBox2.TabIndex = 1
+        Me.txtEditorProgram.Location = New System.Drawing.Point(11, 144)
+        Me.txtEditorProgram.Name = "txtEditorProgram"
+        Me.txtEditorProgram.ReadOnly = True
+        Me.txtEditorProgram.Size = New System.Drawing.Size(473, 20)
+        Me.txtEditorProgram.TabIndex = 1
         '
         'tabEasterEgg
         '
@@ -519,22 +529,13 @@ Partial Class SquealerSettings
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
         '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(6, 147)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(54, 13)
-        Me.Label4.TabIndex = 19
-        Me.Label4.Text = "Becomes:"
-        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
         Me.ClientSize = New System.Drawing.Size(563, 421)
-        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.Tabs)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.btnOK)
         Me.MaximizeBox = False
@@ -543,7 +544,7 @@ Partial Class SquealerSettings
         Me.Text = "Settings"
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabControl1.ResumeLayout(False)
+        Me.Tabs.ResumeLayout(False)
         Me.tabGeneral.ResumeLayout(False)
         Me.tabGeneral.PerformLayout()
         Me.tabOutput.ResumeLayout(False)
@@ -583,19 +584,19 @@ Partial Class SquealerSettings
     Friend WithEvents btnLeaderboardSql As System.Windows.Forms.Button
     Friend WithEvents btnStarwarsHelp As System.Windows.Forms.Button
     Friend WithEvents lblLeaveBlank As System.Windows.Forms.Label
-    Friend WithEvents TabControl1 As Windows.Forms.TabControl
+    Friend WithEvents Tabs As Windows.Forms.TabControl
     Friend WithEvents tabGeneral As Windows.Forms.TabPage
     Friend WithEvents tabOutput As Windows.Forms.TabPage
     Friend WithEvents TabPage3 As Windows.Forms.TabPage
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents TabPage4 As Windows.Forms.TabPage
-    Friend WithEvents TextBox2 As Windows.Forms.TextBox
+    Friend WithEvents txtEditorProgram As Windows.Forms.TextBox
     Friend WithEvents txtDirExample As Windows.Forms.TextBox
     Friend WithEvents chkConfigDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents chkSquealerDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents chkOutputDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents Label7 As Windows.Forms.Label
-    Friend WithEvents Button1 As Windows.Forms.Button
+    Friend WithEvents btnEditorDialog As Windows.Forms.Button
     Friend WithEvents Label2 As Windows.Forms.Label
     Friend WithEvents tabEasterEgg As Windows.Forms.TabPage
     Friend WithEvents Label8 As Windows.Forms.Label
