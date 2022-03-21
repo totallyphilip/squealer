@@ -33,9 +33,8 @@ Partial Class SquealerSettings
         Me.Label3 = New System.Windows.Forms.Label()
         Me.updnFolderSaves = New System.Windows.Forms.NumericUpDown()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.txtTryIt = New System.Windows.Forms.TextBox()
         Me.txtWildcardExample = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.rbTempFile = New System.Windows.Forms.RadioButton()
         Me.rbClipboard = New System.Windows.Forms.RadioButton()
@@ -54,16 +53,18 @@ Partial Class SquealerSettings
         Me.txtDirExample = New System.Windows.Forms.TextBox()
         Me.tabOutput = New System.Windows.Forms.TabPage()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.chkConfigDefaultEditor = New System.Windows.Forms.CheckBox()
+        Me.chkSquealerDefaultEditor = New System.Windows.Forms.CheckBox()
+        Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
+        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
@@ -87,7 +88,7 @@ Partial Class SquealerSettings
         'optUseWildcards
         '
         Me.optUseWildcards.AutoSize = True
-        Me.optUseWildcards.Location = New System.Drawing.Point(8, 6)
+        Me.optUseWildcards.Location = New System.Drawing.Point(9, 39)
         Me.optUseWildcards.Name = "optUseWildcards"
         Me.optUseWildcards.Size = New System.Drawing.Size(135, 17)
         Me.optUseWildcards.TabIndex = 3
@@ -97,7 +98,7 @@ Partial Class SquealerSettings
         'optSpacesAreWildcards
         '
         Me.optSpacesAreWildcards.AutoSize = True
-        Me.optSpacesAreWildcards.Location = New System.Drawing.Point(8, 29)
+        Me.optSpacesAreWildcards.Location = New System.Drawing.Point(9, 62)
         Me.optSpacesAreWildcards.Name = "optSpacesAreWildcards"
         Me.optSpacesAreWildcards.Size = New System.Drawing.Size(146, 17)
         Me.optSpacesAreWildcards.TabIndex = 5
@@ -127,7 +128,7 @@ Partial Class SquealerSettings
         'rbCompact
         '
         Me.rbCompact.AutoSize = True
-        Me.rbCompact.Location = New System.Drawing.Point(93, 74)
+        Me.rbCompact.Location = New System.Drawing.Point(272, 157)
         Me.rbCompact.Name = "rbCompact"
         Me.rbCompact.Size = New System.Drawing.Size(66, 17)
         Me.rbCompact.TabIndex = 10
@@ -138,7 +139,7 @@ Partial Class SquealerSettings
         'rbFull
         '
         Me.rbFull.AutoSize = True
-        Me.rbFull.Location = New System.Drawing.Point(157, 74)
+        Me.rbFull.Location = New System.Drawing.Point(272, 134)
         Me.rbFull.Name = "rbFull"
         Me.rbFull.Size = New System.Drawing.Size(38, 17)
         Me.rbFull.TabIndex = 12
@@ -149,7 +150,7 @@ Partial Class SquealerSettings
         'rbSymbolic
         '
         Me.rbSymbolic.AutoSize = True
-        Me.rbSymbolic.Location = New System.Drawing.Point(201, 74)
+        Me.rbSymbolic.Location = New System.Drawing.Point(273, 180)
         Me.rbSymbolic.Name = "rbSymbolic"
         Me.rbSymbolic.Size = New System.Drawing.Size(65, 17)
         Me.rbSymbolic.TabIndex = 13
@@ -160,15 +161,15 @@ Partial Class SquealerSettings
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(19, 257)
+        Me.Label3.Location = New System.Drawing.Point(8, 250)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(151, 13)
+        Me.Label3.Size = New System.Drawing.Size(186, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Number of folders to remember"
+        Me.Label3.Text = "Number of project folders to remember"
         '
         'updnFolderSaves
         '
-        Me.updnFolderSaves.Location = New System.Drawing.Point(176, 255)
+        Me.updnFolderSaves.Location = New System.Drawing.Point(200, 248)
         Me.updnFolderSaves.Name = "updnFolderSaves"
         Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
         Me.updnFolderSaves.TabIndex = 0
@@ -176,37 +177,31 @@ Partial Class SquealerSettings
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(8, 76)
+        Me.Label5.Location = New System.Drawing.Point(8, 90)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(81, 13)
         Me.Label5.TabIndex = 14
         Me.Label5.Text = "Directory format"
         '
-        'TextBox1
+        'txtTryIt
         '
-        Me.TextBox1.Location = New System.Drawing.Point(11, 98)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ReadOnly = True
-        Me.TextBox1.Size = New System.Drawing.Size(124, 20)
-        Me.TextBox1.TabIndex = 16
-        Me.TextBox1.Text = "DIR your file search"
+        Me.txtTryIt.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtTryIt.Location = New System.Drawing.Point(6, 114)
+        Me.txtTryIt.Name = "txtTryIt"
+        Me.txtTryIt.Size = New System.Drawing.Size(519, 20)
+        Me.txtTryIt.TabIndex = 16
+        Me.txtTryIt.Text = "type any file name"
         '
         'txtWildcardExample
         '
-        Me.txtWildcardExample.Location = New System.Drawing.Point(163, 98)
+        Me.txtWildcardExample.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtWildcardExample.Location = New System.Drawing.Point(6, 164)
         Me.txtWildcardExample.Name = "txtWildcardExample"
         Me.txtWildcardExample.ReadOnly = True
-        Me.txtWildcardExample.Size = New System.Drawing.Size(124, 20)
+        Me.txtWildcardExample.Size = New System.Drawing.Size(519, 20)
         Me.txtWildcardExample.TabIndex = 14
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(141, 101)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(16, 13)
-        Me.Label4.TabIndex = 15
-        Me.Label4.Text = "->"
         '
         'btnOK
         '
@@ -222,7 +217,7 @@ Partial Class SquealerSettings
         'rbTempFile
         '
         Me.rbTempFile.AutoSize = True
-        Me.rbTempFile.Location = New System.Drawing.Point(166, 31)
+        Me.rbTempFile.Location = New System.Drawing.Point(166, 41)
         Me.rbTempFile.Name = "rbTempFile"
         Me.rbTempFile.Size = New System.Drawing.Size(113, 17)
         Me.rbTempFile.TabIndex = 11
@@ -233,7 +228,7 @@ Partial Class SquealerSettings
         'rbClipboard
         '
         Me.rbClipboard.AutoSize = True
-        Me.rbClipboard.Location = New System.Drawing.Point(92, 29)
+        Me.rbClipboard.Location = New System.Drawing.Point(92, 39)
         Me.rbClipboard.Name = "rbClipboard"
         Me.rbClipboard.Size = New System.Drawing.Size(68, 17)
         Me.rbClipboard.TabIndex = 10
@@ -244,7 +239,7 @@ Partial Class SquealerSettings
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(8, 31)
+        Me.Label6.Location = New System.Drawing.Point(8, 41)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(77, 13)
         Me.Label6.TabIndex = 9
@@ -253,7 +248,7 @@ Partial Class SquealerSettings
         'optDetectOldSquealerObjects
         '
         Me.optDetectOldSquealerObjects.AutoSize = True
-        Me.optDetectOldSquealerObjects.Location = New System.Drawing.Point(8, 6)
+        Me.optDetectOldSquealerObjects.Location = New System.Drawing.Point(8, 16)
         Me.optDetectOldSquealerObjects.Name = "optDetectOldSquealerObjects"
         Me.optDetectOldSquealerObjects.Size = New System.Drawing.Size(197, 17)
         Me.optDetectOldSquealerObjects.TabIndex = 8
@@ -368,9 +363,10 @@ Partial Class SquealerSettings
         '
         'txtDirExample
         '
-        Me.txtDirExample.Location = New System.Drawing.Point(8, 97)
+        Me.txtDirExample.Location = New System.Drawing.Point(8, 111)
         Me.txtDirExample.Multiline = True
         Me.txtDirExample.Name = "txtDirExample"
+        Me.txtDirExample.ReadOnly = True
         Me.txtDirExample.Size = New System.Drawing.Size(258, 107)
         Me.txtDirExample.TabIndex = 15
         '
@@ -390,11 +386,12 @@ Partial Class SquealerSettings
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.Label4)
+        Me.TabPage3.Controls.Add(Me.Label8)
         Me.TabPage3.Controls.Add(Me.Label1)
-        Me.TabPage3.Controls.Add(Me.TextBox1)
+        Me.TabPage3.Controls.Add(Me.txtTryIt)
         Me.TabPage3.Controls.Add(Me.txtWildcardExample)
         Me.TabPage3.Controls.Add(Me.optUseWildcards)
-        Me.TabPage3.Controls.Add(Me.Label4)
         Me.TabPage3.Controls.Add(Me.optSpacesAreWildcards)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
@@ -404,10 +401,19 @@ Partial Class SquealerSettings
         Me.TabPage3.Text = "Wildcards"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(6, 97)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(33, 13)
+        Me.Label8.TabIndex = 18
+        Me.Label8.Text = "Try it!"
+        '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(8, 72)
+        Me.Label1.Location = New System.Drawing.Point(6, 12)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(146, 13)
         Me.Label1.TabIndex = 17
@@ -415,9 +421,9 @@ Partial Class SquealerSettings
         '
         'TabPage4
         '
-        Me.TabPage4.Controls.Add(Me.CheckBox3)
-        Me.TabPage4.Controls.Add(Me.CheckBox2)
-        Me.TabPage4.Controls.Add(Me.CheckBox1)
+        Me.TabPage4.Controls.Add(Me.chkConfigDefaultEditor)
+        Me.TabPage4.Controls.Add(Me.chkSquealerDefaultEditor)
+        Me.TabPage4.Controls.Add(Me.chkOutputDefaultEditor)
         Me.TabPage4.Controls.Add(Me.Label7)
         Me.TabPage4.Controls.Add(Me.Button1)
         Me.TabPage4.Controls.Add(Me.Label2)
@@ -430,40 +436,40 @@ Partial Class SquealerSettings
         Me.TabPage4.Text = "Editor"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
-        'CheckBox3
+        'chkConfigDefaultEditor
         '
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(6, 70)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(72, 17)
-        Me.CheckBox3.TabIndex = 7
-        Me.CheckBox3.Text = "Config file"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.chkConfigDefaultEditor.AutoSize = True
+        Me.chkConfigDefaultEditor.Location = New System.Drawing.Point(6, 86)
+        Me.chkConfigDefaultEditor.Name = "chkConfigDefaultEditor"
+        Me.chkConfigDefaultEditor.Size = New System.Drawing.Size(72, 17)
+        Me.chkConfigDefaultEditor.TabIndex = 7
+        Me.chkConfigDefaultEditor.Text = "Config file"
+        Me.chkConfigDefaultEditor.UseVisualStyleBackColor = True
         '
-        'CheckBox2
+        'chkSquealerDefaultEditor
         '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(6, 47)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(89, 17)
-        Me.CheckBox2.TabIndex = 6
-        Me.CheckBox2.Text = "Squealer files"
-        Me.CheckBox2.UseVisualStyleBackColor = True
+        Me.chkSquealerDefaultEditor.AutoSize = True
+        Me.chkSquealerDefaultEditor.Location = New System.Drawing.Point(6, 63)
+        Me.chkSquealerDefaultEditor.Name = "chkSquealerDefaultEditor"
+        Me.chkSquealerDefaultEditor.Size = New System.Drawing.Size(89, 17)
+        Me.chkSquealerDefaultEditor.TabIndex = 6
+        Me.chkSquealerDefaultEditor.Text = "Squealer files"
+        Me.chkSquealerDefaultEditor.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'chkOutputDefaultEditor
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(6, 24)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(58, 17)
-        Me.CheckBox1.TabIndex = 5
-        Me.CheckBox1.Text = "Output"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.chkOutputDefaultEditor.AutoSize = True
+        Me.chkOutputDefaultEditor.Location = New System.Drawing.Point(6, 40)
+        Me.chkOutputDefaultEditor.Name = "chkOutputDefaultEditor"
+        Me.chkOutputDefaultEditor.Size = New System.Drawing.Size(58, 17)
+        Me.chkOutputDefaultEditor.TabIndex = 5
+        Me.chkOutputDefaultEditor.Text = "Output"
+        Me.chkOutputDefaultEditor.UseVisualStyleBackColor = True
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(8, 3)
+        Me.Label7.Location = New System.Drawing.Point(3, 19)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(204, 13)
         Me.Label7.TabIndex = 4
@@ -473,7 +479,7 @@ Partial Class SquealerSettings
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.Button1.Location = New System.Drawing.Point(490, 120)
+        Me.Button1.Location = New System.Drawing.Point(490, 136)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(35, 35)
         Me.Button1.TabIndex = 3
@@ -482,7 +488,7 @@ Partial Class SquealerSettings
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(8, 108)
+        Me.Label2.Location = New System.Drawing.Point(8, 124)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(94, 13)
         Me.Label2.TabIndex = 2
@@ -492,7 +498,7 @@ Partial Class SquealerSettings
         '
         Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Location = New System.Drawing.Point(11, 128)
+        Me.TextBox2.Location = New System.Drawing.Point(11, 144)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(473, 20)
         Me.TextBox2.TabIndex = 1
@@ -512,6 +518,15 @@ Partial Class SquealerSettings
         Me.tabEasterEgg.TabIndex = 4
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(6, 147)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(54, 13)
+        Me.Label4.TabIndex = 19
+        Me.Label4.Text = "Becomes:"
         '
         'SquealerSettings
         '
@@ -553,8 +568,7 @@ Partial Class SquealerSettings
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents updnFolderSaves As System.Windows.Forms.NumericUpDown
     Friend WithEvents txtWildcardExample As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents txtTryIt As System.Windows.Forms.TextBox
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents btnOK As System.Windows.Forms.Button
     Friend WithEvents optDetectOldSquealerObjects As System.Windows.Forms.CheckBox
@@ -577,11 +591,13 @@ Partial Class SquealerSettings
     Friend WithEvents TabPage4 As Windows.Forms.TabPage
     Friend WithEvents TextBox2 As Windows.Forms.TextBox
     Friend WithEvents txtDirExample As Windows.Forms.TextBox
-    Friend WithEvents CheckBox3 As Windows.Forms.CheckBox
-    Friend WithEvents CheckBox2 As Windows.Forms.CheckBox
-    Friend WithEvents CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents chkConfigDefaultEditor As Windows.Forms.CheckBox
+    Friend WithEvents chkSquealerDefaultEditor As Windows.Forms.CheckBox
+    Friend WithEvents chkOutputDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents Label7 As Windows.Forms.Label
     Friend WithEvents Button1 As Windows.Forms.Button
     Friend WithEvents Label2 As Windows.Forms.Label
     Friend WithEvents tabEasterEgg As Windows.Forms.TabPage
+    Friend WithEvents Label8 As Windows.Forms.Label
+    Friend WithEvents Label4 As Windows.Forms.Label
 End Class

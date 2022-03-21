@@ -163,32 +163,6 @@ Module Main
 
     End Class
 
-    Public Class MyConstants
-        Public Shared ReadOnly Property ObjectFileExtension As String
-            Get
-                Return ".sqlr"
-            End Get
-        End Property
-
-        Public Shared ReadOnly Property ConfigFilename As String
-            Get
-                Return My.Application.Info.ProductName & ".config"
-            End Get
-        End Property
-
-        Public Shared ReadOnly Property ConnectionStringFilename As String
-            Get
-                Return ".connectionstring"
-            End Get
-        End Property
-
-        Public Shared ReadOnly Property AutocreateFilename As String
-            Get
-                Return String.Format("({0})", My.Application.Info.ProductName)
-            End Get
-        End Property
-
-    End Class
 
     Private Class BatchParametersClass
 
@@ -576,7 +550,7 @@ Module Main
                 Console.WriteLine()
                 Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & MyConstants.ObjectFileExtension)
             End If
-            s = WildcardInterpreter(s.Trim, FindExact)
+            s = Misc.WildcardInterpreter(s.Trim, UserSettings.WildcardSpaces, UserSettings.AutoSearch, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
 
@@ -1037,23 +1011,23 @@ Module Main
 
     End Sub
 
-    Private Function WildcardInterpreter(s As String, FindExact As Boolean) As String
+    'Private Function WildcardInterpreter(s As String, FindExact As Boolean) As String
 
-        If UserSettings.WildcardSpaces Then
-            s = s.Replace(" "c, "*"c)
-        End If
+    '    If UserSettings.WildcardSpaces Then
+    '        s = s.Replace(" "c, "*"c)
+    '    End If
 
-        If String.IsNullOrWhiteSpace(s) Then
-            s = "*"
-        ElseIf UserSettings.AutoSearch AndAlso Not FindExact Then
-            s = "*" & s & "*"
-        End If
-        While s.Contains("**")
-            s = s.Replace("**", "*")
-        End While
-        Return s & MyConstants.ObjectFileExtension
+    '    If String.IsNullOrWhiteSpace(s) Then
+    '        s = "*"
+    '    ElseIf UserSettings.AutoSearch AndAlso Not FindExact Then
+    '        s = "*" & s & "*"
+    '    End If
+    '    While s.Contains("**")
+    '        s = s.Replace("**", "*")
+    '    End While
+    '    Return s & MyConstants.ObjectFileExtension
 
-    End Function
+    'End Function
 
     Private Function StringInList(l As List(Of String), s As String) As Boolean
         Return l.Exists(Function(x) x.ToLower = s.ToLower)
@@ -1365,7 +1339,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.explore.ToString Then
 
-                    OpenExplorer(WildcardInterpreter(UserInput, False), WorkingFolder)
+                    OpenExplorer(Misc.WildcardInterpreter(UserInput, UserSettings.WildcardSpaces, UserSettings.AutoSearch, False), WorkingFolder)
 
 
 

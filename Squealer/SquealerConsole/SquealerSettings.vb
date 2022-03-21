@@ -3,17 +3,17 @@
     Private _Blasts As Integer = 0
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Icon = My.Resources.PigNose
-        UpdateExample()
+        UpdateWildcardExample()
         UpdateDirectoryExample()
         TabControl1.TabPages.Remove(tabEasterEgg)
     End Sub
 
-    Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles optUseWildcards.CheckedChanged, optSpacesAreWildcards.CheckedChanged
-        UpdateExample()
+    Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles optUseWildcards.CheckedChanged, optSpacesAreWildcards.CheckedChanged, txtTryIt.TextChanged
+        UpdateWildcardExample()
     End Sub
 
-    Private Sub UpdateExample()
-        txtWildcardExample.Text = String.Format("DIR {0}your{1}file{1}search{0}", IIf(optUseWildcards.Checked, "*", "").ToString, IIf(optSpacesAreWildcards.Checked, "*", " ").ToString)
+    Private Sub UpdateWildcardExample()
+        txtWildcardExample.Text = Misc.WildcardInterpreter(txtTryIt.Text.Trim, optSpacesAreWildcards.Checked, optUseWildcards.Checked, False)
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click

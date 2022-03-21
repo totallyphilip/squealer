@@ -128,6 +128,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc.vb" />
+    <Compile Include="MyConstants.vb" />
     <Compile Include="EasyShell.vb" />
     <Compile Include="GitShell.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
