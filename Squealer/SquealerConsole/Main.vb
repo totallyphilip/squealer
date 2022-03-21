@@ -467,7 +467,7 @@ Module Main
         Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
 
         ' Restore the previous working folder
-        Dim WorkingFolder As String = My.Configger.LoadSetting("PreviousFolder", My.Computer.FileSystem.SpecialDirectories.MyDocuments)
+        Dim WorkingFolder As String = My.Configger.LoadSetting("PreviousFolder", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
         If My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
             ChangeFolder(WorkingFolder, WorkingFolder)
         End If
@@ -873,7 +873,7 @@ Module Main
 
         ' open folder
         cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command. Omit path to open folder dialog."}, CommandCatalog.eCommandCategory.folder, "<path>", False)
-        cmd.Examples.Add("% " & My.Computer.FileSystem.SpecialDirectories.MyDocuments)
+        cmd.Examples.Add("% " & Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
         cmd.Examples.Add("% C:\Some Folder\Spaces Are OK, Quotes Not Needed")
         cmd.Examples.Add("% -- open Windows Explorer to select folder")
         cmd.IgnoreSwitches = True
@@ -1115,13 +1115,13 @@ Module Main
                         Textify.SayBulletLine(Textify.eBullet.Hash, "Opening remote file...")
                         Console.WriteLine()
                         Dim wc As New Net.WebClient
-                        Dim fn As String = My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\Squealer.zip"
+                        Dim fn As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\Squealer.zip"
                         wc.DownloadFile(s3ZipFile, fn)
                         Textify.SayBulletLine(Textify.eBullet.Hash, "File downloaded to " & fn, ConsoleColor.White)
                         Textify.SayNewLine()
                         Textify.SayBulletLine(Textify.eBullet.Hash, "Opening local folder...")
                         Console.WriteLine()
-                        OpenExplorer("Squealer.zip", My.Computer.FileSystem.SpecialDirectories.MyDocuments)
+                        OpenExplorer("Squealer.zip", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
                     End If
 
                     If StringInList(MySwitches, "changelog") Then

@@ -4,6 +4,8 @@
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Icon = My.Resources.PigNose
         UpdateExample()
+        UpdateDirectoryExample()
+        TabControl1.TabPages.Remove(tabEasterEgg)
     End Sub
 
     Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles optUseWildcards.CheckedChanged, optSpacesAreWildcards.CheckedChanged
@@ -22,24 +24,10 @@
             blaster.Play(My.Resources.BlasterFiring, AudioPlayMode.Background)
         End If
         Select Case _Blasts
-            Case 1
-                gbGeneral.Controls.Remove(gbStarwars)
-                gbGeneral.Visible = False
-                gbOutput.Visible = False
-                gbFilenames.Visible = False
-            Case 2
-                gbStarwars.Visible = True
             Case 3
-                lblLeaderboard.Visible = True
-            Case 4
-                txtLeaderboardCs.Visible = True
-                lblLeaveBlank.Visible = True
-            Case 5
-                chkShowLeaderboard.Visible = True
+                TabControl1.TabPages.Add(tabEasterEgg)
             Case 6
-                btnStarwarsHelp.Visible = True
-            Case 7
-                btnLeaderboardSql.Visible = True
+                TabControl1.SelectedTab = tabEasterEgg
 
             Case MaxBlasts
                 blaster.Play(My.Resources.DroidScream, AudioPlayMode.Background)
@@ -56,4 +44,38 @@
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnStarwarsHelp.Click
         System.Windows.Forms.MessageBox.Show(My.Resources.HowToLaunchR2)
     End Sub
+
+    Private Sub rbCompact_CheckedChanged(sender As Object, e As EventArgs) Handles rbCompact.CheckedChanged, rbFull.CheckedChanged, rbSymbolic.CheckedChanged
+        UpdateDirectoryExample()
+    End Sub
+
+    Private Sub UpdateDirectoryExample()
+
+        If rbSymbolic.Checked Then
+            txtDirExample.Text = "dbo.MyInlineTableValuedFunction*" _
+                & vbCrLf & "dbo.MyMultiStatementTableValuedFunction**" _
+                & vbCrLf & "dbo.MyScalarFunction()" _
+                & vbCrLf & "dbo.MyStoredProcedure" _
+                & vbCrLf & "dbo.MyView+"
+        End If
+
+        If rbCompact.Checked Then
+            txtDirExample.Text = "if dbo.MyInlineTableValuedFunction" _
+                & vbCrLf & "tf dbo.MyMultiStatementTableValuedFunction" _
+                & vbCrLf & "fn dbo.MyScalarFunction" _
+                & vbCrLf & "p  dbo.MyStoredProcedure" _
+                & vbCrLf & "v  dbo.MyView"
+        End If
+
+        If rbFull.Checked Then
+            txtDirExample.Text = "if [flags] dbo.MyInlineTableValuedFunction" _
+                & vbCrLf & "tf [flags] dbo.MyMultiStatementTableValuedFunction" _
+                & vbCrLf & "fn [flags] dbo.MyScalarFunction" _
+                & vbCrLf & "p  [flags] dbo.MyStoredProcedure" _
+                & vbCrLf & "v  [flags] dbo.MyView"
+        End If
+
+    End Sub
+
+
 End Class
