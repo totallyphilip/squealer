@@ -128,8 +128,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.vb" />
     <Compile Include="Misc.vb" />
-    <Compile Include="MyConstants.vb" />
     <Compile Include="EasyShell.vb" />
     <Compile Include="GitShell.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -140,13 +140,14 @@
     <Compile Include="ParameterClass.vb" />
     <Compile Include="Configger.vb" />
     <Compile Include="CommandCatalog.vb" />
-    <Compile Include="SpinCursor.vb" />
-    <Compile Include="SquealerSettings.Designer.vb">
-      <DependentUpon>SquealerSettings.vb</DependentUpon>
+    <Compile Include="Settings.vb" />
+    <Compile Include="SettingsForm.Designer.vb">
+      <DependentUpon>SettingsForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="SquealerSettings.vb">
+    <Compile Include="SettingsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SpinCursor.vb" />
     <Compile Include="ObjectType.vb" />
     <Compile Include="TempFileHandler.vb" />
     <Compile Include="Textify.vb" />
@@ -162,7 +163,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="UserSettings.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -171,8 +171,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SquealerSettings.resx">
-      <DependentUpon>SquealerSettings.vb</DependentUpon>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
