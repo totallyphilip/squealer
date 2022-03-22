@@ -65,6 +65,7 @@ Partial Class SquealerSettings
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtEditorProgram = New System.Windows.Forms.TextBox()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
+        Me.Label9 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -161,15 +162,15 @@ Partial Class SquealerSettings
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(8, 250)
+        Me.Label3.Location = New System.Drawing.Point(8, 252)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(186, 13)
+        Me.Label3.Size = New System.Drawing.Size(85, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Number of project folders to remember"
+        Me.Label3.Text = "Remember up to"
         '
         'updnFolderSaves
         '
-        Me.updnFolderSaves.Location = New System.Drawing.Point(200, 248)
+        Me.updnFolderSaves.Location = New System.Drawing.Point(99, 250)
         Me.updnFolderSaves.Name = "updnFolderSaves"
         Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
         Me.updnFolderSaves.TabIndex = 0
@@ -343,6 +344,7 @@ Partial Class SquealerSettings
         '
         'tabGeneral
         '
+        Me.tabGeneral.Controls.Add(Me.Label9)
         Me.tabGeneral.Controls.Add(Me.txtDirExample)
         Me.tabGeneral.Controls.Add(Me.Label3)
         Me.tabGeneral.Controls.Add(Me.updnFolderSaves)
@@ -529,6 +531,15 @@ Partial Class SquealerSettings
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(160, 252)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(73, 13)
+        Me.Label9.TabIndex = 16
+        Me.Label9.Text = "project folders"
+        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -601,4 +612,5 @@ Partial Class SquealerSettings
     Friend WithEvents tabEasterEgg As Windows.Forms.TabPage
     Friend WithEvents Label8 As Windows.Forms.Label
     Friend WithEvents Label4 As Windows.Forms.Label
+    Friend WithEvents Label9 As Windows.Forms.Label
 End Class

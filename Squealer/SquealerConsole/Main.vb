@@ -49,7 +49,7 @@ Module Main
 #Region " All The Definitions "
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
-    Private UserSettings As New UserSettingsClass
+    Private MySettings As New UserSettingsClass
 
     Private Class BatchParametersClass
 
@@ -158,7 +158,7 @@ Module Main
         If Not String.IsNullOrWhiteSpace(unsplit) Then
             folders.AddRange(My.Configger.LoadSetting("Folders", "nothing").Split(New Char() {"|"c}))
         End If
-        While folders.Count > UserSettings.RecentFolders
+        While folders.Count > MySettings.RecentFolders
             folders.RemoveAt(folders.Count - 1)
         End While
         Return folders
@@ -315,17 +315,17 @@ Module Main
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
         ' Load settings.
-        UserSettings.TextEditor = My.Configger.LoadSetting(NameOf(UserSettings.TextEditor), "notepad.exe")
-        UserSettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(UserSettings.LeaderboardConnectionString), String.Empty)
-        UserSettings.RecentFolders = My.Configger.LoadSetting(NameOf(UserSettings.RecentFolders), 20)
-        UserSettings.AutoSearch = My.Configger.LoadSetting(NameOf(UserSettings.AutoSearch), False)
-        UserSettings.EditNew = My.Configger.LoadSetting(NameOf(UserSettings.EditNew), True)
-        UserSettings.UseClipboard = My.Configger.LoadSetting(NameOf(UserSettings.UseClipboard), True)
-        UserSettings.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(UserSettings.ShowLeaderboardAtStartup), False)
-        UserSettings.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(UserSettings.DetectSquealerObjects), True)
-        UserSettings.ShowBranch = My.Configger.LoadSetting(NameOf(UserSettings.ShowBranch), True)
-        UserSettings.WildcardSpaces = My.Configger.LoadSetting(NameOf(UserSettings.WildcardSpaces), False)
-        UserSettings.DirStyle = My.Configger.LoadSetting(NameOf(UserSettings.DirStyle), eDirectoryStyle.compact.ToString)
+        MySettings.TextEditor = My.Configger.LoadSetting(NameOf(MySettings.TextEditor), "notepad.exe")
+        MySettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(MySettings.LeaderboardConnectionString), String.Empty)
+        MySettings.RecentFolders = My.Configger.LoadSetting(NameOf(MySettings.RecentFolders), 20)
+        MySettings.AutoSearch = My.Configger.LoadSetting(NameOf(MySettings.AutoSearch), False)
+        MySettings.EditNew = My.Configger.LoadSetting(NameOf(MySettings.EditNew), True)
+        MySettings.UseClipboard = My.Configger.LoadSetting(NameOf(MySettings.UseClipboard), True)
+        MySettings.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(MySettings.ShowLeaderboardAtStartup), False)
+        MySettings.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(MySettings.DetectSquealerObjects), True)
+        MySettings.ShowBranch = My.Configger.LoadSetting(NameOf(MySettings.ShowBranch), True)
+        MySettings.WildcardSpaces = My.Configger.LoadSetting(NameOf(MySettings.WildcardSpaces), False)
+        MySettings.DirStyle = My.Configger.LoadSetting(NameOf(MySettings.DirStyle), eDirectoryStyle.compact.ToString)
         Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
 
         ' Restore the previous working folder
@@ -349,20 +349,20 @@ Module Main
         'Dim fvi As FileVersionInfo = FileVersionInfo.GetVersionInfo(fileName)
         'Dim fvAsString$ = fvi.FileVersion ' but other useful properties exist too.
 
-        Dim ver As New Version(My.Configger.LoadSetting(NameOf(UserSettings.LastRunVersion), "0.0.0.0"))
+        Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastRunVersion), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
             DisplayChangelog()
-            My.Configger.SaveSetting(NameOf(UserSettings.LastRunVersion), My.Application.Info.Version.ToString)
+            My.Configger.SaveSetting(NameOf(MySettings.LastRunVersion), My.Application.Info.Version.ToString)
         End If
 
         ' Main process
         Console.WriteLine()
         CheckS3(True)
-        If IsStarWarsDay() Then
+        If Misc.IsStarWarsDay() Then
             Console.WriteLine("May the Fourth be with you! (easter egg revealed - see HELP)")
             Console.WriteLine()
         End If
-        If UserSettings.ShowLeaderboardAtStartup Then
+        If MySettings.ShowLeaderboardAtStartup Then
             ShowLeaderboard(10)
         End If
         HandleUserInput(WorkingFolder)
@@ -438,7 +438,7 @@ Module Main
                 Console.WriteLine()
                 Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & MyConstants.SquealerFileExtension)
             End If
-            s = Misc.WildcardInterpreter(s.Trim, UserSettings.WildcardSpaces, UserSettings.AutoSearch, FindExact)
+            s = Misc.WildcardInterpreter(s.Trim, MySettings.WildcardSpaces, MySettings.AutoSearch, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
 
@@ -515,19 +515,19 @@ Module Main
             Console.Write(eCommandType.directory.ToString.ToLower & " - x ")
         Else
 
-            If UserSettings.DirStyle = eDirectoryStyle.full.ToString Then
+            If MySettings.DirStyle = eDirectoryStyle.full.ToString Then
                 Textify.Write("Type Flags ")
-            ElseIf UserSettings.DirStyle = eDirectoryStyle.compact.ToString Then
+            ElseIf MySettings.DirStyle = eDirectoryStyle.compact.ToString Then
                 Textify.Write("   ")
-            ElseIf UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
+            ElseIf MySettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
                 Textify.Write(" ")
             End If
 
             Textify.WriteLine("FileName")
 
-            If UserSettings.DirStyle = eDirectoryStyle.full.ToString Then
+            If MySettings.DirStyle = eDirectoryStyle.full.ToString Then
                 Textify.Write("---- ----- ")
-            ElseIf UserSettings.DirStyle = eDirectoryStyle.compact.ToString Then
+            ElseIf MySettings.DirStyle = eDirectoryStyle.compact.ToString Then
                 Textify.Write("-- ")
             End If
 
@@ -565,16 +565,16 @@ Module Main
                 End If
 
 
-                If UserSettings.DirStyle = eDirectoryStyle.full.ToString Then
+                If MySettings.DirStyle = eDirectoryStyle.full.ToString Then
                     Textify.Write(" " & obj.Type.ShortType.ToString.PadRight(4) & obj.FlagsSummary)
-                ElseIf UserSettings.DirStyle = eDirectoryStyle.compact.ToString Then
+                ElseIf MySettings.DirStyle = eDirectoryStyle.compact.ToString Then
                     Textify.Write(obj.Type.ShortType.ToString.PadRight(2))
                     If String.IsNullOrWhiteSpace(obj.FlagsSummary) Then
                         Textify.Write(" ")
                     Else
                         Textify.Write("*")
                     End If
-                ElseIf UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
+                ElseIf MySettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
                     If String.IsNullOrWhiteSpace(obj.FlagsSummary) Then
                         Textify.Write(" ")
                     Else
@@ -599,7 +599,7 @@ Module Main
                         symbol = "+"
                 End Select
 
-                If UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
+                If MySettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
                     Textify.Write(symbol, ConsoleColor.Green)
                 End If
 
@@ -698,12 +698,12 @@ Module Main
             If Action = eFileAction.compare Then
                 GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", MyConstants.AutocreateFilename)
             ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                If UserSettings.DetectSquealerObjects Then
+                If MySettings.DetectSquealerObjects Then
                     GeneratedOutput = My.Resources.SqlTopScript & GeneratedOutput
                 End If
             End If
 
-            If UserSettings.UseClipboard Then
+            If MySettings.UseClipboard Then
                 Console.WriteLine()
                 Textify.SayBulletLine(Textify.eBullet.Hash, "Output copied to Windows clipboard.")
                 Clipboard.SetText(GeneratedOutput)
@@ -888,7 +888,7 @@ Module Main
         ' star wars
         cmd = New CommandCatalog.CommandDefinition({eCommandType.starwars.ToString, "r2"}, {"I've got a bad feeling about this.", "Jump in an X-Wing and blow something up!"}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("top;display leaderboard"))
-        cmd.Visible = IsStarWarsDay()
+        cmd.Visible = Misc.IsStarWarsDay()
         MyCommands.Items.Add(cmd)
 
         ' test 
@@ -898,24 +898,6 @@ Module Main
         MyCommands.Items.Add(cmd)
 
     End Sub
-
-    'Private Function WildcardInterpreter(s As String, FindExact As Boolean) As String
-
-    '    If UserSettings.WildcardSpaces Then
-    '        s = s.Replace(" "c, "*"c)
-    '    End If
-
-    '    If String.IsNullOrWhiteSpace(s) Then
-    '        s = "*"
-    '    ElseIf UserSettings.AutoSearch AndAlso Not FindExact Then
-    '        s = "*" & s & "*"
-    '    End If
-    '    While s.Contains("**")
-    '        s = s.Replace("**", "*")
-    '    End While
-    '    Return s & MyConstants.ObjectFileExtension
-
-    'End Function
 
     Private Function StringInList(l As List(Of String), s As String) As Boolean
         Return l.Exists(Function(x) x.ToLower = s.ToLower)
@@ -1196,7 +1178,7 @@ Module Main
 
                     Dim f As String = CreateNewFile(WorkingFolder, filetype, UserInput)
 
-                    If UserSettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
+                    If MySettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
                         OpenInTextEditor(f)
                     End If
 
@@ -1227,7 +1209,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.explore.ToString Then
 
-                    OpenExplorer(Misc.WildcardInterpreter(UserInput, UserSettings.WildcardSpaces, UserSettings.AutoSearch, False), WorkingFolder)
+                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardSpaces, MySettings.AutoSearch, False), WorkingFolder)
 
 
 
@@ -1246,7 +1228,7 @@ Module Main
                         Dim fgColor As ConsoleColor = Console.ForegroundColor
                         Dim bgColor As ConsoleColor = Console.BackgroundColor
                         Dim fight As New GoldLeader(False)
-                        fight.TryPlay(UserSettings.LeaderboardConnectionString)
+                        fight.TryPlay(MySettings.LeaderboardConnectionString)
                         Console.ForegroundColor = fgColor
                         Console.BackgroundColor = bgColor
                         Console.WriteLine()
@@ -1342,7 +1324,7 @@ Module Main
             Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
 
             Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
-            If UserSettings.ShowBranch Then
+            If MySettings.ShowBranch Then
                 'Textify.Write(GitShell.CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
                 Textify.Write(String.Format(" ({0})", GitShell.CurrentBranch(WorkingFolder)), ConsoleColor.DarkGreen)
             End If
@@ -1486,33 +1468,25 @@ Module Main
 
 #Region " Settings "
 
-    Private Sub SettingViewOne(name As String, value As String)
-        Textify.SayBullet(Textify.eBullet.Arrow, "")
-        Textify.Write(name, ConsoleColor.Green)
-        Textify.Write(": ")
-        Textify.WriteLine(value, ConsoleColor.White)
-        Console.WriteLine()
-    End Sub
-
     Private Sub ShowSettingsDialog()
 
         Dim f As New SquealerSettings
-        f.txtEditorProgram.Text = UserSettings.TextEditor
-        f.txtLeaderboardCs.Text = UserSettings.LeaderboardConnectionString
-        f.updnFolderSaves.Value = UserSettings.RecentFolders
-        f.optUseWildcards.Checked = UserSettings.AutoSearch
-        f.optEditNewFiles.Checked = UserSettings.EditNew
-        f.chkShowLeaderboard.Checked = UserSettings.ShowLeaderboardAtStartup
-        If UserSettings.UseClipboard Then
+        f.txtEditorProgram.Text = MySettings.TextEditor
+        f.txtLeaderboardCs.Text = MySettings.LeaderboardConnectionString
+        f.updnFolderSaves.Value = MySettings.RecentFolders
+        f.optUseWildcards.Checked = MySettings.AutoSearch
+        f.optEditNewFiles.Checked = MySettings.EditNew
+        f.chkShowLeaderboard.Checked = MySettings.ShowLeaderboardAtStartup
+        If MySettings.UseClipboard Then
             f.rbClipboard.Checked = True
         Else
             f.rbTempFile.Checked = True
         End If
-        f.optShowGitBranch.Checked = UserSettings.ShowBranch
-        f.optSpacesAreWildcards.Checked = UserSettings.WildcardSpaces
+        f.optShowGitBranch.Checked = MySettings.ShowBranch
+        f.optSpacesAreWildcards.Checked = MySettings.WildcardSpaces
         f.optBeep.Checked = Textify.ErrorAlert.Beep
-        f.optDetectOldSquealerObjects.Checked = UserSettings.DetectSquealerObjects
-        Select Case UserSettings.DirStyle
+        f.optDetectOldSquealerObjects.Checked = MySettings.DetectSquealerObjects
+        Select Case MySettings.DirStyle
             Case eDirectoryStyle.compact.ToString
                 f.rbCompact.Checked = True
             Case eDirectoryStyle.full.ToString
@@ -1523,37 +1497,37 @@ Module Main
 
         f.ShowDialog()
 
-        UserSettings.TextEditor = f.txtEditorProgram.Text
-        UserSettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
-        UserSettings.RecentFolders = CInt(f.updnFolderSaves.Value)
-        UserSettings.AutoSearch = f.optUseWildcards.Checked
-        UserSettings.EditNew = f.optEditNewFiles.Checked
-        UserSettings.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
-        UserSettings.UseClipboard = f.rbClipboard.Checked
-        UserSettings.ShowBranch = f.optShowGitBranch.Checked
-        UserSettings.WildcardSpaces = f.optSpacesAreWildcards.Checked
+        MySettings.TextEditor = f.txtEditorProgram.Text
+        MySettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
+        MySettings.RecentFolders = CInt(f.updnFolderSaves.Value)
+        MySettings.AutoSearch = f.optUseWildcards.Checked
+        MySettings.EditNew = f.optEditNewFiles.Checked
+        MySettings.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
+        MySettings.UseClipboard = f.rbClipboard.Checked
+        MySettings.ShowBranch = f.optShowGitBranch.Checked
+        MySettings.WildcardSpaces = f.optSpacesAreWildcards.Checked
         Textify.ErrorAlert.Beep = f.optBeep.Checked
-        UserSettings.DetectSquealerObjects = f.optDetectOldSquealerObjects.Checked
+        MySettings.DetectSquealerObjects = f.optDetectOldSquealerObjects.Checked
         If f.rbCompact.Checked Then
-            UserSettings.DirStyle = eDirectoryStyle.compact.ToString
+            MySettings.DirStyle = eDirectoryStyle.compact.ToString
         ElseIf f.rbFull.Checked Then
-            UserSettings.DirStyle = eDirectoryStyle.full.ToString
+            MySettings.DirStyle = eDirectoryStyle.full.ToString
         Else
-            UserSettings.DirStyle = eDirectoryStyle.symbolic.ToString
+            MySettings.DirStyle = eDirectoryStyle.symbolic.ToString
         End If
 
-        My.Configger.SaveSetting(NameOf(UserSettings.TextEditor), UserSettings.TextEditor)
-        My.Configger.SaveSetting(NameOf(UserSettings.LeaderboardConnectionString), UserSettings.LeaderboardConnectionString)
-        My.Configger.SaveSetting(NameOf(UserSettings.RecentFolders), UserSettings.RecentFolders)
-        My.Configger.SaveSetting(NameOf(UserSettings.AutoSearch), UserSettings.AutoSearch)
-        My.Configger.SaveSetting(NameOf(UserSettings.EditNew), UserSettings.EditNew)
-        My.Configger.SaveSetting(NameOf(UserSettings.ShowLeaderboardAtStartup), UserSettings.ShowLeaderboardAtStartup)
-        My.Configger.SaveSetting(NameOf(UserSettings.UseClipboard), UserSettings.UseClipboard)
-        My.Configger.SaveSetting(NameOf(UserSettings.DetectSquealerObjects), UserSettings.DetectSquealerObjects)
-        My.Configger.SaveSetting(NameOf(UserSettings.ShowBranch), UserSettings.ShowBranch)
-        My.Configger.SaveSetting(NameOf(UserSettings.WildcardSpaces), UserSettings.WildcardSpaces)
+        My.Configger.SaveSetting(NameOf(MySettings.TextEditor), MySettings.TextEditor)
+        My.Configger.SaveSetting(NameOf(MySettings.LeaderboardConnectionString), MySettings.LeaderboardConnectionString)
+        My.Configger.SaveSetting(NameOf(MySettings.RecentFolders), MySettings.RecentFolders)
+        My.Configger.SaveSetting(NameOf(MySettings.AutoSearch), MySettings.AutoSearch)
+        My.Configger.SaveSetting(NameOf(MySettings.EditNew), MySettings.EditNew)
+        My.Configger.SaveSetting(NameOf(MySettings.ShowLeaderboardAtStartup), MySettings.ShowLeaderboardAtStartup)
+        My.Configger.SaveSetting(NameOf(MySettings.UseClipboard), MySettings.UseClipboard)
+        My.Configger.SaveSetting(NameOf(MySettings.DetectSquealerObjects), MySettings.DetectSquealerObjects)
+        My.Configger.SaveSetting(NameOf(MySettings.ShowBranch), MySettings.ShowBranch)
+        My.Configger.SaveSetting(NameOf(MySettings.WildcardSpaces), MySettings.WildcardSpaces)
         My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
-        My.Configger.SaveSetting(NameOf(UserSettings.DirStyle), UserSettings.DirStyle)
+        My.Configger.SaveSetting(NameOf(MySettings.DirStyle), MySettings.DirStyle)
 
     End Sub
 
@@ -2526,21 +2500,11 @@ Module Main
 
 #Region " Misc "
 
-    Private Function IsStarWarsDay() As Boolean
-
-        'todo: turn star wars day back on
-        If Now.Month = 5 AndAlso Now.Day = 4 AndAlso False Then ' added false to hide this for now
-            Return True
-        Else
-            Return False
-        End If
-    End Function
-
     Private Sub ShowLeaderboard(topN As Integer)
         Textify.WriteLine("Retrieving scores...")
         Console.WriteLine()
         Dim lb As New AsciiEngine.Leaderboard
-        lb.SqlConnectionString = UserSettings.LeaderboardConnectionString
+        lb.SqlConnectionString = MySettings.LeaderboardConnectionString
         lb.SqlLoadScores(topN)
         Dim i As Integer = 0
         For Each s As AsciiEngine.Leaderboard.Score In lb.Items
@@ -2549,73 +2513,7 @@ Module Main
         Next
         Console.WriteLine()
     End Sub
-    Public Class SpinnyProgress
 
-        Const TicksPerSecond = 10000000 ' 10 million
-
-        Private _Index As Integer = 0
-        Private _SymbolString As String
-        Private _Symbols As New List(Of Char)
-        Private _AnimationsPerSecond As Integer
-        Private _LastTick As Long = DateTime.Now.Ticks
-
-        Public Sub New()
-            Me.New("/—\|", 4)
-        End Sub
-
-        Public Sub New(s As String)
-            Me.New(s, 4)
-        End Sub
-
-        Public Sub New(AnimationsPerSecond As Integer)
-            Me.New("/—\|", AnimationsPerSecond)
-        End Sub
-
-        Public Sub New(s As String, AnimationsPerSecond As Integer)
-            _Symbols.AddRange(s.ToCharArray)
-            _AnimationsPerSecond = AnimationsPerSecond
-            Console.Write(CurrentSymbol)
-        End Sub
-
-        Private Function CurrentSymbol() As String
-
-            If Console.CursorLeft > Console.BufferWidth - 2 Then
-                Return "."
-            Else
-                Return _Symbols(_Index)
-            End If
-
-        End Function
-
-        Public Sub DoStep(final As Boolean)
-
-            Console.Write(Chr(8) & ".")
-
-            If DateTime.Now.Ticks - _LastTick > TicksPerSecond / _AnimationsPerSecond Then
-                _LastTick = DateTime.Now.Ticks
-                _Index += 1
-                If _Index >= _Symbols.Count Then
-                    _Index = 0
-                End If
-            End If
-
-            If final Then
-                Console.WriteLine("*")
-            Else
-                Console.Write(CurrentSymbol)
-            End If
-
-        End Sub
-
-        Public Sub DoStep()
-            DoStep(False)
-        End Sub
-
-        Public Sub Finish()
-            DoStep(True)
-        End Sub
-
-    End Class
 
     Private Function SpitDashes(s As String, marker As String) As String
         Return New String("-"c, 5) & " " & s & " " & New String("-"c, 100 - s.Length) & " " & marker
@@ -2885,8 +2783,6 @@ Module Main
 
             While DbReader.Read
 
-                'Dim Result As String = 
-
                 Textify.SayBulletLine(Textify.eBullet.Arrow, DbReader.GetString(2)) ' @@version
                 Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("[{0}].[{1}]", DbReader.GetString(0), DbReader.GetString(1)))
                 Textify.SayBulletLine(Textify.eBullet.Arrow, String.Format("{0} table(s)", DbReader.GetInt32(3).ToString))
@@ -2929,7 +2825,7 @@ Module Main
 
             Dim TableReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.AutoGetTables, DbTables).ExecuteReader
 
-            Dim spinny As New SpinnyProgress()
+            Dim spinny As New SpinCursor()
 
 
             While TableReader.Read
@@ -2945,7 +2841,7 @@ Module Main
                 Dim GenFromColumns As New List(Of String)
                 Dim GenValuesColumns As New List(Of String)
 
-                spinny.DoStep()
+                spinny.Animate()
 
                 Using DbColumns As SqlClient.SqlConnection = New SqlClient.SqlConnection(cs)
 
@@ -3192,7 +3088,7 @@ Module Main
 
             Dim ObjectReader As SqlClient.SqlDataReader = New SqlClient.SqlCommand(My.Resources.ObjectList, DbObjects).ExecuteReader
 
-            Dim spinny As New SpinnyProgress()
+            Dim spinny As New SpinCursor()
 
             While ObjectReader.Read ' loop thru procs, views, functions
 
@@ -3298,7 +3194,7 @@ Module Main
                     ProcCount += 1
                     tempfile.Writeline(ObjectName & " -- OK")
                 End If
-                spinny.DoStep()
+                spinny.Animate()
 
                 If Console.KeyAvailable() Then
                     Throw New System.Exception("Keyboard interrupt.")

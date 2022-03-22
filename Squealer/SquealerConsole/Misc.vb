@@ -17,4 +17,15 @@
 
     End Function
 
+    Public Shared Function IsStarWarsDay() As Boolean
+
+        'todo: turn star wars day back on
+        If Now.Month = 5 AndAlso Now.Day = 4 AndAlso False Then ' added false to hide this for now
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
+
 End Class
