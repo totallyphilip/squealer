@@ -1,13 +1,17 @@
 ﻿Public Class Misc
-    Public Shared Function WildcardInterpreter(s As String, SpaceIsWild As Boolean, EdgeIsWild As Boolean, FindExact As Boolean) As String
+    Public Shared Function WildcardInterpreter(s As String, spaces As Boolean, edges As Boolean, FindExact As Boolean) As String
+        WildcardInterpreter = WildcardInterpreter(s, New UserSettings.WildcardClass With {.UseEdges = edges, .UseSpaces = spaces}, FindExact)
+    End Function
 
-        If SpaceIsWild Then
+    Public Shared Function WildcardInterpreter(s As String, w As UserSettings.WildcardClass, FindExact As Boolean) As String
+
+        If w.UseSpaces Then
             s = s.Replace(" "c, "*"c)
         End If
 
         If String.IsNullOrWhiteSpace(s) Then
             s = "*"
-        ElseIf EdgeIsWild AndAlso Not FindExact Then
+        ElseIf w.UseEdges AndAlso Not FindExact Then
             s = "*" & s & "*"
         End If
         While s.Contains("**")

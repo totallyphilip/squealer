@@ -23,8 +23,8 @@ Partial Class SquealerSettings
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.optBeep = New System.Windows.Forms.CheckBox()
-        Me.optUseWildcards = New System.Windows.Forms.CheckBox()
-        Me.optSpacesAreWildcards = New System.Windows.Forms.CheckBox()
+        Me.chkEdgesWild = New System.Windows.Forms.CheckBox()
+        Me.chkSpacesWild = New System.Windows.Forms.CheckBox()
         Me.optEditNewFiles = New System.Windows.Forms.CheckBox()
         Me.optShowGitBranch = New System.Windows.Forms.CheckBox()
         Me.rbCompact = New System.Windows.Forms.RadioButton()
@@ -50,9 +50,10 @@ Partial Class SquealerSettings
         Me.btnLeaderboardSql = New System.Windows.Forms.Button()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.txtDirExample = New System.Windows.Forms.TextBox()
         Me.tabOutput = New System.Windows.Forms.TabPage()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.tabWildcards = New System.Windows.Forms.TabPage()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -65,13 +66,12 @@ Partial Class SquealerSettings
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtEditorProgram = New System.Windows.Forms.TextBox()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
-        Me.Label9 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.tabOutput.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
+        Me.tabWildcards.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.tabEasterEgg.SuspendLayout()
         Me.SuspendLayout()
@@ -86,25 +86,25 @@ Partial Class SquealerSettings
         Me.optBeep.Text = "Beep on error"
         Me.optBeep.UseVisualStyleBackColor = True
         '
-        'optUseWildcards
+        'chkEdgesWild
         '
-        Me.optUseWildcards.AutoSize = True
-        Me.optUseWildcards.Location = New System.Drawing.Point(9, 39)
-        Me.optUseWildcards.Name = "optUseWildcards"
-        Me.optUseWildcards.Size = New System.Drawing.Size(135, 17)
-        Me.optUseWildcards.TabIndex = 3
-        Me.optUseWildcards.Text = "Surround with asterisks"
-        Me.optUseWildcards.UseVisualStyleBackColor = True
+        Me.chkEdgesWild.AutoSize = True
+        Me.chkEdgesWild.Location = New System.Drawing.Point(9, 39)
+        Me.chkEdgesWild.Name = "chkEdgesWild"
+        Me.chkEdgesWild.Size = New System.Drawing.Size(135, 17)
+        Me.chkEdgesWild.TabIndex = 3
+        Me.chkEdgesWild.Text = "Surround with asterisks"
+        Me.chkEdgesWild.UseVisualStyleBackColor = True
         '
-        'optSpacesAreWildcards
+        'chkSpacesWild
         '
-        Me.optSpacesAreWildcards.AutoSize = True
-        Me.optSpacesAreWildcards.Location = New System.Drawing.Point(9, 62)
-        Me.optSpacesAreWildcards.Name = "optSpacesAreWildcards"
-        Me.optSpacesAreWildcards.Size = New System.Drawing.Size(146, 17)
-        Me.optSpacesAreWildcards.TabIndex = 5
-        Me.optSpacesAreWildcards.Text = "Treat spaces as asterisks"
-        Me.optSpacesAreWildcards.UseVisualStyleBackColor = True
+        Me.chkSpacesWild.AutoSize = True
+        Me.chkSpacesWild.Location = New System.Drawing.Point(9, 62)
+        Me.chkSpacesWild.Name = "chkSpacesWild"
+        Me.chkSpacesWild.Size = New System.Drawing.Size(146, 17)
+        Me.chkSpacesWild.TabIndex = 5
+        Me.chkSpacesWild.Text = "Treat spaces as asterisks"
+        Me.chkSpacesWild.UseVisualStyleBackColor = True
         '
         'optEditNewFiles
         '
@@ -333,7 +333,7 @@ Partial Class SquealerSettings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Tabs.Controls.Add(Me.tabGeneral)
         Me.Tabs.Controls.Add(Me.tabOutput)
-        Me.Tabs.Controls.Add(Me.TabPage3)
+        Me.Tabs.Controls.Add(Me.tabWildcards)
         Me.Tabs.Controls.Add(Me.TabPage4)
         Me.Tabs.Controls.Add(Me.tabEasterEgg)
         Me.Tabs.Location = New System.Drawing.Point(12, 12)
@@ -363,6 +363,15 @@ Partial Class SquealerSettings
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(160, 252)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(73, 13)
+        Me.Label9.TabIndex = 16
+        Me.Label9.Text = "project folders"
+        '
         'txtDirExample
         '
         Me.txtDirExample.Location = New System.Drawing.Point(8, 111)
@@ -386,22 +395,22 @@ Partial Class SquealerSettings
         Me.tabOutput.Text = "Output"
         Me.tabOutput.UseVisualStyleBackColor = True
         '
-        'TabPage3
+        'tabWildcards
         '
-        Me.TabPage3.Controls.Add(Me.Label4)
-        Me.TabPage3.Controls.Add(Me.Label8)
-        Me.TabPage3.Controls.Add(Me.Label1)
-        Me.TabPage3.Controls.Add(Me.txtTryIt)
-        Me.TabPage3.Controls.Add(Me.txtWildcardExample)
-        Me.TabPage3.Controls.Add(Me.optUseWildcards)
-        Me.TabPage3.Controls.Add(Me.optSpacesAreWildcards)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(531, 341)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Wildcards"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.tabWildcards.Controls.Add(Me.Label4)
+        Me.tabWildcards.Controls.Add(Me.Label8)
+        Me.tabWildcards.Controls.Add(Me.Label1)
+        Me.tabWildcards.Controls.Add(Me.txtTryIt)
+        Me.tabWildcards.Controls.Add(Me.txtWildcardExample)
+        Me.tabWildcards.Controls.Add(Me.chkEdgesWild)
+        Me.tabWildcards.Controls.Add(Me.chkSpacesWild)
+        Me.tabWildcards.Location = New System.Drawing.Point(4, 22)
+        Me.tabWildcards.Name = "tabWildcards"
+        Me.tabWildcards.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabWildcards.Size = New System.Drawing.Size(531, 341)
+        Me.tabWildcards.TabIndex = 2
+        Me.tabWildcards.Text = "RUNTIME"
+        Me.tabWildcards.UseVisualStyleBackColor = True
         '
         'Label4
         '
@@ -531,15 +540,6 @@ Partial Class SquealerSettings
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
         '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(160, 252)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(73, 13)
-        Me.Label9.TabIndex = 16
-        Me.Label9.Text = "project folders"
-        '
         'SquealerSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -560,8 +560,8 @@ Partial Class SquealerSettings
         Me.tabGeneral.PerformLayout()
         Me.tabOutput.ResumeLayout(False)
         Me.tabOutput.PerformLayout()
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabPage3.PerformLayout()
+        Me.tabWildcards.ResumeLayout(False)
+        Me.tabWildcards.PerformLayout()
         Me.TabPage4.ResumeLayout(False)
         Me.TabPage4.PerformLayout()
         Me.tabEasterEgg.ResumeLayout(False)
@@ -570,8 +570,8 @@ Partial Class SquealerSettings
 
     End Sub
     Friend WithEvents optBeep As System.Windows.Forms.CheckBox
-    Friend WithEvents optUseWildcards As System.Windows.Forms.CheckBox
-    Friend WithEvents optSpacesAreWildcards As System.Windows.Forms.CheckBox
+    Friend WithEvents chkEdgesWild As System.Windows.Forms.CheckBox
+    Friend WithEvents chkSpacesWild As System.Windows.Forms.CheckBox
     Friend WithEvents optEditNewFiles As System.Windows.Forms.CheckBox
     Friend WithEvents optShowGitBranch As System.Windows.Forms.CheckBox
     Friend WithEvents rbCompact As System.Windows.Forms.RadioButton
@@ -598,7 +598,7 @@ Partial Class SquealerSettings
     Friend WithEvents Tabs As Windows.Forms.TabControl
     Friend WithEvents tabGeneral As Windows.Forms.TabPage
     Friend WithEvents tabOutput As Windows.Forms.TabPage
-    Friend WithEvents TabPage3 As Windows.Forms.TabPage
+    Friend WithEvents tabWildcards As Windows.Forms.TabPage
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents TabPage4 As Windows.Forms.TabPage
     Friend WithEvents txtEditorProgram As Windows.Forms.TextBox

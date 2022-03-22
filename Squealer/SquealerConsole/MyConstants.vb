@@ -10,5 +10,6 @@
     Public Const ConnectionStringFilename As String = ".connectionstring"
     Public Const ConfigFilename As String = AppTitle & ".config"
     Public Const AutocreateFilename As String = "(" & AppTitle & ")"
+    Public Const WildcardAsterisks As String = "Wildcards"
 
 End Class

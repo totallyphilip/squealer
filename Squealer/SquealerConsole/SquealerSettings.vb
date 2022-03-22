@@ -6,15 +6,16 @@
         UpdateWildcardExample()
         UpdateDirectoryExample()
         Tabs.TabPages.Remove(tabEasterEgg)
+        tabWildcards.Text = MyConstants.WildcardAsterisks
         SetEditorAccess()
     End Sub
 
-    Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles optUseWildcards.CheckedChanged, optSpacesAreWildcards.CheckedChanged, txtTryIt.TextChanged
+    Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles chkEdgesWild.CheckedChanged, chkSpacesWild.CheckedChanged, txtTryIt.TextChanged
         UpdateWildcardExample()
     End Sub
 
     Private Sub UpdateWildcardExample()
-        txtWildcardExample.Text = Misc.WildcardInterpreter(txtTryIt.Text.Trim, optSpacesAreWildcards.Checked, optUseWildcards.Checked, False)
+        txtWildcardExample.Text = Misc.WildcardInterpreter(txtTryIt.Text.Trim, chkSpacesWild.Checked, chkEdgesWild.Checked, False)
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click

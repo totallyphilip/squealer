@@ -49,7 +49,7 @@ Module Main
 #Region " All The Definitions "
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
-    Private MySettings As New UserSettingsClass
+    Private MySettings As New UserSettings
 
     Private Class BatchParametersClass
 
@@ -318,13 +318,13 @@ Module Main
         MySettings.TextEditor = My.Configger.LoadSetting(NameOf(MySettings.TextEditor), "notepad.exe")
         MySettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(MySettings.LeaderboardConnectionString), String.Empty)
         MySettings.RecentFolders = My.Configger.LoadSetting(NameOf(MySettings.RecentFolders), 20)
-        MySettings.AutoSearch = My.Configger.LoadSetting(NameOf(MySettings.AutoSearch), False)
+        MySettings.Wildcards.UseEdges = My.Configger.LoadSetting(NameOf(MySettings.Wildcards.UseEdges), False)
         MySettings.EditNew = My.Configger.LoadSetting(NameOf(MySettings.EditNew), True)
         MySettings.UseClipboard = My.Configger.LoadSetting(NameOf(MySettings.UseClipboard), True)
         MySettings.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(MySettings.ShowLeaderboardAtStartup), False)
         MySettings.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(MySettings.DetectSquealerObjects), True)
         MySettings.ShowBranch = My.Configger.LoadSetting(NameOf(MySettings.ShowBranch), True)
-        MySettings.WildcardSpaces = My.Configger.LoadSetting(NameOf(MySettings.WildcardSpaces), False)
+        MySettings.Wildcards.UseSpaces = My.Configger.LoadSetting(NameOf(MySettings.Wildcards.UseSpaces), False)
         MySettings.DirStyle = My.Configger.LoadSetting(NameOf(MySettings.DirStyle), eDirectoryStyle.compact.ToString)
         Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
 
@@ -438,7 +438,7 @@ Module Main
                 Console.WriteLine()
                 Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & MyConstants.SquealerFileExtension)
             End If
-            s = Misc.WildcardInterpreter(s.Trim, MySettings.WildcardSpaces, MySettings.AutoSearch, FindExact)
+            s = Misc.WildcardInterpreter(s.Trim, MySettings.Wildcards, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
 
@@ -1209,7 +1209,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.explore.ToString Then
 
-                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardSpaces, MySettings.AutoSearch, False), WorkingFolder)
+                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.Wildcards.UseSpaces, MySettings.Wildcards.UseEdges, False), WorkingFolder)
 
 
 
@@ -1474,7 +1474,7 @@ Module Main
         f.txtEditorProgram.Text = MySettings.TextEditor
         f.txtLeaderboardCs.Text = MySettings.LeaderboardConnectionString
         f.updnFolderSaves.Value = MySettings.RecentFolders
-        f.optUseWildcards.Checked = MySettings.AutoSearch
+        f.chkEdgesWild.Checked = MySettings.Wildcards.UseEdges
         f.optEditNewFiles.Checked = MySettings.EditNew
         f.chkShowLeaderboard.Checked = MySettings.ShowLeaderboardAtStartup
         If MySettings.UseClipboard Then
@@ -1483,7 +1483,7 @@ Module Main
             f.rbTempFile.Checked = True
         End If
         f.optShowGitBranch.Checked = MySettings.ShowBranch
-        f.optSpacesAreWildcards.Checked = MySettings.WildcardSpaces
+        f.chkSpacesWild.Checked = MySettings.Wildcards.UseSpaces
         f.optBeep.Checked = Textify.ErrorAlert.Beep
         f.optDetectOldSquealerObjects.Checked = MySettings.DetectSquealerObjects
         Select Case MySettings.DirStyle
@@ -1500,12 +1500,12 @@ Module Main
         MySettings.TextEditor = f.txtEditorProgram.Text
         MySettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
         MySettings.RecentFolders = CInt(f.updnFolderSaves.Value)
-        MySettings.AutoSearch = f.optUseWildcards.Checked
+        MySettings.Wildcards.UseEdges = f.chkEdgesWild.Checked
         MySettings.EditNew = f.optEditNewFiles.Checked
         MySettings.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
         MySettings.UseClipboard = f.rbClipboard.Checked
         MySettings.ShowBranch = f.optShowGitBranch.Checked
-        MySettings.WildcardSpaces = f.optSpacesAreWildcards.Checked
+        MySettings.Wildcards.UseSpaces = f.chkSpacesWild.Checked
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         MySettings.DetectSquealerObjects = f.optDetectOldSquealerObjects.Checked
         If f.rbCompact.Checked Then
@@ -1519,13 +1519,13 @@ Module Main
         My.Configger.SaveSetting(NameOf(MySettings.TextEditor), MySettings.TextEditor)
         My.Configger.SaveSetting(NameOf(MySettings.LeaderboardConnectionString), MySettings.LeaderboardConnectionString)
         My.Configger.SaveSetting(NameOf(MySettings.RecentFolders), MySettings.RecentFolders)
-        My.Configger.SaveSetting(NameOf(MySettings.AutoSearch), MySettings.AutoSearch)
+        My.Configger.SaveSetting(NameOf(MySettings.Wildcards.UseEdges), MySettings.Wildcards.UseEdges)
         My.Configger.SaveSetting(NameOf(MySettings.EditNew), MySettings.EditNew)
         My.Configger.SaveSetting(NameOf(MySettings.ShowLeaderboardAtStartup), MySettings.ShowLeaderboardAtStartup)
         My.Configger.SaveSetting(NameOf(MySettings.UseClipboard), MySettings.UseClipboard)
         My.Configger.SaveSetting(NameOf(MySettings.DetectSquealerObjects), MySettings.DetectSquealerObjects)
         My.Configger.SaveSetting(NameOf(MySettings.ShowBranch), MySettings.ShowBranch)
-        My.Configger.SaveSetting(NameOf(MySettings.WildcardSpaces), MySettings.WildcardSpaces)
+        My.Configger.SaveSetting(NameOf(MySettings.Wildcards.UseSpaces), MySettings.Wildcards.UseSpaces)
         My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
         My.Configger.SaveSetting(NameOf(MySettings.DirStyle), MySettings.DirStyle)
 

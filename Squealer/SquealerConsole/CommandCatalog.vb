@@ -324,11 +324,11 @@
                 _CanFileSearch = True
                 _ParameterDefinition = String.Format("{0}|#", CommandCatalog.CommandDefinition.WildcardText)
                 _ParameterRequired = req
-                Dim temp As New UserSettingsClass() ' need an instance to expose a property name
+                Dim temp As New UserSettings() ' need an instance to expose a property name
                 For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(True).Split((New Char() {"|"c}))
                     _Options.Items.Add(New CommandCatalog.CommandSwitch(s))
                 Next
-                _Options.Items.Add(New CommandSwitch(String.Format("x;exact filename match, override {0} setting", NameOf(temp.AutoSearch))))
+                _Options.Items.Add(New CommandSwitch(String.Format("x;exact filename match, override {0} setting", MyConstants.WildcardAsterisks)))
                 _Options.Items.Add(New CommandSwitch("today;files with today's date"))
                 _Options.Items.Add(New CommandSwitch("cs;case-sensitive text search"))
                 _Options.Items.Add(New CommandSwitch("code;with pre/post code"))
@@ -440,8 +440,8 @@
             End If
 
             If Me.CanFileSearch Then
-                Dim temp As New UserSettingsClass() ' need an instance to expose a property name
-                Textify.WriteLine(String.Format("See Wildcards setting. I.E. 'foo bar' may be treated as '*foo*bar*'", NameOf(temp.AutoSearch)))
+                Dim temp As New UserSettings() ' need an instance to expose a property name
+                Textify.WriteLine(String.Format("See {0} setting. I.E. 'foo bar' may be treated as '*foo*bar*'", MyConstants.WildcardAsterisks))
                 Console.WriteLine()
             End If
 

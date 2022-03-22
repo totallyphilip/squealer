@@ -69,7 +69,4 @@ Public Class GitShell
 
     End Function
 
-
-
-
 End Class

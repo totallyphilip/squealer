@@ -1,4 +1,35 @@
-﻿Public Class UserSettingsClass
+﻿Public Class UserSettings
+
+    Public Class WildcardClass
+
+        Private _UseEdges As Boolean
+        Public Property UseEdges As Boolean
+            Get
+                Return _UseEdges
+            End Get
+            Set(value As Boolean)
+                _UseEdges = value
+            End Set
+        End Property
+
+        Private _UseSpaces As Boolean
+        Public Property UseSpaces As Boolean
+            Get
+                Return _UseSpaces
+            End Get
+            Set(value As Boolean)
+                _UseSpaces = value
+            End Set
+        End Property
+
+    End Class
+
+    Private _Wildcards As New WildcardClass
+    Public ReadOnly Property Wildcards As WildcardClass
+        Get
+            Return _Wildcards
+        End Get
+    End Property
 
     Private _TextEditor As String
     Public Property TextEditor As String
@@ -50,15 +81,6 @@
         End Set
     End Property
 
-    Private _AutoSearch As Boolean
-    Public Property AutoSearch As Boolean
-        Get
-            Return _AutoSearch
-        End Get
-        Set(value As Boolean)
-            _AutoSearch = value
-        End Set
-    End Property
 
     Private _UseClipboard As Boolean
     Public Property UseClipboard As Boolean
@@ -80,15 +102,6 @@
         End Set
     End Property
 
-    Private _SpacesAreWildcards As Boolean
-    Public Property WildcardSpaces As Boolean
-        Get
-            Return _SpacesAreWildcards
-        End Get
-        Set(value As Boolean)
-            _SpacesAreWildcards = value
-        End Set
-    End Property
 
     Public LastRunVersion As String = String.Empty ' this is just to generate an intellisense name
 
