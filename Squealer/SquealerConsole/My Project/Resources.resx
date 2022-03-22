@@ -154,12 +154,6 @@
   <data name="SqlEndProcedure1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\sql\sqlendprocedure1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlEndProcedure2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendprocedure2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="SqlEndProcedure3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendprocedure3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="SqlEndScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\sql\sqlendscalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -267,5 +261,11 @@ To play the game, type HELP STARWARS at the command prompt.</value>
   </data>
   <data name="RebelAlliance" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\images\rebelalliance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SqlEndProcedure2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendprocedure2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SqlEndProcedure3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlendprocedure3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

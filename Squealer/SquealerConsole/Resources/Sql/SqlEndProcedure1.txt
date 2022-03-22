@@ -4,57 +4,55 @@
 ######################################################################*/
 
 /***********************************************************************
-	Commit the transaction. If this is the parent process, then all
-	pending work will be written to the database. If this is a child
-    process, then the commit statement will merely decrement the
-	@@trancount system variable.
+	Commit the transaction. If we are in a nested transaction, this
+	decrements the transaction count.
 ***********************************************************************/
 
               -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
-	print concat('commit - nest level is ',@SqlrInternalNestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+
+	print concat('commit - ',object_schema_name(@@procid),'.',object_name(@@procid),' - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 	commit transaction
+
 end try
 
 
 /***********************************************************************
-	Rollback the transaction. If we caught a new error, construct the
-    error message to bubble up. If a child process threw the error, then
-    the message was already constructed. A deadlock from a child process
-    will be thrown by the child as error 50001, but it will be caught by
-    the parent process as 18054.
-
-    (Error 18054 means "error raised but no corresponding user-defined
-    error message exists in sys.messages." Without permission to use
-    sp_addmessage to add a custom "deadlock" message, we must rely on
-    the 18054 error as an indicator that the child process tried to
-    throw a "deadlock" exception.)
+	Rollback the transaction if we're at the top procedure.
 ***********************************************************************/
 
               -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
 
 begin catch
 
-	-- Determine the exception unless it was manually thrown by setting the error variable.
-	if @SqlrInternalErrorNumber = 0
-		set @SqlrInternalErrorNumber = error_number();
+	set @Squealer_ErrorNumber = error_number();
 
+	print concat('exception - ',object_schema_name(@@procid),'.',object_name(@@procid),' - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
-	declare @SqlrInternalErrorMessage varchar(7000)
-	if @SqlrInternalErrorNumber = -999999
-		or
-		(
-			@SqlrInternalErrorNumber > 0
-			and @SqlrInternalErrorNumber <> 50000
-			and @SqlrInternalErrorNumber <> 18054
-		)
-	-- Construct the error message.
+	if @Squealer_NestLevel =	0
+	-- We're at the outermost procedure, so rollback the whole transaction.
 	begin
-		-- Build the error message and embed the details of the error into the message.
-		set @SqlrInternalErrorMessage =
-			'Sql Error: ' + convert(varchar,@SqlrInternalErrorNumber) + '; ' +
-			'Severity: ' + convert(varchar,error_severity()) + '; ' +
-			'State: ' + convert(varchar,error_state()) + '; ' +
-			'Procedure: ' + coalesce(error_procedure(),'n/a') + '; ' +
-			'Line: ' + convert(varchar,error_line()) + '; ' +
-			'Message: ' + error_message();
+		if xact_state() in (1,-1)
+			rollback transaction
+	end
+	else
+	-- We are still	within a nested	procedure, so just decrement the transaction count.
+	begin
+		if xact_state() = 1
+			commit transaction
+	end
+
+	declare @Squealer_ErrorSeverity int = error_severity();
+	declare @Squealer_ErrorState int = error_state();
+	declare @Squealer_ErrorMessage varchar(max);
+	if @Squealer_ErrorNumber = 50000
+		set @Squealer_ErrorMessage = concat(error_message(),char(13),char(10),'-> Called by ',object_schema_name(@@procid),'.',object_name(@@procid))
+	else
+		set @Squealer_ErrorMessage = concat(
+			'Procedure: ',isnull(error_procedure(),'n/a')
+			,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
+--			,char(13),char(10),'Severity: ',convert(varchar,@Squealer_ErrorSeverity)
+--			,char(13),char(10),'State: ',convert(varchar,@Squealer_ErrorState)
+			,char(13),char(10),'Line: ',convert(varchar,error_line())
+			,char(13),char(10),'Message: ',error_message()
+		);

@@ -422,8 +422,9 @@ Namespace My.Resources
         '''set nocount on;
         '''set quoted_identifier on;
         '''
-        '''declare @SqlrInternalErrorNumber	int; -- Error code to return to parent process.
-        '''declare @SqlrInternalNestLevel		int; -- Current nested level of procedure ca [rest of string was truncated]&quot;;.
+        '''declare @Squealer_ErrorNumber int = 0;
+        '''declare @SqlrInternalErrorNumber int; -- for backward compatibility
+        '''declare @Squealer_NestLevel int; -- Current neste [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlBeginProcedure() As String
             Get
@@ -627,11 +628,12 @@ Namespace My.Resources
         '''######################################################################*/
         '''
         '''/***********************************************************************
-        '''	Commit the transaction. If this is the parent process, then all
-        '''	pending work will be written to the database. If this is a child
-        '''    process, then the commit statement will merely decrement the
-        '''	@@trancount system variable.
-        '''******** [rest of string was truncated]&quot;;.
+        '''	Commit the transaction. If we are in a nested transaction, this
+        '''	decrements the transaction count.
+        '''***********************************************************************/
+        '''
+        '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+        ''' [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property SqlEndProcedure1() As String
             Get

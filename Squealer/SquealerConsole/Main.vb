@@ -1723,7 +1723,7 @@ Module Main
             Dim InParameters As DataTable = GetParameters(InputXml)
 
             If InParameters.Rows.Count = 0 Then
-                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name="" MyParameter"" Type="" varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
+                OutParameters.AppendChild(OutputXml.CreateComment("<Parameter Name=""MyParameter"" Type=""varchar(50)"" " & IIf(obj.Type.LongType = SquealerObjectType.eType.StoredProcedure, "Output=""False"" ", String.Empty).ToString & "DefaultValue="""" Comments="""" />"))
             Else
                 For Each InParameter As DataRow In InParameters.Select()
                     Dim OutParameter As Xml.XmlElement = OutputXml.CreateElement("Parameter")
@@ -1839,19 +1839,16 @@ Module Main
                 & vbCrLf & vbCrLf
             Select Case obj.Type.LongType
                 Case SquealerObjectType.eType.InlineTableFunction
-                    InCode &= "select 'hello world! love, {THIS}' as [MyColumn]"
+                    InCode &= "select 'hello world! love, ``this``' as [MyColumn]"
                 Case SquealerObjectType.eType.MultiStatementTableFunction
-                    InCode &= "insert @TableValue select 'hello world! love, {THIS}'"
+                    InCode &= "insert @TableValue select 'hello world! love, ``this``'"
                 Case SquealerObjectType.eType.ScalarFunction
-                    InCode &= "set @Result = 'hello world! love, {THIS}'"
+                    InCode &= "set @Result = 'hello world! love, ``this``'"
                 Case SquealerObjectType.eType.StoredProcedure
-                    InCode &= "select 'hello world! love, {THIS}'"
+                    InCode &= "select 'hello world! love, ``this``'"
                 Case SquealerObjectType.eType.View
-                    InCode &= "select 'hello world! love, {THIS}' as hello"
+                    InCode &= "select 'hello world! love, ``this``' as hello"
             End Select
-
-
-
 
         End If
 
@@ -1983,7 +1980,7 @@ Module Main
 
             Dim parms As String = String.Empty
             For Each p As ParameterClass In Parameters.Items
-                parms &= String.Format("<Parameter Name="" {0}"" Type=""{1}"" Output=""{2}"" />", p.Name, p.Type, p.IsOutput.ToString)
+                parms &= String.Format("<Parameter Name=""{0}"" Type=""{1}"" Output=""{2}"" />", p.Name, p.Type, p.IsOutput.ToString)
             Next
             Template = Template.Replace("<!--Parameters-->", parms)
         End If

@@ -11,14 +11,14 @@ set ansi_nulls on;
 set nocount on;
 set quoted_identifier on;
 
-declare @SqlrInternalErrorNumber	int; -- Error code to return to parent process.
-declare @SqlrInternalNestLevel		int; -- Current nested level of procedure calls.
-set @SqlrInternalNestLevel = @@trancount;
-print concat('begin - nest level is ',@SqlrInternalNestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+declare @Squealer_ErrorNumber int = 0;
+declare @SqlrInternalErrorNumber int; -- for backward compatibility
+declare @Squealer_NestLevel int; -- Current nested level of procedure calls.
+set @Squealer_NestLevel = @@trancount;
+print concat('begin - ',object_schema_name(@@procid),'.',object_name(@@procid),' - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 SquealerDeadlock:
 begin try
-	set @SqlrInternalErrorNumber = 0; -- Reset the error variable.
 	begin transaction
 
 /*######################################################################
