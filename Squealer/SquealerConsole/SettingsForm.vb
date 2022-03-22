@@ -6,7 +6,7 @@
         UpdateWildcardExample()
         UpdateDirectoryExample()
         Tabs.TabPages.Remove(tabEasterEgg)
-        tabWildcards.Text = MyConstants.WildcardAsterisks
+        tabWildcards.Text = Constants.WildcardAsterisks
         SetEditorAccess()
     End Sub
 
@@ -95,8 +95,7 @@
     End Sub
 
     Private Sub SetEditorAccess()
-        txtEditorProgram.Enabled = Not (chkOutputDefaultEditor.Checked AndAlso chkConfigDefaultEditor.Checked AndAlso chkSquealerDefaultEditor.Checked)
-        btnEditorDialog.Enabled = txtEditorProgram.Enabled
+        gbTextEditor.Visible = Not (chkOutputDefaultEditor.Checked AndAlso chkConfigDefaultEditor.Checked AndAlso chkSquealerDefaultEditor.Checked)
     End Sub
 
 End Class

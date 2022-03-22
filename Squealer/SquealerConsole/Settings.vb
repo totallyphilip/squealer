@@ -24,10 +24,51 @@
 
     End Class
 
+    Public Class OpenWithDefaultClass
+
+        Private _SqlFiles As Boolean
+        Public Property SqlFiles As Boolean
+            Get
+                Return _SqlFiles
+            End Get
+            Set(value As Boolean)
+                _SqlFiles = value
+            End Set
+        End Property
+
+        Private _ConfigFiles As Boolean
+        Public Property ConfigFiles As Boolean
+            Get
+                Return _ConfigFiles
+            End Get
+            Set(value As Boolean)
+                _ConfigFiles = value
+            End Set
+        End Property
+
+        Private _SquealerFiles As Boolean
+        Public Property SquealerFiles As Boolean
+            Get
+                Return _SquealerFiles
+            End Get
+            Set(value As Boolean)
+                _SquealerFiles = value
+            End Set
+        End Property
+
+    End Class
+
     Private _Wildcards As New WildcardClass
     Public ReadOnly Property Wildcards As WildcardClass
         Get
             Return _Wildcards
+        End Get
+    End Property
+
+    Private _OpenWithDefault As New OpenWithDefaultClass
+    Public ReadOnly Property OpenWithDefault As OpenWithDefaultClass
+        Get
+            Return _OpenWithDefault
         End Get
     End Property
 
@@ -129,9 +170,13 @@
     Public Sub Show()
 
         Dim f As New SettingsForm
+        f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
+        f.chkConfigDefaultEditor.Checked = Me.OpenWithDefault.ConfigFiles
+        f.chkSquealerDefaultEditor.Checked = Me.OpenWithDefault.SquealerFiles
         f.txtEditorProgram.Text = Me.TextEditor
         f.txtLeaderboardCs.Text = Me.LeaderboardConnectionString
         f.updnFolderSaves.Value = Me.RecentFolders
+        f.chkSpacesWild.Checked = Me.Wildcards.UseSpaces
         f.chkEdgesWild.Checked = Me.Wildcards.UseEdges
         f.optEditNewFiles.Checked = Me.EditNew
         f.chkShowLeaderboard.Checked = Me.ShowLeaderboardAtStartup
@@ -141,7 +186,6 @@
             f.rbTempFile.Checked = True
         End If
         f.optShowGitBranch.Checked = Me.ShowBranch
-        f.chkSpacesWild.Checked = Me.Wildcards.UseSpaces
         f.optBeep.Checked = Textify.ErrorAlert.Beep
         f.optDetectOldSquealerObjects.Checked = Me.DetectSquealerObjects
         Select Case Me.DirStyle
@@ -153,17 +197,21 @@
                 f.rbSymbolic.Checked = True
         End Select
 
+        f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.ShowDialog()
 
+        Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
+        Me.OpenWithDefault.ConfigFiles = f.chkConfigDefaultEditor.Checked
+        Me.OpenWithDefault.SquealerFiles = f.chkSquealerDefaultEditor.Checked
         Me.TextEditor = f.txtEditorProgram.Text
         Me.LeaderboardConnectionString = f.txtLeaderboardCs.Text
         Me.RecentFolders = CInt(f.updnFolderSaves.Value)
+        Me.Wildcards.UseSpaces = f.chkSpacesWild.Checked
         Me.Wildcards.UseEdges = f.chkEdgesWild.Checked
         Me.EditNew = f.optEditNewFiles.Checked
         Me.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
         Me.UseClipboard = f.rbClipboard.Checked
         Me.ShowBranch = f.optShowGitBranch.Checked
-        Me.Wildcards.UseSpaces = f.chkSpacesWild.Checked
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectSquealerObjects = f.optDetectOldSquealerObjects.Checked
         If f.rbCompact.Checked Then
@@ -174,16 +222,19 @@
             Me.DirStyle = eDirectoryStyle.symbolic.ToString
         End If
 
+        My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SqlFiles), Me.OpenWithDefault.SqlFiles)
+        My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.ConfigFiles), Me.OpenWithDefault.ConfigFiles)
+        My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SquealerFiles), Me.OpenWithDefault.SquealerFiles)
         My.Configger.SaveSetting(NameOf(Me.TextEditor), Me.TextEditor)
         My.Configger.SaveSetting(NameOf(Me.LeaderboardConnectionString), Me.LeaderboardConnectionString)
         My.Configger.SaveSetting(NameOf(Me.RecentFolders), Me.RecentFolders)
+        My.Configger.SaveSetting(NameOf(Me.Wildcards.UseSpaces), Me.Wildcards.UseSpaces)
         My.Configger.SaveSetting(NameOf(Me.Wildcards.UseEdges), Me.Wildcards.UseEdges)
         My.Configger.SaveSetting(NameOf(Me.EditNew), Me.EditNew)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
         My.Configger.SaveSetting(NameOf(Me.UseClipboard), Me.UseClipboard)
         My.Configger.SaveSetting(NameOf(Me.DetectSquealerObjects), Me.DetectSquealerObjects)
         My.Configger.SaveSetting(NameOf(Me.ShowBranch), Me.ShowBranch)
-        My.Configger.SaveSetting(NameOf(Me.Wildcards.UseSpaces), Me.Wildcards.UseSpaces)
         My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
         My.Configger.SaveSetting(NameOf(Me.DirStyle), Me.DirStyle)
 

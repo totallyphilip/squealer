@@ -1,4 +1,4 @@
-﻿Public Class MyConstants
+﻿Public Class Constants
 
     Public Const AppTitle As String = "Squealer"
     Public Const DefaultConnectionString As String = "Server=MySqlServer;Initial Catalog=AdventureWorks;Trusted_Connection=True"

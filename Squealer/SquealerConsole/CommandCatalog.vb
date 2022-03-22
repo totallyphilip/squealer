@@ -328,7 +328,7 @@
                 For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(True).Split((New Char() {"|"c}))
                     _Options.Items.Add(New CommandCatalog.CommandSwitch(s))
                 Next
-                _Options.Items.Add(New CommandSwitch(String.Format("x;exact filename match, override {0} setting", MyConstants.WildcardAsterisks)))
+                _Options.Items.Add(New CommandSwitch(String.Format("x;exact filename match, override {0} setting", Constants.WildcardAsterisks)))
                 _Options.Items.Add(New CommandSwitch("today;files with today's date"))
                 _Options.Items.Add(New CommandSwitch("cs;case-sensitive text search"))
                 _Options.Items.Add(New CommandSwitch("code;with pre/post code"))
@@ -441,7 +441,7 @@
 
             If Me.CanFileSearch Then
                 Dim temp As New Settings() ' need an instance to expose a property name
-                Textify.WriteLine(String.Format("See {0} setting. I.E. 'foo bar' may be treated as '*foo*bar*'", MyConstants.WildcardAsterisks))
+                Textify.WriteLine(String.Format("See {0} setting. I.E. 'foo bar' may be treated as '*foo*bar*'", Constants.WildcardAsterisks))
                 Console.WriteLine()
             End If
 

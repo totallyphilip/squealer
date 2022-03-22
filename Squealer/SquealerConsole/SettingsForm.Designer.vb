@@ -63,9 +63,10 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.btnEditorDialog = New System.Windows.Forms.Button()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.txtEditorProgram = New System.Windows.Forms.TextBox()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
+        Me.gbTextEditor = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -74,6 +75,7 @@ Partial Class SettingsForm
         Me.tabWildcards.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.tabEasterEgg.SuspendLayout()
+        Me.gbTextEditor.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -441,13 +443,11 @@ Partial Class SettingsForm
         '
         'TabPage4
         '
+        Me.TabPage4.Controls.Add(Me.gbTextEditor)
         Me.TabPage4.Controls.Add(Me.chkConfigDefaultEditor)
         Me.TabPage4.Controls.Add(Me.chkSquealerDefaultEditor)
         Me.TabPage4.Controls.Add(Me.chkOutputDefaultEditor)
         Me.TabPage4.Controls.Add(Me.Label7)
-        Me.TabPage4.Controls.Add(Me.btnEditorDialog)
-        Me.TabPage4.Controls.Add(Me.Label2)
-        Me.TabPage4.Controls.Add(Me.txtEditorProgram)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
@@ -499,29 +499,19 @@ Partial Class SettingsForm
         '
         Me.btnEditorDialog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnEditorDialog.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.btnEditorDialog.Location = New System.Drawing.Point(490, 136)
+        Me.btnEditorDialog.Location = New System.Drawing.Point(478, 50)
         Me.btnEditorDialog.Name = "btnEditorDialog"
         Me.btnEditorDialog.Size = New System.Drawing.Size(35, 35)
         Me.btnEditorDialog.TabIndex = 3
         Me.btnEditorDialog.UseVisualStyleBackColor = True
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(8, 124)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(94, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Custom text editor:"
-        '
         'txtEditorProgram
         '
         Me.txtEditorProgram.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEditorProgram.Location = New System.Drawing.Point(11, 144)
+        Me.txtEditorProgram.Location = New System.Drawing.Point(6, 58)
         Me.txtEditorProgram.Name = "txtEditorProgram"
-        Me.txtEditorProgram.ReadOnly = True
-        Me.txtEditorProgram.Size = New System.Drawing.Size(473, 20)
+        Me.txtEditorProgram.Size = New System.Drawing.Size(466, 20)
         Me.txtEditorProgram.TabIndex = 1
         '
         'tabEasterEgg
@@ -540,7 +530,28 @@ Partial Class SettingsForm
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
         '
-        'SquealerSettings
+        'gbTextEditor
+        '
+        Me.gbTextEditor.Controls.Add(Me.Label2)
+        Me.gbTextEditor.Controls.Add(Me.txtEditorProgram)
+        Me.gbTextEditor.Controls.Add(Me.btnEditorDialog)
+        Me.gbTextEditor.Location = New System.Drawing.Point(6, 124)
+        Me.gbTextEditor.Name = "gbTextEditor"
+        Me.gbTextEditor.Size = New System.Drawing.Size(519, 98)
+        Me.gbTextEditor.TabIndex = 8
+        Me.gbTextEditor.TabStop = False
+        Me.gbTextEditor.Text = "Text editor"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(6, 25)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(300, 13)
+        Me.Label2.TabIndex = 4
+        Me.Label2.Text = "Select a text editor to use for any file type not checked above."
+        '
+        'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -551,7 +562,7 @@ Partial Class SettingsForm
         Me.Controls.Add(Me.btnOK)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "SquealerSettings"
+        Me.Name = "SettingsForm"
         Me.Text = "Settings"
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -566,6 +577,8 @@ Partial Class SettingsForm
         Me.TabPage4.PerformLayout()
         Me.tabEasterEgg.ResumeLayout(False)
         Me.tabEasterEgg.PerformLayout()
+        Me.gbTextEditor.ResumeLayout(False)
+        Me.gbTextEditor.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -608,9 +621,10 @@ Partial Class SettingsForm
     Friend WithEvents chkOutputDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents Label7 As Windows.Forms.Label
     Friend WithEvents btnEditorDialog As Windows.Forms.Button
-    Friend WithEvents Label2 As Windows.Forms.Label
     Friend WithEvents tabEasterEgg As Windows.Forms.TabPage
     Friend WithEvents Label8 As Windows.Forms.Label
     Friend WithEvents Label4 As Windows.Forms.Label
     Friend WithEvents Label9 As Windows.Forms.Label
+    Friend WithEvents gbTextEditor As Windows.Forms.GroupBox
+    Friend WithEvents Label2 As Windows.Forms.Label
 End Class

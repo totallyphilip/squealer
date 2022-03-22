@@ -143,7 +143,7 @@ Module Main
         Dim oldcs As String = newpath & "\.Squealer_cs"
         Try
             If My.Computer.FileSystem.FileExists(oldcs) Then
-                My.Computer.FileSystem.RenameFile(oldcs, MyConstants.ConnectionStringFilename)
+                My.Computer.FileSystem.RenameFile(oldcs, Constants.ConnectionStringFilename)
             End If
         Catch ex As Exception
             ' suppress errors
@@ -169,7 +169,7 @@ Module Main
 
         Dim f As String = FolderCollection().Find(Function(x) Not My.Computer.FileSystem.DirectoryExists(x))
         If String.IsNullOrEmpty(f) Then ' couldn't find any bad directories
-            f = FolderCollection().Find(Function(x) My.Computer.FileSystem.GetFiles(x, FileIO.SearchOption.SearchTopLevelOnly, "*" & MyConstants.SquealerFileExtension).Count = 0)
+            f = FolderCollection().Find(Function(x) My.Computer.FileSystem.GetFiles(x, FileIO.SearchOption.SearchTopLevelOnly, "*" & Constants.SquealerFileExtension).Count = 0)
             If String.IsNullOrEmpty(f) Then ' couldn't find any unused directories
                 InvalidFolderIndex = -1
             Else
@@ -184,7 +184,7 @@ Module Main
     Private Sub AutoRemoveFolders()
 
         If InvalidFolderIndex() = -1 Then
-            Textify.WriteLine("All folders contain *" & MyConstants.SquealerFileExtension)
+            Textify.WriteLine("All folders contain *" & Constants.SquealerFileExtension)
         Else
             While InvalidFolderIndex() > -1
                 Dim i As Integer = InvalidFolderIndex()
@@ -315,6 +315,9 @@ Module Main
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
         ' Load settings.
+        MySettings.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.SqlFiles), False)
+        MySettings.OpenWithDefault.ConfigFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.ConfigFiles), False)
+        MySettings.OpenWithDefault.SquealerFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.SquealerFiles), False)
         MySettings.TextEditor = My.Configger.LoadSetting(NameOf(MySettings.TextEditor), "notepad.exe")
         MySettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(MySettings.LeaderboardConnectionString), String.Empty)
         MySettings.RecentFolders = My.Configger.LoadSetting(NameOf(MySettings.RecentFolders), 20)
@@ -434,9 +437,9 @@ Module Main
         comma = ""
 
         For Each s As String In Wildcard.Split((New Char() {"|"c}))
-            If s.ToLower.Contains(MyConstants.SquealerFileExtension.ToLower) Then
+            If s.ToLower.Contains(Constants.SquealerFileExtension.ToLower) Then
                 Console.WriteLine()
-                Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & MyConstants.SquealerFileExtension)
+                Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & Constants.SquealerFileExtension)
             End If
             s = Misc.WildcardInterpreter(s.Trim, MySettings.Wildcards, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
@@ -553,7 +556,7 @@ Module Main
                 If FileCount > 0 Then
                     Console.Write("|")
                 End If
-                Console.Write(info.Name.Replace(MyConstants.SquealerFileExtension, ""))
+                Console.Write(info.Name.Replace(Constants.SquealerFileExtension, ""))
             Else
                 Dim fg As ConsoleColor = ConsoleColor.Gray
 
@@ -583,7 +586,7 @@ Module Main
                 End If
 
 
-                Textify.Write(info.Name.Replace(MyConstants.SquealerFileExtension, ""), fg)
+                Textify.Write(info.Name.Replace(Constants.SquealerFileExtension, ""), fg)
 
                 Dim symbol As String = String.Empty
                 Select Case obj.Type.LongType
@@ -638,13 +641,13 @@ Module Main
                         End If
 
                     Case eFileAction.edit
-                        OpenInTextEditor(info.FullName)
+                        EditFile(info.FullName)
                     Case eFileAction.checkout
                         GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
                     Case eFileAction.generate
                         GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count)
                     Case eFileAction.compare
-                        Dim RootName As String = info.Name.Replace(MyConstants.SquealerFileExtension, "")
+                        Dim RootName As String = info.Name.Replace(Constants.SquealerFileExtension, "")
                         GeneratedOutput &= String.Format("insert #CodeToDrop ([Type], [Schema], [Name]) values ('{0}','{1}','{2}');", obj.Type.GeneralType, SchemaName(RootName), RoutineName(RootName)) & vbCrLf
                     Case eFileAction.delete
                         Dim trashcan As FileIO.RecycleOption = FileIO.RecycleOption.SendToRecycleBin
@@ -696,7 +699,7 @@ Module Main
         If (Action = eFileAction.generate OrElse Action = eFileAction.compare) AndAlso FileCount > 0 Then
 
             If Action = eFileAction.compare Then
-                GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", MyConstants.AutocreateFilename)
+                GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
             ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                 If MySettings.DetectSquealerObjects Then
                     GeneratedOutput = My.Resources.SqlTopScript & GeneratedOutput
@@ -752,7 +755,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' forget folder
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & MyConstants.SquealerFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & Constants.SquealerFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("auto;detect invalid folders"))
         cmd.Examples.Add("% 3")
         cmd.Examples.Add("% -auto")
@@ -846,7 +849,7 @@ Module Main
 
 
         ' config
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.config.ToString, "c"}, {"Display or edit " & MyConstants.ConfigFilename & ".", "This file configures how " & My.Application.Info.ProductName & " operates in your current working folder."}, CommandCatalog.eCommandCategory.other)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.config.ToString, "c"}, {"Display or edit " & Constants.ConfigFilename & ".", "This file configures how " & My.Application.Info.ProductName & " operates in your current working folder."}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("e;edit existing file"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("new;create new default file"))
         MyCommands.Items.Add(cmd)
@@ -856,13 +859,13 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' connection string
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.connection.ToString, "cs"}, {"Define the SQL Server connection string.", String.Format("The connection string is encrypted for the current local user and current working folder, and is required for some {0} commands. If you are using version control, you should add ""{1}"" to your ignore list.", My.Application.Info.ProductName, MyConstants.ConnectionStringFilename)}, CommandCatalog.eCommandCategory.other, "<connectionstring>", False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.connection.ToString, "cs"}, {"Define the SQL Server connection string.", String.Format("The connection string is encrypted for the current local user and current working folder, and is required for some {0} commands. If you are using version control, you should add ""{1}"" to your ignore list.", My.Application.Info.ProductName, Constants.ConnectionStringFilename)}, CommandCatalog.eCommandCategory.other, "<connectionstring>", False)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("e;edit current connection string"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("t;test connection", True))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("set;encrypt and save the connection string"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("show;display the connection string"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("forget;discard the saved connection string"))
-        cmd.Examples.Add("% -set " & MyConstants.DefaultConnectionString)
+        cmd.Examples.Add("% -set " & Constants.DefaultConnectionString)
         cmd.Examples.Add("% -get")
         MyCommands.Items.Add(cmd)
 
@@ -946,7 +949,7 @@ Module Main
 
                 ElseIf MyCommand Is Nothing Then
 
-                    Throw New System.Exception(MyConstants.BadCommandMessage)
+                    Throw New System.Exception(Constants.BadCommandMessage)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.about.ToString Then
@@ -960,7 +963,7 @@ Module Main
                         Console.WriteLine()
                         Dim wc As New Net.WebClient
                         Dim fn As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\Squealer.zip"
-                        wc.DownloadFile(MyConstants.s3ZipFile, fn)
+                        wc.DownloadFile(Constants.s3ZipFile, fn)
                         Textify.SayBulletLine(Textify.eBullet.Hash, "File downloaded to " & fn, ConsoleColor.White)
                         Textify.SayNewLine()
                         Textify.SayBulletLine(Textify.eBullet.Hash, "Opening local folder...")
@@ -985,11 +988,11 @@ Module Main
 
                     ' Try to make a new file
                     If StringInList(MySwitches, "new") Then
-                        If My.Computer.FileSystem.FileExists(WorkingFolder & "\" & MyConstants.ConfigFilename) Then
+                        If My.Computer.FileSystem.FileExists(WorkingFolder & "\" & Constants.ConfigFilename) Then
                             Throw New Exception("Config file already exists.")
                         Else
-                            My.Computer.FileSystem.WriteAllText(WorkingFolder & "\" & MyConstants.ConfigFilename, My.Resources.UserConfig, False)
-                            SayFileAction("config file created", WorkingFolder, MyConstants.ConfigFilename)
+                            My.Computer.FileSystem.WriteAllText(WorkingFolder & "\" & Constants.ConfigFilename, My.Resources.UserConfig, False)
+                            SayFileAction("config file created", WorkingFolder, Constants.ConfigFilename)
                             Textify.SayNewLine()
                         End If
                         Textify.SayNewLine()
@@ -997,12 +1000,12 @@ Module Main
 
                     ' Now edit 
                     If StringInList(MySwitches, "e") Then
-                        OpenInTextEditor(MyConstants.ConfigFilename, WorkingFolder)
+                        OpenInTextEditor(Constants.ConfigFilename, WorkingFolder)
                     End If
 
                     ' No switches, so just display
                     If MySwitches.Count = 0 Then
-                        ShowFile(WorkingFolder, MyConstants.ConfigFilename)
+                        ShowFile(WorkingFolder, Constants.ConfigFilename)
                         Textify.SayNewLine()
                     End If
 
@@ -1179,7 +1182,7 @@ Module Main
                     Dim f As String = CreateNewFile(WorkingFolder, filetype, UserInput)
 
                     If MySettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
-                        OpenInTextEditor(f)
+                        EditFile(f)
                     End If
 
 
@@ -1250,7 +1253,7 @@ Module Main
                     Try
                         cs = GetConnectionString(WorkingFolder)
                     Catch ex As Exception
-                        cs = MyConstants.DefaultConnectionString
+                        cs = Constants.DefaultConnectionString
                     End Try
                     cs = Microsoft.VisualBasic.Interaction.InputBox("Connection String", "", cs)
                     If Not String.IsNullOrWhiteSpace(cs) Then
@@ -1302,7 +1305,7 @@ Module Main
 
 
                 Else
-                    Throw New System.Exception(MyConstants.BadCommandMessage)
+                    Throw New System.Exception(Constants.BadCommandMessage)
                 End If
 
             Catch ex As Exception
@@ -1963,7 +1966,7 @@ Module Main
             Case SquealerObjectType.eType.View
                 Template = My.Resources.SqlTemplateView
         End Select
-        Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", MyConstants.MyThis)
+        Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", Constants.MyThis)
 
         Dim IsNew As Boolean = True
 
@@ -2010,7 +2013,7 @@ Module Main
         End If
 
         'Dim fqTemp As String = My.Computer.FileSystem.GetTempFileName
-        Dim fqTarget As String = WorkingFolder & "\" & filename & MyConstants.SquealerFileExtension
+        Dim fqTarget As String = WorkingFolder & "\" & filename & Constants.SquealerFileExtension
 
         If definition IsNot Nothing Then
             Template = Template.Replace("<Code/>", String.Format("<Code><![CDATA[{0}]]></Code>", definition))
@@ -2047,7 +2050,7 @@ Module Main
     Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass, cur As Integer, tot As Integer) As String
 
         Dim oType As SquealerObjectType.eType = SquealerObjectType.Eval(XmlGetObjectType(info.FullName))
-        Dim RootName As String = info.Name.Replace(MyConstants.SquealerFileExtension, "")
+        Dim RootName As String = info.Name.Replace(Constants.SquealerFileExtension, "")
 
         Dim InXml As Xml.XmlDocument = FixedXml(False, info.FullName)
         Dim InRoot As Xml.XmlElement = DirectCast(InXml.SelectSingleNode(My.Application.Info.ProductName), Xml.XmlElement)
@@ -2058,7 +2061,7 @@ Module Main
 
         ' Pre-Code
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-            Dim InPreCode As String = String.Format("print '{2}/{3} creating {0}, {1}'", MyConstants.MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
+            Dim InPreCode As String = String.Format("print '{2}/{3} creating {0}, {1}'", Constants.MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
             Try
                 InPreCode &= InRoot.SelectSingleNode("PreCode").InnerText
             Catch ex As Exception
@@ -2424,7 +2427,7 @@ Module Main
         For Each Replacement As DataRow In StringReplacements.Select() '.Select("")
             ExpandIndividual = ExpandIndividual.Replace(Replacement.Item("Original").ToString, Replacement.Item("Replacement").ToString)
         Next
-        ExpandIndividual = ExpandIndividual.Replace(MyConstants.MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
+        ExpandIndividual = ExpandIndividual.Replace(Constants.MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
 
 
     End Function
@@ -2485,7 +2488,7 @@ Module Main
 
         Dim sr As New IO.StringReader(My.Resources.ChangeLog.TrimEnd)
         While sr.Peek <> -1
-            s &= String.Format(sr.ReadLine.Replace("{THIS}", MyConstants.MyThis), ">>>> ", " <<<<", " - ") & vbCrLf
+            s &= String.Format(sr.ReadLine.Replace("{THIS}", Constants.MyThis), ">>>> ", " <<<<", " - ") & vbCrLf
         End While
 
         Return s
@@ -2513,13 +2516,7 @@ Module Main
         f.ShowDialog()
     End Sub
 
-    ' Edit one or more files.
-    Private Sub OpenInTextEditor(filename As String, path As String)
-        OpenInTextEditor(path & "\" & filename)
-    End Sub
-    Private Sub OpenInTextEditor(filename As String)
-        EasyShell.StartProcess(filename)
-    End Sub
+
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)
         If n > limit AndAlso Not OverrideSafety Then
@@ -2567,7 +2564,7 @@ Module Main
         End With
 
         Dim Reader As New Xml.XmlDocument
-        Reader.Load(WorkingFolder & "\" & MyConstants.ConfigFilename)
+        Reader.Load(WorkingFolder & "\" & Constants.ConfigFilename)
         Dim Nodes As Xml.XmlNodeList = Reader.SelectNodes("/Settings/DefaultUsers/User")
 
         For Each Node As Xml.XmlNode In Nodes
@@ -2589,7 +2586,7 @@ Module Main
 
         Try
             Dim Reader As New Xml.XmlDocument
-            Reader.Load(WorkingFolder & "\" & MyConstants.ConfigFilename)
+            Reader.Load(WorkingFolder & "\" & Constants.ConfigFilename)
             Dim Nodes As Xml.XmlNodeList = Reader.SelectNodes("/Settings/StringReplacements/String")
 
             For Each Node As Xml.XmlNode In Nodes
@@ -2610,7 +2607,7 @@ Module Main
 
         Try
             Dim Reader As New Xml.XmlDocument
-            Reader.Load(WorkingFolder & "\" & MyConstants.ConfigFilename)
+            Reader.Load(WorkingFolder & "\" & Constants.ConfigFilename)
             Dim Node As Xml.XmlNode = Reader.SelectSingleNode("/Settings")
             Dim s As String = Node.Attributes("ProjectName").Value.ToString.Trim()
             If String.IsNullOrWhiteSpace(s) Then
@@ -2657,7 +2654,7 @@ Module Main
 
     Private Sub SetConnectionString(workingfolder As String, cs As String)
 
-        Dim f As String = String.Format("{0}\{1}", workingfolder, MyConstants.ConnectionStringFilename)
+        Dim f As String = String.Format("{0}\{1}", workingfolder, Constants.ConnectionStringFilename)
         Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
         Dim csbytes As Byte() = System.Text.Encoding.Unicode.GetBytes(cs.Trim)
 
@@ -2674,7 +2671,7 @@ Module Main
     End Sub
     Private Sub ForgetConnectionString(workingfolder As String)
 
-        Dim f As String = String.Format("{0}\{1}", workingfolder, MyConstants.ConnectionStringFilename)
+        Dim f As String = String.Format("{0}\{1}", workingfolder, Constants.ConnectionStringFilename)
         My.Computer.FileSystem.DeleteFile(f)
         Textify.SayBulletLine(Textify.eBullet.Hash, "OK")
         Textify.SayNewLine()
@@ -2683,7 +2680,7 @@ Module Main
 
     Private Function GetConnectionString(workingfolder As String) As String
 
-        Dim f As String = String.Format("{0}\{1}", workingfolder, MyConstants.ConnectionStringFilename)
+        Dim f As String = String.Format("{0}\{1}", workingfolder, Constants.ConnectionStringFilename)
 
         If Not My.Computer.FileSystem.FileExists(f) Then
             Throw New Exception("Connection string not defined.")
@@ -2965,7 +2962,7 @@ Module Main
 
                 If ValidOutput Then
 
-                    Dim filename As String = String.Format("{0}\{1}.{5}{2}{3}{4}", WorkingFolder, SchemaName, TableName, AutoProcType, MyConstants.SquealerFileExtension, MyConstants.AutocreateFilename)
+                    Dim filename As String = String.Format("{0}\{1}.{5}{2}{3}{4}", WorkingFolder, SchemaName, TableName, AutoProcType, Constants.SquealerFileExtension, Constants.AutocreateFilename)
 
                     If Not ReplaceOnly OrElse My.Computer.FileSystem.FileExists(filename) Then
 
@@ -3158,14 +3155,14 @@ Module Main
 
         Try
             Dim client As Net.WebClient = New Net.WebClient()
-            Using reader As New IO.StreamReader(client.OpenRead(MyConstants.s3VersionText))
+            Using reader As New IO.StreamReader(client.OpenRead(Constants.s3VersionText))
 
                 Dim av As New Version(reader.ReadToEnd)
 
                 If My.Application.Info.Version.CompareTo(av) < 0 Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("A new version of {0} is available. Use {1} -{2} to download.", My.Application.Info.ProductName, eCommandType.about.ToString.ToUpper, MyCommands.FindCommand(eCommandType.about.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
                     Console.BackgroundColor = ConsoleColor.Black
-                    Textify.SayBulletLine(Textify.eBullet.Arrow, MyConstants.s3ZipFile)
+                    Textify.SayBulletLine(Textify.eBullet.Arrow, Constants.s3ZipFile)
                     Console.WriteLine()
                 ElseIf My.Application.Info.Version.CompareTo(av) = 0 AndAlso Not silent Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of {0}.", My.Application.Info.ProductName), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
@@ -3195,6 +3192,24 @@ Module Main
         f.Show()
     End Sub
 
+
+#End Region
+
+#Region " Text Editor "
+
+    ' Edit one or more files.
+    Private Sub OpenInTextEditor(filename As String, path As String)
+        EditFile(path & "\" & filename)
+    End Sub
+    Private Sub EditFile(filename As String)
+        If (filename.EndsWith(".sql") AndAlso Not MySettings.OpenWithDefault.SqlFiles) _
+            OrElse (filename.EndsWith(Constants.ConfigFilename) AndAlso Not MySettings.OpenWithDefault.ConfigFiles) _
+            OrElse (filename.EndsWith(Constants.SquealerFileExtension) AndAlso Not MySettings.OpenWithDefault.SquealerFiles) Then
+            EasyShell.StartProcess(MySettings.TextEditor, filename)
+        Else
+            EasyShell.StartProcess(filename)
+        End If
+    End Sub
 
 #End Region
 
