@@ -8,6 +8,7 @@
         Tabs.TabPages.Remove(tabEasterEgg)
         tabWildcards.Text = Constants.WildcardAsterisks
         SetEditorAccess()
+        chkSquealerDefaultEditor.Text = String.Format("Squealer files (*{0})", Constants.SquealerFileExtension)
     End Sub
 
     Private Sub optUseWildcards_CheckedChanged(sender As Object, e As EventArgs) Handles chkEdgesWild.CheckedChanged, chkSpacesWild.CheckedChanged, txtTryIt.TextChanged

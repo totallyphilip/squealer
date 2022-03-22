@@ -58,15 +58,15 @@ Partial Class SettingsForm
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.gbTextEditor = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtEditorProgram = New System.Windows.Forms.TextBox()
+        Me.btnEditorDialog = New System.Windows.Forms.Button()
         Me.chkConfigDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.chkSquealerDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.btnEditorDialog = New System.Windows.Forms.Button()
-        Me.txtEditorProgram = New System.Windows.Forms.TextBox()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
-        Me.gbTextEditor = New System.Windows.Forms.GroupBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -74,8 +74,8 @@ Partial Class SettingsForm
         Me.tabOutput.SuspendLayout()
         Me.tabWildcards.SuspendLayout()
         Me.TabPage4.SuspendLayout()
-        Me.tabEasterEgg.SuspendLayout()
         Me.gbTextEditor.SuspendLayout()
+        Me.tabEasterEgg.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -456,80 +456,6 @@ Partial Class SettingsForm
         Me.TabPage4.Text = "Editor"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
-        'chkConfigDefaultEditor
-        '
-        Me.chkConfigDefaultEditor.AutoSize = True
-        Me.chkConfigDefaultEditor.Location = New System.Drawing.Point(6, 86)
-        Me.chkConfigDefaultEditor.Name = "chkConfigDefaultEditor"
-        Me.chkConfigDefaultEditor.Size = New System.Drawing.Size(72, 17)
-        Me.chkConfigDefaultEditor.TabIndex = 7
-        Me.chkConfigDefaultEditor.Text = "Config file"
-        Me.chkConfigDefaultEditor.UseVisualStyleBackColor = True
-        '
-        'chkSquealerDefaultEditor
-        '
-        Me.chkSquealerDefaultEditor.AutoSize = True
-        Me.chkSquealerDefaultEditor.Location = New System.Drawing.Point(6, 63)
-        Me.chkSquealerDefaultEditor.Name = "chkSquealerDefaultEditor"
-        Me.chkSquealerDefaultEditor.Size = New System.Drawing.Size(89, 17)
-        Me.chkSquealerDefaultEditor.TabIndex = 6
-        Me.chkSquealerDefaultEditor.Text = "Squealer files"
-        Me.chkSquealerDefaultEditor.UseVisualStyleBackColor = True
-        '
-        'chkOutputDefaultEditor
-        '
-        Me.chkOutputDefaultEditor.AutoSize = True
-        Me.chkOutputDefaultEditor.Location = New System.Drawing.Point(6, 40)
-        Me.chkOutputDefaultEditor.Name = "chkOutputDefaultEditor"
-        Me.chkOutputDefaultEditor.Size = New System.Drawing.Size(58, 17)
-        Me.chkOutputDefaultEditor.TabIndex = 5
-        Me.chkOutputDefaultEditor.Text = "Output"
-        Me.chkOutputDefaultEditor.UseVisualStyleBackColor = True
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(3, 19)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(204, 13)
-        Me.Label7.TabIndex = 4
-        Me.Label7.Text = "Use default Windows application to open:"
-        '
-        'btnEditorDialog
-        '
-        Me.btnEditorDialog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnEditorDialog.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.btnEditorDialog.Location = New System.Drawing.Point(478, 50)
-        Me.btnEditorDialog.Name = "btnEditorDialog"
-        Me.btnEditorDialog.Size = New System.Drawing.Size(35, 35)
-        Me.btnEditorDialog.TabIndex = 3
-        Me.btnEditorDialog.UseVisualStyleBackColor = True
-        '
-        'txtEditorProgram
-        '
-        Me.txtEditorProgram.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEditorProgram.Location = New System.Drawing.Point(6, 58)
-        Me.txtEditorProgram.Name = "txtEditorProgram"
-        Me.txtEditorProgram.Size = New System.Drawing.Size(466, 20)
-        Me.txtEditorProgram.TabIndex = 1
-        '
-        'tabEasterEgg
-        '
-        Me.tabEasterEgg.Controls.Add(Me.btnStarwarsHelp)
-        Me.tabEasterEgg.Controls.Add(Me.lblLeaveBlank)
-        Me.tabEasterEgg.Controls.Add(Me.btnLeaderboardSql)
-        Me.tabEasterEgg.Controls.Add(Me.chkShowLeaderboard)
-        Me.tabEasterEgg.Controls.Add(Me.lblLeaderboard)
-        Me.tabEasterEgg.Controls.Add(Me.txtLeaderboardCs)
-        Me.tabEasterEgg.Location = New System.Drawing.Point(4, 22)
-        Me.tabEasterEgg.Name = "tabEasterEgg"
-        Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabEasterEgg.Size = New System.Drawing.Size(531, 341)
-        Me.tabEasterEgg.TabIndex = 4
-        Me.tabEasterEgg.Text = "Easter Egg"
-        Me.tabEasterEgg.UseVisualStyleBackColor = True
-        '
         'gbTextEditor
         '
         Me.gbTextEditor.Controls.Add(Me.Label2)
@@ -550,6 +476,80 @@ Partial Class SettingsForm
         Me.Label2.Size = New System.Drawing.Size(300, 13)
         Me.Label2.TabIndex = 4
         Me.Label2.Text = "Select a text editor to use for any file type not checked above."
+        '
+        'txtEditorProgram
+        '
+        Me.txtEditorProgram.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtEditorProgram.Location = New System.Drawing.Point(6, 58)
+        Me.txtEditorProgram.Name = "txtEditorProgram"
+        Me.txtEditorProgram.Size = New System.Drawing.Size(466, 20)
+        Me.txtEditorProgram.TabIndex = 1
+        '
+        'btnEditorDialog
+        '
+        Me.btnEditorDialog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnEditorDialog.Image = Global.Squealer.My.Resources.Resources.Folder
+        Me.btnEditorDialog.Location = New System.Drawing.Point(478, 50)
+        Me.btnEditorDialog.Name = "btnEditorDialog"
+        Me.btnEditorDialog.Size = New System.Drawing.Size(35, 35)
+        Me.btnEditorDialog.TabIndex = 3
+        Me.btnEditorDialog.UseVisualStyleBackColor = True
+        '
+        'chkConfigDefaultEditor
+        '
+        Me.chkConfigDefaultEditor.AutoSize = True
+        Me.chkConfigDefaultEditor.Location = New System.Drawing.Point(6, 86)
+        Me.chkConfigDefaultEditor.Name = "chkConfigDefaultEditor"
+        Me.chkConfigDefaultEditor.Size = New System.Drawing.Size(117, 17)
+        Me.chkConfigDefaultEditor.TabIndex = 7
+        Me.chkConfigDefaultEditor.Text = "Config file (*.config)"
+        Me.chkConfigDefaultEditor.UseVisualStyleBackColor = True
+        '
+        'chkSquealerDefaultEditor
+        '
+        Me.chkSquealerDefaultEditor.AutoSize = True
+        Me.chkSquealerDefaultEditor.Location = New System.Drawing.Point(6, 63)
+        Me.chkSquealerDefaultEditor.Name = "chkSquealerDefaultEditor"
+        Me.chkSquealerDefaultEditor.Size = New System.Drawing.Size(89, 17)
+        Me.chkSquealerDefaultEditor.TabIndex = 6
+        Me.chkSquealerDefaultEditor.Text = "Squealer files"
+        Me.chkSquealerDefaultEditor.UseVisualStyleBackColor = True
+        '
+        'chkOutputDefaultEditor
+        '
+        Me.chkOutputDefaultEditor.AutoSize = True
+        Me.chkOutputDefaultEditor.Location = New System.Drawing.Point(6, 40)
+        Me.chkOutputDefaultEditor.Name = "chkOutputDefaultEditor"
+        Me.chkOutputDefaultEditor.Size = New System.Drawing.Size(108, 17)
+        Me.chkOutputDefaultEditor.TabIndex = 5
+        Me.chkOutputDefaultEditor.Text = "Output files (*.sql)"
+        Me.chkOutputDefaultEditor.UseVisualStyleBackColor = True
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(3, 19)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(204, 13)
+        Me.Label7.TabIndex = 4
+        Me.Label7.Text = "Use default Windows application to open:"
+        '
+        'tabEasterEgg
+        '
+        Me.tabEasterEgg.Controls.Add(Me.btnStarwarsHelp)
+        Me.tabEasterEgg.Controls.Add(Me.lblLeaveBlank)
+        Me.tabEasterEgg.Controls.Add(Me.btnLeaderboardSql)
+        Me.tabEasterEgg.Controls.Add(Me.chkShowLeaderboard)
+        Me.tabEasterEgg.Controls.Add(Me.lblLeaderboard)
+        Me.tabEasterEgg.Controls.Add(Me.txtLeaderboardCs)
+        Me.tabEasterEgg.Location = New System.Drawing.Point(4, 22)
+        Me.tabEasterEgg.Name = "tabEasterEgg"
+        Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabEasterEgg.Size = New System.Drawing.Size(531, 341)
+        Me.tabEasterEgg.TabIndex = 4
+        Me.tabEasterEgg.Text = "Easter Egg"
+        Me.tabEasterEgg.UseVisualStyleBackColor = True
         '
         'SettingsForm
         '
@@ -575,10 +575,10 @@ Partial Class SettingsForm
         Me.tabWildcards.PerformLayout()
         Me.TabPage4.ResumeLayout(False)
         Me.TabPage4.PerformLayout()
-        Me.tabEasterEgg.ResumeLayout(False)
-        Me.tabEasterEgg.PerformLayout()
         Me.gbTextEditor.ResumeLayout(False)
         Me.gbTextEditor.PerformLayout()
+        Me.tabEasterEgg.ResumeLayout(False)
+        Me.tabEasterEgg.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
