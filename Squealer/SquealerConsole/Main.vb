@@ -49,7 +49,7 @@ Module Main
 #Region " All The Definitions "
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
-    Private MySettings As New UserSettings
+    Private MySettings As New Settings
 
     Private Class BatchParametersClass
 
@@ -1202,7 +1202,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.setting.ToString Then
 
-                    ShowSettingsDialog()
+                    MySettings.Show()
 
 
 
@@ -1463,73 +1463,6 @@ Module Main
         Return fnames
 
     End Function
-
-#End Region
-
-#Region " Settings "
-
-    Private Sub ShowSettingsDialog()
-
-        Dim f As New SquealerSettings
-        f.txtEditorProgram.Text = MySettings.TextEditor
-        f.txtLeaderboardCs.Text = MySettings.LeaderboardConnectionString
-        f.updnFolderSaves.Value = MySettings.RecentFolders
-        f.chkEdgesWild.Checked = MySettings.Wildcards.UseEdges
-        f.optEditNewFiles.Checked = MySettings.EditNew
-        f.chkShowLeaderboard.Checked = MySettings.ShowLeaderboardAtStartup
-        If MySettings.UseClipboard Then
-            f.rbClipboard.Checked = True
-        Else
-            f.rbTempFile.Checked = True
-        End If
-        f.optShowGitBranch.Checked = MySettings.ShowBranch
-        f.chkSpacesWild.Checked = MySettings.Wildcards.UseSpaces
-        f.optBeep.Checked = Textify.ErrorAlert.Beep
-        f.optDetectOldSquealerObjects.Checked = MySettings.DetectSquealerObjects
-        Select Case MySettings.DirStyle
-            Case eDirectoryStyle.compact.ToString
-                f.rbCompact.Checked = True
-            Case eDirectoryStyle.full.ToString
-                f.rbFull.Checked = True
-            Case eDirectoryStyle.symbolic.ToString
-                f.rbSymbolic.Checked = True
-        End Select
-
-        f.ShowDialog()
-
-        MySettings.TextEditor = f.txtEditorProgram.Text
-        MySettings.LeaderboardConnectionString = f.txtLeaderboardCs.Text
-        MySettings.RecentFolders = CInt(f.updnFolderSaves.Value)
-        MySettings.Wildcards.UseEdges = f.chkEdgesWild.Checked
-        MySettings.EditNew = f.optEditNewFiles.Checked
-        MySettings.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
-        MySettings.UseClipboard = f.rbClipboard.Checked
-        MySettings.ShowBranch = f.optShowGitBranch.Checked
-        MySettings.Wildcards.UseSpaces = f.chkSpacesWild.Checked
-        Textify.ErrorAlert.Beep = f.optBeep.Checked
-        MySettings.DetectSquealerObjects = f.optDetectOldSquealerObjects.Checked
-        If f.rbCompact.Checked Then
-            MySettings.DirStyle = eDirectoryStyle.compact.ToString
-        ElseIf f.rbFull.Checked Then
-            MySettings.DirStyle = eDirectoryStyle.full.ToString
-        Else
-            MySettings.DirStyle = eDirectoryStyle.symbolic.ToString
-        End If
-
-        My.Configger.SaveSetting(NameOf(MySettings.TextEditor), MySettings.TextEditor)
-        My.Configger.SaveSetting(NameOf(MySettings.LeaderboardConnectionString), MySettings.LeaderboardConnectionString)
-        My.Configger.SaveSetting(NameOf(MySettings.RecentFolders), MySettings.RecentFolders)
-        My.Configger.SaveSetting(NameOf(MySettings.Wildcards.UseEdges), MySettings.Wildcards.UseEdges)
-        My.Configger.SaveSetting(NameOf(MySettings.EditNew), MySettings.EditNew)
-        My.Configger.SaveSetting(NameOf(MySettings.ShowLeaderboardAtStartup), MySettings.ShowLeaderboardAtStartup)
-        My.Configger.SaveSetting(NameOf(MySettings.UseClipboard), MySettings.UseClipboard)
-        My.Configger.SaveSetting(NameOf(MySettings.DetectSquealerObjects), MySettings.DetectSquealerObjects)
-        My.Configger.SaveSetting(NameOf(MySettings.ShowBranch), MySettings.ShowBranch)
-        My.Configger.SaveSetting(NameOf(MySettings.Wildcards.UseSpaces), MySettings.Wildcards.UseSpaces)
-        My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
-        My.Configger.SaveSetting(NameOf(MySettings.DirStyle), MySettings.DirStyle)
-
-    End Sub
 
 #End Region
 

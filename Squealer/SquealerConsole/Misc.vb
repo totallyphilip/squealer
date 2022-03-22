@@ -1,9 +1,9 @@
 ﻿Public Class Misc
     Public Shared Function WildcardInterpreter(s As String, spaces As Boolean, edges As Boolean, FindExact As Boolean) As String
-        WildcardInterpreter = WildcardInterpreter(s, New UserSettings.WildcardClass With {.UseEdges = edges, .UseSpaces = spaces}, FindExact)
+        WildcardInterpreter = WildcardInterpreter(s, New Settings.WildcardClass With {.UseEdges = edges, .UseSpaces = spaces}, FindExact)
     End Function
 
-    Public Shared Function WildcardInterpreter(s As String, w As UserSettings.WildcardClass, FindExact As Boolean) As String
+    Public Shared Function WildcardInterpreter(s As String, w As Settings.WildcardClass, FindExact As Boolean) As String
 
         If w.UseSpaces Then
             s = s.Replace(" "c, "*"c)

@@ -1,4 +1,4 @@
-﻿Public Class SquealerSettings
+﻿Public Class SettingsForm
 
     Private _Blasts As Integer = 0
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load

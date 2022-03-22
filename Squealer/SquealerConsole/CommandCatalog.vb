@@ -324,7 +324,7 @@
                 _CanFileSearch = True
                 _ParameterDefinition = String.Format("{0}|#", CommandCatalog.CommandDefinition.WildcardText)
                 _ParameterRequired = req
-                Dim temp As New UserSettings() ' need an instance to expose a property name
+                Dim temp As New Settings() ' need an instance to expose a property name
                 For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(True).Split((New Char() {"|"c}))
                     _Options.Items.Add(New CommandCatalog.CommandSwitch(s))
                 Next
@@ -440,7 +440,7 @@
             End If
 
             If Me.CanFileSearch Then
-                Dim temp As New UserSettings() ' need an instance to expose a property name
+                Dim temp As New Settings() ' need an instance to expose a property name
                 Textify.WriteLine(String.Format("See {0} setting. I.E. 'foo bar' may be treated as '*foo*bar*'", MyConstants.WildcardAsterisks))
                 Console.WriteLine()
             End If
