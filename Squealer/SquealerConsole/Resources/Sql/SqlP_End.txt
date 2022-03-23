@@ -51,8 +51,16 @@ begin catch
 		set @Squealer_ErrorMessage = concat(
 			'Procedure: ',isnull(error_procedure(),'n/a')
 			,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
---			,char(13),char(10),'Severity: ',convert(varchar,@Squealer_ErrorSeverity)
---			,char(13),char(10),'State: ',convert(varchar,@Squealer_ErrorState)
 			,char(13),char(10),'Line: ',convert(varchar,error_line())
 			,char(13),char(10),'Message: ',error_message()
 		);
+{Parameters}
+
+	raiserror(@Squealer_ErrorMessage,@Squealer_ErrorSeverity,@Squealer_ErrorState)
+
+end catch
+
+if @SqlrInternalErrorNumber is not null
+	set @Squealer_ReturnValue = @SqlrInternalErrorNumber -- for backward compatibility with pre-release squealer
+
+return @Squealer_ReturnValue

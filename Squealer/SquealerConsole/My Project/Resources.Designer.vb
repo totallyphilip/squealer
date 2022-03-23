@@ -61,6 +61,34 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to /***********************************************************************
+        '''	Delete deprecated squealer log tables.
+        '''***********************************************************************/
+        '''
+        '''if exists (select 1 from sys.objects where name like &apos;%squealer%&apos;)
+        '''	or exists (select 1 from sys.schemas where name = &apos;squealer&apos;)
+        '''select 
+        '''	s.name
+        '''	,o.name
+        '''	,o.type_desc
+        '''from
+        '''	sys.objects o
+        '''join
+        '''	sys.schemas s
+        '''	on s.schema_id = o.schema_id
+        '''where
+        '''	o.name like &apos;%squealer%&apos;
+        '''	or s.name = &apos;squealer&apos;
+        '''union
+        '''selec [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property _TopScript() As String
+            Get
+                Return ResourceManager.GetString("_TopScript", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to declare @table_id int = {TableId};
         '''
         '''with ctePkCols as
@@ -187,11 +215,173 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/***********************************************************************
+        '''
+        '''title : {Schema}.{RootProgramName}
+        '''{Comments}
+        '''***********************************************************************/
+        '''.
+        '''</summary>
+        Friend ReadOnly Property Comment() As String
+            Get
+                Return ResourceManager.GetString("Comment", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to set nocount on;
+        '''
+        '''create table #CodeToDrop ([Type] nvarchar(10), [Schema] nvarchar(10), [Name] nvarchar(500));
+        '''
+        '''{RoutineList}
+        '''
+        '''with cteObjects as
+        '''(
+        '''	select
+        '''		r.ROUTINE_TYPE as ObjectType
+        '''		,r.ROUTINE_SCHEMA as ObjectSchema
+        '''		,r.ROUTINE_NAME as ObjectName
+        '''	from
+        '''		INFORMATION_SCHEMA.ROUTINES r
+        '''	union
+        '''	select
+        '''		&apos;VIEW&apos;
+        '''		,v.TABLE_SCHEMA
+        '''		,v.TABLE_NAME
+        '''	from
+        '''		INFORMATION_SCHEMA.VIEWS v
+        ''')
+        '''select
+        '''	o.ObjectType collate database_default as ObjectType
+        '''	,o.ObjectSchema collate database_default [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property CompareObjects() As String
+            Get
+                Return ResourceManager.GetString("CompareObjects", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         '''</summary>
         Friend ReadOnly Property DroidScream() As System.IO.UnmanagedMemoryStream
             Get
                 Return ResourceManager.GetStream("DroidScream", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;p&apos;) is not null
+        '''	drop procedure [{Schema}].[{RootProgramName}];
+        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;fn&apos;) is not null
+        '''	drop function [{Schema}].[{RootProgramName}];
+        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;if&apos;) is not null
+        '''	drop function [{Schema}].[{RootProgramName}];
+        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;tf&apos;) is not null
+        '''	drop function [{Schema}].[{RootProgramName}];
+        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;v&apos;) is not  [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property DropAny() As String
+            Get
+                Return ResourceManager.GetString("DropAny", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        ''')
+        '''
+        '''returns {ReturnDataType}
+        '''
+        '''{WithOptions}
+        '''as
+        '''begin
+        '''set ansi_nulls on;
+        '''
+        '''declare @Result {ReturnDataType}
+        '''
+        ''';.
+        '''</summary>
+        Friend ReadOnly Property FN_Begin() As String
+            Get
+                Return ResourceManager.GetString("FN_Begin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''set ansi_nulls on;
+        '''
+        '''declare @Result {ReturnDataType};
+        '''
+        ''';.
+        '''</summary>
+        Friend ReadOnly Property FN_BeginTest() As String
+            Get
+                Return ResourceManager.GetString("FN_BeginTest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''create function [{Schema}].[{RootProgramName}]
+        '''(
+        '''.
+        '''</summary>
+        Friend ReadOnly Property FN_Create() As String
+            Get
+                Return ResourceManager.GetString("FN_Create", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/***********************************************************************
+        '''    Return the function result.
+        '''***********************************************************************/
+        '''
+        '''return @Result
+        '''end
+        '''.
+        '''</summary>
+        Friend ReadOnly Property FN_End() As String
+            Get
+                Return ResourceManager.GetString("FN_End", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/***********************************************************************
+        '''    Return the function result.
+        '''***********************************************************************/
+        '''
+        '''select @Result as [Result]
+        '''.
+        '''</summary>
+        Friend ReadOnly Property FN_EndTest() As String
+            Get
+                Return ResourceManager.GetString("FN_EndTest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
+        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Returns Type=&quot;{ReturnDataType}&quot; /&gt;
+        '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
+        '''&lt;/Squealer&gt;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property FN_Template() As String
+            Get
+                Return ResourceManager.GetString("FN_Template", resourceCulture)
             End Get
         End Property
         
@@ -202,6 +392,24 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("Folder", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to grant execute on [{Schema}].[{RootProgramName}] to [{User}];.
+        '''</summary>
+        Friend ReadOnly Property GrantExecute() As String
+            Get
+                Return ResourceManager.GetString("GrantExecute", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to grant select on [{Schema}].[{RootProgramName}] to [{User}];.
+        '''</summary>
+        Friend ReadOnly Property GrantSelect() As String
+            Get
+                Return ResourceManager.GetString("GrantSelect", resourceCulture)
             End Get
         End Property
         
@@ -217,6 +425,40 @@ Namespace My.Resources
         Friend ReadOnly Property HowToLaunchR2() As String
             Get
                 Return ResourceManager.GetString("HowToLaunchR2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        ''')
+        '''
+        '''returns table
+        '''
+        '''{WithOptions}
+        '''as
+        '''
+        '''return.
+        '''</summary>
+        Friend ReadOnly Property IF_Begin() As String
+            Get
+                Return ResourceManager.GetString("IF_Begin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
+        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
+        '''&lt;/Squealer&gt;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property IF_Template() As String
+            Get
+                Return ResourceManager.GetString("IF_Template", resourceCulture)
             End Get
         End Property
         
@@ -319,6 +561,134 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/***********************************************************************
+        '''	Begin the transaction. Start the TRY..CATCH wrapper.
+        '''***********************************************************************/
+        '''
+        '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+        '''
+        '''{WithOptions}
+        '''as
+        '''set ansi_nulls on;
+        '''set nocount on;
+        '''set quoted_identifier on;
+        '''
+        '''declare @Squealer_ReturnValue int = 0;
+        '''declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
+        '''
+        '''begin try
+        '''	begin tra [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property P_Begin() As String
+            Get
+                Return ResourceManager.GetString("P_Begin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''
+        '''set ansi_nulls on;
+        '''set quoted_identifier on;
+        '''
+        '''declare @SqlrInternalErrorNumber int = 0; -- Not used in test scripts, but declared to avoid errors.
+        '''
+        '''begin transaction
+        '''
+        '''/*######################################################################
+        '''                         YOUR CODE BEGINS HERE.
+        '''######################################################################*/
+        ''';.
+        '''</summary>
+        Friend ReadOnly Property P_BeginTest() As String
+            Get
+                Return ResourceManager.GetString("P_BeginTest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''create procedure [{Schema}].[{RootProgramName}]
+        '''.
+        '''</summary>
+        Friend ReadOnly Property P_Create() As String
+            Get
+                Return ResourceManager.GetString("P_Create", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/*######################################################################
+        '''                          YOUR CODE ENDS HERE.
+        '''######################################################################*/
+        '''
+        '''/***********************************************************************
+        '''	Commit the transaction. If we are in a nested transaction, this
+        '''	decrements the transaction count.
+        '''***********************************************************************/
+        '''
+        '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+        ''' [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property P_End() As String
+            Get
+                Return ResourceManager.GetString("P_End", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/*######################################################################
+        '''                          YOUR CODE ENDS HERE.
+        '''######################################################################*/
+        '''
+        '''-- This script defaults to ROLLBACK so you can repeat your testing.
+        '''
+        '''rollback transaction
+        '''--commit transaction
+        '''
+        '''print &apos;@SqlrInternalErrorNumber = &apos; + convert(varchar,(@SqlrInternalErrorNumber));
+        '''.
+        '''</summary>
+        Friend ReadOnly Property P_EndTest() As String
+            Get
+                Return ResourceManager.GetString("P_EndTest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 		set @Squealer_ErrorMessage =
+        '''			@Squealer_ErrorMessage
+        '''			+ char(10)
+        '''			+ &apos;@{ErrorParameterName} = &apos;
+        '''			+ isnull(convert(varchar(max),@{ErrorParameterName}),&apos;[NULL]&apos;);.
+        '''</summary>
+        Friend ReadOnly Property P_ErrorParameter() As String
+            Get
+                Return ResourceManager.GetString("P_ErrorParameter", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
+        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
+        '''&lt;Parameters&gt;
+        '''&lt;!--Parameters--&gt;
+        '''&lt;/Parameters&gt;
+        '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
+        '''&lt;/Squealer&gt;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property P_Template() As String
+            Get
+                Return ResourceManager.GetString("P_Template", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         '''</summary>
         Friend ReadOnly Property PigNose() As System.Drawing.Icon
@@ -366,32 +736,15 @@ Namespace My.Resources
         '''  Looks up a localized string similar to 
         ''')
         '''
-        '''returns table
-        '''
-        '''{WithOptions}
-        '''as
-        '''
-        '''return.
-        '''</summary>
-        Friend ReadOnly Property SqlBeginInlineTableFunction() As String
-            Get
-                Return ResourceManager.GetString("SqlBeginInlineTableFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        ''')
-        '''
         '''{WithOptions}
         '''as
         '''begin
         '''set ansi_nulls on;
         '''.
         '''</summary>
-        Friend ReadOnly Property SqlBeginMultiStatementTableFunction() As String
+        Friend ReadOnly Property Tf_Begin() As String
             Get
-                Return ResourceManager.GetString("SqlBeginMultiStatementTableFunction", resourceCulture)
+                Return ResourceManager.GetString("Tf_Begin", resourceCulture)
             End Get
         End Property
         
@@ -402,201 +755,9 @@ Namespace My.Resources
         '''set ansi_nulls on;
         '''.
         '''</summary>
-        Friend ReadOnly Property SqlBeginMultiStatementTableFunctionTest() As String
+        Friend ReadOnly Property Tf_BeginTest() As String
             Get
-                Return ResourceManager.GetString("SqlBeginMultiStatementTableFunctionTest", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''/***********************************************************************
-        '''	Begin the transaction. Start the TRY..CATCH wrapper.
-        '''***********************************************************************/
-        '''
-        '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
-        '''
-        '''{WithOptions}
-        '''as
-        '''set ansi_nulls on;
-        '''set nocount on;
-        '''set quoted_identifier on;
-        '''
-        '''declare @Squealer_ErrorNumber int = 0;
-        '''declare @SqlrInternalErrorNumber int; -- for backward compatibility
-        '''declare @Squealer_NestLevel int; -- Current neste [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlBeginProcedure() As String
-            Get
-                Return ResourceManager.GetString("SqlBeginProcedure", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''
-        '''set ansi_nulls on;
-        '''set quoted_identifier on;
-        '''
-        '''declare @SqlrInternalErrorNumber int = 0; -- Not used in test scripts, but declared to avoid errors.
-        '''
-        '''begin transaction
-        '''
-        '''/*######################################################################
-        '''                         YOUR CODE BEGINS HERE.
-        '''######################################################################*/
-        ''';.
-        '''</summary>
-        Friend ReadOnly Property SqlBeginProcedureTest() As String
-            Get
-                Return ResourceManager.GetString("SqlBeginProcedureTest", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        ''')
-        '''
-        '''returns {ReturnDataType}
-        '''
-        '''{WithOptions}
-        '''as
-        '''begin
-        '''set ansi_nulls on;
-        '''
-        '''declare @Result {ReturnDataType}
-        '''
-        ''';.
-        '''</summary>
-        Friend ReadOnly Property SqlBeginScalarFunction() As String
-            Get
-                Return ResourceManager.GetString("SqlBeginScalarFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''set ansi_nulls on;
-        '''
-        '''declare @Result {ReturnDataType};
-        '''
-        ''';.
-        '''</summary>
-        Friend ReadOnly Property SqlBeginScalarFunctionTest() As String
-            Get
-                Return ResourceManager.GetString("SqlBeginScalarFunctionTest", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''{WithOptions}
-        '''as
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlBeginView() As String
-            Get
-                Return ResourceManager.GetString("SqlBeginView", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''/***********************************************************************
-        '''
-        '''title : {Schema}.{RootProgramName}
-        '''{Comments}
-        '''***********************************************************************/
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlComment() As String
-            Get
-                Return ResourceManager.GetString("SqlComment", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''create function [{Schema}].[{RootProgramName}]
-        '''(
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlCreateFunction() As String
-            Get
-                Return ResourceManager.GetString("SqlCreateFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''create procedure [{Schema}].[{RootProgramName}]
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlCreateProcedure() As String
-            Get
-                Return ResourceManager.GetString("SqlCreateProcedure", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''create view [{Schema}].[{RootProgramName}]
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlCreateView() As String
-            Get
-                Return ResourceManager.GetString("SqlCreateView", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;p&apos;) is not null
-        '''	drop procedure [{Schema}].[{RootProgramName}];
-        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;fn&apos;) is not null
-        '''	drop function [{Schema}].[{RootProgramName}];
-        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;if&apos;) is not null
-        '''	drop function [{Schema}].[{RootProgramName}];
-        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;tf&apos;) is not null
-        '''	drop function [{Schema}].[{RootProgramName}];
-        '''if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,&apos;v&apos;) is not  [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlDrop() As String
-            Get
-                Return ResourceManager.GetString("SqlDrop", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to set nocount on;
-        '''
-        '''create table #CodeToDrop ([Type] nvarchar(10), [Schema] nvarchar(10), [Name] nvarchar(500));
-        '''
-        '''{RoutineList}
-        '''
-        '''with cteObjects as
-        '''(
-        '''	select
-        '''		r.ROUTINE_TYPE as ObjectType
-        '''		,r.ROUTINE_SCHEMA as ObjectSchema
-        '''		,r.ROUTINE_NAME as ObjectName
-        '''	from
-        '''		INFORMATION_SCHEMA.ROUTINES r
-        '''	union
-        '''	select
-        '''		&apos;VIEW&apos;
-        '''		,v.TABLE_SCHEMA
-        '''		,v.TABLE_NAME
-        '''	from
-        '''		INFORMATION_SCHEMA.VIEWS v
-        ''')
-        '''select
-        '''	o.ObjectType collate database_default as ObjectType
-        '''	,o.ObjectSchema collate database_default [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlDropOrphanedRoutines() As String
-            Get
-                Return ResourceManager.GetString("SqlDropOrphanedRoutines", resourceCulture)
+                Return ResourceManager.GetString("Tf_BeginTest", resourceCulture)
             End Get
         End Property
         
@@ -605,9 +766,9 @@ Namespace My.Resources
         '''return
         '''end.
         '''</summary>
-        Friend ReadOnly Property SqlEndMultiStatementTableFunction() As String
+        Friend ReadOnly Property TF_End() As String
             Get
-                Return ResourceManager.GetString("SqlEndMultiStatementTableFunction", resourceCulture)
+                Return ResourceManager.GetString("TF_End", resourceCulture)
             End Get
         End Property
         
@@ -615,137 +776,9 @@ Namespace My.Resources
         '''  Looks up a localized string similar to 
         '''select * from @TableValue;.
         '''</summary>
-        Friend ReadOnly Property SqlEndMultiStatementTableFunctionTest() As String
+        Friend ReadOnly Property TF_EndTest() As String
             Get
-                Return ResourceManager.GetString("SqlEndMultiStatementTableFunctionTest", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''/*######################################################################
-        '''                          YOUR CODE ENDS HERE.
-        '''######################################################################*/
-        '''
-        '''/***********************************************************************
-        '''	Commit the transaction. If we are in a nested transaction, this
-        '''	decrements the transaction count.
-        '''***********************************************************************/
-        '''
-        '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
-        ''' [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlEndProcedure1() As String
-            Get
-                Return ResourceManager.GetString("SqlEndProcedure1", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 		set @SqlrInternalErrorMessage =
-        '''			@SqlrInternalErrorMessage
-        '''			+ char(10)
-        '''			+ &apos;@{ErrorParameterName} = &apos;
-        '''			+ isnull(convert(varchar(max),@{ErrorParameterName}),&apos;[NULL]&apos;);.
-        '''</summary>
-        Friend ReadOnly Property SqlEndProcedure2() As String
-            Get
-                Return ResourceManager.GetString("SqlEndProcedure2", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''	end
-        '''	else
-        '''	-- The exception was raised in a nested procedure, so just grab the message it bubbled up to this procedure.
-        '''	begin
-        '''		set @SqlrInternalErrorMessage = error_message();
-        '''	end
-        '''
-        '''	print concat(&apos;exception - nest level is &apos;,@SqlrInternalNestLevel,&apos;; tran count is &apos;,@@trancount,&apos;; xact state is &apos;,xact_state());
-        '''
-        '''	if @SqlrInternalNestLevel =	0
-        '''	-- We&apos;re at the outermost procedure, so rollback the whole transaction.
-        '''	begin
-        '''		if xact_state() in (1,-1)
-        '''			rollback transaction
-        '''	end
-        '''	else
-        '''	-- [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlEndProcedure3() As String
-            Get
-                Return ResourceManager.GetString("SqlEndProcedure3", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''/*######################################################################
-        '''                          YOUR CODE ENDS HERE.
-        '''######################################################################*/
-        '''
-        '''-- This script defaults to ROLLBACK so you can repeat your testing.
-        '''
-        '''rollback transaction
-        '''--commit transaction
-        '''
-        '''print &apos;@SqlrInternalErrorNumber = &apos; + convert(varchar,(@SqlrInternalErrorNumber));
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlEndProcedureTest() As String
-            Get
-                Return ResourceManager.GetString("SqlEndProcedureTest", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''/***********************************************************************
-        '''    Return the function result.
-        '''***********************************************************************/
-        '''
-        '''return @Result
-        '''end
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlEndScalarFunction() As String
-            Get
-                Return ResourceManager.GetString("SqlEndScalarFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''/***********************************************************************
-        '''    Return the function result.
-        '''***********************************************************************/
-        '''
-        '''select @Result as [Result]
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlEndScalarFunctionTest() As String
-            Get
-                Return ResourceManager.GetString("SqlEndScalarFunctionTest", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to grant execute on [{Schema}].[{RootProgramName}] to [{User}];.
-        '''</summary>
-        Friend ReadOnly Property SqlGrantExecute() As String
-            Get
-                Return ResourceManager.GetString("SqlGrantExecute", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to grant select on [{Schema}].[{RootProgramName}] to [{User}];.
-        '''</summary>
-        Friend ReadOnly Property SqlGrantSelect() As String
-            Get
-                Return ResourceManager.GetString("SqlGrantSelect", resourceCulture)
+                Return ResourceManager.GetString("TF_EndTest", resourceCulture)
             End Get
         End Property
         
@@ -757,9 +790,9 @@ Namespace My.Resources
         '''(
         '''.
         '''</summary>
-        Friend ReadOnly Property SqlTableMultiStatementTableFunction() As String
+        Friend ReadOnly Property TF_Table() As String
             Get
-                Return ResourceManager.GetString("SqlTableMultiStatementTableFunction", resourceCulture)
+                Return ResourceManager.GetString("TF_Table", resourceCulture)
             End Get
         End Property
         
@@ -770,9 +803,9 @@ Namespace My.Resources
         '''(
         '''.
         '''</summary>
-        Friend ReadOnly Property SqlTableMultiStatementTableFunctionTest() As String
+        Friend ReadOnly Property TF_TableTest() As String
             Get
-                Return ResourceManager.GetString("SqlTableMultiStatementTableFunctionTest", resourceCulture)
+                Return ResourceManager.GetString("TF_TableTest", resourceCulture)
             End Get
         End Property
         
@@ -787,103 +820,9 @@ Namespace My.Resources
         '''&lt;/Squealer&gt;
         '''.
         '''</summary>
-        Friend ReadOnly Property SqlTemplateInlineTableFunction() As String
+        Friend ReadOnly Property TF_Template() As String
             Get
-                Return ResourceManager.GetString("SqlTemplateInlineTableFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
-        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''&lt;Parameters&gt;
-        '''&lt;!--Parameters--&gt;
-        '''&lt;/Parameters&gt;
-        '''&lt;Code/&gt;
-        '''&lt;Users/&gt;
-        '''&lt;/Squealer&gt;
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlTemplateMultiStatementTableFunction() As String
-            Get
-                Return ResourceManager.GetString("SqlTemplateMultiStatementTableFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
-        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''&lt;Parameters&gt;
-        '''&lt;!--Parameters--&gt;
-        '''&lt;/Parameters&gt;
-        '''&lt;Code/&gt;
-        '''&lt;Users/&gt;
-        '''&lt;/Squealer&gt;
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlTemplateProcedure() As String
-            Get
-                Return ResourceManager.GetString("SqlTemplateProcedure", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
-        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''&lt;Parameters&gt;
-        '''&lt;!--Parameters--&gt;
-        '''&lt;/Parameters&gt;
-        '''&lt;Returns Type=&quot;{ReturnDataType}&quot; /&gt;
-        '''&lt;Code/&gt;
-        '''&lt;Users/&gt;
-        '''&lt;/Squealer&gt;
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlTemplateScalarFunction() As String
-            Get
-                Return ResourceManager.GetString("SqlTemplateScalarFunction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
-        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
-        '''&lt;Code/&gt;
-        '''&lt;Users/&gt;
-        '''&lt;/Squealer&gt;
-        '''.
-        '''</summary>
-        Friend ReadOnly Property SqlTemplateView() As String
-            Get
-                Return ResourceManager.GetString("SqlTemplateView", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to /***********************************************************************
-        '''	Delete deprecated squealer log tables.
-        '''***********************************************************************/
-        '''
-        '''if exists (select 1 from sys.objects where name like &apos;%squealer%&apos;)
-        '''	or exists (select 1 from sys.schemas where name = &apos;squealer&apos;)
-        '''select 
-        '''	s.name
-        '''	,o.name
-        '''	,o.type_desc
-        '''from
-        '''	sys.objects o
-        '''join
-        '''	sys.schemas s
-        '''	on s.schema_id = o.schema_id
-        '''where
-        '''	o.name like &apos;%squealer%&apos;
-        '''	or s.name = &apos;squealer&apos;
-        '''union
-        '''selec [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property SqlTopScript() As String
-            Get
-                Return ResourceManager.GetString("SqlTopScript", resourceCulture)
+                Return ResourceManager.GetString("TF_Template", resourceCulture)
             End Get
         End Property
         
@@ -902,6 +841,43 @@ Namespace My.Resources
         Friend ReadOnly Property UserConfig() As String
             Get
                 Return ResourceManager.GetString("UserConfig", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''{WithOptions}
+        '''as
+        '''.
+        '''</summary>
+        Friend ReadOnly Property V_Begin() As String
+            Get
+                Return ResourceManager.GetString("V_Begin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''create view [{Schema}].[{RootProgramName}]
+        '''.
+        '''</summary>
+        Friend ReadOnly Property V_Create() As String
+            Get
+                Return ResourceManager.GetString("V_Create", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;
+        '''&lt;Squealer Type=&quot;{RootType}&quot;&gt;
+        '''&lt;Code/&gt;
+        '''&lt;Users/&gt;
+        '''&lt;/Squealer&gt;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property V_Template() As String
+            Get
+                Return ResourceManager.GetString("V_Template", resourceCulture)
             End Get
         End Property
     End Module

@@ -699,10 +699,10 @@ Module Main
         If (Action = eFileAction.generate OrElse Action = eFileAction.compare) AndAlso FileCount > 0 Then
 
             If Action = eFileAction.compare Then
-                GeneratedOutput = My.Resources.SqlDropOrphanedRoutines.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
+                GeneratedOutput = My.Resources.CompareObjects.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
             ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                 If MySettings.DetectSquealerObjects Then
-                    GeneratedOutput = My.Resources.SqlTopScript & GeneratedOutput
+                    GeneratedOutput = My.Resources._TopScript & GeneratedOutput
                 End If
             End If
 
@@ -1961,15 +1961,15 @@ Module Main
         Dim Template As String = String.Empty
         Select Case FileType
             Case SquealerObjectType.eType.InlineTableFunction
-                Template = My.Resources.SqlTemplateInlineTableFunction
+                Template = My.Resources.IF_Template
             Case SquealerObjectType.eType.MultiStatementTableFunction
-                Template = My.Resources.SqlTemplateMultiStatementTableFunction
+                Template = My.Resources.TF_Template
             Case SquealerObjectType.eType.ScalarFunction
-                Template = My.Resources.SqlTemplateScalarFunction
+                Template = My.Resources.FN_Template
             Case SquealerObjectType.eType.StoredProcedure
-                Template = My.Resources.SqlTemplateProcedure
+                Template = My.Resources.P_Template
             Case SquealerObjectType.eType.View
-                Template = My.Resources.SqlTemplateView
+                Template = My.Resources.V_Template
         End Select
         Template = Template.Replace("{RootType}", FileType.ToString).Replace("{THIS}", Constants.MyThis)
 
@@ -2082,7 +2082,7 @@ Module Main
 
         ' Drop 
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
-            CodeBlocks.Add(My.Resources.SqlDrop.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName)).ToString)
+            CodeBlocks.Add(My.Resources.DropAny.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName)).ToString)
         End If
 
         ' Comments
@@ -2092,18 +2092,18 @@ Module Main
         Catch ex As Exception
             OutComments = String.Empty
         End Try
-        Block = My.Resources.SqlComment.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Comments}", OutComments).Replace("{Schema}", SchemaName(RootName))
+        Block = My.Resources.Comment.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Comments}", OutComments).Replace("{Schema}", SchemaName(RootName))
 
         ' Create
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
             Dim SqlCreate As String = String.Empty
             Select Case oType
                 Case SquealerObjectType.eType.StoredProcedure
-                    SqlCreate = My.Resources.SqlCreateProcedure
+                    SqlCreate = My.Resources.P_Create
                 Case SquealerObjectType.eType.ScalarFunction, SquealerObjectType.eType.InlineTableFunction, SquealerObjectType.eType.MultiStatementTableFunction
-                    SqlCreate = My.Resources.SqlCreateFunction
+                    SqlCreate = My.Resources.FN_Create
                 Case SquealerObjectType.eType.View
-                    SqlCreate = My.Resources.SqlCreateView
+                    SqlCreate = My.Resources.V_Create
             End Select
             If bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
                 SqlCreate = SqlCreate.Replace("create", "alter")
@@ -2162,7 +2162,7 @@ Module Main
                     Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
                     ErrorLogParameters &= whynot
                 Else
-                    ErrorLogParameters &= vbCrLf & My.Resources.SqlEndProcedure2.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
+                    ErrorLogParameters &= vbCrLf & My.Resources.P_ErrorParameter.Replace("{ErrorParameterNumber}", ParameterCount.ToString).Replace("{ErrorParameterName}", Parameter.Item("Name").ToString)
                 End If
 
             End If
@@ -2219,9 +2219,9 @@ Module Main
         If oType = SquealerObjectType.eType.MultiStatementTableFunction Then
 
             If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                Block = Block & My.Resources.SqlTableMultiStatementTableFunctionTest
+                Block = Block & My.Resources.TF_TableTest
             Else
-                Block = Block & My.Resources.SqlTableMultiStatementTableFunction
+                Block = Block & My.Resources.TF_Table
             End If
 
             Dim PrimaryKey As String = String.Empty ' If this never gets filled, then there is no primary key.
@@ -2272,35 +2272,35 @@ Module Main
         Select Case oType
             Case SquealerObjectType.eType.StoredProcedure
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                    BeginBlock = My.Resources.SqlBeginProcedureTest
+                    BeginBlock = My.Resources.P_BeginTest
                 Else
-                    BeginBlock = My.Resources.SqlBeginProcedure
+                    BeginBlock = My.Resources.P_Begin
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 Dim Returns As String = Nothing
                 Returns = DirectCast(InRoot.SelectSingleNode("Returns"), Xml.XmlElement).GetAttribute("Type")
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                    BeginBlock = My.Resources.SqlBeginScalarFunctionTest.Replace("{ReturnDataType}", Returns)
+                    BeginBlock = My.Resources.FN_BeginTest.Replace("{ReturnDataType}", Returns)
                 Else
-                    BeginBlock = My.Resources.SqlBeginScalarFunction.Replace("{ReturnDataType}", Returns)
+                    BeginBlock = My.Resources.FN_Begin.Replace("{ReturnDataType}", Returns)
                 End If
             Case SquealerObjectType.eType.InlineTableFunction
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = String.Empty
                 Else
-                    BeginBlock = My.Resources.SqlBeginInlineTableFunction
+                    BeginBlock = My.Resources.IF_Begin
                 End If
             Case SquealerObjectType.eType.MultiStatementTableFunction
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                    BeginBlock = My.Resources.SqlBeginMultiStatementTableFunctionTest
+                    BeginBlock = My.Resources.Tf_BeginTest
                 Else
-                    BeginBlock = My.Resources.SqlBeginMultiStatementTableFunction
+                    BeginBlock = My.Resources.Tf_Begin
                 End If
             Case SquealerObjectType.eType.View
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = String.Empty
                 Else
-                    BeginBlock = My.Resources.SqlBeginView
+                    BeginBlock = My.Resources.V_Begin
                 End If
         End Select
 
@@ -2335,21 +2335,21 @@ Module Main
         Select Case oType
             Case SquealerObjectType.eType.StoredProcedure
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                    Block &= My.Resources.SqlEndProcedureTest
+                    Block &= My.Resources.P_EndTest
                 Else
-                    Block &= My.Resources.SqlEndProcedure1 & ErrorLogParameters & My.Resources.SqlEndProcedure3
+                    Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters) '& ErrorLogParameters & My.Resources.SqlEndProcedure3
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                    Block = Block & My.Resources.SqlEndScalarFunctionTest
+                    Block = Block & My.Resources.FN_EndTest
                 Else
-                    Block = Block & My.Resources.SqlEndScalarFunction
+                    Block = Block & My.Resources.FN_End
                 End If
             Case SquealerObjectType.eType.MultiStatementTableFunction
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                    Block = Block & My.Resources.SqlEndMultiStatementTableFunctionTest
+                    Block = Block & My.Resources.TF_EndTest
                 Else
-                    Block = Block & My.Resources.SqlEndMultiStatementTableFunction
+                    Block = Block & My.Resources.TF_End
                 End If
             Case SquealerObjectType.eType.View
                 ' nothing to add
@@ -2371,9 +2371,9 @@ Module Main
                 For Each User As DataRow In InUsers.Select("", "Name asc")
                     Dim GrantStatement As String
                     If oType = SquealerObjectType.eType.StoredProcedure OrElse oType = SquealerObjectType.eType.ScalarFunction Then
-                        GrantStatement = My.Resources.SqlGrantExecute
+                        GrantStatement = My.Resources.GrantExecute
                     Else
-                        GrantStatement = My.Resources.SqlGrantSelect
+                        GrantStatement = My.Resources.GrantSelect
                     End If
                     Block = Block & vbCrLf & GrantStatement.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{User}", User.Item("Name").ToString).Replace("{Schema}", SchemaName(RootName))
                 Next

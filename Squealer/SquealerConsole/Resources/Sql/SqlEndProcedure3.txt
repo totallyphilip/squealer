@@ -1,9 +1,0 @@
-
-	raiserror(@Squealer_ErrorMessage,@Squealer_ErrorSeverity,@Squealer_ErrorState)
-
-end catch
-
-if @SqlrInternalErrorNumber is not null
-	set @Squealer_ReturnValue = @SqlrInternalErrorNumber -- for backward compatibility with pre-release squealer
-
-return @Squealer_ReturnValue

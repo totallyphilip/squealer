@@ -124,89 +124,89 @@
   <data name="RaiseErrors" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\text\raiseerrors.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlBeginInlineTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbegininlinetablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="IF_Begin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlif_begin.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlBeginMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginmultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="Tf_Begin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_begin.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlBeginProcedure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginprocedure.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="P_Begin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_begin.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlBeginScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginscalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="FN_Begin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlfn_begin.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlComment" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlcomment.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Comment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlall_comment.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlCreateFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlcreatefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="FN_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlfn_create.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlCreateProcedure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlcreateprocedure.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="P_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_create.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlDrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqldrop.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="DropAny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlall_drop.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlEndMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendmultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="TF_End" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_end.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlEndProcedure1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendprocedure1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="P_End" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_end.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlEndScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendscalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="FN_End" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlfn_end.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlGrantExecute" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlgrantexecute.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="GrantExecute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlall_grantexecute.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlGrantSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlgrantselect.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="GrantSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlall_grantselect.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTableMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltablemultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="TF_Table" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_table.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTemplateInlineTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltemplateinlinetablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="IF_Template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlif_template.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTemplateMultiStatementTableFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltemplatemultistatementtablefunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="TF_Template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_template.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTemplateProcedure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltemplateprocedure.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="P_Template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_template.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTemplateScalarFunction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltemplatescalarfunction.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="FN_Template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlfn_template.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UserConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\text\userconfig.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlDropOrphanedRoutines" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqldroporphanedroutines.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="CompareObjects" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlall_findmismatches.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="ChangeLog" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\text\changelog.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlBeginMultiStatementTableFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginmultistatementtablefunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="Tf_BeginTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_begintest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlBeginProcedureTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginproceduretest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="P_BeginTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_begintest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlBeginScalarFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginscalarfunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="FN_BeginTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlfn_begintest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlEndMultiStatementTableFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendmultistatementtablefunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="TF_EndTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_endtest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlEndProcedureTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendproceduretest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="P_EndTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_endtest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlEndScalarFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendscalarfunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="FN_EndTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlfn_endtest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlTableMultiStatementTableFunctionTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltablemultistatementtablefunctiontest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="TF_TableTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqltf_tabletest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="AutoGetColumns" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\auto\autogetcolumns.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -217,17 +217,17 @@
   <data name="AutoProcTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\auto\autoproctemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="SqlBeginView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlbeginview.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="V_Begin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlv_begin.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTemplateView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltemplateview.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="V_Template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlv_template.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlCreateView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlcreateview.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="V_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlv_create.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SqlTopScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqltopscript.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="_TopScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\_topscript.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="ObjectList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\reverse\objectlist.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -262,10 +262,7 @@ To play the game, type HELP STARWARS at the command prompt.</value>
   <data name="RebelAlliance" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\images\rebelalliance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SqlEndProcedure2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendprocedure2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="SqlEndProcedure3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\sql\sqlendprocedure3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="P_ErrorParameter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\sql\sqlp_errorparameter.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
