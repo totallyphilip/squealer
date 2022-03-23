@@ -110,7 +110,6 @@ Module Main
         [exit]
         [explore]
         [fix]
-        [forget]
         [generate]
         [help]
         [list]
@@ -188,7 +187,7 @@ Module Main
         Else
             While InvalidFolderIndex() > -1
                 Dim i As Integer = InvalidFolderIndex()
-                Textify.WriteLine(eCommandType.forget.ToString & " " & FolderCollection(i), ConsoleColor.Red)
+                Textify.WriteLine("remove " & FolderCollection(i), ConsoleColor.Red)
                 ForgetFolder(i)
             End While
         End If
@@ -745,7 +744,11 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' list folders
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.list.ToString, "l"}, {"List the saved folders."}, CommandCatalog.eCommandCategory.folder)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.list.ToString, "l"}, {"List or remove project folders.", "Set maximum list size in General tab of settings. Removing folders from the list does NOT delete folders from the filesystem."}, CommandCatalog.eCommandCategory.folder, "project folder number", False)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("trim;remove all invalid or non-Squealer folders"))
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("remove;remove a specific project folder"))
+        cmd.Examples.Add("% -trim -- clean up list")
+        cmd.Examples.Add("% 3 -remove -- remove project folder 3 from list")
         MyCommands.Items.Add(cmd)
 
         ' use folder
@@ -754,12 +757,12 @@ Module Main
         cmd.Examples.Add("% northwind")
         MyCommands.Items.Add(cmd)
 
-        ' forget folder
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & Constants.SquealerFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("auto;detect invalid folders"))
-        cmd.Examples.Add("% 3")
-        cmd.Examples.Add("% -auto")
-        MyCommands.Items.Add(cmd)
+        '' forget folder
+        'cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & Constants.SquealerFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
+        'cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("auto;detect invalid folders"))
+        'cmd.Examples.Add("% 3")
+        'cmd.Examples.Add("% -auto")
+        'MyCommands.Items.Add(cmd)
 
         ' file explorer
         cmd = New CommandCatalog.CommandDefinition({eCommandType.explore.ToString, "fe"}, {"Open File Explorer.", "Opens the current working folder. If {options} is specified, the first matching " & My.Application.Info.ProductName & " object will be selected."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
@@ -920,6 +923,7 @@ Module Main
         Dim SwitchesValidated As Boolean = True
         Dim MySearchText As String = String.Empty
         Dim ObjectTypeFilter As New SquealerObjectTypeCollection
+        Dim FirstLoop As Boolean = True
 
 
 
@@ -927,7 +931,7 @@ Module Main
 
             Try
 
-                If MyCommand IsNot Nothing AndAlso MyCommand.Keyword = eCommandType.nerfherder.ToString Then
+                If MyCommand IsNot Nothing AndAlso MyCommand.Keyword = eCommandType.nerfherder.ToString AndAlso FirstLoop Then
 
                     ' do nothing
 
@@ -1134,16 +1138,6 @@ Module Main
 
 
 
-                ElseIf MyCommand.Keyword = eCommandType.[forget].ToString AndAlso StringInList(MySwitches, "auto") AndAlso String.IsNullOrEmpty(UserInput) Then
-
-                    AutoRemoveFolders()
-                    Textify.SayNewLine()
-
-                ElseIf MyCommand.Keyword = eCommandType.[forget].ToString AndAlso Not StringInList(MySwitches, "auto") AndAlso Not String.IsNullOrEmpty(UserInput) Then
-
-                    ForgetFolder(UserInput)
-                    Textify.SayNewLine()
-
 
 
 
@@ -1165,9 +1159,27 @@ Module Main
 
 
 
-                ElseIf MyCommand.Keyword = eCommandType.[list].ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.[list].ToString AndAlso StringInList(MySwitches, "remove") AndAlso Not String.IsNullOrEmpty(UserInput) Then
+
+                    ForgetFolder(UserInput)
+                    Textify.SayNewLine()
+
+
+
+
+                ElseIf MyCommand.Keyword = eCommandType.[list].ToString AndAlso StringInList(MySwitches, "trim") AndAlso String.IsNullOrEmpty(UserInput) Then
+
+                    AutoRemoveFolders()
+                    Textify.SayNewLine()
+
+
+
+                ElseIf MyCommand.Keyword = eCommandType.[list].ToString AndAlso MySwitches.Count = 0 AndAlso String.IsNullOrEmpty(UserInput) Then
 
                     ListFolders(WorkingFolder)
+
+
+
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[new].ToString Then
@@ -1312,7 +1324,7 @@ Module Main
 
                 Textify.SayError(ex.Message)
 
-                If MyCommand Is Nothing Then
+                If MyCommand Is Nothing OrElse MyCommand.Keyword = eCommandType.nerfherder.ToString Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, "Try: HELP")
                 Else
                     Textify.SayBulletLine(Textify.eBullet.Hash, "Try: HELP " & MyCommand.Keyword.ToUpper)
@@ -1321,6 +1333,8 @@ Module Main
                 Textify.SayNewLine()
 
             End Try
+
+            FirstLoop = False
 
             Dim ProjectName As String = GetProjectNickname(WorkingFolder)
 
@@ -1348,11 +1362,10 @@ Module Main
 
             Dim keyword As String = UserInput.Trim.Split(New Char() {" "c})(0) 'get the first solid word
             MyCommand = MyCommands.FindCommand(keyword)
-
-
-
             Dim SplitInput As New List(Of String)
-            SplitInput.AddRange(UserInput.Trim.Split(New Char() {" "c}))
+            If MyCommand IsNot Nothing Then
+                SplitInput.AddRange(UserInput.Trim.Split(New Char() {" "c}))
+            End If
             UserInput = String.Empty
             MySwitches.Clear()
 
@@ -1380,6 +1393,7 @@ Module Main
                 SplitInput.RemoveAt(0)
 
             End While
+
 
 
             ' Separate the command from everything after it
