@@ -12,7 +12,7 @@
 
 	commit transaction
 
-	print concat('commit - ``this`` - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+	print concat('commit - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 end try
 
@@ -27,9 +27,9 @@ begin catch
 
 	declare @Squealer_ErrorNumber int = error_number();
 
-	print concat('exception - ``this`` - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+	print concat('exception - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
-	if @Squealer_NestLevel = 0
+	if @@nestlevel = 1
 	-- We're at the outermost procedure, so rollback the whole transaction.
 	begin
 		if xact_state() in (1,-1)

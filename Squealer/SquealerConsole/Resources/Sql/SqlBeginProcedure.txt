@@ -13,13 +13,11 @@ set quoted_identifier on;
 
 declare @Squealer_ReturnValue int = 0;
 declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
-declare @Squealer_NestLevel int; -- Current nested level of procedure calls.
-set @Squealer_NestLevel = @@trancount;
 
 begin try
 	begin transaction
 
-	print concat('begin - ``this`` - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+	print concat('begin - ``this`` - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 /*######################################################################
                          YOUR CODE BEGINS HERE.
