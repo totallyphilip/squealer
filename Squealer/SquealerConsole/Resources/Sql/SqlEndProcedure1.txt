@@ -10,9 +10,9 @@
 
               -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
 
-	print concat('commit - ',object_schema_name(@@procid),'.',object_name(@@procid),' - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
-
 	commit transaction
+
+	print concat('commit - ``this`` - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 end try
 
@@ -25,11 +25,11 @@ end try
 
 begin catch
 
-	set @Squealer_ErrorNumber = error_number();
+	declare @Squealer_ErrorNumber int = error_number();
 
-	print concat('exception - ',object_schema_name(@@procid),'.',object_name(@@procid),' - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+	print concat('exception - ``this`` - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
-	if @Squealer_NestLevel =	0
+	if @Squealer_NestLevel = 0
 	-- We're at the outermost procedure, so rollback the whole transaction.
 	begin
 		if xact_state() in (1,-1)
@@ -46,7 +46,7 @@ begin catch
 	declare @Squealer_ErrorState int = error_state();
 	declare @Squealer_ErrorMessage varchar(max);
 	if @Squealer_ErrorNumber = 50000
-		set @Squealer_ErrorMessage = concat(error_message(),char(13),char(10),'-> Called by ',object_schema_name(@@procid),'.',object_name(@@procid))
+		set @Squealer_ErrorMessage = concat(error_message(),char(13),char(10),'-> from ``this``')
 	else
 		set @Squealer_ErrorMessage = concat(
 			'Procedure: ',isnull(error_procedure(),'n/a')

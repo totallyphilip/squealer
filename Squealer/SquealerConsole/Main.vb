@@ -1845,10 +1845,18 @@ Module Main
                 Case SquealerObjectType.eType.ScalarFunction
                     InCode &= "set @Result = 'hello world! love, ``this``'"
                 Case SquealerObjectType.eType.StoredProcedure
-                    InCode &= "select 'hello world! love, ``this``'"
+                    InCode &= "select 'hello world! love, ``this``'" _
+                        & vbCrLf _
+                        & vbCrLf _
+                        & vbCrLf _
+                        & "--optional (see https://docs.microsoft.com/en-us/sql/t-sql/language-elements/return-transact-sql?view=sql-server-ver15)" _
+                        & vbCrLf _
+                        & "--set @Squealer_ReturnValue = [ integer_expression ]"
                 Case SquealerObjectType.eType.View
                     InCode &= "select 'hello world! love, ``this``' as hello"
             End Select
+
+
 
         End If
 

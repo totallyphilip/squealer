@@ -11,15 +11,15 @@ set ansi_nulls on;
 set nocount on;
 set quoted_identifier on;
 
-declare @Squealer_ErrorNumber int = 0;
-declare @SqlrInternalErrorNumber int; -- for backward compatibility
+declare @Squealer_ReturnValue int = 0;
+declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
 declare @Squealer_NestLevel int; -- Current nested level of procedure calls.
 set @Squealer_NestLevel = @@trancount;
-print concat('begin - ',object_schema_name(@@procid),'.',object_name(@@procid),' - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
-SquealerDeadlock:
 begin try
 	begin transaction
+
+	print concat('begin - ``this`` - nest level is ',@Squealer_NestLevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
 /*######################################################################
                          YOUR CODE BEGINS HERE.

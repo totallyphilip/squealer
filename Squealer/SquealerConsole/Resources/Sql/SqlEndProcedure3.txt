@@ -4,6 +4,6 @@
 end catch
 
 if @SqlrInternalErrorNumber is not null
-	set @Squealer_ErrorNumber = @SqlrInternalErrorNumber -- for backward compatibility
+	set @Squealer_ReturnValue = @SqlrInternalErrorNumber -- for backward compatibility with pre-release squealer
 
-return @Squealer_ErrorNumber
+return @Squealer_ReturnValue
