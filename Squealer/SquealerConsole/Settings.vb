@@ -1,4 +1,8 @@
 ﻿Public Class Settings
+    Public Enum OutputStyle
+        Detailed
+        Percentage
+    End Enum
 
     Public Class WildcardClass
 
@@ -132,7 +136,6 @@
         End Set
     End Property
 
-
     Private _UseClipboard As Boolean
     Public Property UseClipboard As Boolean
         Get
@@ -153,7 +156,7 @@
         End Set
     End Property
 
-
+    'todo: what does this comment mean?
     Public LastRunVersion As String = String.Empty ' this is just to generate an intellisense name
 
     Private _DetectSquealerObjects As Boolean
@@ -176,10 +179,75 @@
         End Set
     End Property
 
+    Private _OutputStyle As OutputStyle
+    Public Property OutputStyleSelected As OutputStyle
+        Get
+            Return _OutputStyle
+        End Get
+        Set(value As OutputStyle)
+            _OutputStyle = value
+        End Set
+    End Property
+
+    Private _Increment As Integer
+    Public Property OutputIncrement As Integer
+        Get
+            Return _Increment
+        End Get
+        Set(value As Integer)
+            _Increment = value
+        End Set
+    End Property
+
+    Public Sub New()
+        Me.New(False)
+    End Sub
+
+    Public Sub New(doload As Boolean)
+        If doload Then
+            LoadSettings()
+        End If
+    End Sub
+
+    Public Sub LoadSettings()
+
+        ' Load settings.
+        Dim s As String
+        Me.LastVersionCheck = My.Configger.LoadSetting(NameOf(Me.LastVersionCheck), New DateTime(0))
+        Me.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SqlFiles), False)
+        Me.OpenWithDefault.ConfigFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.ConfigFiles), False)
+        Me.OpenWithDefault.SquealerFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SquealerFiles), False)
+        Me.TextEditor = My.Configger.LoadSetting(NameOf(Me.TextEditor), "notepad.exe")
+        Me.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(Me.LeaderboardConnectionString), String.Empty)
+        Me.RecentFolders = My.Configger.LoadSetting(NameOf(Me.RecentFolders), 20)
+        Me.Wildcards.UseEdges = My.Configger.LoadSetting(NameOf(Me.Wildcards.UseEdges), False)
+        Me.EditNew = My.Configger.LoadSetting(NameOf(Me.EditNew), True)
+        Me.UseClipboard = My.Configger.LoadSetting(NameOf(Me.UseClipboard), True)
+        Me.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(Me.ShowLeaderboardAtStartup), False)
+        Me.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectSquealerObjects), True)
+        Me.ShowBranch = My.Configger.LoadSetting(NameOf(Me.ShowBranch), True)
+        Me.Wildcards.UseSpaces = My.Configger.LoadSetting(NameOf(Me.Wildcards.UseSpaces), False)
+        Me.DirStyle = My.Configger.LoadSetting(NameOf(Me.DirStyle), eDirectoryStyle.compact.ToString)
+        s = My.Configger.LoadSetting(NameOf(Me.OutputStyleSelected), OutputStyle.Detailed.ToString)
+        Me.OutputStyleSelected = DirectCast([Enum].Parse(GetType(OutputStyle), s), OutputStyle)
+        Me.OutputIncrement = My.Configger.LoadSetting(NameOf(Me.OutputIncrement), 5)
+        If Not (Me.OutputIncrement = 5 OrElse Me.OutputIncrement = 10 OrElse Me.OutputIncrement = 20 OrElse Me.OutputIncrement = 25) Then
+            Me.OutputIncrement = 5
+        End If
+        Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
+
+    End Sub
 
     Public Sub Show()
 
         Dim f As New SettingsForm
+        f.ddIncrement.SelectedIndex = f.ddIncrement.FindString(Me.OutputIncrement.ToString) ' must set this before radio button because rb checked triggers an event using this value
+        Select Case Me.OutputStyleSelected
+            Case OutputStyle.Detailed
+                f.rbDetailed.Checked = True
+            Case OutputStyle.Percentage
+                f.rbPercentage.Checked = True
+        End Select
         f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
         f.chkConfigDefaultEditor.Checked = Me.OpenWithDefault.ConfigFiles
         f.chkSquealerDefaultEditor.Checked = Me.OpenWithDefault.SquealerFiles
@@ -210,6 +278,12 @@
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.ShowDialog()
 
+        Me.OutputIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
+        If f.rbDetailed.Checked Then
+            Me.OutputStyleSelected = OutputStyle.Detailed
+        Else
+            Me.OutputStyleSelected = OutputStyle.Percentage
+        End If
         Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
         Me.OpenWithDefault.ConfigFiles = f.chkConfigDefaultEditor.Checked
         Me.OpenWithDefault.SquealerFiles = f.chkSquealerDefaultEditor.Checked
@@ -232,6 +306,8 @@
             Me.DirStyle = eDirectoryStyle.symbolic.ToString
         End If
 
+        My.Configger.SaveSetting(NameOf(Me.OutputIncrement), Me.OutputIncrement)
+        My.Configger.SaveSetting(NameOf(Me.OutputStyleSelected), Me.OutputStyleSelected.ToString)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SqlFiles), Me.OpenWithDefault.SqlFiles)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.ConfigFiles), Me.OpenWithDefault.ConfigFiles)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SquealerFiles), Me.OpenWithDefault.SquealerFiles)

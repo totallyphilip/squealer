@@ -49,7 +49,7 @@ Module Main
 #Region " All The Definitions "
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
-    Private MySettings As New Settings
+    Private MySettings As New Settings(True)
 
     Private Class BatchParametersClass
 
@@ -313,23 +313,7 @@ Module Main
         ' Increase input buffer size.
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
-        ' Load settings.
-        MySettings.LastVersionCheck = My.Configger.LoadSetting(NameOf(MySettings.LastVersionCheck), New DateTime(0))
-        MySettings.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.SqlFiles), False)
-        MySettings.OpenWithDefault.ConfigFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.ConfigFiles), False)
-        MySettings.OpenWithDefault.SquealerFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.SquealerFiles), False)
-        MySettings.TextEditor = My.Configger.LoadSetting(NameOf(MySettings.TextEditor), "notepad.exe")
-        MySettings.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(MySettings.LeaderboardConnectionString), String.Empty)
-        MySettings.RecentFolders = My.Configger.LoadSetting(NameOf(MySettings.RecentFolders), 20)
-        MySettings.Wildcards.UseEdges = My.Configger.LoadSetting(NameOf(MySettings.Wildcards.UseEdges), False)
-        MySettings.EditNew = My.Configger.LoadSetting(NameOf(MySettings.EditNew), True)
-        MySettings.UseClipboard = My.Configger.LoadSetting(NameOf(MySettings.UseClipboard), True)
-        MySettings.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(MySettings.ShowLeaderboardAtStartup), False)
-        MySettings.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(MySettings.DetectSquealerObjects), True)
-        MySettings.ShowBranch = My.Configger.LoadSetting(NameOf(MySettings.ShowBranch), True)
-        MySettings.Wildcards.UseSpaces = My.Configger.LoadSetting(NameOf(MySettings.Wildcards.UseSpaces), False)
-        MySettings.DirStyle = My.Configger.LoadSetting(NameOf(MySettings.DirStyle), eDirectoryStyle.compact.ToString)
-        Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
+
 
         ' Restore the previous working folder
         Dim WorkingFolder As String = My.Configger.LoadSetting("PreviousFolder", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
@@ -654,6 +638,7 @@ Module Main
                     Case eFileAction.compare
                         Dim RootName As String = info.Name.Replace(Constants.SquealerFileExtension, "")
                         GeneratedOutput &= String.Format("insert #CodeToDrop ([Type], [Schema], [Name]) values ('{0}','{1}','{2}');", obj.Type.GeneralType, SchemaName(RootName), RoutineName(RootName)) & vbCrLf
+
                     Case eFileAction.delete
                         Dim trashcan As FileIO.RecycleOption = FileIO.RecycleOption.SendToRecycleBin
                         If bp.OutputMode = BatchParametersClass.eOutputMode.permanent Then

@@ -324,6 +324,7 @@
                 _CanFileSearch = True
                 _ParameterDefinition = String.Format("{0}|#", CommandCatalog.CommandDefinition.WildcardText)
                 _ParameterRequired = req
+                'todo: uh, no, this makes too many NEW calls, which means the config settings are repeatedly loaded. there has to be a better way.
                 Dim temp As New Settings() ' need an instance to expose a property name
                 For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(True).Split((New Char() {"|"c}))
                     _Options.Items.Add(New CommandCatalog.CommandSwitch(s))
