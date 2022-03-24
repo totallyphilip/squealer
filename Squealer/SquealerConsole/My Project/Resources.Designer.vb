@@ -422,9 +422,9 @@ Namespace My.Resources
         '''
         '''To play the game, type HELP STARWARS at the command prompt..
         '''</summary>
-        Friend ReadOnly Property HowToLaunchR2() As String
+        Friend ReadOnly Property HowToPlay() As String
             Get
-                Return ResourceManager.GetString("HowToLaunchR2", resourceCulture)
+                Return ResourceManager.GetString("HowToPlay", resourceCulture)
             End Get
         End Property
         

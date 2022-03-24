@@ -131,6 +131,12 @@
             SaveSetting(setting, System.Text.Encoding.Unicode.GetBytes(value))
         End Sub
 
+        ' Save a datetime.
+        Public Sub SaveSetting(setting As String, value As DateTime)
+            ' This could be saved directly as a byte array, but let's save it as a string to make the file human-readable.
+            SaveSetting(setting, value.ToString)
+        End Sub
+
         ' Save a boolean.
         Public Sub SaveSetting(setting As String, value As Boolean)
             ' This could be saved directly as a byte array, but let's save it as a string to make the file human-readable.
@@ -179,6 +185,19 @@
             Dim b As Byte() = Nothing
             If TryLoadSetting(setting, b) Then
                 value = System.Text.Encoding.Unicode.GetString(b)
+                Return True
+            Else
+                Return False
+            End If
+
+        End Function
+
+        ' Load a datetime.
+        Public Function TryLoadSetting(setting As String, ByRef value As DateTime) As Boolean
+
+            Dim s As String = Nothing
+            If TryLoadSetting(setting, s) Then
+                value = Convert.ToDateTime(s)
                 Return True
             Else
                 Return False
@@ -279,6 +298,18 @@
         Public Function LoadSetting(setting As String, defaultValue As String) As String
 
             Dim s As String = Nothing
+            If TryLoadSetting(setting, s) Then
+                Return s
+            Else
+                Return defaultValue
+            End If
+
+        End Function
+
+        ' Load a datetime.
+        Public Function LoadSetting(setting As String, defaultValue As DateTime) As DateTime
+
+            Dim s As DateTime = Nothing
             If TryLoadSetting(setting, s) Then
                 Return s
             Else

@@ -72,6 +72,16 @@
         End Get
     End Property
 
+    Private _LastVersionCheck As DateTime
+    Public Property LastVersionCheck As DateTime
+        Get
+            Return _LastVersionCheck
+        End Get
+        Set(value As DateTime)
+            _LastVersionCheck = value
+        End Set
+    End Property
+
     Private _TextEditor As String
     Public Property TextEditor As String
         Get

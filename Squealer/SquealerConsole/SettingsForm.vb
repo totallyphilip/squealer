@@ -45,7 +45,7 @@
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnStarwarsHelp.Click
-        System.Windows.Forms.MessageBox.Show(My.Resources.HowToLaunchR2)
+        System.Windows.Forms.MessageBox.Show(My.Resources.HowToPlay)
     End Sub
 
     Private Sub rbCompact_CheckedChanged(sender As Object, e As EventArgs) Handles rbCompact.CheckedChanged, rbFull.CheckedChanged, rbSymbolic.CheckedChanged

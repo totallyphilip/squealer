@@ -314,6 +314,7 @@ Module Main
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
         ' Load settings.
+        MySettings.LastVersionCheck = My.Configger.LoadSetting(NameOf(MySettings.LastVersionCheck), New DateTime(0))
         MySettings.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.SqlFiles), False)
         MySettings.OpenWithDefault.ConfigFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.ConfigFiles), False)
         MySettings.OpenWithDefault.SquealerFiles = My.Configger.LoadSetting(NameOf(MySettings.OpenWithDefault.SquealerFiles), False)
@@ -345,11 +346,16 @@ Module Main
         End Try
         Console.BufferWidth = Console.WindowWidth
 
-        ' Change log.
 
-        'Dim fileName$ = System.Reflection.Assembly.GetExecutingAssembly().Location
-        'Dim fvi As FileVersionInfo = FileVersionInfo.GetVersionInfo(fileName)
-        'Dim fvAsString$ = fvi.FileVersion ' but other useful properties exist too.
+        Dim v As New VersionCheck
+        If MySettings.LastVersionCheck.Date = DateTime.Now.Date Then
+            'Console.WriteLine("already checked today")
+        Else
+            'Console.WriteLine("checking...")
+            My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheck), DateTime.Now)
+            v.Check()
+        End If
+
 
         Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastRunVersion), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
@@ -846,14 +852,13 @@ Module Main
 
 
         ' help
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.help.ToString, "h"}, {"{command} for command list, or {command} {options} for details of a single command.", "Switches are ignored if a command is specified."}, CommandCatalog.eCommandCategory.other, "<command>", False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.help.ToString, "h"}, {"{command} {options} for help.", "Use {command} alone for list of commands."}, CommandCatalog.eCommandCategory.other, "<command>", False)
         cmd.Examples.Add("% " & eCommandType.generate.ToString)
         MyCommands.Items.Add(cmd)
 
 
         ' config
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.config.ToString, "c"}, {"Display or edit " & Constants.ConfigFilename & ".", "This file configures how " & My.Application.Info.ProductName & " operates in your current working folder."}, CommandCatalog.eCommandCategory.other)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("e;edit existing file"))
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.config.ToString, "c"}, {"Edit " & Constants.ConfigFilename & ".", "This file configures how " & My.Application.Info.ProductName & " operates in your current working folder."}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("new;create new default file"))
         MyCommands.Items.Add(cmd)
 
@@ -1003,15 +1008,7 @@ Module Main
                     End If
 
                     ' Now edit 
-                    If StringInList(MySwitches, "e") Then
-                        OpenInTextEditor(Constants.ConfigFilename, WorkingFolder)
-                    End If
-
-                    ' No switches, so just display
-                    If MySwitches.Count = 0 Then
-                        ShowFile(WorkingFolder, Constants.ConfigFilename)
-                        Textify.SayNewLine()
-                    End If
+                    OpenInTextEditor(Constants.ConfigFilename, WorkingFolder)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[delete].ToString _
@@ -1304,7 +1301,8 @@ Module Main
                     End If
 
 
-
+                    Dim v As New VersionCheck
+                    v.XmlTest()
 
 
 
@@ -2650,21 +2648,6 @@ Module Main
     Private Sub SayFileAction(ByVal notice As String, ByVal path As String, ByVal file As String)
         Textify.SayBullet(Textify.eBullet.Hash, notice & ":")
         Textify.SayBullet(Textify.eBullet.Arrow, path & IIf(file = "", "", "\" & file).ToString)
-    End Sub
-
-    Private Sub ShowFile(ByVal path As String, ByVal file As String)
-
-        Dim f As String = path & "\" & file
-
-        SayFileAction("reading", path, file)
-        Textify.SayNewLine()
-
-        Try
-            Console.WriteLine(My.Computer.FileSystem.ReadAllText(f))
-        Catch ex As Exception
-            Textify.SayError("File not found.", Textify.eSeverity.info)
-        End Try
-
     End Sub
 
 #End Region
