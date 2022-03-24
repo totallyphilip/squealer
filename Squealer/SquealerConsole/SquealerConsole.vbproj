@@ -229,6 +229,7 @@
     <Content Include="Resources\Sql\SqlFn_EndTest.txt" />
     <Content Include="Resources\Sql\SqlAll_GrantExecute.txt" />
     <Content Include="Resources\Sql\SqlAll_GrantSelect.txt" />
+    <Content Include="Resources\Text\WhatsNew.txt" />
     <None Include="Resources\Sql\_TopScript.txt" />
     <Content Include="Resources\Sql\SqlTf_TableTest.txt" />
     <Content Include="Resources\Sql\SqlTf_Table.txt" />

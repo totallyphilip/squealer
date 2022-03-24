@@ -365,7 +365,7 @@ Module Main
 
         ' Main process
         Console.WriteLine()
-        CheckS3(True)
+        'CheckS3(True)
         If Misc.IsStarWarsDay() Then
             Console.WriteLine("May the Fourth be with you! (easter egg revealed - see HELP)")
             Console.WriteLine()
@@ -1302,7 +1302,8 @@ Module Main
 
 
                     Dim v As New VersionCheck
-                    v.XmlTest()
+                    'v.Check()
+                    v.CreateMetadata()
 
 
 

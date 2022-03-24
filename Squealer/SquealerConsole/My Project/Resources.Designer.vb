@@ -880,5 +880,15 @@ Namespace My.Resources
                 Return ResourceManager.GetString("V_Template", resourceCulture)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Some stuff is updated!
+        '''We can have &lt;stuff/&gt; too!.
+        '''</summary>
+        Friend ReadOnly Property WhatsNew() As String
+            Get
+                Return ResourceManager.GetString("WhatsNew", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace
