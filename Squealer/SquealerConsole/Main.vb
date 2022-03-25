@@ -528,6 +528,10 @@ Module Main
 
         End If
 
+
+        Dim NextPercentageStep As Integer = MySettings.OutputIncrement
+
+
         For Each FileName As String In FileListing
 
             If Console.KeyAvailable() Then
@@ -634,11 +638,21 @@ Module Main
                     Case eFileAction.checkout
                         GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
                     Case eFileAction.generate
-                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count)
+                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count, MySettings.OutputStyleSelected = Settings.OutputStyle.Detailed)
+
+                        If MySettings.OutputStyleSelected = Settings.OutputStyle.Percentage Then
+                            Dim CurrentPercentage As Double = ((FileCount + 1) / FileListing.Count) * 100
+                            If CurrentPercentage >= NextPercentageStep Then
+                                While NextPercentageStep <= CurrentPercentage
+                                    NextPercentageStep += MySettings.OutputIncrement
+                                End While
+                                GeneratedOutput &= vbCrLf & String.Format("print '{0}% ({1}/{2})';", NextPercentageStep - MySettings.OutputIncrement, FileCount + 1, FileListing.Count) & vbCrLf
+                            End If
+                        End If
+
                     Case eFileAction.compare
                         Dim RootName As String = info.Name.Replace(Constants.SquealerFileExtension, "")
                         GeneratedOutput &= String.Format("insert #CodeToDrop ([Type], [Schema], [Name]) values ('{0}','{1}','{2}');", obj.Type.GeneralType, SchemaName(RootName), RoutineName(RootName)) & vbCrLf
-
                     Case eFileAction.delete
                         Dim trashcan As FileIO.RecycleOption = FileIO.RecycleOption.SendToRecycleBin
                         If bp.OutputMode = BatchParametersClass.eOutputMode.permanent Then
@@ -2050,7 +2064,7 @@ Module Main
 #Region " Proc Generation "
 
     ' Expand one root file.
-    Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass, cur As Integer, tot As Integer) As String
+    Private Function ExpandIndividual(info As IO.FileInfo, StringReplacements As DataTable, bp As BatchParametersClass, cur As Integer, tot As Integer, printsteps As Boolean) As String
 
         Dim oType As SquealerObjectType.eType = SquealerObjectType.Eval(XmlGetObjectType(info.FullName))
         Dim RootName As String = info.Name.Replace(Constants.SquealerFileExtension, "")
@@ -2064,7 +2078,10 @@ Module Main
 
         ' Pre-Code
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-            Dim InPreCode As String = String.Format("print '{2}/{3} creating {0}, {1}'", Constants.MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
+            Dim InPreCode As String = ""
+            If printsteps Then
+                InPreCode = String.Format("print '{2}/{3} creating {0}, {1}'", Constants.MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
+            End If
             Try
                 InPreCode &= InRoot.SelectSingleNode("PreCode").InnerText
             Catch ex As Exception

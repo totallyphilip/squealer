@@ -20,6 +20,9 @@
 
     Private Sub UpdateWildcardExample()
         txtWildcardExample.Text = Misc.WildcardInterpreter(txtTryIt.Text.Trim, chkSpacesWild.Checked, chkEdgesWild.Checked, False)
+        If txtTryIt.Text.EndsWith(".sqlr") Then
+            txtWildcardExample.Text = "<invalid!>"
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
@@ -88,10 +91,8 @@
 
     Private Sub UpdateProgressExample()
 
-        txtProgressExample.Text = "Creating objects..."
-
         If rbDetailed.Checked Then
-            txtProgressExample.Text &= vbCrLf & "1/10 creating [dbo].[Func1], ScalarFunction" _
+            txtProgressExample.Text = "1/10 creating [dbo].[Func1], ScalarFunction" _
                 & vbCrLf & "2/10 creating [dbo].[Proc1], StoredProcedure" _
                 & vbCrLf & "3/10 creating [dbo].[Proc2], StoredProcedure" _
                 & vbCrLf & "4/10 creating [dbo].[Proc3], StoredProcedure" _
@@ -104,10 +105,12 @@
         End If
 
         If rbPercentage.Checked Then
+            txtProgressExample.Text = String.Empty
             Dim v As Integer = CInt(ddIncrement.Items(ddIncrement.SelectedIndex))
             For n As Integer = v To 100 Step v
                 txtProgressExample.Text &= vbCrLf & String.Format("{0}%", n.ToString)
             Next
+            txtProgressExample.Text = txtProgressExample.Text.Trim
         End If
 
     End Sub
