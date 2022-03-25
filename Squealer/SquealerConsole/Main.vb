@@ -80,13 +80,6 @@ Module Main
 
 #Region " Enums "
 
-    Public Enum eDirectoryStyle
-        full
-        compact
-        symbolic
-        invalid
-    End Enum
-
     Private Enum eFileAction
         directory
         edit
@@ -153,11 +146,11 @@ Module Main
     Private Function FolderCollection() As List(Of String)
 
         Dim folders As New List(Of String)
-        Dim unsplit As String = My.Configger.LoadSetting("Folders", String.Empty)
+        Dim unsplit As String = MySettings.RecentProjectFolders
         If Not String.IsNullOrWhiteSpace(unsplit) Then
-            folders.AddRange(My.Configger.LoadSetting("Folders", "nothing").Split(New Char() {"|"c}))
+            folders.AddRange(unsplit.Split(New Char() {"|"c}))
         End If
-        While folders.Count > MySettings.RecentFolders
+        While folders.Count > MySettings.ProjectFoldersLimit
             folders.RemoveAt(folders.Count - 1)
         End While
         Return folders
@@ -216,7 +209,7 @@ Module Main
         Dim longestnickname As Integer = 0
 
         If folders.Count = 0 Then
-            Throw New Exception("No remembered folders.")
+            Throw New Exception("No saved project folders.")
         Else
 
             Dim farray(folders.Count - 1, 3) As String
@@ -281,7 +274,7 @@ Module Main
             Dim folders As List(Of String) = FolderCollection()
             Dim folder As String = folders(index)
             folders.Remove(folder)
-            My.Configger.SaveSetting("Folders", FolderString(folders))
+            MySettings.RecentProjectFolders = FolderString(folders)
             Textify.SayBulletLine(Textify.eBullet.Hash, "OK")
         Catch ex As Exception
             Throw New Exception("Invalid folder number.")
@@ -297,7 +290,7 @@ Module Main
             folders.Remove(folder)
         End While
         folders.Insert(0, folder)
-        My.Configger.SaveSetting("Folders", FolderString(folders))
+        MySettings.RecentProjectFolders = FolderString(folders)
 
     End Sub
 
@@ -316,7 +309,7 @@ Module Main
 
 
         ' Restore the previous working folder
-        Dim WorkingFolder As String = My.Configger.LoadSetting("PreviousFolder", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
+        Dim WorkingFolder As String = MySettings.LastProjectFolder
         If My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
             ChangeFolder(WorkingFolder, WorkingFolder)
         End If
@@ -332,19 +325,19 @@ Module Main
 
 
         Dim v As New VersionCheck
-        If MySettings.LastVersionCheck.Date = DateTime.Now.Date Then
+        If MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
             'Console.WriteLine("already checked today")
         Else
             'Console.WriteLine("checking...")
-            My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheck), DateTime.Now)
+            My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             v.Check()
         End If
 
 
-        Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastRunVersion), "0.0.0.0"))
+        Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
             DisplayChangelog()
-            My.Configger.SaveSetting(NameOf(MySettings.LastRunVersion), My.Application.Info.Version.ToString)
+            My.Configger.SaveSetting(NameOf(MySettings.LastVersionNumberExecuted), My.Application.Info.Version.ToString)
         End If
 
         ' Main process
@@ -364,7 +357,7 @@ Module Main
         My.Configger.SaveSetting("WindowHeight", Console.WindowHeight)
 
         ' Save the current working folder for next time
-        My.Configger.SaveSetting("PreviousFolder", WorkingFolder)
+        MySettings.LastProjectFolder = WorkingFolder
 
         ' Delete any settings that weren't referenced
         My.Configger.PruneSettings()
@@ -430,7 +423,7 @@ Module Main
                 Console.WriteLine()
                 Throw New ArgumentException(s.Trim & " search term contains explicit reference To " & Constants.SquealerFileExtension)
             End If
-            s = Misc.WildcardInterpreter(s.Trim, MySettings.Wildcards, FindExact)
+            s = Misc.WildcardInterpreter(s.Trim, MySettings.WildcardBehavior, FindExact)
             Textify.Write(comma & " " & s, highlightcolor)
             comma = ", "
 
@@ -507,19 +500,19 @@ Module Main
             Console.Write(eCommandType.directory.ToString.ToLower & " - x ")
         Else
 
-            If MySettings.DirStyle = eDirectoryStyle.full.ToString Then
+            If MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Full Then
                 Textify.Write("Type Flags ")
-            ElseIf MySettings.DirStyle = eDirectoryStyle.compact.ToString Then
+            ElseIf MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Compact Then
                 Textify.Write("   ")
-            ElseIf MySettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
+            ElseIf MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Symbolic Then
                 Textify.Write(" ")
             End If
 
             Textify.WriteLine("FileName")
 
-            If MySettings.DirStyle = eDirectoryStyle.full.ToString Then
+            If MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Full Then
                 Textify.Write("---- ----- ")
-            ElseIf MySettings.DirStyle = eDirectoryStyle.compact.ToString Then
+            ElseIf MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Compact Then
                 Textify.Write("-- ")
             End If
 
@@ -529,7 +522,7 @@ Module Main
         End If
 
 
-        Dim NextPercentageStep As Integer = MySettings.OutputIncrement
+        Dim NextPercentageStep As Integer = MySettings.OutputProgressPercentageIncrement
 
 
         For Each FileName As String In FileListing
@@ -561,16 +554,16 @@ Module Main
                 End If
 
 
-                If MySettings.DirStyle = eDirectoryStyle.full.ToString Then
+                If MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Full Then
                     Textify.Write(" " & obj.Type.ShortType.ToString.PadRight(4) & obj.FlagsSummary)
-                ElseIf MySettings.DirStyle = eDirectoryStyle.compact.ToString Then
+                ElseIf MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Compact Then
                     Textify.Write(obj.Type.ShortType.ToString.PadRight(2))
                     If String.IsNullOrWhiteSpace(obj.FlagsSummary) Then
                         Textify.Write(" ")
                     Else
                         Textify.Write("*")
                     End If
-                ElseIf MySettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
+                ElseIf MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Symbolic Then
                     If String.IsNullOrWhiteSpace(obj.FlagsSummary) Then
                         Textify.Write(" ")
                     Else
@@ -595,7 +588,7 @@ Module Main
                         symbol = "+"
                 End Select
 
-                If MySettings.DirStyle = eDirectoryStyle.symbolic.ToString Then
+                If MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Symbolic Then
                     Textify.Write(symbol, ConsoleColor.Green)
                 End If
 
@@ -638,15 +631,15 @@ Module Main
                     Case eFileAction.checkout
                         GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
                     Case eFileAction.generate
-                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count, MySettings.OutputStyleSelected = Settings.OutputStyle.Detailed)
+                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count, MySettings.OutputProgressIndicatorStyleSelected = Settings.OutputProgressIndicatorStyle.Detailed)
 
-                        If MySettings.OutputStyleSelected = Settings.OutputStyle.Percentage Then
+                        If MySettings.OutputProgressIndicatorStyleSelected = Settings.OutputProgressIndicatorStyle.Percentage Then
                             Dim CurrentPercentage As Double = ((FileCount + 1) / FileListing.Count) * 100
                             If CurrentPercentage >= NextPercentageStep Then
                                 While NextPercentageStep <= CurrentPercentage
-                                    NextPercentageStep += MySettings.OutputIncrement
+                                    NextPercentageStep += MySettings.OutputProgressPercentageIncrement
                                 End While
-                                GeneratedOutput &= vbCrLf & String.Format("print '{0}% ({1}/{2})';", NextPercentageStep - MySettings.OutputIncrement, FileCount + 1, FileListing.Count) & vbCrLf
+                                GeneratedOutput &= vbCrLf & String.Format("print '{0}% ({1}/{2})';", NextPercentageStep - MySettings.OutputProgressPercentageIncrement, FileCount + 1, FileListing.Count) & vbCrLf
                             End If
                         End If
 
@@ -705,12 +698,12 @@ Module Main
             If Action = eFileAction.compare Then
                 GeneratedOutput = My.Resources.CompareObjects.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
             ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
-                If MySettings.DetectSquealerObjects Then
+                If MySettings.DetectDeprecatedSquealerObjects Then
                     GeneratedOutput = My.Resources._TopScript & GeneratedOutput
                 End If
             End If
 
-            If MySettings.UseClipboard Then
+            If MySettings.OutputToClipboard Then
                 Console.WriteLine()
                 Textify.SayBulletLine(Textify.eBullet.Hash, "Output copied to Windows clipboard.")
                 Clipboard.SetText(GeneratedOutput)
@@ -1189,7 +1182,7 @@ Module Main
 
                     Dim f As String = CreateNewFile(WorkingFolder, filetype, UserInput)
 
-                    If MySettings.EditNew AndAlso Not String.IsNullOrEmpty(f) Then
+                    If MySettings.AutoEditNewFiles AndAlso Not String.IsNullOrEmpty(f) Then
                         EditFile(f)
                     End If
 
@@ -1220,7 +1213,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.explore.ToString Then
 
-                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.Wildcards.UseSpaces, MySettings.Wildcards.UseEdges, False), WorkingFolder)
+                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardBehavior.UseSpaces, MySettings.WildcardBehavior.UseEdges, False), WorkingFolder)
 
 
 
@@ -1339,7 +1332,7 @@ Module Main
             Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
 
             Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
-            If MySettings.ShowBranch Then
+            If MySettings.ShowGitBranch Then
                 'Textify.Write(GitShell.CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
                 Textify.Write(String.Format(" ({0})", GitShell.CurrentBranch(WorkingFolder)), ConsoleColor.DarkGreen)
             End If
@@ -2481,27 +2474,6 @@ Module Main
         End If
     End Sub
 
-    Private Function ValidDirectoryStyle(s As String) As Boolean
-        Select Case s.ToLower
-            Case eDirectoryStyle.compact.ToString
-                Return True
-            Case eDirectoryStyle.full.ToString
-                Return True
-            Case eDirectoryStyle.symbolic.ToString
-                Return True
-            Case Else
-                Return False
-        End Select
-    End Function
-
-    Private Function PadRightIfNotEmpty(s As String) As String
-        If String.IsNullOrWhiteSpace(s) Then
-            Return s
-        Else
-            Return s & " "
-        End If
-    End Function
-
     Private Function ReadChangeLog() As String
 
         Dim s As String = String.Empty
@@ -3210,7 +3182,7 @@ Module Main
         If (filename.EndsWith(".sql") AndAlso Not MySettings.OpenWithDefault.SqlFiles) _
             OrElse (filename.EndsWith(Constants.ConfigFilename) AndAlso Not MySettings.OpenWithDefault.ConfigFiles) _
             OrElse (filename.EndsWith(Constants.SquealerFileExtension) AndAlso Not MySettings.OpenWithDefault.SquealerFiles) Then
-            EasyShell.StartProcess(MySettings.TextEditor, filename)
+            EasyShell.StartProcess(MySettings.TextEditorPath, filename)
         Else
             EasyShell.StartProcess(filename)
         End If

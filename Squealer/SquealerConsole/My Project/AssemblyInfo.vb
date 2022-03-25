@@ -10,7 +10,7 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Squealer 2022")>
 <Assembly: AssemblyDescription("A tool for creating SQL Server functions, views, and stored procedures with built-in error handling.")>
-<Assembly: AssemblyCompany("Philip Wright")>
+<Assembly: AssemblyCompany("AsciiMotive")>
 <Assembly: AssemblyProduct("Squealer")>
 <Assembly: AssemblyCopyright("(c) 2022 Philip Wright")>
 <Assembly: AssemblyTrademark("Be kind to animals, and may the Force be with you.")>

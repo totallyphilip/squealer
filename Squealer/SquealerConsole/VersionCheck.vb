@@ -85,7 +85,7 @@
     Public Sub Check()
 
         Try
-            Throw New Exception("nope")
+            Throw New Exception("Failed to retrieve update information from Amazon S3 bucket.")
         Catch ex As Exception
             Textify.SayError(ex.Message)
             Textify.SayBulletLine(Textify.eBullet.Star, "Visit www.asciimotive.com to obtain the latest version of Squealer.")

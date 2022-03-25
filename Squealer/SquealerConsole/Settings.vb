@@ -1,10 +1,6 @@
 ﻿Public Class Settings
-    Public Enum OutputStyle
-        Detailed
-        Percentage
-    End Enum
 
-    Public Class WildcardClass
+    Public Class WildcardBehaviorClass
 
         Private _UseEdges As Boolean
         Public Property UseEdges As Boolean
@@ -62,10 +58,10 @@
 
     End Class
 
-    Private _Wildcards As New WildcardClass
-    Public ReadOnly Property Wildcards As WildcardClass
+    Private _WildcardBehavior As New WildcardBehaviorClass
+    Public ReadOnly Property WildcardBehavior As WildcardBehaviorClass
         Get
-            Return _Wildcards
+            Return _WildcardBehavior
         End Get
     End Property
 
@@ -76,23 +72,23 @@
         End Get
     End Property
 
-    Private _LastVersionCheck As DateTime
-    Public Property LastVersionCheck As DateTime
+    Private _LastVersionCheckDate As DateTime
+    Public Property LastVersionCheckDate As DateTime
         Get
-            Return _LastVersionCheck
+            Return _LastVersionCheckDate
         End Get
         Set(value As DateTime)
-            _LastVersionCheck = value
+            _LastVersionCheckDate = value
         End Set
     End Property
 
-    Private _TextEditor As String
-    Public Property TextEditor As String
+    Private _TextEditorPath As String
+    Public Property TextEditorPath As String
         Get
-            Return _TextEditor
+            Return _TextEditorPath
         End Get
         Set(value As String)
-            _TextEditor = value
+            _TextEditorPath = value
         End Set
     End Property
 
@@ -106,66 +102,73 @@
         End Set
     End Property
 
-    Private _EditNew As Boolean
-    Public Property EditNew As Boolean
+    Private _AutoEditNewFiles As Boolean
+    Public Property AutoEditNewFiles As Boolean
         Get
-            Return _EditNew
+            Return _AutoEditNewFiles
         End Get
         Set(value As Boolean)
-            _EditNew = value
+            _AutoEditNewFiles = value
         End Set
     End Property
 
-    Private _DirStyle As String
-    Public Property DirStyle As String
+    Private _ProjectFoldersLimit As Integer
+    Public Property ProjectFoldersLimit As Integer
         Get
-            Return _DirStyle
-        End Get
-        Set(value As String)
-            _DirStyle = value
-        End Set
-    End Property
-
-    Private _RecentFolders As Integer
-    Public Property RecentFolders As Integer
-        Get
-            Return _RecentFolders
+            Return _ProjectFoldersLimit
         End Get
         Set(value As Integer)
-            _RecentFolders = value
+            _ProjectFoldersLimit = value
         End Set
     End Property
 
-    Private _UseClipboard As Boolean
-    Public Property UseClipboard As Boolean
+    Public Property RecentProjectFolders As String
         Get
-            Return _UseClipboard
+            Return My.Configger.LoadSetting(NameOf(Me.RecentProjectFolders), String.Empty)
         End Get
-        Set(value As Boolean)
-            _UseClipboard = value
+        Set(value As String)
+            My.Configger.SaveSetting(NameOf(Me.RecentProjectFolders), value)
         End Set
     End Property
 
-    Private _ShowBranch As Boolean
-    Public Property ShowBranch As Boolean
+    Public Property LastProjectFolder As String
         Get
-            Return _ShowBranch
+            Return My.Configger.LoadSetting(NameOf(Me.LastProjectFolder), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
         End Get
-        Set(value As Boolean)
-            _ShowBranch = value
+        Set(value As String)
+            My.Configger.SaveSetting(NameOf(Me.LastProjectFolder), value)
         End Set
     End Property
 
-    'todo: what does this comment mean?
-    Public LastRunVersion As String = String.Empty ' this is just to generate an intellisense name
-
-    Private _DetectSquealerObjects As Boolean
-    Public Property DetectSquealerObjects As Boolean
+    Private _OutputToClipboard As Boolean
+    Public Property OutputToClipboard As Boolean
         Get
-            Return _DetectSquealerObjects
+            Return _OutputToClipboard
         End Get
         Set(value As Boolean)
-            _DetectSquealerObjects = value
+            _OutputToClipboard = value
+        End Set
+    End Property
+
+    Private _ShowGitBranch As Boolean
+    Public Property ShowGitBranch As Boolean
+        Get
+            Return _ShowGitBranch
+        End Get
+        Set(value As Boolean)
+            _ShowGitBranch = value
+        End Set
+    End Property
+
+    Public LastVersionNumberExecuted As String = String.Empty
+
+    Private _DetectDeprecatedSquealerObjects As Boolean
+    Public Property DetectDeprecatedSquealerObjects As Boolean
+        Get
+            Return _DetectDeprecatedSquealerObjects
+        End Get
+        Set(value As Boolean)
+            _DetectDeprecatedSquealerObjects = value
         End Set
     End Property
 
@@ -179,18 +182,39 @@
         End Set
     End Property
 
-    Private _OutputStyle As OutputStyle
-    Public Property OutputStyleSelected As OutputStyle
+    Public Enum OutputProgressIndicatorStyle
+        Detailed
+        Percentage
+    End Enum
+
+    Private _OutputProgressIndicatorStyleSelected As OutputProgressIndicatorStyle
+    Public Property OutputProgressIndicatorStyleSelected As OutputProgressIndicatorStyle
         Get
-            Return _OutputStyle
+            Return _OutputProgressIndicatorStyleSelected
         End Get
-        Set(value As OutputStyle)
-            _OutputStyle = value
+        Set(value As OutputProgressIndicatorStyle)
+            _OutputProgressIndicatorStyleSelected = value
+        End Set
+    End Property
+
+    Public Enum DirectoryStyle
+        Full
+        Compact
+        Symbolic
+    End Enum
+
+    Private _DirectoryStyleSelected As DirectoryStyle
+    Public Property DirectoryStyleSelected As DirectoryStyle
+        Get
+            Return _DirectoryStyleSelected
+        End Get
+        Set(value As DirectoryStyle)
+            _DirectoryStyleSelected = value
         End Set
     End Property
 
     Private _Increment As Integer
-    Public Property OutputIncrement As Integer
+    Public Property OutputProgressPercentageIncrement As Integer
         Get
             Return _Increment
         End Get
@@ -200,10 +224,12 @@
     End Property
 
     Public Sub New()
+        ' Use this when you just want an empty settings object.
         Me.New(False)
     End Sub
 
     Public Sub New(doload As Boolean)
+        ' Use this to load saved settings from disk.
         If doload Then
             LoadSettings()
         End If
@@ -213,26 +239,27 @@
 
         ' Load settings.
         Dim s As String
-        Me.LastVersionCheck = My.Configger.LoadSetting(NameOf(Me.LastVersionCheck), New DateTime(0))
+        Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
         Me.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SqlFiles), False)
         Me.OpenWithDefault.ConfigFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.ConfigFiles), False)
         Me.OpenWithDefault.SquealerFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SquealerFiles), False)
-        Me.TextEditor = My.Configger.LoadSetting(NameOf(Me.TextEditor), "notepad.exe")
+        Me.TextEditorPath = My.Configger.LoadSetting(NameOf(Me.TextEditorPath), "notepad.exe")
         Me.LeaderboardConnectionString = My.Configger.LoadSetting(NameOf(Me.LeaderboardConnectionString), String.Empty)
-        Me.RecentFolders = My.Configger.LoadSetting(NameOf(Me.RecentFolders), 20)
-        Me.Wildcards.UseEdges = My.Configger.LoadSetting(NameOf(Me.Wildcards.UseEdges), False)
-        Me.EditNew = My.Configger.LoadSetting(NameOf(Me.EditNew), True)
-        Me.UseClipboard = My.Configger.LoadSetting(NameOf(Me.UseClipboard), True)
+        Me.ProjectFoldersLimit = My.Configger.LoadSetting(NameOf(Me.ProjectFoldersLimit), 20)
+        Me.WildcardBehavior.UseEdges = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseEdges), False)
+        Me.AutoEditNewFiles = My.Configger.LoadSetting(NameOf(Me.AutoEditNewFiles), True)
+        Me.OutputToClipboard = My.Configger.LoadSetting(NameOf(Me.OutputToClipboard), True)
         Me.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(Me.ShowLeaderboardAtStartup), False)
-        Me.DetectSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectSquealerObjects), True)
-        Me.ShowBranch = My.Configger.LoadSetting(NameOf(Me.ShowBranch), True)
-        Me.Wildcards.UseSpaces = My.Configger.LoadSetting(NameOf(Me.Wildcards.UseSpaces), False)
-        Me.DirStyle = My.Configger.LoadSetting(NameOf(Me.DirStyle), eDirectoryStyle.compact.ToString)
-        s = My.Configger.LoadSetting(NameOf(Me.OutputStyleSelected), OutputStyle.Detailed.ToString)
-        Me.OutputStyleSelected = DirectCast([Enum].Parse(GetType(OutputStyle), s), OutputStyle)
-        Me.OutputIncrement = My.Configger.LoadSetting(NameOf(Me.OutputIncrement), 5)
-        If Not (Me.OutputIncrement = 5 OrElse Me.OutputIncrement = 10 OrElse Me.OutputIncrement = 20 OrElse Me.OutputIncrement = 25) Then
-            Me.OutputIncrement = 5
+        Me.DetectDeprecatedSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectDeprecatedSquealerObjects), True)
+        Me.ShowGitBranch = My.Configger.LoadSetting(NameOf(Me.ShowGitBranch), True)
+        Me.WildcardBehavior.UseSpaces = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseSpaces), False)
+        s = My.Configger.LoadSetting(NameOf(Me.DirectoryStyleSelected), DirectoryStyle.Full.ToString)
+        Me.DirectoryStyleSelected = DirectCast([Enum].Parse(GetType(DirectoryStyle), s), DirectoryStyle)
+        s = My.Configger.LoadSetting(NameOf(Me.OutputProgressIndicatorStyleSelected), OutputProgressIndicatorStyle.Detailed.ToString)
+        Me.OutputProgressIndicatorStyleSelected = DirectCast([Enum].Parse(GetType(OutputProgressIndicatorStyle), s), OutputProgressIndicatorStyle)
+        Me.OutputProgressPercentageIncrement = My.Configger.LoadSetting(NameOf(Me.OutputProgressPercentageIncrement), 5)
+        If Not (Me.OutputProgressPercentageIncrement = 5 OrElse Me.OutputProgressPercentageIncrement = 10 OrElse Me.OutputProgressPercentageIncrement = 20 OrElse Me.OutputProgressPercentageIncrement = 25) Then
+            Me.OutputProgressPercentageIncrement = 5
         End If
         Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
 
@@ -241,88 +268,88 @@
     Public Sub Show()
 
         Dim f As New SettingsForm
-        f.ddIncrement.SelectedIndex = f.ddIncrement.FindString(Me.OutputIncrement.ToString) ' must set this before radio button because rb checked triggers an event using this value
-        Select Case Me.OutputStyleSelected
-            Case OutputStyle.Detailed
+        f.ddIncrement.SelectedIndex = f.ddIncrement.FindString(Me.OutputProgressPercentageIncrement.ToString) ' must set this before radio button because rb checked triggers an event using this value
+        Select Case Me.OutputProgressIndicatorStyleSelected
+            Case OutputProgressIndicatorStyle.Detailed
                 f.rbDetailed.Checked = True
-            Case OutputStyle.Percentage
+            Case OutputProgressIndicatorStyle.Percentage
                 f.rbPercentage.Checked = True
+        End Select
+        Select Case Me.DirectoryStyleSelected
+            Case DirectoryStyle.Compact
+                f.rbCompact.Checked = True
+            Case DirectoryStyle.Full
+                f.rbFull.Checked = True
+            Case DirectoryStyle.Symbolic
+                f.rbSymbolic.Checked = True
         End Select
         f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
         f.chkConfigDefaultEditor.Checked = Me.OpenWithDefault.ConfigFiles
         f.chkSquealerDefaultEditor.Checked = Me.OpenWithDefault.SquealerFiles
-        f.txtEditorProgram.Text = Me.TextEditor
+        f.txtEditorProgram.Text = Me.TextEditorPath
         f.txtLeaderboardCs.Text = Me.LeaderboardConnectionString
-        f.updnFolderSaves.Value = Me.RecentFolders
-        f.chkSpacesWild.Checked = Me.Wildcards.UseSpaces
-        f.chkEdgesWild.Checked = Me.Wildcards.UseEdges
-        f.optEditNewFiles.Checked = Me.EditNew
+        f.updnFolderSaves.Value = Me.ProjectFoldersLimit
+        f.chkSpacesWild.Checked = Me.WildcardBehavior.UseSpaces
+        f.chkEdgesWild.Checked = Me.WildcardBehavior.UseEdges
+        f.optEditNewFiles.Checked = Me.AutoEditNewFiles
         f.chkShowLeaderboard.Checked = Me.ShowLeaderboardAtStartup
-        If Me.UseClipboard Then
+        If Me.OutputToClipboard Then
             f.rbClipboard.Checked = True
         Else
             f.rbTempFile.Checked = True
         End If
-        f.optShowGitBranch.Checked = Me.ShowBranch
+        f.optShowGitBranch.Checked = Me.ShowGitBranch
         f.optBeep.Checked = Textify.ErrorAlert.Beep
-        f.optDetectOldSquealerObjects.Checked = Me.DetectSquealerObjects
-        Select Case Me.DirStyle
-            Case eDirectoryStyle.compact.ToString
-                f.rbCompact.Checked = True
-            Case eDirectoryStyle.full.ToString
-                f.rbFull.Checked = True
-            Case eDirectoryStyle.symbolic.ToString
-                f.rbSymbolic.Checked = True
-        End Select
+        f.optDetectOldSquealerObjects.Checked = Me.DetectDeprecatedSquealerObjects
 
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.ShowDialog()
 
-        Me.OutputIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
+        Me.OutputProgressPercentageIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
         If f.rbDetailed.Checked Then
-            Me.OutputStyleSelected = OutputStyle.Detailed
+            Me.OutputProgressIndicatorStyleSelected = OutputProgressIndicatorStyle.Detailed
         Else
-            Me.OutputStyleSelected = OutputStyle.Percentage
+            Me.OutputProgressIndicatorStyleSelected = OutputProgressIndicatorStyle.Percentage
+        End If
+        If f.rbCompact.Checked Then
+            Me.DirectoryStyleSelected = DirectoryStyle.Compact
+        ElseIf f.rbFull.Checked Then
+            Me.DirectoryStyleSelected = DirectoryStyle.Full
+        Else
+            Me.DirectoryStyleSelected = DirectoryStyle.Symbolic
         End If
         Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
         Me.OpenWithDefault.ConfigFiles = f.chkConfigDefaultEditor.Checked
         Me.OpenWithDefault.SquealerFiles = f.chkSquealerDefaultEditor.Checked
-        Me.TextEditor = f.txtEditorProgram.Text
+        Me.TextEditorPath = f.txtEditorProgram.Text
         Me.LeaderboardConnectionString = f.txtLeaderboardCs.Text
-        Me.RecentFolders = CInt(f.updnFolderSaves.Value)
-        Me.Wildcards.UseSpaces = f.chkSpacesWild.Checked
-        Me.Wildcards.UseEdges = f.chkEdgesWild.Checked
-        Me.EditNew = f.optEditNewFiles.Checked
+        Me.ProjectFoldersLimit = CInt(f.updnFolderSaves.Value)
+        Me.WildcardBehavior.UseSpaces = f.chkSpacesWild.Checked
+        Me.WildcardBehavior.UseEdges = f.chkEdgesWild.Checked
+        Me.AutoEditNewFiles = f.optEditNewFiles.Checked
         Me.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
-        Me.UseClipboard = f.rbClipboard.Checked
-        Me.ShowBranch = f.optShowGitBranch.Checked
+        Me.OutputToClipboard = f.rbClipboard.Checked
+        Me.ShowGitBranch = f.optShowGitBranch.Checked
         Textify.ErrorAlert.Beep = f.optBeep.Checked
-        Me.DetectSquealerObjects = f.optDetectOldSquealerObjects.Checked
-        If f.rbCompact.Checked Then
-            Me.DirStyle = eDirectoryStyle.compact.ToString
-        ElseIf f.rbFull.Checked Then
-            Me.DirStyle = eDirectoryStyle.full.ToString
-        Else
-            Me.DirStyle = eDirectoryStyle.symbolic.ToString
-        End If
+        Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
 
-        My.Configger.SaveSetting(NameOf(Me.OutputIncrement), Me.OutputIncrement)
-        My.Configger.SaveSetting(NameOf(Me.OutputStyleSelected), Me.OutputStyleSelected.ToString)
+        My.Configger.SaveSetting(NameOf(Me.OutputProgressPercentageIncrement), Me.OutputProgressPercentageIncrement)
+        My.Configger.SaveSetting(NameOf(Me.OutputProgressIndicatorStyleSelected), Me.OutputProgressIndicatorStyleSelected.ToString)
+        My.Configger.SaveSetting(NameOf(Me.DirectoryStyleSelected), Me.DirectoryStyleSelected.ToString)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SqlFiles), Me.OpenWithDefault.SqlFiles)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.ConfigFiles), Me.OpenWithDefault.ConfigFiles)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SquealerFiles), Me.OpenWithDefault.SquealerFiles)
-        My.Configger.SaveSetting(NameOf(Me.TextEditor), Me.TextEditor)
+        My.Configger.SaveSetting(NameOf(Me.TextEditorPath), Me.TextEditorPath)
         My.Configger.SaveSetting(NameOf(Me.LeaderboardConnectionString), Me.LeaderboardConnectionString)
-        My.Configger.SaveSetting(NameOf(Me.RecentFolders), Me.RecentFolders)
-        My.Configger.SaveSetting(NameOf(Me.Wildcards.UseSpaces), Me.Wildcards.UseSpaces)
-        My.Configger.SaveSetting(NameOf(Me.Wildcards.UseEdges), Me.Wildcards.UseEdges)
-        My.Configger.SaveSetting(NameOf(Me.EditNew), Me.EditNew)
+        My.Configger.SaveSetting(NameOf(Me.ProjectFoldersLimit), Me.ProjectFoldersLimit)
+        My.Configger.SaveSetting(NameOf(Me.WildcardBehavior.UseSpaces), Me.WildcardBehavior.UseSpaces)
+        My.Configger.SaveSetting(NameOf(Me.WildcardBehavior.UseEdges), Me.WildcardBehavior.UseEdges)
+        My.Configger.SaveSetting(NameOf(Me.AutoEditNewFiles), Me.AutoEditNewFiles)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
-        My.Configger.SaveSetting(NameOf(Me.UseClipboard), Me.UseClipboard)
-        My.Configger.SaveSetting(NameOf(Me.DetectSquealerObjects), Me.DetectSquealerObjects)
-        My.Configger.SaveSetting(NameOf(Me.ShowBranch), Me.ShowBranch)
+        My.Configger.SaveSetting(NameOf(Me.OutputToClipboard), Me.OutputToClipboard)
+        My.Configger.SaveSetting(NameOf(Me.DetectDeprecatedSquealerObjects), Me.DetectDeprecatedSquealerObjects)
+        My.Configger.SaveSetting(NameOf(Me.ShowGitBranch), Me.ShowGitBranch)
         My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
-        My.Configger.SaveSetting(NameOf(Me.DirStyle), Me.DirStyle)
 
     End Sub
 
