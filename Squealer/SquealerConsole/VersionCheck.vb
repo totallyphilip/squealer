@@ -5,47 +5,71 @@
 
     Private Class Metadata
 
-        Private _Version As String
-        Public ReadOnly Property Version As String
+        Private _Version As Version
+        Public Property Version As Version
             Get
                 Return _Version
+            End Get
+            Set(value As Version)
+                _Version = value
+            End Set
+        End Property
+
+        Public ReadOnly Property IsUpdateAvailable As Boolean
+            Get
+                Return My.Application.Info.Version.CompareTo(_Version) < 0
             End Get
         End Property
 
         Private _Updated As DateTime
-        Public ReadOnly Property Updated As DateTime
+        Public Property Updated As DateTime
             Get
                 Return _Updated
             End Get
+            Set(value As DateTime)
+                _Updated = value
+            End Set
         End Property
 
         Private _Hidden As Boolean
-        Public ReadOnly Property Hidden As Boolean
+        Public Property Hidden As Boolean
             Get
                 Return _Hidden
             End Get
+            Set(value As Boolean)
+                _Hidden = value
+            End Set
         End Property
 
         Private _About As String
-        Public ReadOnly Property About As String
+        Public Property About As String
             Get
                 Return _About
             End Get
+            Set(value As String)
+                _About = value
+            End Set
         End Property
 
         Private _ZipFile As String
-        Public ReadOnly Property ZipFile As String
+        Public Property ZipFile As String
             Get
                 Return _ZipFile
             End Get
+            Set(value As String)
+                _ZipFile = value
+            End Set
         End Property
 
-        Public Sub New(ver As String, updated As DateTime, hidden As Boolean, about As String)
+        Public Sub New()
+        End Sub
+
+        Public Sub New(ver As Version, updated As DateTime, hidden As Boolean, about As String)
             Me._Version = ver
             Me._Updated = updated
             Me._Hidden = hidden
             Me._About = about
-            Me._ZipFile = String.Format(DownloadFileUrl, _Version.Replace(".", ""))
+            Me._ZipFile = String.Format(DownloadFileUrl, _Version.ToString.Replace(".", ""))
         End Sub
 
     End Class
@@ -53,7 +77,7 @@
 #Region " Output "
 
     Public Sub CreateMetadata()
-        Dim info As New Metadata(My.Application.Info.Version.ToString, DateTime.UtcNow, False, My.Resources.WhatsNew)
+        Dim info As New Metadata(My.Application.Info.Version, DateTime.UtcNow, False, My.Resources.WhatsNew)
         Dim f As New TempFileHandler(".xml")
         Generate(info).Save(f.Filename)
         f.Show()
@@ -65,11 +89,11 @@
         doc.AppendChild(doc.CreateXmlDeclaration("1.0", "us-ascii", Nothing))
         Dim squealer As Xml.XmlElement = doc.CreateElement("Squealer")
         doc.AppendChild(squealer)
-        squealer.SetAttribute("Version", info.Version)
-        squealer.SetAttribute("Updated", info.Updated.ToString)
-        squealer.SetAttribute("Hidden", info.Hidden.ToString)
-        squealer.SetAttribute("Filename", info.ZipFile)
-        Dim about As Xml.XmlElement = doc.CreateElement("About")
+        squealer.SetAttribute(NameOf(info.Version), info.Version.ToString)
+        squealer.SetAttribute(NameOf(info.Updated), info.Updated.ToString)
+        squealer.SetAttribute(NameOf(info.Hidden), info.Hidden.ToString)
+        squealer.SetAttribute(NameOf(info.ZipFile), info.ZipFile)
+        Dim about As Xml.XmlElement = doc.CreateElement(NameOf(info.About))
         squealer.AppendChild(about)
         Dim abouttext As Xml.XmlCDataSection = doc.CreateCDataSection("")
         about.AppendChild(abouttext)
@@ -82,17 +106,49 @@
 
 #Region " Input "
 
-    Public Sub Check()
+    Public Sub DisplayVersionCheckResults()
 
-        Try
-            Throw New Exception("Failed to retrieve update information from Amazon S3 bucket.")
-        Catch ex As Exception
-            Textify.SayError(ex.Message)
-            Textify.SayBulletLine(Textify.eBullet.Star, "Visit www.asciimotive.com to obtain the latest version of Squealer.")
+        Dim m As Metadata = DownloadMetadata()
+        If m.IsUpdateAvailable Then
+            Textify.SayBulletLine(Textify.eBullet.Hash, "A new version is available.", New Textify.ColorScheme(ConsoleColor.Yellow))
+            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Squealer {0} released on {1}.", m.Version, m.Updated.ToShortDateString))
             Console.WriteLine()
-        End Try
+            Console.WriteLine(m.About)
+            Console.WriteLine()
+            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Get the latest version at {0}", Constants.HomePage))
+        Else
+            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of Squealer ({0}).", My.Application.Info.Version), New Textify.ColorScheme(ConsoleColor.White))
+        End If
 
     End Sub
+
+    Private Function DownloadMetadata() As Metadata
+
+        Dim d As New Metadata()
+        Dim client As New Net.WebClient
+        Dim x As New Xml.XmlDocument
+        Dim r As New IO.StreamReader(client.OpenRead(VersionInfoUrl))
+        x.LoadXml(r.ReadToEnd)
+
+        Try
+            Dim Node As Xml.XmlNode = x.SelectSingleNode("/Squealer")
+            d.Version = Version.Parse(Node.Attributes(NameOf(d.Version)).Value)
+            d.Updated = DateTime.Parse(Node.Attributes(NameOf(d.Updated)).Value)
+            d.Hidden = Boolean.Parse(Node.Attributes(NameOf(d.Hidden)).Value)
+            d.ZipFile = Node.Attributes(NameOf(d.ZipFile)).Value.ToString
+            Node = x.SelectSingleNode("/Squealer/About")
+            d.About = x.InnerText
+            Return d
+        Catch ex As Exception
+            Return Nothing
+        End Try
+
+        '<?xml version="1.0" encoding="us-ascii"?>
+        '<Squealer Version = "1.2.3.45" Updated="mm/dd/yyyy 12:00:00 AM" Hidden="False" Filename="https://s3_xxx/Squealerabcde12345-Install.zip">
+        '  <About><![CDATA[Release notes]]></About>
+        '</Squealer>
+
+    End Function
 
 #End Region
 

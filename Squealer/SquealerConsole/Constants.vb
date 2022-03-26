@@ -11,5 +11,6 @@
     Public Const ConfigFilename As String = AppTitle & ".config"
     Public Const AutocreateFilename As String = "(" & AppTitle & ")"
     Public Const WildcardAsterisks As String = "Wildcards"
+    Public Const HomePage As String = "www.asciimotive.com"
 
 End Class

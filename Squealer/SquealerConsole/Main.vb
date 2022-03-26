@@ -323,26 +323,27 @@ Module Main
         End Try
         Console.BufferWidth = Console.WindowWidth
 
+        Textify.SayCentered(Constants.HomePage, True)
+        Textify.SayCentered(My.Application.Info.Copyright, True)
+        Console.WriteLine()
 
-        Dim v As New VersionCheck
-        If MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
-            'Console.WriteLine("already checked today")
-        Else
-            'Console.WriteLine("checking...")
+
+        ' Is a newer version available?
+        If Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
-            v.Check()
+            Dim v As New VersionCheck
+            v.DisplayVersionCheckResults()
         End If
 
-
+        ' Are we running this version for the first time?
         Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
-            DisplayChangelog()
+            DisplayAboutInfo()
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionNumberExecuted), My.Application.Info.Version.ToString)
         End If
 
         ' Main process
         Console.WriteLine()
-        'CheckS3(True)
         If Misc.IsStarWarsDay() Then
             Console.WriteLine("May the Fourth be with you! (easter egg revealed - see HELP)")
             Console.WriteLine()
@@ -955,27 +956,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.about.ToString Then
 
-                    Console.WriteLine(AboutInfo)
-                    Console.WriteLine()
-                    CheckS3(False)
-
-                    If StringInList(MySwitches, "download") Then
-                        Textify.SayBulletLine(Textify.eBullet.Hash, "Opening remote file...")
-                        Console.WriteLine()
-                        Dim wc As New Net.WebClient
-                        Dim fn As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\Squealer.zip"
-                        wc.DownloadFile(Constants.s3ZipFile, fn)
-                        Textify.SayBulletLine(Textify.eBullet.Hash, "File downloaded to " & fn, ConsoleColor.White)
-                        Textify.SayNewLine()
-                        Textify.SayBulletLine(Textify.eBullet.Hash, "Opening local folder...")
-                        Console.WriteLine()
-                        OpenExplorer("Squealer.zip", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-                    End If
-
-                    If StringInList(MySwitches, "changelog") Then
-                        DisplayChangelog()
-                    End If
-
+                    DisplayAboutInfo
 
 
 
@@ -1294,8 +1275,9 @@ Module Main
 
 
                     Dim v As New VersionCheck
-                    'v.Check()
-                    v.CreateMetadata()
+                    v.DisplayVersionCheckResults()
+                    Console.WriteLine()
+                    'v.CreateMetadata()
 
 
 
@@ -2487,19 +2469,17 @@ Module Main
 
     End Function
 
-    Private Function AboutInfo() As String
+    Private Sub DisplayAboutInfo()
 
-        AboutInfo = My.Application.Info.Title & " v." & My.Application.Info.Version.ToString & " : " & My.Application.Info.Description _
-            & vbCrLf _
-            & vbCrLf & "by " & My.Application.Info.CompanyName _
-            & vbCrLf & My.Application.Info.Copyright _
-            & vbCrLf & """" & My.Application.Info.Trademark & """" _
-            & vbCrLf _
-            & vbCrLf & "SQL formatting by https://github.com/TaoK/PoorMansTSqlFormatter" _
-            & vbCrLf _
-            & vbCrLf & "May the Force be with you."
+        Console.WriteLine(String.Format("{0} v.{1}", My.Application.Info.Title, My.Application.Info.Version))
+        Console.WriteLine(My.Application.Info.Copyright)
+        Console.WriteLine()
 
-    End Function
+        Dim v As New VersionCheck
+        v.DisplayVersionCheckResults()
+        Console.WriteLine()
+
+    End Sub
 
     Private Sub OpenExplorer(ByVal wildcard As String, ByVal WorkingFolder As String)
         Dim f As New OpenFileDialog
@@ -3121,52 +3101,6 @@ Module Main
 
         tempfile.Show()
 
-    End Sub
-
-
-#End Region
-
-#Region " Version Check "
-
-    Private Sub CheckS3(silent As Boolean)
-
-        Try
-            Dim client As Net.WebClient = New Net.WebClient()
-            Using reader As New IO.StreamReader(client.OpenRead(Constants.s3VersionText))
-
-                Dim av As New Version(reader.ReadToEnd)
-
-                If My.Application.Info.Version.CompareTo(av) < 0 Then
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("A new version of {0} is available. Use {1} -{2} to download.", My.Application.Info.ProductName, eCommandType.about.ToString.ToUpper, MyCommands.FindCommand(eCommandType.about.ToString).Options.Items(0).Keyword.ToUpper), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
-                    Console.BackgroundColor = ConsoleColor.Black
-                    Textify.SayBulletLine(Textify.eBullet.Arrow, Constants.s3ZipFile)
-                    Console.WriteLine()
-                ElseIf My.Application.Info.Version.CompareTo(av) = 0 AndAlso Not silent Then
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of {0}.", My.Application.Info.ProductName), New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkBlue))
-                ElseIf My.Application.Info.Version.CompareTo(av) < 0 OrElse (My.Application.Info.Version.CompareTo(av) > 0 AndAlso Not silent) Then
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Latest version: {0}", av.ToString))
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Your version: {0}", My.Application.Info.Version.ToString))
-                End If
-
-            End Using
-
-        Catch ex As Exception
-            If Not silent Then
-                Textify.SayError(ex.Message)
-            End If
-        End Try
-
-        Console.WriteLine()
-
-    End Sub
-
-    Private Sub DisplayChangelog()
-        Dim f As New TempFileHandler(".txt")
-        f.Writeline(AboutInfo)
-        f.Writeline()
-        f.Writeline()
-        f.Writeline(ReadChangeLog)
-        f.Show()
     End Sub
 
 
