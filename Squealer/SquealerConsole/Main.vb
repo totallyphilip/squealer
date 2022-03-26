@@ -92,6 +92,7 @@ Module Main
 
     Private Enum eCommandType
         [about]
+        [browse]
         [checkout]
         [clear]
         [compare]
@@ -101,7 +102,6 @@ Module Main
         [directory]
         [edit]
         [exit]
-        [explore]
         [fix]
         [generate]
         [help]
@@ -523,7 +523,7 @@ Module Main
         End If
 
 
-        Dim NextPercentageStep As Integer = MySettings.OutputProgressPercentageIncrement
+        Dim NextPercentageStep As Integer = MySettings.OutputPercentageIncrement
 
 
         For Each FileName As String In FileListing
@@ -632,15 +632,15 @@ Module Main
                     Case eFileAction.checkout
                         GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
                     Case eFileAction.generate
-                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count, MySettings.OutputProgressIndicatorStyleSelected = Settings.OutputProgressIndicatorStyle.Detailed)
+                        GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count, MySettings.OutputStepStyleSelected = Settings.OutputStepStyle.Detailed)
 
-                        If MySettings.OutputProgressIndicatorStyleSelected = Settings.OutputProgressIndicatorStyle.Percentage Then
+                        If MySettings.OutputStepStyleSelected = Settings.OutputStepStyle.Percentage Then
                             Dim CurrentPercentage As Double = ((FileCount + 1) / FileListing.Count) * 100
                             If CurrentPercentage >= NextPercentageStep Then
                                 While NextPercentageStep <= CurrentPercentage
-                                    NextPercentageStep += MySettings.OutputProgressPercentageIncrement
+                                    NextPercentageStep += MySettings.OutputPercentageIncrement
                                 End While
-                                GeneratedOutput &= vbCrLf & String.Format("print '{0}% ({1}/{2})';", NextPercentageStep - MySettings.OutputProgressPercentageIncrement, FileCount + 1, FileListing.Count) & vbCrLf
+                                GeneratedOutput &= vbCrLf & String.Format("print '{0}% ({1}/{2})';", NextPercentageStep - MySettings.OutputPercentageIncrement, FileCount + 1, FileListing.Count) & vbCrLf
                             End If
                         End If
 
@@ -723,7 +723,6 @@ Module Main
 #End Region
 
 #Region " Commands "
-
     Private Sub DefineCommands()
 
         Dim cmd As CommandCatalog.CommandDefinition
@@ -756,15 +755,8 @@ Module Main
         cmd.Examples.Add("% northwind")
         MyCommands.Items.Add(cmd)
 
-        '' forget folder
-        'cmd = New CommandCatalog.CommandDefinition({eCommandType.forget.ToString}, {"Forget a saved folder.", "See " & eCommandType.list.ToString.ToUpper & " command. Either specify a folder to forget, or automatically forget all folders that do not contain any " & Constants.SquealerFileExtension & " files."}, CommandCatalog.eCommandCategory.folder, "<folder number>", False)
-        'cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("auto;detect invalid folders"))
-        'cmd.Examples.Add("% 3")
-        'cmd.Examples.Add("% -auto")
-        'MyCommands.Items.Add(cmd)
-
         ' file explorer
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.explore.ToString, "fe"}, {"Open File Explorer.", "Opens the current working folder. If {options} is specified, the first matching " & My.Application.Info.ProductName & " object will be selected."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.browse.ToString, "b"}, {"Open file browser.", "Opens the current project folder. If {options} is specified, only matching files will be displayed."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
         MyCommands.Items.Add(cmd)
 
         ' checkout
@@ -881,8 +873,6 @@ Module Main
 
         ' about
         cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"Check for updates and display program information."}, CommandCatalog.eCommandCategory.other)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("download;download latest version"))
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("changelog;display the changelog"))
         MyCommands.Items.Add(cmd)
 
         ' exit
@@ -956,7 +946,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.about.ToString Then
 
-                    DisplayAboutInfo
+                    DisplayAboutInfo()
 
 
 
@@ -1192,9 +1182,9 @@ Module Main
 
 
 
-                ElseIf MyCommand.Keyword = eCommandType.explore.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.browse.ToString Then
 
-                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardBehavior.UseSpaces, MySettings.WildcardBehavior.UseEdges, False), WorkingFolder)
+                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardBehavior, False), WorkingFolder)
 
 
 
@@ -1278,11 +1268,6 @@ Module Main
                     v.DisplayVersionCheckResults()
                     Console.WriteLine()
                     'v.CreateMetadata()
-
-
-
-
-
 
 
 
@@ -2487,8 +2472,6 @@ Module Main
         f.FileName = wildcard
         f.ShowDialog()
     End Sub
-
-
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)
         If n > limit AndAlso Not OverrideSafety Then

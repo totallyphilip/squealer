@@ -182,18 +182,22 @@
         End Set
     End Property
 
-    Public Enum OutputProgressIndicatorStyle
+    Public Enum OutputStepStyle
         Detailed
         Percentage
     End Enum
 
-    Private _OutputProgressIndicatorStyleSelected As OutputProgressIndicatorStyle
-    Public Property OutputProgressIndicatorStyleSelected As OutputProgressIndicatorStyle
+    Public Function OutputStepStyleParse(s As String) As OutputStepStyle
+        Return DirectCast([Enum].Parse(GetType(OutputStepStyle), s), OutputStepStyle)
+    End Function
+
+    Private _OutputStepStyle As OutputStepStyle
+    Public Property OutputStepStyleSelected As OutputStepStyle
         Get
-            Return _OutputProgressIndicatorStyleSelected
+            Return _OutputStepStyle
         End Get
-        Set(value As OutputProgressIndicatorStyle)
-            _OutputProgressIndicatorStyleSelected = value
+        Set(value As OutputStepStyle)
+            _OutputStepStyle = value
         End Set
     End Property
 
@@ -202,6 +206,10 @@
         Compact
         Symbolic
     End Enum
+
+    Public Function DirectoryStyleParse(s As String) As DirectoryStyle
+        Return DirectCast([Enum].Parse(GetType(DirectoryStyle), s), DirectoryStyle)
+    End Function
 
     Private _DirectoryStyleSelected As DirectoryStyle
     Public Property DirectoryStyleSelected As DirectoryStyle
@@ -213,13 +221,13 @@
         End Set
     End Property
 
-    Private _Increment As Integer
-    Public Property OutputProgressPercentageIncrement As Integer
+    Private _OutputPercentageIncrement As Integer
+    Public Property OutputPercentageIncrement As Integer
         Get
-            Return _Increment
+            Return _OutputPercentageIncrement
         End Get
         Set(value As Integer)
-            _Increment = value
+            _OutputPercentageIncrement = value
         End Set
     End Property
 
@@ -253,13 +261,11 @@
         Me.DetectDeprecatedSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectDeprecatedSquealerObjects), True)
         Me.ShowGitBranch = My.Configger.LoadSetting(NameOf(Me.ShowGitBranch), True)
         Me.WildcardBehavior.UseSpaces = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseSpaces), False)
-        s = My.Configger.LoadSetting(NameOf(Me.DirectoryStyleSelected), DirectoryStyle.Full.ToString)
-        Me.DirectoryStyleSelected = DirectCast([Enum].Parse(GetType(DirectoryStyle), s), DirectoryStyle)
-        s = My.Configger.LoadSetting(NameOf(Me.OutputProgressIndicatorStyleSelected), OutputProgressIndicatorStyle.Detailed.ToString)
-        Me.OutputProgressIndicatorStyleSelected = DirectCast([Enum].Parse(GetType(OutputProgressIndicatorStyle), s), OutputProgressIndicatorStyle)
-        Me.OutputProgressPercentageIncrement = My.Configger.LoadSetting(NameOf(Me.OutputProgressPercentageIncrement), 5)
-        If Not (Me.OutputProgressPercentageIncrement = 5 OrElse Me.OutputProgressPercentageIncrement = 10 OrElse Me.OutputProgressPercentageIncrement = 20 OrElse Me.OutputProgressPercentageIncrement = 25) Then
-            Me.OutputProgressPercentageIncrement = 5
+        Me.DirectoryStyleSelected = DirectoryStyleParse(My.Configger.LoadSetting(NameOf(Me.DirectoryStyleSelected), DirectoryStyle.Full.ToString))
+        Me.OutputStepStyleSelected = OutputStepStyleParse(My.Configger.LoadSetting(NameOf(Me.OutputStepStyleSelected), OutputStepStyle.Detailed.ToString))
+        Me.OutputPercentageIncrement = My.Configger.LoadSetting(NameOf(Me.OutputPercentageIncrement), 5)
+        If Not (Me.OutputPercentageIncrement = 5 OrElse Me.OutputPercentageIncrement = 10 OrElse Me.OutputPercentageIncrement = 20 OrElse Me.OutputPercentageIncrement = 25) Then
+            Me.OutputPercentageIncrement = 5
         End If
         Textify.ErrorAlert.Beep = My.Configger.LoadSetting(NameOf(Textify.ErrorAlert.Beep), False)
 
@@ -268,11 +274,11 @@
     Public Sub Show()
 
         Dim f As New SettingsForm
-        f.ddIncrement.SelectedIndex = f.ddIncrement.FindString(Me.OutputProgressPercentageIncrement.ToString) ' must set this before radio button because rb checked triggers an event using this value
-        Select Case Me.OutputProgressIndicatorStyleSelected
-            Case OutputProgressIndicatorStyle.Detailed
+        f.ddIncrement.SelectedIndex = f.ddIncrement.FindString(Me.OutputPercentageIncrement.ToString) ' must set this before radio button because rb checked triggers an event using this value
+        Select Case Me.OutputStepStyleSelected
+            Case OutputStepStyle.Detailed
                 f.rbDetailed.Checked = True
-            Case OutputProgressIndicatorStyle.Percentage
+            Case OutputStepStyle.Percentage
                 f.rbPercentage.Checked = True
         End Select
         Select Case Me.DirectoryStyleSelected
@@ -305,11 +311,11 @@
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.ShowDialog()
 
-        Me.OutputProgressPercentageIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
+        Me.OutputPercentageIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
         If f.rbDetailed.Checked Then
-            Me.OutputProgressIndicatorStyleSelected = OutputProgressIndicatorStyle.Detailed
+            Me.OutputStepStyleSelected = OutputStepStyle.Detailed
         Else
-            Me.OutputProgressIndicatorStyleSelected = OutputProgressIndicatorStyle.Percentage
+            Me.OutputStepStyleSelected = OutputStepStyle.Percentage
         End If
         If f.rbCompact.Checked Then
             Me.DirectoryStyleSelected = DirectoryStyle.Compact
@@ -333,8 +339,8 @@
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
 
-        My.Configger.SaveSetting(NameOf(Me.OutputProgressPercentageIncrement), Me.OutputProgressPercentageIncrement)
-        My.Configger.SaveSetting(NameOf(Me.OutputProgressIndicatorStyleSelected), Me.OutputProgressIndicatorStyleSelected.ToString)
+        My.Configger.SaveSetting(NameOf(Me.OutputPercentageIncrement), Me.OutputPercentageIncrement)
+        My.Configger.SaveSetting(NameOf(Me.OutputStepStyleSelected), Me.OutputStepStyleSelected.ToString)
         My.Configger.SaveSetting(NameOf(Me.DirectoryStyleSelected), Me.DirectoryStyleSelected.ToString)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.SqlFiles), Me.OpenWithDefault.SqlFiles)
         My.Configger.SaveSetting(NameOf(Me.OpenWithDefault.ConfigFiles), Me.OpenWithDefault.ConfigFiles)

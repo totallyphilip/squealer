@@ -49,13 +49,15 @@ Partial Class SettingsForm
         Me.btnLeaderboardSql = New System.Windows.Forms.Button()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
-        Me.Label9 = New System.Windows.Forms.Label()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.txtDirExample = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.tabOutput = New System.Windows.Forms.TabPage()
-        Me.ddIncrement = New System.Windows.Forms.ComboBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.txtProgressExample = New System.Windows.Forms.TextBox()
-        Me.rbDetailed = New System.Windows.Forms.RadioButton()
+        Me.ddIncrement = New System.Windows.Forms.ComboBox()
         Me.rbPercentage = New System.Windows.Forms.RadioButton()
+        Me.rbDetailed = New System.Windows.Forms.RadioButton()
         Me.tabWildcards = New System.Windows.Forms.TabPage()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -70,19 +72,17 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.tabOutput.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.tabWildcards.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.gbTextEditor.SuspendLayout()
         Me.tabEasterEgg.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -120,9 +120,9 @@ Partial Class SettingsForm
         Me.optEditNewFiles.AutoSize = True
         Me.optEditNewFiles.Location = New System.Drawing.Point(8, 29)
         Me.optEditNewFiles.Name = "optEditNewFiles"
-        Me.optEditNewFiles.Size = New System.Drawing.Size(285, 17)
+        Me.optEditNewFiles.Size = New System.Drawing.Size(214, 17)
         Me.optEditNewFiles.TabIndex = 6
-        Me.optEditNewFiles.Text = "Automatically run EDIT command after NEW command"
+        Me.optEditNewFiles.Text = "Automatically open NEW files for editing"
         Me.optEditNewFiles.UseVisualStyleBackColor = True
         '
         'optShowGitBranch
@@ -354,19 +354,26 @@ Partial Class SettingsForm
         Me.tabGeneral.Location = New System.Drawing.Point(4, 22)
         Me.tabGeneral.Name = "tabGeneral"
         Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabGeneral.Size = New System.Drawing.Size(365, 355)
+        Me.tabGeneral.Size = New System.Drawing.Size(371, 355)
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
         '
-        'Label9
+        'GroupBox1
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(158, 91)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(73, 13)
-        Me.Label9.TabIndex = 16
-        Me.Label9.Text = "project folders"
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.rbCompact)
+        Me.GroupBox1.Controls.Add(Me.rbSymbolic)
+        Me.GroupBox1.Controls.Add(Me.txtDirExample)
+        Me.GroupBox1.Controls.Add(Me.rbFull)
+        Me.GroupBox1.Location = New System.Drawing.Point(3, 135)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(356, 214)
+        Me.GroupBox1.TabIndex = 17
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Directory format"
         '
         'txtDirExample
         '
@@ -380,6 +387,15 @@ Partial Class SettingsForm
         Me.txtDirExample.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtDirExample.Size = New System.Drawing.Size(344, 166)
         Me.txtDirExample.TabIndex = 15
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(158, 91)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(73, 13)
+        Me.Label9.TabIndex = 16
+        Me.Label9.Text = "project folders"
         '
         'tabOutput
         '
@@ -396,15 +412,21 @@ Partial Class SettingsForm
         Me.tabOutput.Text = "Output"
         Me.tabOutput.UseVisualStyleBackColor = True
         '
-        'ddIncrement
+        'GroupBox2
         '
-        Me.ddIncrement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ddIncrement.FormattingEnabled = True
-        Me.ddIncrement.Items.AddRange(New Object() {"5", "10", "20", "25"})
-        Me.ddIncrement.Location = New System.Drawing.Point(159, 15)
-        Me.ddIncrement.Name = "ddIncrement"
-        Me.ddIncrement.Size = New System.Drawing.Size(42, 21)
-        Me.ddIncrement.TabIndex = 22
+        Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.txtProgressExample)
+        Me.GroupBox2.Controls.Add(Me.ddIncrement)
+        Me.GroupBox2.Controls.Add(Me.rbPercentage)
+        Me.GroupBox2.Controls.Add(Me.rbDetailed)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 79)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(362, 270)
+        Me.GroupBox2.TabIndex = 23
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Progress display"
         '
         'txtProgressExample
         '
@@ -419,16 +441,15 @@ Partial Class SettingsForm
         Me.txtProgressExample.Size = New System.Drawing.Size(350, 218)
         Me.txtProgressExample.TabIndex = 20
         '
-        'rbDetailed
+        'ddIncrement
         '
-        Me.rbDetailed.AutoSize = True
-        Me.rbDetailed.Location = New System.Drawing.Point(6, 19)
-        Me.rbDetailed.Name = "rbDetailed"
-        Me.rbDetailed.Size = New System.Drawing.Size(62, 17)
-        Me.rbDetailed.TabIndex = 17
-        Me.rbDetailed.TabStop = True
-        Me.rbDetailed.Text = "detailed"
-        Me.rbDetailed.UseVisualStyleBackColor = True
+        Me.ddIncrement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ddIncrement.FormattingEnabled = True
+        Me.ddIncrement.Items.AddRange(New Object() {"5", "10", "20", "25"})
+        Me.ddIncrement.Location = New System.Drawing.Point(159, 15)
+        Me.ddIncrement.Name = "ddIncrement"
+        Me.ddIncrement.Size = New System.Drawing.Size(42, 21)
+        Me.ddIncrement.TabIndex = 22
         '
         'rbPercentage
         '
@@ -440,6 +461,17 @@ Partial Class SettingsForm
         Me.rbPercentage.TabStop = True
         Me.rbPercentage.Text = "percentage"
         Me.rbPercentage.UseVisualStyleBackColor = True
+        '
+        'rbDetailed
+        '
+        Me.rbDetailed.AutoSize = True
+        Me.rbDetailed.Location = New System.Drawing.Point(6, 19)
+        Me.rbDetailed.Name = "rbDetailed"
+        Me.rbDetailed.Size = New System.Drawing.Size(62, 17)
+        Me.rbDetailed.TabIndex = 17
+        Me.rbDetailed.TabStop = True
+        Me.rbDetailed.Text = "detailed"
+        Me.rbDetailed.UseVisualStyleBackColor = True
         '
         'tabWildcards
         '
@@ -453,7 +485,7 @@ Partial Class SettingsForm
         Me.tabWildcards.Location = New System.Drawing.Point(4, 22)
         Me.tabWildcards.Name = "tabWildcards"
         Me.tabWildcards.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabWildcards.Size = New System.Drawing.Size(478, 355)
+        Me.tabWildcards.Size = New System.Drawing.Size(371, 355)
         Me.tabWildcards.TabIndex = 2
         Me.tabWildcards.Text = "RUNTIME"
         Me.tabWildcards.UseVisualStyleBackColor = True
@@ -495,7 +527,7 @@ Partial Class SettingsForm
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage4.Size = New System.Drawing.Size(398, 265)
+        Me.TabPage4.Size = New System.Drawing.Size(371, 355)
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Editor"
         Me.TabPage4.UseVisualStyleBackColor = True
@@ -592,42 +624,10 @@ Partial Class SettingsForm
         Me.tabEasterEgg.Location = New System.Drawing.Point(4, 22)
         Me.tabEasterEgg.Name = "tabEasterEgg"
         Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabEasterEgg.Size = New System.Drawing.Size(402, 325)
+        Me.tabEasterEgg.Size = New System.Drawing.Size(371, 355)
         Me.tabEasterEgg.TabIndex = 4
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox1.Controls.Add(Me.rbCompact)
-        Me.GroupBox1.Controls.Add(Me.rbSymbolic)
-        Me.GroupBox1.Controls.Add(Me.txtDirExample)
-        Me.GroupBox1.Controls.Add(Me.rbFull)
-        Me.GroupBox1.Location = New System.Drawing.Point(3, 135)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(356, 214)
-        Me.GroupBox1.TabIndex = 17
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Directory format"
-        '
-        'GroupBox2
-        '
-        Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox2.Controls.Add(Me.txtProgressExample)
-        Me.GroupBox2.Controls.Add(Me.ddIncrement)
-        Me.GroupBox2.Controls.Add(Me.rbPercentage)
-        Me.GroupBox2.Controls.Add(Me.rbDetailed)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 79)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(362, 270)
-        Me.GroupBox2.TabIndex = 23
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Progress display"
         '
         'SettingsForm
         '
@@ -647,8 +647,12 @@ Partial Class SettingsForm
         Me.Tabs.ResumeLayout(False)
         Me.tabGeneral.ResumeLayout(False)
         Me.tabGeneral.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.tabOutput.ResumeLayout(False)
         Me.tabOutput.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.tabWildcards.ResumeLayout(False)
         Me.tabWildcards.PerformLayout()
         Me.TabPage4.ResumeLayout(False)
@@ -657,10 +661,6 @@ Partial Class SettingsForm
         Me.gbTextEditor.PerformLayout()
         Me.tabEasterEgg.ResumeLayout(False)
         Me.tabEasterEgg.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

@@ -57,7 +57,7 @@
     Private Sub rbCompact_CheckedChanged(sender As Object, e As EventArgs) Handles rbCompact.CheckedChanged, rbFull.CheckedChanged, rbSymbolic.CheckedChanged
         UpdateDirectoryExample()
     End Sub
-    Private Sub rbOutputStyle_Changed(sender As Object, e As EventArgs) Handles rbDetailed.CheckedChanged, rbPercentage.CheckedChanged
+    Private Sub rbOutputStyle_Changed(sender As Object, e As EventArgs) Handles rbDetailed.CheckedChanged, rbPercentage.CheckedChanged, rbDetailed.Click, rbPercentage.Click
         UpdateProgressExample()
     End Sub
 
@@ -91,27 +91,27 @@
 
     Private Sub UpdateProgressExample()
 
+        txtProgressExample.Text = String.Empty
+
         If rbDetailed.Checked Then
-            txtProgressExample.Text = "1/10 creating [dbo].[Func1], ScalarFunction" _
-                & vbCrLf & "2/10 creating [dbo].[Proc1], StoredProcedure" _
-                & vbCrLf & "3/10 creating [dbo].[Proc2], StoredProcedure" _
-                & vbCrLf & "4/10 creating [dbo].[Proc3], StoredProcedure" _
-                & vbCrLf & "5/10 creating [dbo].[Proc4], StoredProcedure" _
-                & vbCrLf & "6/10 creating [dbo].[TableFunction1], InlineTableFunction" _
-                & vbCrLf & "7/10 creating [dbo].[TableFunction2], MultiStatementTableFunction" _
-                & vbCrLf & "8/10 creating [dbo].[View1], View" _
-                & vbCrLf & "9/10 creating [dbo].[View2], View" _
-                & vbCrLf & "10/10 creating [dbo].[View3], View"
+            Dim r As New Random
+            Dim total As Integer = r.Next(5, 50)
+            For n As Integer = 1 To total
+                txtProgressExample.Text &= vbCrLf & String.Format("{0}/{1} creating [dbo].[File{0}], ", n, total)
+                Dim e As SquealerObjectType.eType = DirectCast(r.Next(1, 5), SquealerObjectType.eType)
+                txtProgressExample.Text &= e.ToString
+            Next
         End If
 
         If rbPercentage.Checked Then
-            txtProgressExample.Text = String.Empty
+            Dim r As Integer = New Random().Next(20, 500)
             Dim v As Integer = CInt(ddIncrement.Items(ddIncrement.SelectedIndex))
             For n As Integer = v To 100 Step v
-                txtProgressExample.Text &= vbCrLf & String.Format("{0}%", n.ToString)
+                txtProgressExample.Text &= vbCrLf & String.Format("{0}% ({1}/{2})", n, Math.Floor((n / 100) * r), r)
             Next
-            txtProgressExample.Text = txtProgressExample.Text.Trim
         End If
+
+        txtProgressExample.Text = txtProgressExample.Text.Trim
 
     End Sub
 
@@ -136,6 +136,7 @@
     End Sub
 
     Private Sub ddIncrement_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddIncrement.SelectedIndexChanged
+        rbPercentage.Checked = True
         UpdateProgressExample()
     End Sub
 
