@@ -105,15 +105,17 @@ Module Main
         [fix]
         [generate]
         [help]
+        [helpall]
         [list]
         [make]
         [nerfherder]
         [new]
         [open]
         [raiserror]
+        release
         [reverse]
         [setting]
-        [starwars]
+        pewpew
         [test]
         [use]
     End Enum
@@ -736,8 +738,6 @@ Module Main
         ' open folder
         cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command. Omit path to open folder dialog."}, CommandCatalog.eCommandCategory.folder, "<path>", False)
         cmd.Examples.Add("% " & Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
-        cmd.Examples.Add("% C:\Some Folder\Spaces Are OK, Quotes Not Needed")
-        cmd.Examples.Add("% -- open Windows Explorer to select folder")
         cmd.IgnoreSwitches = True
         MyCommands.Items.Add(cmd)
 
@@ -841,6 +841,11 @@ Module Main
         cmd.Examples.Add("% " & eCommandType.generate.ToString)
         MyCommands.Items.Add(cmd)
 
+        ' helpall
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.helpall.ToString}, {"Show all help including hidden commands."}, CommandCatalog.eCommandCategory.other)
+        cmd.Visible = False
+        MyCommands.Items.Add(cmd)
+
 
         ' config
         cmd = New CommandCatalog.CommandDefinition({eCommandType.config.ToString, "c"}, {"Edit " & Constants.ConfigFilename & ".", "This file configures how " & My.Application.Info.ProductName & " operates in your current working folder."}, CommandCatalog.eCommandCategory.other)
@@ -880,14 +885,18 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' star wars
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.starwars.ToString, "r2"}, {"I've got a bad feeling about this.", "Jump in an X-Wing and blow something up!"}, CommandCatalog.eCommandCategory.other)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.pewpew.ToString, "pew"}, {"I've got a bad feeling about this.", "Jump in an X-Wing and blow something up!"}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("top;display leaderboard"))
         cmd.Visible = Misc.IsStarWarsDay()
         MyCommands.Items.Add(cmd)
 
         ' test 
         cmd = New CommandCatalog.CommandDefinition({eCommandType.test.ToString}, {"Hidden command. Debugging/testing only."}, CommandCatalog.eCommandCategory.other)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("release;generate version text file"))
+        cmd.Visible = False
+        MyCommands.Items.Add(cmd)
+
+        ' release
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.release.ToString}, {String.Format("Create files for {0} release.", My.Application.Info.Version)}, CommandCatalog.eCommandCategory.other)
         cmd.Visible = False
         MyCommands.Items.Add(cmd)
 
@@ -1104,7 +1113,7 @@ Module Main
                 ElseIf MyCommand.Keyword = eCommandType.[help].ToString Then
 
                     If String.IsNullOrEmpty(UserInput) Then
-                        MyCommands.ShowHelpCatalog()
+                        MyCommands.ShowHelpCatalog(False)
                     Else
                         Dim HelpWithCommand As CommandCatalog.CommandDefinition = MyCommands.FindCommand(UserInput)
 
@@ -1116,6 +1125,9 @@ Module Main
                     End If
 
 
+                ElseIf MyCommand.Keyword = eCommandType.[helpall].ToString AndAlso String.IsNullOrWhiteSpace(UserInput) Then
+
+                    MyCommands.ShowHelpCatalog(True)
 
 
 
@@ -1195,7 +1207,7 @@ Module Main
                     LoadFolder(UserInput, WorkingFolder)
 
 
-                ElseIf MyCommand.Keyword = eCommandType.starwars.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.pewpew.ToString Then
 
                     If StringInList(MySwitches, "top") Then
                         ShowLeaderboard(20)
@@ -1251,23 +1263,19 @@ Module Main
 
 
 
+
+                ElseIf MyCommand.Keyword = eCommandType.release.ToString Then
+
+                    Dim v As New VersionCheck
+                    v.CreateMetadata()
+
+
+
                 ElseIf MyCommand.Keyword = "test" Then 'footest
 
 
-                    If StringInList(MySwitches, "release") Then
-                        Dim s As String = WorkingFolder & "\ver.txt"
-                        My.Computer.FileSystem.WriteAllText(s, My.Application.Info.Version.ToString, False)
-                        Console.WriteLine()
-                        Console.WriteLine()
-                        Console.WriteLine("generated " & s & " with " & My.Application.Info.Version.ToString)
-                        Console.WriteLine()
-                    End If
 
 
-                    Dim v As New VersionCheck
-                    v.DisplayVersionCheckResults()
-                    Console.WriteLine()
-                    'v.CreateMetadata()
 
 
 

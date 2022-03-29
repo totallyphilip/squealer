@@ -144,7 +144,7 @@
             Return _Items.Find(Function(x) x.Keyword = s OrElse x.Shortkeyword = s)
         End Function
 
-        Public Sub ShowHelpCatalog()
+        Public Sub ShowHelpCatalog(showhidden As Boolean)
 
             Dim maxcommandlength As Integer = 0
             For Each c As CommandDefinition In _Items
@@ -160,12 +160,14 @@
                 Textify.WriteLine("// " & cat & " //", ConsoleColor.White)
                 Console.WriteLine()
 
-                For Each c As CommandDefinition In Items.Where(Function(x) x.CommandCategory.ToString = cat AndAlso x.Visible = True)
-                    Textify.SayBullet(Textify.eBullet.Arrow, "")
+                For Each c As CommandDefinition In Items.Where(Function(x) x.CommandCategory.ToString = cat AndAlso (x.Visible Or showhidden))
+                    If c.Visible Then
+                        Textify.SayBullet(Textify.eBullet.Arrow, "")
+                    Else
+                        Textify.SayBullet(Textify.eBullet.Arrow, "", 0, New Textify.ColorScheme(ConsoleColor.White, ConsoleColor.DarkRed))
+                    End If
                     Textify.Write(c.ShortAndLongKeyword.ToUpper, ConsoleColor.Green)
                     Textify.WriteLine(New String(" "c, maxcommandlength - c.ShortAndLongKeyword.Length) & " " & c.CommandShortHelp, maxcommandlength + 4)
-                    'Textify.Write(pper & New String(" "c, maxcommandlength - c.ShortAndLongKeyword.Length) & " " & c.CommandShortHelp, maxcommandlength + 4)
-                    '                    Textify.SayBulletLine(Textify.eBullet.Arrow, c.ShortAndLongKeyword.ToUpper & New String(" "c, maxcommandlength - c.ShortAndLongKeyword.Length) & " " & c.CommandShortHelp, maxcommandlength + 4)
                 Next
 
                 Console.WriteLine()
