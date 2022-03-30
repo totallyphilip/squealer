@@ -231,6 +231,26 @@
         End Set
     End Property
 
+    Private _EnableEzObjects As Boolean
+    Public Property EnableEzObjects As Boolean
+        Get
+            Return _EnableEzObjects
+        End Get
+        Set(value As Boolean)
+            _EnableEzObjects = value
+        End Set
+    End Property
+
+    Private _EzSchema As String
+    Public Property EzSchema As String
+        Get
+            Return _EzSchema.Trim.ToLower.Replace(".", "")
+        End Get
+        Set(value As String)
+            _EzSchema = value.Trim.ToLower.Replace(".", "")
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -259,6 +279,8 @@
         Me.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(Me.ShowLeaderboardAtStartup), False)
         Me.DetectDeprecatedSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectDeprecatedSquealerObjects), True)
         Me.ShowGitBranch = My.Configger.LoadSetting(NameOf(Me.ShowGitBranch), True)
+        Me.EnableEzObjects = My.Configger.LoadSetting(NameOf(Me.EnableEzObjects), False)
+        Me.EzSchema = My.Configger.LoadSetting(NameOf(Me.EzSchema), "ez")
         Me.WildcardBehavior.UseSpaces = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseSpaces), False)
         Me.DirectoryStyleSelected = DirectoryStyleParse(My.Configger.LoadSetting(NameOf(Me.DirectoryStyleSelected), DirectoryStyle.Full.ToString))
         Me.OutputStepStyleSelected = OutputStepStyleParse(My.Configger.LoadSetting(NameOf(Me.OutputStepStyleSelected), OutputStepStyle.Detailed.ToString))
@@ -304,6 +326,8 @@
             f.rbTempFile.Checked = True
         End If
         f.optShowGitBranch.Checked = Me.ShowGitBranch
+        f.chkEnableEzObjects.Checked = Me.EnableEzObjects
+        f.txtEzSchema.Text = Me.EzSchema
         f.optBeep.Checked = Textify.ErrorAlert.Beep
         f.optDetectOldSquealerObjects.Checked = Me.DetectDeprecatedSquealerObjects
 
@@ -335,6 +359,8 @@
         Me.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
         Me.OutputToClipboard = f.rbClipboard.Checked
         Me.ShowGitBranch = f.optShowGitBranch.Checked
+        Me.EnableEzObjects = f.chkEnableEzObjects.Checked
+        Me.EzSchema = f.txtEzSchema.Text
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
 
@@ -354,6 +380,8 @@
         My.Configger.SaveSetting(NameOf(Me.OutputToClipboard), Me.OutputToClipboard)
         My.Configger.SaveSetting(NameOf(Me.DetectDeprecatedSquealerObjects), Me.DetectDeprecatedSquealerObjects)
         My.Configger.SaveSetting(NameOf(Me.ShowGitBranch), Me.ShowGitBranch)
+        My.Configger.SaveSetting(NameOf(Me.EnableEzObjects), Me.EnableEzObjects)
+        My.Configger.SaveSetting(NameOf(Me.EzSchema), Me.EzSchema)
         My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
 
     End Sub

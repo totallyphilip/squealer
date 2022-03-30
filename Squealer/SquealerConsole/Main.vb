@@ -704,6 +704,9 @@ Module Main
                 If MySettings.DetectDeprecatedSquealerObjects Then
                     GeneratedOutput = My.Resources._TopScript & GeneratedOutput
                 End If
+                If MySettings.EnableEzObjects Then
+                    GeneratedOutput = My.Resources.IncludeEzObjects.Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
+                End If
             End If
 
             If MySettings.OutputToClipboard Then

@@ -463,6 +463,45 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to 
+        '''declare @ezdrop varchar(max) =
+        '''(
+        '''	select string_agg(
+        '''		&apos;drop &apos;
+        '''		+case o.type
+        '''			when &apos;V&apos; then &apos;view&apos;
+        '''			when &apos;P&apos; then &apos;procedure&apos;
+        '''			when &apos;FN&apos; then &apos;function&apos;
+        '''		end
+        '''		+ concat(&apos; [&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;)
+        '''			,&apos;; &apos;)
+        '''		+ &apos;; drop schema ez&apos;
+        '''	from sys.objects o
+        '''	join sys.schemas s
+        '''		on s.schema_id = o.schema_id
+        '''	where s.name = &apos;ez&apos;
+        ''')
+        '''if @ezdrop is not null
+        '''	exec (@ezdrop)
+        '''
+        '''go
+        '''
+        '''if schema_id(&apos;ez&apos;) is null
+        '''	exec (&apos;create schema ez&apos;)
+        '''
+        '''go
+        '''
+        '''create view ez.objects as
+        '''select
+        '''	concat(&apos;[&apos; [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property IncludeEzObjects() As String
+            Get
+                Return ResourceManager.GetString("IncludeEzObjects", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to /***********************************************
         '''
         '''	How to create a leaderboard in SQL Server!

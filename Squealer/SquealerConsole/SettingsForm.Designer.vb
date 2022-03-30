@@ -22,6 +22,7 @@ Partial Class SettingsForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingsForm))
         Me.optBeep = New System.Windows.Forms.CheckBox()
         Me.chkEdgesWild = New System.Windows.Forms.CheckBox()
         Me.chkSpacesWild = New System.Windows.Forms.CheckBox()
@@ -72,6 +73,10 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
+        Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.txtEzSchema = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -615,6 +620,10 @@ Partial Class SettingsForm
         '
         'tabEasterEgg
         '
+        Me.tabEasterEgg.Controls.Add(Me.Label5)
+        Me.tabEasterEgg.Controls.Add(Me.txtEzSchema)
+        Me.tabEasterEgg.Controls.Add(Me.TextBox1)
+        Me.tabEasterEgg.Controls.Add(Me.chkEnableEzObjects)
         Me.tabEasterEgg.Controls.Add(Me.btnStarwarsHelp)
         Me.tabEasterEgg.Controls.Add(Me.lblLeaveBlank)
         Me.tabEasterEgg.Controls.Add(Me.btnLeaderboardSql)
@@ -628,6 +637,45 @@ Partial Class SettingsForm
         Me.tabEasterEgg.TabIndex = 4
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
+        '
+        'chkEnableEzObjects
+        '
+        Me.chkEnableEzObjects.AutoSize = True
+        Me.chkEnableEzObjects.Location = New System.Drawing.Point(7, 205)
+        Me.chkEnableEzObjects.Name = "chkEnableEzObjects"
+        Me.chkEnableEzObjects.Size = New System.Drawing.Size(109, 17)
+        Me.chkEnableEzObjects.TabIndex = 27
+        Me.chkEnableEzObjects.Text = "Script EZ Objects"
+        Me.chkEnableEzObjects.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox1.Location = New System.Drawing.Point(6, 228)
+        Me.TextBox1.Multiline = True
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(359, 71)
+        Me.TextBox1.TabIndex = 28
+        Me.TextBox1.Text = resources.GetString("TextBox1.Text")
+        '
+        'txtEzSchema
+        '
+        Me.txtEzSchema.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtEzSchema.Location = New System.Drawing.Point(192, 203)
+        Me.txtEzSchema.Name = "txtEzSchema"
+        Me.txtEzSchema.Size = New System.Drawing.Size(173, 20)
+        Me.txtEzSchema.TabIndex = 29
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(147, 206)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(44, 13)
+        Me.Label5.TabIndex = 30
+        Me.Label5.Text = "schema"
         '
         'SettingsForm
         '
@@ -714,4 +762,8 @@ Partial Class SettingsForm
     Friend WithEvents ddIncrement As Windows.Forms.ComboBox
     Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
     Friend WithEvents GroupBox2 As Windows.Forms.GroupBox
+    Friend WithEvents chkEnableEzObjects As Windows.Forms.CheckBox
+    Friend WithEvents TextBox1 As Windows.Forms.TextBox
+    Friend WithEvents Label5 As Windows.Forms.Label
+    Friend WithEvents txtEzSchema As Windows.Forms.TextBox
 End Class

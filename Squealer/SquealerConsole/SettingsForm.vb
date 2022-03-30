@@ -143,4 +143,5 @@
     Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         System.Windows.Forms.MessageBox.Show(rbDetailed.Checked.ToString)
     End Sub
+
 End Class

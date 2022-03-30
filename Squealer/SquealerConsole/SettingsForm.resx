@@ -120,6 +120,9 @@
   <metadata name="dlgTextEditor.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="TextBox1.Text" xml:space="preserve">
+    <value>Caution! This is for advanced users only! By checking this box, an EZ script will be added to your generated output. The script creates a schema named EZ, along with several procs and views. Any existing EZ procs and views (and the schema itself) will be deleted and re-created when you execute the script.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>60</value>
   </metadata>
