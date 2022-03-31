@@ -101,6 +101,7 @@ Module Main
         [delete]
         [directory]
         [edit]
+        ezonly
         [exit]
         [fix]
         [generate]
@@ -738,6 +739,11 @@ Module Main
         cmd.Visible = False
         MyCommands.Items.Add(cmd)
 
+        ' show ez script only
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.ezonly.ToString}, {"Display the EZ script from hidden options."}, CommandCatalog.eCommandCategory.other)
+        cmd.Visible = False
+        MyCommands.Items.Add(cmd)
+
         ' open folder
         cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command. Omit path to open folder dialog."}, CommandCatalog.eCommandCategory.folder, "<path>", False)
         cmd.Examples.Add("% " & Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
@@ -966,6 +972,13 @@ Module Main
 
                     Console.Clear()
 
+
+
+                ElseIf MyCommand.Keyword = eCommandType.ezonly.ToString Then
+
+                    Dim f As New TempFileHandler("sql")
+                    f.Writeline(My.Resources.IncludeEzObjects.Replace("{Schema}", MySettings.EzSchema))
+                    f.Show()
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[config].ToString Then

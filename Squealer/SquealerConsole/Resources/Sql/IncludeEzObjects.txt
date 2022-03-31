@@ -115,3 +115,60 @@ return @i
 end
 
 go
+
+create view {Schema}.indexcolumns as
+select
+	i.name as index_name
+	,i.index_id
+	,t.schema_id
+	,t.object_id
+	,t.schema_name
+	,t.table_name
+	,ic.index_column_id
+	,c.name as column_name
+	,ic.column_id
+	,ic.is_included_column
+from
+	sys.index_columns ic
+join
+	sys.indexes i
+	on i.object_id = ic.object_id
+	and i.index_id = ic.index_id
+join
+	sys.columns c
+	on c.object_id = ic.object_id
+	and c.column_id = ic.column_id
+join
+	{Schema}.tables t
+	on t.object_id = ic.object_id
+
+go
+
+create view {Schema}.indexes as
+select
+	i.name as index_name
+	,t.table_name
+	,i.type
+	,i.type_desc
+	,i.index_id
+	,t.object_id
+	,t.type as object_type
+	,t.type_desc as object_type_desc
+	,(
+		select
+			string_agg(c.column_name,',') within group (order by c.column_id)
+		from
+			{Schema}.indexcolumns c
+		where
+			c.index_id = i.index_id
+	) as index_columns
+
+from
+	sys.indexes i
+join
+	{Schema}.tables t
+	on t.object_id = i.object_id
+where
+	i.type > 0
+
+go
