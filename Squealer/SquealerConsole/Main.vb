@@ -639,7 +639,7 @@ Module Main
 
                         If MySettings.OutputStepStyleSelected = Settings.OutputStepStyle.Percentage Then
                             Dim CurrentPercentage As Double = ((FileCount + 1) / FileListing.Count) * 100
-                            If CurrentPercentage >= NextPercentageStep Then
+                            If CurrentPercentage >= NextPercentageStep OrElse (FileCount = 0 AndAlso CurrentPercentage < 1) Then
                                 While NextPercentageStep <= CurrentPercentage
                                     NextPercentageStep += MySettings.OutputPercentageIncrement
                                 End While
