@@ -1322,15 +1322,21 @@ Module Main
 
             Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
 
-            Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
-            If MySettings.ShowGitBranch Then
-                'Textify.Write(GitShell.CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
-                Textify.Write(String.Format(" ({0})", GitShell.CurrentBranch(WorkingFolder)), ConsoleColor.DarkGreen)
-            End If
-            Textify.Write(" > ", ConsoleColor.DarkYellow)
-            ClearKeyboard()
-            UserInput = Console.ReadLine
-            Textify.SayNewLine()
+            UserInput = String.Empty
+            While String.IsNullOrWhiteSpace(UserInput)
+
+                Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
+                If MySettings.ShowGitBranch Then
+                    'Textify.Write(GitShell.CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
+                    Textify.Write(String.Format(" ({0})", GitShell.CurrentBranch(WorkingFolder)), ConsoleColor.DarkGreen)
+                End If
+                Textify.Write(" > ", ConsoleColor.DarkYellow)
+                ClearKeyboard()
+                UserInput = Console.ReadLine
+                Textify.SayNewLine()
+
+            End While
+
 
             ' Separate command text from search text
             If UserInput.Contains("/") Then
