@@ -1,2 +1,1 @@
-﻿Some stuff is updated!
-We can have <stuff/> too!
+﻿First public release under new brand information.
