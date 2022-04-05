@@ -2377,7 +2377,7 @@ Module Main
                     Block = Block & vbCrLf & GrantStatement.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{User}", User.Item("Name").ToString).Replace("{Schema}", SchemaName(RootName))
                 Next
                 Block &= vbCrLf & "end" _
-                    & vbCrLf & "else print 'Permissions not granted.'"
+                    & vbCrLf & String.Format("else print 'Permissions not granted on {0}.'", Constants.MyThis)
             End If
 
             If Not Block = String.Empty Then
