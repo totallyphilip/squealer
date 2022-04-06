@@ -1312,8 +1312,6 @@ Module Main
 
                 Textify.SayError(ex.Message)
 
-                My.Logging.WriteLog(String.Format("{0} USER INPUT: ""{1}""", ex.Message, RawUserInput) & vbCrLf & ex.StackTrace)
-
                 If MyCommand Is Nothing OrElse MyCommand.Keyword = eCommandType.nerfherder.ToString Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, "Try: HELP")
                 Else
