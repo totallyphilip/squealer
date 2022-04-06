@@ -304,6 +304,8 @@ Module Main
     ' Main module. Start here.
     Sub Main()
 
+        My.Logging.WriteLog("Startup.")
+
         DefineCommands()
 
         ' Increase input buffer size.
@@ -365,6 +367,8 @@ Module Main
 
         ' Delete any settings that weren't referenced
         My.Configger.PruneSettings()
+
+        My.Logging.WriteLog("Shutdown.")
 
     End Sub
 
@@ -921,6 +925,7 @@ Module Main
 
         Dim MySwitches As New List(Of String)
         Dim UserInput As String = Nothing
+        Dim RawUserInput As String = String.Empty
 
         Textify.SayBulletLine(Textify.eBullet.Hash, "Type HELP to get started.")
         Console.WriteLine()
@@ -1298,6 +1303,7 @@ Module Main
 
 
 
+
                 Else
                     Throw New System.Exception(Constants.BadCommandMessage)
                 End If
@@ -1305,6 +1311,8 @@ Module Main
             Catch ex As Exception
 
                 Textify.SayError(ex.Message)
+
+                My.Logging.WriteLog(String.Format("{0} USER INPUT: ""{1}""", ex.Message, RawUserInput) & vbCrLf & ex.StackTrace)
 
                 If MyCommand Is Nothing OrElse MyCommand.Keyword = eCommandType.nerfherder.ToString Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, "Try: HELP")
@@ -1327,8 +1335,12 @@ Module Main
 
                 Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
                 If MySettings.ShowGitBranch Then
-                    'Textify.Write(GitShell.CurrentBranch(WorkingFolder, " ({0})"), ConsoleColor.DarkGreen)
-                    Textify.Write(String.Format(" ({0})", GitShell.CurrentBranch(WorkingFolder)), ConsoleColor.DarkGreen)
+                    Dim s As String = GitShell.CurrentBranch(WorkingFolder)
+                    Dim c As ConsoleColor = ConsoleColor.DarkGreen
+                    If s = GitShell.GitErrorMessage Then
+                        c = ConsoleColor.Red
+                    End If
+                    Textify.Write(String.Format(" ({0})", s), c)
                 End If
                 Textify.Write(" > ", ConsoleColor.DarkYellow)
                 ClearKeyboard()
@@ -1337,6 +1349,7 @@ Module Main
 
             End While
 
+            RawUserInput = UserInput
 
             ' Separate command text from search text
             If UserInput.Contains("/") Then

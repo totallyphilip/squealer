@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.vb" />
+    <Compile Include="Logging.vb" />
     <Compile Include="Misc.vb" />
     <Compile Include="EasyShell.vb" />
     <Compile Include="GitShell.vb" />

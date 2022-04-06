@@ -4,6 +4,8 @@ Imports System.Management.Automation.Runspaces
 
 Public Class GitShell
 
+    Public Const GitErrorMessage As String = "\\git-error\\"
+
     Public Shared Function ChangedFiles(folder As String, gc As String, glob As String, includeDeleted As Boolean) As List(Of String)
 
         Dim files As New List(Of String)
@@ -32,6 +34,7 @@ Public Class GitShell
                 Textify.Write(s, ConsoleColor.Cyan, Textify.eLineMode.Truncate)
             Next
         Catch ex As Exception
+            My.Logging.WriteLog(ex.Message & vbCrLf & ex.StackTrace)
             Throw New Exception(ex.Message)
         End Try
 
@@ -41,7 +44,8 @@ Public Class GitShell
         Try
             Return Results(folder, "git symbolic-ref HEAD")(0).Trim.Replace("refs/heads/", String.Empty)
         Catch ex As Exception
-            Return "git error!"
+            My.Logging.WriteLog("CANNOT GET GIT BRANCH: " & ex.Message & vbCrLf & ex.StackTrace)
+            Return GitErrorMessage
         End Try
     End Function
 
