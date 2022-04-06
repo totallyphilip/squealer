@@ -1326,7 +1326,20 @@ Module Main
 
             Dim ProjectName As String = GetProjectNickname(WorkingFolder)
 
-            Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
+            Dim title As String = ""
+            If MySettings.ShowProjectNameInTitleBar Then
+                title &= "[" & ProjectName & "]"
+            End If
+            If MySettings.ShowProjectDirectoryInTitleBar Then
+                title &= " " & WorkingFolder
+            End If
+            If Not title = "" Then
+                title &= " |"
+            End If
+            title &= " " & My.Application.Info.Title
+
+            'Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
+            Console.Title = title.Trim
 
             UserInput = String.Empty
             While String.IsNullOrWhiteSpace(UserInput)

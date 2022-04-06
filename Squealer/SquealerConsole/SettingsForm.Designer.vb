@@ -73,10 +73,12 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
-        Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.txtEzSchema = New System.Windows.Forms.TextBox()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
+        Me.chkShowProjectName = New System.Windows.Forms.CheckBox()
+        Me.chkShowProjectDirectory = New System.Windows.Forms.CheckBox()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -176,7 +178,7 @@ Partial Class SettingsForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(6, 91)
+        Me.Label3.Location = New System.Drawing.Point(6, 143)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(85, 13)
         Me.Label3.TabIndex = 1
@@ -184,7 +186,7 @@ Partial Class SettingsForm
         '
         'updnFolderSaves
         '
-        Me.updnFolderSaves.Location = New System.Drawing.Point(97, 89)
+        Me.updnFolderSaves.Location = New System.Drawing.Point(97, 141)
         Me.updnFolderSaves.Name = "updnFolderSaves"
         Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
         Me.updnFolderSaves.TabIndex = 0
@@ -213,7 +215,7 @@ Partial Class SettingsForm
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(312, 400)
+        Me.btnOK.Location = New System.Drawing.Point(312, 505)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
@@ -264,7 +266,7 @@ Partial Class SettingsForm
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 399)
+        Me.PictureBox1.Location = New System.Drawing.Point(12, 504)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
         Me.PictureBox1.TabIndex = 12
@@ -344,11 +346,13 @@ Partial Class SettingsForm
         Me.Tabs.Location = New System.Drawing.Point(12, 12)
         Me.Tabs.Name = "Tabs"
         Me.Tabs.SelectedIndex = 0
-        Me.Tabs.Size = New System.Drawing.Size(379, 381)
+        Me.Tabs.Size = New System.Drawing.Size(379, 486)
         Me.Tabs.TabIndex = 26
         '
         'tabGeneral
         '
+        Me.tabGeneral.Controls.Add(Me.chkShowProjectDirectory)
+        Me.tabGeneral.Controls.Add(Me.chkShowProjectName)
         Me.tabGeneral.Controls.Add(Me.GroupBox1)
         Me.tabGeneral.Controls.Add(Me.Label9)
         Me.tabGeneral.Controls.Add(Me.Label3)
@@ -359,7 +363,7 @@ Partial Class SettingsForm
         Me.tabGeneral.Location = New System.Drawing.Point(4, 22)
         Me.tabGeneral.Name = "tabGeneral"
         Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabGeneral.Size = New System.Drawing.Size(371, 355)
+        Me.tabGeneral.Size = New System.Drawing.Size(371, 460)
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
@@ -373,9 +377,9 @@ Partial Class SettingsForm
         Me.GroupBox1.Controls.Add(Me.rbSymbolic)
         Me.GroupBox1.Controls.Add(Me.txtDirExample)
         Me.GroupBox1.Controls.Add(Me.rbFull)
-        Me.GroupBox1.Location = New System.Drawing.Point(3, 135)
+        Me.GroupBox1.Location = New System.Drawing.Point(3, 194)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(356, 214)
+        Me.GroupBox1.Size = New System.Drawing.Size(356, 260)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Directory format"
@@ -390,13 +394,13 @@ Partial Class SettingsForm
         Me.txtDirExample.Name = "txtDirExample"
         Me.txtDirExample.ReadOnly = True
         Me.txtDirExample.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtDirExample.Size = New System.Drawing.Size(344, 166)
+        Me.txtDirExample.Size = New System.Drawing.Size(344, 212)
         Me.txtDirExample.TabIndex = 15
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(158, 91)
+        Me.Label9.Location = New System.Drawing.Point(158, 143)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(73, 13)
         Me.Label9.TabIndex = 16
@@ -638,15 +642,23 @@ Partial Class SettingsForm
         Me.tabEasterEgg.Text = "Easter Egg"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
         '
-        'chkEnableEzObjects
+        'Label5
         '
-        Me.chkEnableEzObjects.AutoSize = True
-        Me.chkEnableEzObjects.Location = New System.Drawing.Point(7, 205)
-        Me.chkEnableEzObjects.Name = "chkEnableEzObjects"
-        Me.chkEnableEzObjects.Size = New System.Drawing.Size(109, 17)
-        Me.chkEnableEzObjects.TabIndex = 27
-        Me.chkEnableEzObjects.Text = "Script EZ Objects"
-        Me.chkEnableEzObjects.UseVisualStyleBackColor = True
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(147, 206)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(44, 13)
+        Me.Label5.TabIndex = 30
+        Me.Label5.Text = "schema"
+        '
+        'txtEzSchema
+        '
+        Me.txtEzSchema.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtEzSchema.Location = New System.Drawing.Point(192, 203)
+        Me.txtEzSchema.Name = "txtEzSchema"
+        Me.txtEzSchema.Size = New System.Drawing.Size(173, 20)
+        Me.txtEzSchema.TabIndex = 29
         '
         'TextBox1
         '
@@ -659,30 +671,42 @@ Partial Class SettingsForm
         Me.TextBox1.TabIndex = 28
         Me.TextBox1.Text = resources.GetString("TextBox1.Text")
         '
-        'txtEzSchema
+        'chkEnableEzObjects
         '
-        Me.txtEzSchema.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEzSchema.Location = New System.Drawing.Point(192, 203)
-        Me.txtEzSchema.Name = "txtEzSchema"
-        Me.txtEzSchema.Size = New System.Drawing.Size(173, 20)
-        Me.txtEzSchema.TabIndex = 29
+        Me.chkEnableEzObjects.AutoSize = True
+        Me.chkEnableEzObjects.Location = New System.Drawing.Point(7, 205)
+        Me.chkEnableEzObjects.Name = "chkEnableEzObjects"
+        Me.chkEnableEzObjects.Size = New System.Drawing.Size(109, 17)
+        Me.chkEnableEzObjects.TabIndex = 27
+        Me.chkEnableEzObjects.Text = "Script EZ Objects"
+        Me.chkEnableEzObjects.UseVisualStyleBackColor = True
         '
-        'Label5
+        'chkShowProjectName
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(147, 206)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(44, 13)
-        Me.Label5.TabIndex = 30
-        Me.Label5.Text = "schema"
+        Me.chkShowProjectName.AutoSize = True
+        Me.chkShowProjectName.Location = New System.Drawing.Point(8, 75)
+        Me.chkShowProjectName.Name = "chkShowProjectName"
+        Me.chkShowProjectName.Size = New System.Drawing.Size(165, 17)
+        Me.chkShowProjectName.TabIndex = 18
+        Me.chkShowProjectName.Text = "Show project name in title bar"
+        Me.chkShowProjectName.UseVisualStyleBackColor = True
+        '
+        'chkShowProjectDirectory
+        '
+        Me.chkShowProjectDirectory.AutoSize = True
+        Me.chkShowProjectDirectory.Location = New System.Drawing.Point(8, 99)
+        Me.chkShowProjectDirectory.Name = "chkShowProjectDirectory"
+        Me.chkShowProjectDirectory.Size = New System.Drawing.Size(165, 17)
+        Me.chkShowProjectDirectory.TabIndex = 19
+        Me.chkShowProjectDirectory.Text = "Show project folder in title bar"
+        Me.chkShowProjectDirectory.UseVisualStyleBackColor = True
         '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(403, 435)
+        Me.ClientSize = New System.Drawing.Size(403, 540)
         Me.Controls.Add(Me.Tabs)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.btnOK)
@@ -766,4 +790,6 @@ Partial Class SettingsForm
     Friend WithEvents TextBox1 As Windows.Forms.TextBox
     Friend WithEvents Label5 As Windows.Forms.Label
     Friend WithEvents txtEzSchema As Windows.Forms.TextBox
+    Friend WithEvents chkShowProjectDirectory As Windows.Forms.CheckBox
+    Friend WithEvents chkShowProjectName As Windows.Forms.CheckBox
 End Class

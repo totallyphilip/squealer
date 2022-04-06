@@ -1,1 +1,2 @@
 ﻿Added error log to AppData folder to assist with troubleshooting.
+Title bar display is configurable in settings now.
