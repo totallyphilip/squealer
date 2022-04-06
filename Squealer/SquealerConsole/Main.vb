@@ -219,7 +219,7 @@ Module Main
 
             For i As Integer = 0 To folders.Count - 1
                 farray(i, 0) = i.ToString
-                farray(i, 1) = GetProjectNickname(folders(i))
+                farray(i, 1) = Misc.ProjectName(folders(i))
                 farray(i, 2) = folders(i)
                 If Not My.Computer.FileSystem.DirectoryExists(farray(i, 2)) Then
                     farray(i, 1) = "**********"
@@ -254,9 +254,9 @@ Module Main
                 ChangeFolder(FolderCollection(n), WorkingFolder)
             Else
                 ' Load by project name
-                Dim s As String = FolderCollection.Find(Function(x) GetProjectNickname(x).ToLower.StartsWith(NewFolder.ToLower))
+                Dim s As String = FolderCollection.Find(Function(x) ProjectName(x).ToLower.StartsWith(NewFolder.ToLower))
                 If String.IsNullOrEmpty(s) Then
-                    s = FolderCollection.Find(Function(x) GetProjectNickname(x).ToLower.Contains(NewFolder.ToLower))
+                    s = FolderCollection.Find(Function(x) ProjectName(x).ToLower.Contains(NewFolder.ToLower))
                 End If
                 ChangeFolder(s, WorkingFolder)
             End If
@@ -1324,36 +1324,23 @@ Module Main
 
             FirstLoop = False
 
-            Dim ProjectName As String = GetProjectNickname(WorkingFolder)
-
-            Dim title As String = ""
-            If MySettings.ShowProjectNameInTitleBar Then
-                title &= "[" & ProjectName & "]"
-            End If
-            If MySettings.ShowProjectDirectoryInTitleBar Then
-                title &= " " & WorkingFolder
-            End If
-            If Not title = "" Then
-                title &= " |"
-            End If
-            title &= " " & My.Application.Info.Title
-
-            'Console.Title = String.Format("[{0}] {1} - {2}", ProjectName, WorkingFolder, My.Application.Info.Title) ' Info may have changed. Update the title bar on every pass. 
-            Console.Title = title.Trim
+            Console.Title = Misc.TitleText(MySettings.ShowProjectNameInTitleBar, MySettings.ShowProjectDirectoryInTitleBar, WorkingFolder)
 
             UserInput = String.Empty
             While String.IsNullOrWhiteSpace(UserInput)
 
-                Textify.Write(String.Format("[{0}]", ProjectName), ConsoleColor.DarkYellow)
+                If MySettings.ShowProjectNameInCommandPrompt Then
+                    Textify.Write(String.Format("[{0}] ", Misc.ProjectName(WorkingFolder)), ConsoleColor.DarkYellow)
+                End If
                 If MySettings.ShowGitBranch Then
                     Dim s As String = GitShell.CurrentBranch(WorkingFolder)
                     Dim c As ConsoleColor = ConsoleColor.DarkGreen
                     If s = GitShell.GitErrorMessage Then
                         c = ConsoleColor.Red
                     End If
-                    Textify.Write(String.Format(" ({0})", s), c)
+                    Textify.Write(String.Format("({0}) ", s), c)
                 End If
-                Textify.Write(" > ", ConsoleColor.DarkYellow)
+                Textify.Write("> ", ConsoleColor.DarkYellow)
                 ClearKeyboard()
                 UserInput = Console.ReadLine
                 Textify.SayNewLine()
@@ -2611,26 +2598,7 @@ Module Main
 
     End Function
 
-    ' Get the project nickname.
-    Private Function GetProjectNickname(ByVal WorkingFolder As String) As String
 
-        Try
-            Dim Reader As New Xml.XmlDocument
-            Reader.Load(WorkingFolder & "\" & Constants.ConfigFilename)
-            Dim Node As Xml.XmlNode = Reader.SelectSingleNode("/Settings")
-            Dim s As String = Node.Attributes("ProjectName").Value.ToString.Trim()
-            If String.IsNullOrWhiteSpace(s) Then
-                s = "myproject"
-            End If
-            If s.Length > 30 Then
-                s = s.Substring(0, 30)
-            End If
-            Return s
-        Catch ex As Exception
-            Return "myproject"
-        End Try
-
-    End Function
 
 #End Region
 

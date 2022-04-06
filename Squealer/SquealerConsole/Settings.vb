@@ -271,6 +271,16 @@
         End Set
     End Property
 
+    Private _ShowProjectNameInCommandPrompt As Boolean
+    Public Property ShowProjectNameInCommandPrompt As Boolean
+        Get
+            Return _ShowProjectNameInCommandPrompt
+        End Get
+        Set(value As Boolean)
+            _ShowProjectNameInCommandPrompt = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -289,6 +299,7 @@
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.ShowProjectDirectoryInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), True)
+        Me.ShowProjectNameInCommandPrompt = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInCommandPrompt), True)
         Me.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SqlFiles), False)
         Me.OpenWithDefault.ConfigFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.ConfigFiles), False)
         Me.OpenWithDefault.SquealerFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SquealerFiles), False)
@@ -332,8 +343,9 @@
             Case DirectoryStyle.Symbolic
                 f.rbSymbolic.Checked = True
         End Select
-        f.chkShowProjectName.Checked = Me.ShowProjectNameInTitleBar
-        f.chkShowProjectDirectory.Checked = Me.ShowProjectDirectoryInTitleBar
+        f.chkShowProjectNameInTitleBar.Checked = Me.ShowProjectNameInTitleBar
+        f.chkShowProjectDirectoryInTitleBar.Checked = Me.ShowProjectDirectoryInTitleBar
+        f.chkShowProjectNameInCommandPrompt.Checked = Me.ShowProjectNameInCommandPrompt
         f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
         f.chkConfigDefaultEditor.Checked = Me.OpenWithDefault.ConfigFiles
         f.chkSquealerDefaultEditor.Checked = Me.OpenWithDefault.SquealerFiles
@@ -371,8 +383,9 @@
         Else
             Me.DirectoryStyleSelected = DirectoryStyle.Symbolic
         End If
-        Me.ShowProjectNameInTitleBar = f.chkShowProjectName.Checked
-        Me.ShowProjectDirectoryInTitleBar = f.chkShowProjectDirectory.Checked
+        Me.ShowProjectNameInTitleBar = f.chkShowProjectNameInTitleBar.Checked
+        Me.ShowProjectDirectoryInTitleBar = f.chkShowProjectDirectoryInTitleBar.Checked
+        Me.ShowProjectNameInCommandPrompt = f.chkShowProjectNameInCommandPrompt.Checked
         Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
         Me.OpenWithDefault.ConfigFiles = f.chkConfigDefaultEditor.Checked
         Me.OpenWithDefault.SquealerFiles = f.chkSquealerDefaultEditor.Checked
@@ -403,6 +416,7 @@
         My.Configger.SaveSetting(NameOf(Me.WildcardBehavior.UseEdges), Me.WildcardBehavior.UseEdges)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInTitleBar), Me.ShowProjectNameInTitleBar)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), Me.ShowProjectDirectoryInTitleBar)
+        My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInCommandPrompt), Me.ShowProjectNameInCommandPrompt)
         My.Configger.SaveSetting(NameOf(Me.AutoEditNewFiles), Me.AutoEditNewFiles)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
         My.Configger.SaveSetting(NameOf(Me.OutputToClipboard), Me.OutputToClipboard)
