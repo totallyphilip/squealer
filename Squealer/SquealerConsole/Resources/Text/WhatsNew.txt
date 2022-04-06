@@ -1,1 +1,1 @@
-﻿First public release under new brand information.
+﻿Added error log to AppData folder to assist with troubleshooting.
