@@ -96,6 +96,7 @@ Module Main
         [checkout]
         [clear]
         [compare]
+        copypath
         [config]
         [connection]
         [delete]
@@ -183,7 +184,7 @@ Module Main
         Else
             While InvalidFolderIndex() > -1
                 Dim i As Integer = InvalidFolderIndex()
-                Textify.WriteLine("remove " & FolderCollection(i), ConsoleColor.Red)
+                Textify.WriteLine("Remove: " & FolderCollection(i), ConsoleColor.Red)
                 ForgetFolder(i)
             End While
         End If
@@ -769,7 +770,11 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' file explorer
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.browse.ToString, "b"}, {"Open file browser.", "Opens the current project folder. If {options} is specified, only matching files will be displayed."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.browse.ToString, "b"}, {"Open file browser.", "Browse files in the current project folder. If {options} is specified, only matching files will be displayed."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
+        MyCommands.Items.Add(cmd)
+
+        ' copy path
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.copypath.ToString, "cp"}, {"Copy working folder path to clipboard.", "Copies the full path of the current working folder into the Windows clipboard.."}, CommandCatalog.eCommandCategory.folder)
         MyCommands.Items.Add(cmd)
 
         ' checkout
@@ -977,6 +982,13 @@ Module Main
 
                     Console.Clear()
 
+
+
+                ElseIf MyCommand.Keyword = eCommandType.copypath.ToString AndAlso String.IsNullOrEmpty(UserInput) Then
+
+                    Clipboard.SetText(WorkingFolder)
+                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Copied: {0}", WorkingFolder))
+                    Console.WriteLine()
 
 
                 ElseIf MyCommand.Keyword = eCommandType.ezonly.ToString Then
@@ -1217,7 +1229,15 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.browse.ToString Then
 
-                    OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardBehavior, False), WorkingFolder)
+                    'OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardBehavior, False), WorkingFolder)
+
+
+                    Dim SelectedFiles As List(Of String) = OpenExplorer(Misc.WildcardInterpreter(UserInput, MySettings.WildcardBehavior, False), WorkingFolder) '  FilesToProcess(WorkingFolder, UserInput, MySearchText, True, ObjectTypeFilter, True, False, False, False, New GitFlags)
+
+                    If SelectedFiles.Count > 0 Then
+                        ProcessFiles(SelectedFiles, eFileAction.edit, New BatchParametersClass, SquealerObjectType.eType.Invalid, New GitFlags)
+                    End If
+
 
 
 
@@ -1225,87 +1245,87 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.[use].ToString Then
 
-                    LoadFolder(UserInput, WorkingFolder)
+                        LoadFolder(UserInput, WorkingFolder)
 
 
-                ElseIf MyCommand.Keyword = eCommandType.pewpew.ToString Then
+                    ElseIf MyCommand.Keyword = eCommandType.pewpew.ToString Then
 
-                    If StringInList(MySwitches, "top") Then
-                        ShowLeaderboard(20)
-                    Else
-                        Dim fgColor As ConsoleColor = Console.ForegroundColor
-                        Dim bgColor As ConsoleColor = Console.BackgroundColor
-                        Dim fight As New GoldLeader(False)
-                        fight.TryPlay(MySettings.LeaderboardConnectionString)
-                        Console.ForegroundColor = fgColor
-                        Console.BackgroundColor = bgColor
-                        Console.WriteLine()
-                    End If
+                        If StringInList(MySwitches, "top") Then
+                            ShowLeaderboard(20)
+                        Else
+                            Dim fgColor As ConsoleColor = Console.ForegroundColor
+                            Dim bgColor As ConsoleColor = Console.BackgroundColor
+                            Dim fight As New GoldLeader(False)
+                            fight.TryPlay(MySettings.LeaderboardConnectionString)
+                            Console.ForegroundColor = fgColor
+                            Console.BackgroundColor = bgColor
+                            Console.WriteLine()
+                        End If
 
 
 
-                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "set") AndAlso Not String.IsNullOrEmpty(UserInput) Then
-                    SetConnectionString(WorkingFolder, UserInput)
-                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "show") AndAlso String.IsNullOrEmpty(UserInput) Then
-                    Textify.SayBulletLine(Textify.eBullet.Arrow, GetConnectionString(WorkingFolder))
-                    Textify.SayNewLine()
-                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso (StringInList(MySwitches, "t") OrElse MySwitches.Count = 0) AndAlso String.IsNullOrEmpty(UserInput) Then
-                    TestConnectionString(WorkingFolder)
-                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "forget") AndAlso String.IsNullOrEmpty(UserInput) Then
-                    ForgetConnectionString(WorkingFolder)
-                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "e") AndAlso String.IsNullOrEmpty(UserInput) Then
-                    Dim cs As String
-                    Try
-                        cs = GetConnectionString(WorkingFolder)
-                    Catch ex As Exception
-                        cs = Constants.DefaultConnectionString
-                    End Try
-                    cs = Microsoft.VisualBasic.Interaction.InputBox("Connection String", "", cs)
-                    If Not String.IsNullOrWhiteSpace(cs) Then
-                        SetConnectionString(WorkingFolder, cs)
-                        Textify.SayBulletLine(Textify.eBullet.Arrow, cs)
+                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "set") AndAlso Not String.IsNullOrEmpty(UserInput) Then
+                        SetConnectionString(WorkingFolder, UserInput)
+                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "show") AndAlso String.IsNullOrEmpty(UserInput) Then
+                        Textify.SayBulletLine(Textify.eBullet.Arrow, GetConnectionString(WorkingFolder))
                         Textify.SayNewLine()
-                    End If
+                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso (StringInList(MySwitches, "t") OrElse MySwitches.Count = 0) AndAlso String.IsNullOrEmpty(UserInput) Then
+                        TestConnectionString(WorkingFolder)
+                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "forget") AndAlso String.IsNullOrEmpty(UserInput) Then
+                        ForgetConnectionString(WorkingFolder)
+                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "e") AndAlso String.IsNullOrEmpty(UserInput) Then
+                        Dim cs As String
+                        Try
+                            cs = GetConnectionString(WorkingFolder)
+                        Catch ex As Exception
+                            cs = Constants.DefaultConnectionString
+                        End Try
+                        cs = Microsoft.VisualBasic.Interaction.InputBox("Connection String", "", cs)
+                        If Not String.IsNullOrWhiteSpace(cs) Then
+                            SetConnectionString(WorkingFolder, cs)
+                            Textify.SayBulletLine(Textify.eBullet.Arrow, cs)
+                            Textify.SayNewLine()
+                        End If
 
 
 
-                ElseIf MyCommand.Keyword = eCommandType.make.ToString Then
+                    ElseIf MyCommand.Keyword = eCommandType.make.ToString Then
 
 
-                    Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
-
-
-
-
-                ElseIf MyCommand.Keyword = eCommandType.reverse.ToString Then
-
-                    ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "clean"))
-
-
-
-
-
-                ElseIf MyCommand.Keyword = eCommandType.release.ToString Then
-
-                    Dim v As New VersionCheck
-                    v.CreateMetadata()
-
-
-
-                ElseIf MyCommand.Keyword = "test" Then 'footest
+                        Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
 
 
 
 
+                    ElseIf MyCommand.Keyword = eCommandType.reverse.ToString Then
 
+                        ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "clean"))
 
 
 
 
 
+                    ElseIf MyCommand.Keyword = eCommandType.release.ToString Then
 
-                Else
-                    Throw New System.Exception(Constants.BadCommandMessage)
+                        Dim v As New VersionCheck
+                        v.CreateMetadata()
+
+
+
+                    ElseIf MyCommand.Keyword = "test" Then 'footest
+
+
+
+
+
+
+
+
+
+
+
+                    Else
+                        Throw New System.Exception(Constants.BadCommandMessage)
                 End If
 
             Catch ex As Exception
@@ -2507,12 +2527,18 @@ Module Main
 
     End Sub
 
-    Private Sub OpenExplorer(ByVal wildcard As String, ByVal WorkingFolder As String)
+    Private Function OpenExplorer(ByVal wildcard As String, ByVal WorkingFolder As String) As List(Of String)
         Dim f As New OpenFileDialog
         f.InitialDirectory = WorkingFolder
         f.FileName = wildcard
-        f.ShowDialog()
-    End Sub
+        f.Multiselect = True
+        Dim s As New List(Of String)
+        If Not f.ShowDialog() = DialogResult.Cancel Then
+            s.AddRange(f.FileNames)
+
+        End If
+        Return s
+    End Function
 
     Private Sub ThrowErrorIfOverFileLimit(limit As Integer, n As Integer, OverrideSafety As Boolean)
         If n > limit AndAlso Not OverrideSafety Then
