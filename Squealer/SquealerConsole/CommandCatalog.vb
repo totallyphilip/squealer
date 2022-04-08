@@ -332,7 +332,6 @@
                     _Options.Items.Add(New CommandCatalog.CommandSwitch(s))
                 Next
                 _Options.Items.Add(New CommandSwitch(String.Format("x;exact filename match, override {0} setting", Constants.WildcardAsterisks)))
-                _Options.Items.Add(New CommandSwitch("today;files with today's date"))
                 _Options.Items.Add(New CommandSwitch("cs;case-sensitive text search"))
                 _Options.Items.Add(New CommandSwitch("code;with pre/post code"))
                 _Options.Items.Add(New CommandSwitch("u;uncommitted, case-sensitive per github.com/microsoft/vscode/issues/10633"))

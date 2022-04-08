@@ -1,2 +1,3 @@
 ﻿Added error log to AppData folder to assist with troubleshooting.
 Title bar and command prompt information is configurable now.
+Several minor improvements.

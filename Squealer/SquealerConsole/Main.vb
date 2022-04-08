@@ -373,7 +373,7 @@ Module Main
 
     End Sub
 
-    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, todayonly As Boolean, hasPrePostCode As Boolean, gf As GitFlags) As List(Of String)
+    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, hasPrePostCode As Boolean, gf As GitFlags) As List(Of String)
 
         Wildcard = Wildcard.Replace("[", "").Replace("]", "")
 
@@ -387,9 +387,6 @@ Module Main
         Dim comma As String = Nothing
 
 
-        If todayonly Then
-            Textify.Write(" today's", highlightcolor)
-        End If
         If filter.AllSelected Then
             Textify.Write(" all", highlightcolor)
             If gf.GitEnabled Then
@@ -481,13 +478,6 @@ Module Main
         For Each t As SquealerObjectType In filter.Items.Where(Function(x) Not x.Selected)
             DistinctFiles.RemoveAll(Function(x) SquealerObjectType.Eval(XmlGetObjectType(x)) = t.LongType)
         Next
-
-        ' Remove any results that don't match the time constraint
-        If todayonly Then
-            With My.Computer.FileSystem
-                DistinctFiles.RemoveAll(Function(x) Not (.GetFileInfo(x).LastWriteTime.Year = Now.Year AndAlso .GetFileInfo(x).LastWriteTime.DayOfYear = Now.DayOfYear))
-            End With
-        End If
 
         ' Remove any results that don't have pre/post code
         If hasPrePostCode Then
@@ -1029,7 +1019,6 @@ Module Main
                     Dim action As eFileAction = eFileAction.directory
                     Dim bp As New BatchParametersClass
                     Dim targetftype As SquealerObjectType.eType = SquealerObjectType.eType.Invalid ' for object conversion only
-                    Dim todayonly As Boolean = StringInList(MySwitches, "today")
                     Dim gf As New GitFlags()
                     gf.ShowUncommitted = StringInList(MySwitches, "u")
 
@@ -1131,7 +1120,7 @@ Module Main
                     Dim ignorefilelimit As Boolean = StringInList(MySwitches, "all")
                     Dim findPrePost As Boolean = StringInList(MySwitches, "code")
 
-                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, todayonly, findPrePost, gf)
+                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, findPrePost, gf)
 
                     ThrowErrorIfOverFileLimit(FileLimit, SelectedFiles.Count, ignorefilelimit)
 
