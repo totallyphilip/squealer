@@ -2454,10 +2454,10 @@ Module Main
             & SpitDashes(String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)), "<EOF>") & vbCrLf & vbCrLf
 
         ' Do string replacements.
+        ExpandIndividual = ExpandIndividual.Replace(Constants.MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
         For Each Replacement As DataRow In StringReplacements.Select() '.Select("")
             ExpandIndividual = ExpandIndividual.Replace(Replacement.Item("Original").ToString, Replacement.Item("Replacement").ToString)
         Next
-        ExpandIndividual = ExpandIndividual.Replace(Constants.MyThis, String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)))
 
 
     End Function

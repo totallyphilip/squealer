@@ -57,7 +57,7 @@ Public Class GitShell
         Dim pipeline As Pipeline = runspace.CreatePipeline()
         pipeline.Commands.AddScript($"cd ""{folder}""")
         pipeline.Commands.AddScript("Out-String")
-        pipeline.Commands.AddScript(gc)
+        pipeline.Commands.AddScript(gc.Replace("$", "`$"))
         Dim psobjects As Collection(Of PSObject) = pipeline.Invoke()
         runspace.Close()
 
