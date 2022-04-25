@@ -1901,7 +1901,7 @@ Module Main
         Else
             For Each User As DataRow In InUsers.Select("", "Name asc")
                 Dim OutUser As Xml.XmlElement = OutputXml.CreateElement("User")
-                OutUser.SetAttribute("Name", User.Item("Name").ToString)
+                OutUser.SetAttribute("Name", User.Item("Name").ToString.Trim)
                 OutUsers.AppendChild(OutUser)
             Next
         End If
