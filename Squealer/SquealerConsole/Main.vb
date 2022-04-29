@@ -312,8 +312,6 @@ Module Main
         ' Increase input buffer size.
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
-
-
         ' Restore the previous working folder
         Dim WorkingFolder As String = MySettings.LastProjectFolder
         If My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
@@ -1351,7 +1349,13 @@ Module Main
                 End If
                 Textify.Write("> ", ConsoleColor.DarkYellow)
                 ClearKeyboard()
+
+                Dim KA As New KeepAlive
+                If MySettings.KeepScreenAlive Then
+                    KA.KeepMonitorActive()
+                End If
                 UserInput = Console.ReadLine
+                KA.RestoreMonitorSettings()
                 Textify.SayNewLine()
 
             End While

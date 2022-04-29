@@ -281,6 +281,16 @@
         End Set
     End Property
 
+    Private _KeepScreenAlive As Boolean
+    Public Property KeepScreenAlive As Boolean
+        Get
+            Return _KeepScreenAlive
+        End Get
+        Set(value As Boolean)
+            _KeepScreenAlive = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -298,6 +308,7 @@
         ' Load settings.
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
+        Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
         Me.ShowProjectDirectoryInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), True)
         Me.ShowProjectNameInCommandPrompt = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInCommandPrompt), True)
         Me.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SqlFiles), False)
@@ -344,6 +355,7 @@
                 f.rbSymbolic.Checked = True
         End Select
         f.chkShowProjectNameInTitleBar.Checked = Me.ShowProjectNameInTitleBar
+        f.chkKeepScreenOn.Checked = Me.KeepScreenAlive
         f.chkShowProjectDirectoryInTitleBar.Checked = Me.ShowProjectDirectoryInTitleBar
         f.chkShowProjectNameInCommandPrompt.Checked = Me.ShowProjectNameInCommandPrompt
         f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
@@ -384,6 +396,7 @@
             Me.DirectoryStyleSelected = DirectoryStyle.Symbolic
         End If
         Me.ShowProjectNameInTitleBar = f.chkShowProjectNameInTitleBar.Checked
+        Me.KeepScreenAlive = f.chkKeepScreenOn.Checked
         Me.ShowProjectDirectoryInTitleBar = f.chkShowProjectDirectoryInTitleBar.Checked
         Me.ShowProjectNameInCommandPrompt = f.chkShowProjectNameInCommandPrompt.Checked
         Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
@@ -416,6 +429,7 @@
         My.Configger.SaveSetting(NameOf(Me.WildcardBehavior.UseEdges), Me.WildcardBehavior.UseEdges)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInTitleBar), Me.ShowProjectNameInTitleBar)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), Me.ShowProjectDirectoryInTitleBar)
+        My.Configger.SaveSetting(NameOf(Me.KeepScreenAlive), Me.KeepScreenAlive)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInCommandPrompt), Me.ShowProjectNameInCommandPrompt)
         My.Configger.SaveSetting(NameOf(Me.AutoEditNewFiles), Me.AutoEditNewFiles)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)

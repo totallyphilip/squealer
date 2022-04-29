@@ -1,4 +1,5 @@
 ﻿Added error log to AppData folder to assist with troubleshooting.
 Title bar and command prompt information is configurable now.
+Added option to keep screen alive.
 Fixed error reading filenames containing "$" character.
 Several minor improvements.
