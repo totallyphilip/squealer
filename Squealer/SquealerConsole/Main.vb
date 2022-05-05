@@ -1815,7 +1815,7 @@ Module Main
                     OutColumn.SetAttribute("Comments", "")
                     OutTable.AppendChild(OutColumn)
                 Else
-                    OutTable.AppendChild(OutputXml.CreateComment("<Column Name="" MyColumn"" Comments=""""/>"))
+                    OutTable.AppendChild(OutputXml.CreateComment("<Column Name=""MyColumn"" Comments="""" />"))
                 End If
             Else
                 For Each InColumn As DataRow In InColumns.Select()
@@ -1901,7 +1901,7 @@ Module Main
         End If
 
         If InUsers.Rows.Count = 0 Then
-            OutUsers.AppendChild(OutputXml.CreateComment(" <User Name="" MyUser""/> "))
+            OutUsers.AppendChild(OutputXml.CreateComment(" <User Name=""MyUser""/> "))
         Else
             For Each User As DataRow In InUsers.Select("", "Name asc")
                 Dim OutUser As Xml.XmlElement = OutputXml.CreateElement("User")
@@ -1915,7 +1915,7 @@ Module Main
         Dim OutPostCode As Xml.XmlElement = OutputXml.CreateElement("PostCode")
         Dim CDataPostCode As Xml.XmlCDataSection = OutputXml.CreateCDataSection("") ' CData disables the XML parser so that special characters can exist in the inner text.
 
-        OutRoot.AppendChild(OutputXml.CreateComment(" Optional T-SQL to execute after the main object Is created. "))
+        OutRoot.AppendChild(OutputXml.CreateComment(" Optional T-SQL to execute after the main object is created. "))
         OutRoot.AppendChild(OutPostCode)
 
         Dim InPostCode As String = String.Empty
