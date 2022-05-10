@@ -12,6 +12,12 @@
         ' The root folder for all the settings files.
         Private _AppDataFolder As String = String.Concat(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "\", My.Application.Info.CompanyName, "\", My.Application.Info.Title)
 
+        Public ReadOnly Property AppDataFolder As String
+            Get
+                Return _AppDataFolder
+            End Get
+        End Property
+
         ' The calculated filename for a given setting name.
         Private Function SettingFilename(setting As String) As String
             Return SettingFilename(setting, SettingFileExtension)

@@ -291,6 +291,45 @@ Namespace My.Resources
         
         '''<summary>
         '''  Looks up a localized string similar to 
+        '''go
+        '''
+        '''declare @ezdrop varchar(max) =
+        '''(
+        '''	select string_agg(
+        '''		&apos;drop &apos;
+        '''		+case o.type
+        '''			when &apos;V&apos; then &apos;view&apos;
+        '''			when &apos;P&apos; then &apos;procedure&apos;
+        '''			when &apos;FN&apos; then &apos;function&apos;
+        '''		end
+        '''		+ concat(&apos; [&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;)
+        '''			,&apos;; &apos;)
+        '''		+ &apos;; drop schema {Schema}&apos;
+        '''	from sys.objects o
+        '''	join sys.schemas s
+        '''		on s.schema_id = o.schema_id
+        '''	where s.name = &apos;{Schema}&apos;
+        ''')
+        '''if @ezdrop is not null
+        '''	exec (@ezdrop)
+        '''
+        '''go
+        '''
+        '''if schema_id(&apos;{Schema}&apos;) is null
+        '''	exec (&apos;create schema {Schema}&apos;)
+        '''
+        '''go
+        '''
+        '''create view {Sch [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property EzObjects() As String
+            Get
+                Return ResourceManager.GetString("EzObjects", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
         ''')
         '''
         '''returns {ReturnDataType}
@@ -459,45 +498,6 @@ Namespace My.Resources
         Friend ReadOnly Property IF_Template() As String
             Get
                 Return ResourceManager.GetString("IF_Template", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''declare @ezdrop varchar(max) =
-        '''(
-        '''	select string_agg(
-        '''		&apos;drop &apos;
-        '''		+case o.type
-        '''			when &apos;V&apos; then &apos;view&apos;
-        '''			when &apos;P&apos; then &apos;procedure&apos;
-        '''			when &apos;FN&apos; then &apos;function&apos;
-        '''		end
-        '''		+ concat(&apos; [&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;)
-        '''			,&apos;; &apos;)
-        '''		+ &apos;; drop schema ez&apos;
-        '''	from sys.objects o
-        '''	join sys.schemas s
-        '''		on s.schema_id = o.schema_id
-        '''	where s.name = &apos;ez&apos;
-        ''')
-        '''if @ezdrop is not null
-        '''	exec (@ezdrop)
-        '''
-        '''go
-        '''
-        '''if schema_id(&apos;ez&apos;) is null
-        '''	exec (&apos;create schema ez&apos;)
-        '''
-        '''go
-        '''
-        '''create view ez.objects as
-        '''select
-        '''	concat(&apos;[&apos; [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property IncludeEzObjects() As String
-            Get
-                Return ResourceManager.GetString("IncludeEzObjects", resourceCulture)
             End Get
         End Property
         
@@ -921,8 +921,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Some stuff is updated!
-        '''We can have &lt;stuff/&gt; too!.
+        '''  Looks up a localized string similar to Added error log to AppData folder to assist with troubleshooting.
+        '''Title bar and command prompt information is configurable now.
+        '''Added option to keep screen alive.
+        '''Fixed error reading filenames containing &quot;$&quot; character.
+        '''Several minor improvements..
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

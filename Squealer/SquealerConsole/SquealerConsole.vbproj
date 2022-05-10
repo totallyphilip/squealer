@@ -208,7 +208,7 @@
     <Content Include="Resources\Reverse\ObjectList.txt" />
     <Content Include="Resources\Reverse\ObjectParameters.txt" />
     <Content Include="Resources\Reverse\ObjectPermissions.txt" />
-    <Content Include="Resources\Sql\IncludeEzObjects.txt" />
+    <Content Include="Resources\Sql\EzObjects.txt" />
     <Content Include="Resources\Sql\SqlTf_BeginTest.txt" />
     <Content Include="Resources\Sql\SqlFn_BeginTest.txt" />
     <Content Include="Resources\Sql\SqlIf_Begin.txt" />

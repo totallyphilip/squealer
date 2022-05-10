@@ -38,10 +38,6 @@ Public Class GitFlags
         End Get
     End Property
 
-    Public Sub New()
-
-    End Sub
-
 End Class
 
 Module Main
@@ -342,7 +338,7 @@ Module Main
         ' Are we running this version for the first time?
         Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
-            DisplayAboutInfo()
+            DisplayAboutInfo(False)
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionNumberExecuted), My.Application.Info.Version.ToString)
         End If
 
@@ -699,7 +695,7 @@ Module Main
                     GeneratedOutput = My.Resources._TopScript & GeneratedOutput
                 End If
                 If MySettings.EnableEzObjects Then
-                    GeneratedOutput = My.Resources.IncludeEzObjects.Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
+                    GeneratedOutput = EzText.Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
                 End If
             End If
 
@@ -884,6 +880,7 @@ Module Main
 
         ' about
         cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"Check for updates and display program information."}, CommandCatalog.eCommandCategory.other)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("whatsnew;display what's new"))
         MyCommands.Items.Add(cmd)
 
         ' exit
@@ -962,7 +959,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.about.ToString Then
 
-                    DisplayAboutInfo()
+                    DisplayAboutInfo(StringInList(MySwitches, "whatsnew"))
 
 
 
@@ -982,7 +979,7 @@ Module Main
                 ElseIf MyCommand.Keyword = eCommandType.ezonly.ToString Then
 
                     Dim f As New TempFileHandler("sql")
-                    f.Writeline(My.Resources.IncludeEzObjects.Replace("{Schema}", MySettings.EzSchema))
+                    f.Writeline(EzText.Replace("{Schema}", MySettings.EzSchema))
                     f.Show()
 
 
@@ -1304,14 +1301,7 @@ Module Main
 
 
 
-
-
-
-
-
-
-
-                    Else
+                Else
                         Throw New System.Exception(Constants.BadCommandMessage)
                 End If
 
@@ -2470,6 +2460,20 @@ Module Main
 
 #Region " Misc "
 
+    Private Function EzText() As String
+        Dim s As String
+        Dim f As String = My.Configger.AppDataFolder & "\ez-script.sql"
+        Try
+            ' attempt to get it from disk
+            s = My.Computer.FileSystem.ReadAllText(f)
+        Catch ex As Exception
+            ' create new disk file for next time (user can edit this file if he knows where to find it)
+            s = My.Resources.EzObjects
+            My.Computer.FileSystem.WriteAllText(f, s, False)
+        End Try
+        Return s
+    End Function
+
     Private Sub ShowLeaderboard(topN As Integer)
         Textify.WriteLine("Retrieving scores...")
         Console.WriteLine()
@@ -2508,7 +2512,7 @@ Module Main
 
     End Function
 
-    Private Sub DisplayAboutInfo()
+    Private Sub DisplayAboutInfo(ShowWhatsNew As Boolean)
 
         Console.WriteLine(String.Format("{0} v.{1}", My.Application.Info.Title, My.Application.Info.Version))
         Console.WriteLine(My.Application.Info.Copyright)
@@ -2517,6 +2521,13 @@ Module Main
         Dim v As New VersionCheck
         v.DisplayVersionCheckResults()
         Console.WriteLine()
+
+        If ShowWhatsNew Then
+            Textify.WriteLine("New in this release:", New Textify.ColorScheme(ConsoleColor.Cyan))
+            Console.WriteLine()
+            Console.WriteLine(My.Resources.WhatsNew)
+            Console.WriteLine()
+        End If
 
     End Sub
 
