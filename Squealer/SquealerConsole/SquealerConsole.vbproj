@@ -199,7 +199,6 @@
     <Content Include="Resources\Auto\AutoGetColumns.txt" />
     <Content Include="Resources\Auto\AutoGetTables.txt" />
     <Content Include="Resources\Auto\AutoProcTemplate.txt" />
-    <Content Include="Resources\BlasterFiring.wav" />
     <Content Include="Resources\Egg\HowToPlay.txt" />
     <Content Include="Resources\Egg\LeaderboardCreate.txt" />
     <Content Include="Resources\Images\Folder.png" />

@@ -1,5 +1,7 @@
 ﻿Public Class Settings
 
+    Const DefaultMediaUrl As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/"
+
     Public Class WildcardBehaviorClass
 
         Private _UseEdges As Boolean
@@ -291,6 +293,16 @@
         End Set
     End Property
 
+    Private _MediaSourceUrl As String
+    Public Property MediaSourceUrl As String
+        Get
+            Return _MediaSourceUrl
+        End Get
+        Set(value As String)
+            _MediaSourceUrl = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -306,6 +318,7 @@
     Public Sub LoadSettings()
 
         ' Load settings.
+        Me.MediaSourceUrl = My.Configger.LoadSetting(NameOf(Me.MediaSourceUrl), DefaultMediaUrl)
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
@@ -339,6 +352,8 @@
     Public Sub Show()
 
         Dim f As New SettingsForm
+        f.txtMediaSourceUrl.Text = Me.MediaSourceUrl
+        f.lblDefaultUrl.Text = DefaultMediaUrl
         f.ddIncrement.SelectedIndex = f.ddIncrement.FindString(Me.OutputPercentageIncrement.ToString) ' must set this before radio button because rb checked triggers an event using this value
         Select Case Me.OutputStepStyleSelected
             Case OutputStepStyle.Detailed
@@ -382,6 +397,10 @@
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.ShowDialog()
 
+        Me.MediaSourceUrl = f.txtMediaSourceUrl.Text.Trim
+        If Not Me.MediaSourceUrl.EndsWith("/") Then
+            Me.MediaSourceUrl = Me.MediaSourceUrl & "/"
+        End If
         Me.OutputPercentageIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
         If f.rbDetailed.Checked Then
             Me.OutputStepStyleSelected = OutputStepStyle.Detailed
@@ -416,6 +435,7 @@
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
 
+        My.Configger.SaveSetting(NameOf(Me.MediaSourceUrl), Me.MediaSourceUrl)
         My.Configger.SaveSetting(NameOf(Me.OutputPercentageIncrement), Me.OutputPercentageIncrement)
         My.Configger.SaveSetting(NameOf(Me.OutputStepStyleSelected), Me.OutputStepStyleSelected.ToString)
         My.Configger.SaveSetting(NameOf(Me.DirectoryStyleSelected), Me.DirectoryStyleSelected.ToString)

@@ -332,7 +332,7 @@ Module Main
         If Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
-            v.DisplayVersionCheckResults()
+            v.DisplayVersionCheckResults(MySettings.MediaSourceUrl)
         End If
 
         ' Are we running this version for the first time?
@@ -1292,11 +1292,11 @@ Module Main
                     ElseIf MyCommand.Keyword = eCommandType.release.ToString Then
 
                         Dim v As New VersionCheck
-                        v.CreateMetadata()
+                    v.CreateMetadata(MySettings.MediaSourceUrl)
 
 
 
-                    ElseIf MyCommand.Keyword = "test" Then 'footest
+                ElseIf MyCommand.Keyword = "test" Then 'footest
 
 
 
@@ -2519,7 +2519,7 @@ Module Main
         Console.WriteLine()
 
         Dim v As New VersionCheck
-        v.DisplayVersionCheckResults()
+        v.DisplayVersionCheckResults(MySettings.MediaSourceUrl)
         Console.WriteLine()
 
         If ShowWhatsNew Then

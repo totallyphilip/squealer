@@ -241,9 +241,6 @@
   <data name="LeaderboardCreate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\egg\leaderboardcreate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="BlasterFiring" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\blasterfiring.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="DroidScream" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\r2d2scream.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

@@ -50,6 +50,7 @@ Partial Class SettingsForm
         Me.btnLeaderboardSql = New System.Windows.Forms.Button()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
+        Me.chkKeepScreenOn = New System.Windows.Forms.CheckBox()
         Me.chkShowProjectNameInCommandPrompt = New System.Windows.Forms.CheckBox()
         Me.chkShowProjectDirectoryInTitleBar = New System.Windows.Forms.CheckBox()
         Me.chkShowProjectNameInTitleBar = New System.Windows.Forms.CheckBox()
@@ -76,11 +77,14 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.txtMediaSourceUrl = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.chkKeepScreenOn = New System.Windows.Forms.CheckBox()
+        Me.btnResetUrl = New System.Windows.Forms.Button()
+        Me.lblDefaultUrl = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -217,7 +221,7 @@ Partial Class SettingsForm
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(337, 502)
+        Me.btnOK.Location = New System.Drawing.Point(352, 508)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
@@ -268,7 +272,7 @@ Partial Class SettingsForm
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 501)
+        Me.PictureBox1.Location = New System.Drawing.Point(12, 507)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
         Me.PictureBox1.TabIndex = 12
@@ -286,7 +290,7 @@ Partial Class SettingsForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtLeaderboardCs.Location = New System.Drawing.Point(167, 6)
         Me.txtLeaderboardCs.Name = "txtLeaderboardCs"
-        Me.txtLeaderboardCs.Size = New System.Drawing.Size(229, 20)
+        Me.txtLeaderboardCs.Size = New System.Drawing.Size(244, 20)
         Me.txtLeaderboardCs.TabIndex = 21
         '
         'lblLeaderboard
@@ -348,7 +352,7 @@ Partial Class SettingsForm
         Me.Tabs.Location = New System.Drawing.Point(12, 12)
         Me.Tabs.Name = "Tabs"
         Me.Tabs.SelectedIndex = 0
-        Me.Tabs.Size = New System.Drawing.Size(404, 483)
+        Me.Tabs.Size = New System.Drawing.Size(419, 489)
         Me.Tabs.TabIndex = 26
         '
         'tabGeneral
@@ -367,10 +371,20 @@ Partial Class SettingsForm
         Me.tabGeneral.Location = New System.Drawing.Point(4, 22)
         Me.tabGeneral.Name = "tabGeneral"
         Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabGeneral.Size = New System.Drawing.Size(396, 457)
+        Me.tabGeneral.Size = New System.Drawing.Size(411, 463)
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
+        '
+        'chkKeepScreenOn
+        '
+        Me.chkKeepScreenOn.AutoSize = True
+        Me.chkKeepScreenOn.Location = New System.Drawing.Point(8, 120)
+        Me.chkKeepScreenOn.Name = "chkKeepScreenOn"
+        Me.chkKeepScreenOn.Size = New System.Drawing.Size(101, 17)
+        Me.chkKeepScreenOn.TabIndex = 21
+        Me.chkKeepScreenOn.Text = "Keep screen on"
+        Me.chkKeepScreenOn.UseVisualStyleBackColor = True
         '
         'chkShowProjectNameInCommandPrompt
         '
@@ -413,7 +427,7 @@ Partial Class SettingsForm
         Me.GroupBox1.Controls.Add(Me.rbFull)
         Me.GroupBox1.Location = New System.Drawing.Point(3, 211)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(381, 240)
+        Me.GroupBox1.Size = New System.Drawing.Size(396, 246)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Directory format"
@@ -428,7 +442,7 @@ Partial Class SettingsForm
         Me.txtDirExample.Name = "txtDirExample"
         Me.txtDirExample.ReadOnly = True
         Me.txtDirExample.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtDirExample.Size = New System.Drawing.Size(369, 192)
+        Me.txtDirExample.Size = New System.Drawing.Size(384, 198)
         Me.txtDirExample.TabIndex = 15
         '
         'Label9
@@ -450,7 +464,7 @@ Partial Class SettingsForm
         Me.tabOutput.Location = New System.Drawing.Point(4, 22)
         Me.tabOutput.Name = "tabOutput"
         Me.tabOutput.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabOutput.Size = New System.Drawing.Size(396, 410)
+        Me.tabOutput.Size = New System.Drawing.Size(411, 463)
         Me.tabOutput.TabIndex = 1
         Me.tabOutput.Text = "Output"
         Me.tabOutput.UseVisualStyleBackColor = True
@@ -466,7 +480,7 @@ Partial Class SettingsForm
         Me.GroupBox2.Controls.Add(Me.rbDetailed)
         Me.GroupBox2.Location = New System.Drawing.Point(3, 79)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(362, 270)
+        Me.GroupBox2.Size = New System.Drawing.Size(377, 276)
         Me.GroupBox2.TabIndex = 23
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Progress display"
@@ -481,7 +495,7 @@ Partial Class SettingsForm
         Me.txtProgressExample.Name = "txtProgressExample"
         Me.txtProgressExample.ReadOnly = True
         Me.txtProgressExample.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtProgressExample.Size = New System.Drawing.Size(350, 218)
+        Me.txtProgressExample.Size = New System.Drawing.Size(365, 224)
         Me.txtProgressExample.TabIndex = 20
         '
         'ddIncrement
@@ -528,7 +542,7 @@ Partial Class SettingsForm
         Me.tabWildcards.Location = New System.Drawing.Point(4, 22)
         Me.tabWildcards.Name = "tabWildcards"
         Me.tabWildcards.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabWildcards.Size = New System.Drawing.Size(396, 410)
+        Me.tabWildcards.Size = New System.Drawing.Size(411, 463)
         Me.tabWildcards.TabIndex = 2
         Me.tabWildcards.Text = "RUNTIME"
         Me.tabWildcards.UseVisualStyleBackColor = True
@@ -570,7 +584,7 @@ Partial Class SettingsForm
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage4.Size = New System.Drawing.Size(396, 410)
+        Me.TabPage4.Size = New System.Drawing.Size(411, 463)
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Editor"
         Me.TabPage4.UseVisualStyleBackColor = True
@@ -584,7 +598,7 @@ Partial Class SettingsForm
         Me.gbTextEditor.Controls.Add(Me.btnEditorDialog)
         Me.gbTextEditor.Location = New System.Drawing.Point(6, 124)
         Me.gbTextEditor.Name = "gbTextEditor"
-        Me.gbTextEditor.Size = New System.Drawing.Size(386, 98)
+        Me.gbTextEditor.Size = New System.Drawing.Size(401, 98)
         Me.gbTextEditor.TabIndex = 8
         Me.gbTextEditor.TabStop = False
         Me.gbTextEditor.Text = "Text editor"
@@ -604,14 +618,14 @@ Partial Class SettingsForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEditorProgram.Location = New System.Drawing.Point(6, 58)
         Me.txtEditorProgram.Name = "txtEditorProgram"
-        Me.txtEditorProgram.Size = New System.Drawing.Size(333, 20)
+        Me.txtEditorProgram.Size = New System.Drawing.Size(348, 20)
         Me.txtEditorProgram.TabIndex = 1
         '
         'btnEditorDialog
         '
         Me.btnEditorDialog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnEditorDialog.Image = Global.Squealer.My.Resources.Resources.Folder
-        Me.btnEditorDialog.Location = New System.Drawing.Point(345, 50)
+        Me.btnEditorDialog.Location = New System.Drawing.Point(360, 50)
         Me.btnEditorDialog.Name = "btnEditorDialog"
         Me.btnEditorDialog.Size = New System.Drawing.Size(35, 35)
         Me.btnEditorDialog.TabIndex = 3
@@ -658,6 +672,10 @@ Partial Class SettingsForm
         '
         'tabEasterEgg
         '
+        Me.tabEasterEgg.Controls.Add(Me.lblDefaultUrl)
+        Me.tabEasterEgg.Controls.Add(Me.btnResetUrl)
+        Me.tabEasterEgg.Controls.Add(Me.Label10)
+        Me.tabEasterEgg.Controls.Add(Me.txtMediaSourceUrl)
         Me.tabEasterEgg.Controls.Add(Me.Label5)
         Me.tabEasterEgg.Controls.Add(Me.txtEzSchema)
         Me.tabEasterEgg.Controls.Add(Me.TextBox1)
@@ -671,10 +689,29 @@ Partial Class SettingsForm
         Me.tabEasterEgg.Location = New System.Drawing.Point(4, 22)
         Me.tabEasterEgg.Name = "tabEasterEgg"
         Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabEasterEgg.Size = New System.Drawing.Size(396, 410)
+        Me.tabEasterEgg.Size = New System.Drawing.Size(411, 463)
         Me.tabEasterEgg.TabIndex = 4
-        Me.tabEasterEgg.Text = "Easter Egg"
+        Me.tabEasterEgg.Text = "EXTRA"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(6, 330)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(241, 13)
+        Me.Label10.TabIndex = 32
+        Me.Label10.Text = "Path to installation files (be EXTREMELY careful):"
+        '
+        'txtMediaSourceUrl
+        '
+        Me.txtMediaSourceUrl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtMediaSourceUrl.Location = New System.Drawing.Point(65, 349)
+        Me.txtMediaSourceUrl.Name = "txtMediaSourceUrl"
+        Me.txtMediaSourceUrl.Size = New System.Drawing.Size(340, 20)
+        Me.txtMediaSourceUrl.TabIndex = 31
+        Me.txtMediaSourceUrl.Text = "runtime"
         '
         'Label5
         '
@@ -691,7 +728,7 @@ Partial Class SettingsForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEzSchema.Location = New System.Drawing.Point(192, 203)
         Me.txtEzSchema.Name = "txtEzSchema"
-        Me.txtEzSchema.Size = New System.Drawing.Size(173, 20)
+        Me.txtEzSchema.Size = New System.Drawing.Size(188, 20)
         Me.txtEzSchema.TabIndex = 29
         '
         'TextBox1
@@ -701,7 +738,7 @@ Partial Class SettingsForm
         Me.TextBox1.Location = New System.Drawing.Point(6, 228)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(359, 71)
+        Me.TextBox1.Size = New System.Drawing.Size(374, 71)
         Me.TextBox1.TabIndex = 28
         Me.TextBox1.Text = resources.GetString("TextBox1.Text")
         '
@@ -715,22 +752,31 @@ Partial Class SettingsForm
         Me.chkEnableEzObjects.Text = "Script EZ Objects"
         Me.chkEnableEzObjects.UseVisualStyleBackColor = True
         '
-        'chkKeepScreenOn
+        'btnResetUrl
         '
-        Me.chkKeepScreenOn.AutoSize = True
-        Me.chkKeepScreenOn.Location = New System.Drawing.Point(8, 120)
-        Me.chkKeepScreenOn.Name = "chkKeepScreenOn"
-        Me.chkKeepScreenOn.Size = New System.Drawing.Size(101, 17)
-        Me.chkKeepScreenOn.TabIndex = 21
-        Me.chkKeepScreenOn.Text = "Keep screen on"
-        Me.chkKeepScreenOn.UseVisualStyleBackColor = True
+        Me.btnResetUrl.Location = New System.Drawing.Point(6, 346)
+        Me.btnResetUrl.Name = "btnResetUrl"
+        Me.btnResetUrl.Size = New System.Drawing.Size(53, 23)
+        Me.btnResetUrl.TabIndex = 33
+        Me.btnResetUrl.Text = "Reset"
+        Me.btnResetUrl.UseVisualStyleBackColor = True
+        '
+        'lblDefaultUrl
+        '
+        Me.lblDefaultUrl.AutoSize = True
+        Me.lblDefaultUrl.Location = New System.Drawing.Point(24, 376)
+        Me.lblDefaultUrl.Name = "lblDefaultUrl"
+        Me.lblDefaultUrl.Size = New System.Drawing.Size(179, 13)
+        Me.lblDefaultUrl.TabIndex = 34
+        Me.lblDefaultUrl.Text = "default set at runtime for reset button"
+        Me.lblDefaultUrl.Visible = False
         '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(428, 537)
+        Me.ClientSize = New System.Drawing.Size(443, 543)
         Me.Controls.Add(Me.Tabs)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.btnOK)
@@ -818,4 +864,8 @@ Partial Class SettingsForm
     Friend WithEvents chkShowProjectNameInTitleBar As Windows.Forms.CheckBox
     Friend WithEvents chkShowProjectNameInCommandPrompt As Windows.Forms.CheckBox
     Friend WithEvents chkKeepScreenOn As Windows.Forms.CheckBox
+    Friend WithEvents txtMediaSourceUrl As Windows.Forms.TextBox
+    Friend WithEvents Label10 As Windows.Forms.Label
+    Friend WithEvents btnResetUrl As Windows.Forms.Button
+    Friend WithEvents lblDefaultUrl As Windows.Forms.Label
 End Class

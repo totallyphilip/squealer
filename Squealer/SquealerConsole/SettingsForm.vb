@@ -28,16 +28,11 @@
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
         Dim blaster As New Microsoft.VisualBasic.Devices.Audio
         _Blasts += 1
-        Const MaxBlasts As Integer = 12
-        If _Blasts < MaxBlasts Then
-            blaster.Play(My.Resources.BlasterFiring, AudioPlayMode.Background)
-        End If
+        Const MaxBlasts As Integer = 7
         Select Case _Blasts
             Case 3
                 Tabs.TabPages.Add(tabEasterEgg)
-            Case 6
-                Tabs.SelectedTab = tabEasterEgg
-
+                Tabs.SelectTab(tabEasterEgg)
             Case MaxBlasts
                 blaster.Play(My.Resources.DroidScream, AudioPlayMode.Background)
                 PictureBox1.Visible = False
@@ -140,8 +135,8 @@
         UpdateProgressExample()
     End Sub
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
-        System.Windows.Forms.MessageBox.Show(rbDetailed.Checked.ToString)
+    Private Sub btnResetUrl_Click(sender As Object, e As EventArgs) Handles btnResetUrl.Click
+        txtMediaSourceUrl.Text = lblDefaultUrl.Text
     End Sub
 
 End Class

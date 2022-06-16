@@ -1,7 +1,7 @@
 ﻿Public Class VersionCheck
 
-    Private Const VersionInfoUrl As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/version.xml"
-    Private Const DownloadFileUrl As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/Squealer{0}-Install.zip"
+    Private Const VersionInfoFilename As String = "version.xml"
+    Private Const DownloadFilename As String = "Squealer{0}-Install.zip"
 
     Private Class Metadata
 
@@ -64,20 +64,20 @@
         Public Sub New()
         End Sub
 
-        Public Sub New(ver As Version, updated As DateTime, hidden As Boolean, about As String)
+        Public Sub New(ver As Version, updated As DateTime, hidden As Boolean, about As String, sourceurl As String)
             Me._Version = ver
             Me._Updated = updated
             Me._Hidden = hidden
             Me._About = about
-            Me._ZipFile = String.Format(DownloadFileUrl, _Version.ToString.Replace(".", ""))
+            Me._ZipFile = String.Format(sourceurl & DownloadFilename, _Version.ToString.Replace(".", ""), sourceurl)
         End Sub
 
     End Class
 
 #Region " Output "
 
-    Public Sub CreateMetadata()
-        Dim info As New Metadata(My.Application.Info.Version, DateTime.UtcNow, False, My.Resources.WhatsNew)
+    Public Sub CreateMetadata(sourceurl As String)
+        Dim info As New Metadata(My.Application.Info.Version, DateTime.UtcNow, False, My.Resources.WhatsNew, sourceurl)
         Dim f As New TempFileHandler(".xml")
         Generate(info).Save(f.Filename)
         f.Show()
@@ -106,9 +106,9 @@
 
 #Region " Input "
 
-    Public Sub DisplayVersionCheckResults()
+    Public Sub DisplayVersionCheckResults(sourceurl As String)
 
-        Dim m As Metadata = DownloadMetadata()
+        Dim m As Metadata = DownloadMetadata(sourceurl)
         If m.IsUpdateAvailable Then
             Textify.SayBulletLine(Textify.eBullet.Hash, "A new version is available.", New Textify.ColorScheme(ConsoleColor.Yellow))
             Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Squealer {0} released on {1}.", m.Version, m.Updated.ToShortDateString))
@@ -122,12 +122,12 @@
 
     End Sub
 
-    Private Function DownloadMetadata() As Metadata
+    Private Function DownloadMetadata(sourceurl As String) As Metadata
 
         Dim d As New Metadata()
         Dim client As New Net.WebClient
         Dim x As New Xml.XmlDocument
-        Dim r As New IO.StreamReader(client.OpenRead(VersionInfoUrl))
+        Dim r As New IO.StreamReader(client.OpenRead(sourceurl & VersionInfoFilename))
         x.LoadXml(r.ReadToEnd)
 
         Try
