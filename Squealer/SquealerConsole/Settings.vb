@@ -303,6 +303,12 @@
         End Set
     End Property
 
+    Public ReadOnly Property IsDefaultMediaSource As Boolean
+        Get
+            Return _MediaSourceUrl = DefaultMediaUrl
+        End Get
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)

@@ -97,6 +97,7 @@ Module Main
         [connection]
         [delete]
         [directory]
+        download
         [edit]
         ezonly
         [exit]
@@ -332,7 +333,12 @@ Module Main
         If Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
-            v.DisplayVersionCheckResults(MySettings.MediaSourceUrl)
+
+
+
+
+
+            v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
         End If
 
         ' Are we running this version for the first time?
@@ -883,6 +889,10 @@ Module Main
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("whatsnew;display what's new"))
         MyCommands.Items.Add(cmd)
 
+        ' download
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.download.ToString}, {String.Format("Download the latest version of {0}.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.other)
+        MyCommands.Items.Add(cmd)
+
         ' exit
         cmd = New CommandCatalog.CommandDefinition({eCommandType.exit.ToString, "x"}, {"Quit."}, CommandCatalog.eCommandCategory.other)
         MyCommands.Items.Add(cmd)
@@ -974,6 +984,12 @@ Module Main
                     Clipboard.SetText(WorkingFolder)
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Copied: {0}", WorkingFolder))
                     Console.WriteLine()
+
+
+                ElseIf MyCommand.Keyword = eCommandType.download.ToString AndAlso String.IsNullOrEmpty(UserInput) Then
+
+                    Dim v As New VersionCheck
+                    v.DownloadLatest(MySettings.MediaSourceUrl)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.ezonly.ToString Then
@@ -1298,7 +1314,8 @@ Module Main
 
                 ElseIf MyCommand.Keyword = "test" Then 'footest
 
-
+                    Dim v As New VersionCheck
+                    v.DownloadLatest(MySettings.MediaSourceUrl)
 
 
                 Else
@@ -2519,7 +2536,7 @@ Module Main
         Console.WriteLine()
 
         Dim v As New VersionCheck
-        v.DisplayVersionCheckResults(MySettings.MediaSourceUrl)
+        v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
         Console.WriteLine()
 
         If ShowWhatsNew Then

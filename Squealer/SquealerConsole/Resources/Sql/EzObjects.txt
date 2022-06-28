@@ -28,6 +28,22 @@ if schema_id('{Schema}') is null
 
 go
 
+create view {Schema}.filegroups as
+select
+	fg.name as filegroup_name
+	,t.object_id
+	,i.index_id
+from
+	sys.indexes i
+join
+	sys.filegroups fg
+	on fg.data_space_id = i.data_space_id
+join
+	sys.tables t
+	on t.object_id = i.object_id
+
+go
+
 create view {Schema}.objects as
 select
 	concat('[',s.name,'].[',o.name,']') as object_name
@@ -56,7 +72,8 @@ go
 
 create view {Schema}.tables as
 select
-	o.object_name as table_name
+	fg.filegroup_name
+	,o.object_name as table_name
 	,o.schema_id
 	,o.object_id
 	,o.schema_name
@@ -71,6 +88,11 @@ from
 join
 	{Schema}.objects o
 	on o.object_id = t.object_id
+join
+	{Schema}.filegroups fg
+	on fg.object_id = t.object_id
+	and fg.index_id<2 -- heaps and clustered indexes
+
 go
 
 create view {Schema}.views as
@@ -146,7 +168,8 @@ go
 
 create view {Schema}.indexes as
 select
-	i.name as index_name
+	fg.filegroup_name
+	,i.name as index_name
 	,t.table_name
 	,i.type
 	,i.type_desc
@@ -160,15 +183,80 @@ select
 		from
 			{Schema}.indexcolumns c
 		where
-			c.index_id = i.index_id
+			c.object_id = i.object_id
+			and c.index_id = i.index_id
+			and c.is_included_column = 0
 	) as index_columns
-
+	,(
+		select
+			string_agg(c.column_name,',') within group (order by c.column_id)
+		from
+			{Schema}.indexcolumns c
+		where
+			c.object_id = i.object_id
+			and c.index_id = i.index_id
+			and c.is_included_column = 1
+	) as included_columns
 from
 	sys.indexes i
 join
 	{Schema}.tables t
 	on t.object_id = i.object_id
+join
+	ez.filegroups fg
+	on fg.object_id = i.object_id
+	and fg.index_id = i.index_id
 where
 	i.type > 0
+
+go
+
+create view {Schema}.indexusage as
+select
+	i.table_name
+	,i.index_name
+	,i.index_id
+	,i.type_desc
+	,i.index_columns
+	,i.included_columns
+	,convert(float,1) * (st.user_seeks+st.user_scans) / isnull(nullif(st.user_updates,0),1) as usage_ratio
+	,st.user_seeks
+	,st.user_scans
+	,st.user_lookups
+	,st.user_updates
+	,st.last_user_seek
+	,st.last_user_scan
+	,st.last_user_update
+	,concat('drop index ',i.index_name,' on ',i.table_name) as sql_dropindex
+from
+	sys.dm_db_index_usage_stats st
+join
+	{Schema}.indexes i
+	on i.object_id = st.object_id
+	and i.index_id = st.index_id
+where
+	st.database_id = db_id()
+	--and i.type = 2
+
+go
+
+create view {Schema}.columns as
+select
+	t.table_name
+	,c.name as column_name
+	,c.column_id
+	,tp.name as type_name
+	,c.max_length
+	,c.precision
+	,c.scale
+	,c.is_nullable
+from
+	ez.tables t
+join
+	sys.all_columns c
+	on c.object_id = t.object_id
+join
+	sys.types tp
+	on tp.system_type_id = c.system_type_id
 
 go

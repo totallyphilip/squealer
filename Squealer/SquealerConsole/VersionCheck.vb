@@ -106,7 +106,7 @@
 
 #Region " Input "
 
-    Public Sub DisplayVersionCheckResults(sourceurl As String)
+    Public Sub DisplayVersionCheckResults(sourceurl As String, ismediadefaultlocation As Boolean)
 
         Dim m As Metadata = DownloadMetadata(sourceurl)
         If m.IsUpdateAvailable Then
@@ -115,7 +115,7 @@
             Console.WriteLine()
             Console.WriteLine(m.About)
             Console.WriteLine()
-            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Get the latest version at {0}", Constants.HomePage))
+            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Get the latest version at {0}", IIf(ismediadefaultlocation, Constants.HomePage, m.ZipFile)))
         Else
             Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of Squealer ({0}).", My.Application.Info.Version), New Textify.ColorScheme(ConsoleColor.White))
         End If
@@ -149,6 +149,22 @@
         '</Squealer>
 
     End Function
+
+    Public Sub DownloadLatest(sourceurl As String)
+
+        Dim d As Metadata = DownloadMetadata(sourceurl)
+        Dim dest As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & System.IO.Path.GetFileName(d.ZipFile)
+        Textify.Write("Downloading ", New Textify.ColorScheme(ConsoleColor.Green))
+        Textify.Write(d.ZipFile, New Textify.ColorScheme(ConsoleColor.DarkYellow))
+        Textify.Write(" to ", New Textify.ColorScheme(ConsoleColor.Green))
+        Textify.WriteLine(dest, New Textify.ColorScheme(ConsoleColor.White))
+        Console.WriteLine()
+
+        Using client As New System.Net.WebClient()
+            client.DownloadFile(d.ZipFile, dest)
+        End Using
+
+    End Sub
 
 #End Region
 
