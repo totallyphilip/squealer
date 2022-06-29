@@ -335,6 +335,7 @@
                 _Options.Items.Add(New CommandSwitch("cs;case-sensitive text search"))
                 _Options.Items.Add(New CommandSwitch("code;with pre/post code"))
                 _Options.Items.Add(New CommandSwitch("u;uncommitted, case-sensitive per github.com/microsoft/vscode/issues/10633"))
+                _Options.Items.Add(New CommandSwitch("diff;hashes are different"))
                 '_Options.Items.Add(New CommandSwitch("fi;include flags, case-sensitive:<flags>;pipe-delimited flags")) ' this won't work until command parser is more robust
                 '_Options.Items.Add(New CommandSwitch("fx;exclude flags, case-sensitive:<flags>;pipe-delimited flags"))
             End If

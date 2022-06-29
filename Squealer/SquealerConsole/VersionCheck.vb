@@ -77,7 +77,7 @@
 #Region " Output "
 
     Public Sub CreateMetadata(sourceurl As String)
-        Dim info As New Metadata(My.Application.Info.Version, DateTime.UtcNow, False, My.Resources.WhatsNew, sourceurl)
+        Dim info As New Metadata(My.Application.Info.Version, DateTime.UtcNow, False, WhatsNew, sourceurl)
         Dim f As New TempFileHandler(".xml")
         Generate(info).Save(f.Filename)
         f.Show()
@@ -100,6 +100,13 @@
         abouttext.InnerText = info.About
         Generate = doc
 
+    End Function
+
+    Public Shared Function WhatsNew() As String
+        Return My.Resources.ChangeLog.Remove(My.Resources.ChangeLog.IndexOf("^break")).Replace(My.Application.Info.Version.ToString, String.Empty).Trim
+    End Function
+    Public Shared Function ChangeLog() As String
+        Return My.Resources.ChangeLog.Replace("^break", String.Empty).Trim
     End Function
 
 #End Region

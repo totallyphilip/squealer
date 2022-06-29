@@ -46,6 +46,7 @@ Module Main
 
     Private MyCommands As New CommandCatalog.CommandDefinitionList
     Private MySettings As New Settings(True)
+    Private MyFileHashes As New FileHashCollection
 
     Private Class BatchParametersClass
 
@@ -89,6 +90,7 @@ Module Main
     Private Enum eCommandType
         [about]
         [browse]
+        hash
         [checkout]
         [clear]
         [compare]
@@ -344,7 +346,7 @@ Module Main
         ' Are we running this version for the first time?
         Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
         If My.Application.Info.Version.CompareTo(ver) > 0 Then
-            DisplayAboutInfo(False)
+            DisplayAboutInfo(False, False)
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionNumberExecuted), My.Application.Info.Version.ToString)
         End If
 
@@ -373,7 +375,7 @@ Module Main
 
     End Sub
 
-    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, hasPrePostCode As Boolean, gf As GitFlags) As List(Of String)
+    Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, hasPrePostCode As Boolean, gf As GitFlags, DifferentOnly As Boolean) As List(Of String)
 
         Wildcard = Wildcard.Replace("[", "").Replace("]", "")
 
@@ -420,6 +422,12 @@ Module Main
             Textify.Write(" containing ", plaincolor)
             Textify.Write("""" & SearchText & """" & IIf(ignoreCase, "", "(case-sensitive)").ToString, highlightcolor)
         End If
+
+        If DifferentOnly Then
+            Textify.Write(" different than", plaincolor)
+            Textify.Write(String.Format(" {1} ({0})", MyFileHashes.Project, MyFileHashes.Branch), highlightcolor)
+        End If
+
         Textify.Write(" matching", plaincolor)
 
         comma = ""
@@ -482,6 +490,11 @@ Module Main
         ' Remove any results that don't have pre/post code
         If hasPrePostCode Then
             DistinctFiles.RemoveAll(Function(x) Not PrePostCodeExists(x))
+        End If
+
+        ' Remove any results that are the same as the baseline.
+        If DifferentOnly Then
+            DistinctFiles.RemoveAll(Function(x) MyFileHashes.MatchExists(x))
         End If
 
         Return DistinctFiles
@@ -819,6 +832,11 @@ Module Main
         cmd.Examples.Add("% -alt -v dbo.* -- generate ALTER scripts for dbo.* VIEW objects")
         MyCommands.Items.Add(cmd)
 
+        ' baseline
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.hash.ToString}, {String.Format("Get the hash values for all {0} objects.", My.Application.Info.ProductName), String.Format("This is useful when working with source control such as Git. For example, {0} your files, then change to a different branch, then {1} only files that are different from the {0}. The hash values are kept in memory only; nothing is written to disk.", eCommandType.hash.ToString.ToUpper, eCommandType.generate.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("i;information display"))
+        MyCommands.Items.Add(cmd)
+
         ' compare
         cmd = New CommandCatalog.CommandDefinition({eCommandType.compare.ToString}, {String.Format("Compare {0} with SQL Server.", My.Application.Info.ProductName), String.Format("This generates a T-SQL query to discover any SQL Server objects that are not in {0}, and any {0} objects that are not in SQL Server.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
         MyCommands.Items.Add(cmd)
@@ -887,6 +905,7 @@ Module Main
         ' about
         cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"Check for updates and display program information."}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("whatsnew;display what's new"))
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("history;display full change log"))
         MyCommands.Items.Add(cmd)
 
         ' download
@@ -967,9 +986,9 @@ Module Main
                     Throw New System.Exception(Constants.BadCommandMessage)
 
 
-                ElseIf MyCommand.Keyword = eCommandType.about.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.about.ToString AndAlso SwitchesValidated Then
 
-                    DisplayAboutInfo(StringInList(MySwitches, "whatsnew"))
+                    DisplayAboutInfo(StringInList(MySwitches, "whatsnew"), StringInList(MySwitches, "history"))
 
 
 
@@ -997,6 +1016,43 @@ Module Main
                     Dim f As New TempFileHandler("sql")
                     f.Writeline(EzText.Replace("{Schema}", MySettings.EzSchema))
                     f.Show()
+
+
+
+                ElseIf MyCommand.Keyword = eCommandType.hash.ToString AndAlso StringInList(MySwitches, "i") AndAlso String.IsNullOrWhiteSpace(UserInput) Then
+
+                    Textify.WriteLine("Latest baseline:", ConsoleColor.White)
+                    Console.WriteLine()
+                    Console.WriteLine(String.Format("Last snapshot at {0}", MyFileHashes.CacheDate.ToString))
+                    Console.WriteLine(String.Format("{0} files", MyFileHashes.Items.Count.ToString))
+                    Console.WriteLine(String.Format("project: {0}, branch: {1}", MyFileHashes.Project, MyFileHashes.Branch))
+                    Console.WriteLine()
+
+
+                ElseIf MyCommand.Keyword = eCommandType.hash.ToString AndAlso String.IsNullOrWhiteSpace(UserInput) Then
+
+                    Console.Write("Calculating hashes..")
+
+                    Dim spinny As New SpinCursor()
+
+                    Dim i As Integer = 0
+
+                    MyFileHashes.Reset(Misc.ProjectName(WorkingFolder), GitShell.CurrentBranch(WorkingFolder))
+                    For Each f As String In My.Computer.FileSystem.GetFiles(WorkingFolder, FileIO.SearchOption.SearchTopLevelOnly, "*" & Constants.SquealerFileExtension)
+                        i += 1
+                        MyFileHashes.AddItem(f)
+                        spinny.Animate()
+                    Next
+
+                    Console.WriteLine()
+                    Console.WriteLine(String.Format("{0} files hashed.", i.ToString))
+                    Console.WriteLine()
+                    Textify.WriteLine("New baseline stored in memory.", ConsoleColor.White)
+                    Console.WriteLine()
+
+                    'foooooooooooooooooooooo
+
+
 
 
                 ElseIf MyCommand.Keyword = eCommandType.[config].ToString Then
@@ -1131,7 +1187,7 @@ Module Main
                     Dim ignorefilelimit As Boolean = StringInList(MySwitches, "all")
                     Dim findPrePost As Boolean = StringInList(MySwitches, "code")
 
-                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, findPrePost, gf)
+                    Dim SelectedFiles As List(Of String) = FilesToProcess(WorkingFolder, UserInput, MySearchText, usedialog, ObjectTypeFilter, ignoreCase, findexact, findPrePost, gf, StringInList(MySwitches, "diff"))
 
                     ThrowErrorIfOverFileLimit(FileLimit, SelectedFiles.Count, ignorefilelimit)
 
@@ -1314,8 +1370,13 @@ Module Main
 
                 ElseIf MyCommand.Keyword = "test" Then 'footest
 
-                    Dim v As New VersionCheck
-                    v.DownloadLatest(MySettings.MediaSourceUrl)
+                    For Each f As String In My.Computer.FileSystem.GetFiles(WorkingFolder, FileIO.SearchOption.SearchTopLevelOnly, "*.sqlr")
+                        If Not MyFileHashes.MatchExists(f) Then
+                            Console.Write(f.Remove(0, f.LastIndexOf("\")))
+                            Console.WriteLine(" ... DIFFERENT")
+                        End If
+
+                    Next
 
 
                 Else
@@ -2516,20 +2577,7 @@ Module Main
         End If
     End Sub
 
-    Private Function ReadChangeLog() As String
-
-        Dim s As String = String.Empty
-
-        Dim sr As New IO.StringReader(My.Resources.ChangeLog.TrimEnd)
-        While sr.Peek <> -1
-            s &= String.Format(sr.ReadLine.Replace("{THIS}", Constants.MyThis), ">>>> ", " <<<<", " - ") & vbCrLf
-        End While
-
-        Return s
-
-    End Function
-
-    Private Sub DisplayAboutInfo(ShowWhatsNew As Boolean)
+    Private Sub DisplayAboutInfo(ShowWhatsNew As Boolean, ShowFullHistory As Boolean)
 
         Console.WriteLine(String.Format("{0} v.{1}", My.Application.Info.Title, My.Application.Info.Version))
         Console.WriteLine(My.Application.Info.Copyright)
@@ -2542,7 +2590,14 @@ Module Main
         If ShowWhatsNew Then
             Textify.WriteLine("New in this release:", New Textify.ColorScheme(ConsoleColor.Cyan))
             Console.WriteLine()
-            Console.WriteLine(My.Resources.WhatsNew)
+            Console.WriteLine(VersionCheck.WhatsNew)
+            Console.WriteLine()
+        End If
+
+        If ShowFullHistory Then
+            Textify.WriteLine("Change log:", New Textify.ColorScheme(ConsoleColor.Cyan))
+            Console.WriteLine()
+            Console.WriteLine(VersionCheck.ChangeLog)
             Console.WriteLine()
         End If
 
@@ -2556,7 +2611,6 @@ Module Main
         Dim s As New List(Of String)
         If Not f.ShowDialog() = DialogResult.Cancel Then
             s.AddRange(f.FileNames)
-
         End If
         Return s
     End Function

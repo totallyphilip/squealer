@@ -179,25 +179,19 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to /*********************
-        '''      CHANGE LOG
-        '''*********************/
+        '''  Looks up a localized string similar to 1.0.6.0
+        '''Added a way to only generate files that have changed (see: HELP HASH, HELP GEN) (Thanks for the suggetion, Chun!).
         '''
-        '''{0}2022-03-11{1}
+        '''1.0.5.0
+        '''Added error log to AppData folder to assist with troubleshooting.
+        '''Title bar and command prompt information is configurable now.
+        '''Added option to keep screen alive.
+        '''Fixed error reading filenames containing &quot;$&quot; character.
+        '''Several minor improvements.
         '''
-        '''{2}Change log was broken, either would not display or would result in infinite loop. Fixed.
-        '''
-        '''
-        '''
-        '''{0}2022-03-10{1}
-        '''
-        '''{2}Added REVERSE command to reverse engineer tables, views, and functions from SQL Server into the working folder.
-        '''
-        '''{2}OPEN command now opens Explorer dialog if no path is specified.
-        '''
-        '''{2}Simplified Windows Start menu application name.
-        '''
-        '''{2}Removed runlogging feature. It created too many complication [rest of string was truncated]&quot;;.
+        '''Earlier
+        '''This application has been under development since the late &apos;90s,
+        '''and the version has been reset to 1.0.0.0 a few [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -450,7 +444,7 @@ Namespace My.Resources
         '''
         '''If you do not want to connect to a leaderboard, make sure your connection string is blank. Otherwise, the game will attempt to connect and you will have to wait for it to time out.
         '''
-        '''To play the game, type HELP STARWARS at the command prompt..
+        '''To play the game, type HELP PEWPEW at the command prompt..
         '''</summary>
         Friend ReadOnly Property HowToPlay() As String
             Get
@@ -908,19 +902,6 @@ Namespace My.Resources
         Friend ReadOnly Property V_Template() As String
             Get
                 Return ResourceManager.GetString("V_Template", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Added error log to AppData folder to assist with troubleshooting.
-        '''Title bar and command prompt information is configurable now.
-        '''Added option to keep screen alive.
-        '''Fixed error reading filenames containing &quot;$&quot; character.
-        '''Several minor improvements..
-        '''</summary>
-        Friend ReadOnly Property WhatsNew() As String
-            Get
-                Return ResourceManager.GetString("WhatsNew", resourceCulture)
             End Get
         End Property
     End Module
