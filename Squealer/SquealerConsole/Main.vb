@@ -334,11 +334,6 @@ Module Main
         If Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
-
-
-
-
-
             v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
         End If
 
@@ -375,6 +370,10 @@ Module Main
     End Sub
 
     Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, hasPrePostCode As Boolean, gf As GitFlags, DifferentOnly As Boolean) As List(Of String)
+
+        If DifferentOnly AndAlso MyFileHashes.Items.Count = 0 Then
+            Throw New ArgumentException(String.Format("Cannot use -DIFF before {0} is executed (see {1} {0})", eCommandType.hash.ToString.ToUpper, eCommandType.help.ToString.ToUpper))
+        End If
 
         Wildcard = Wildcard.Replace("[", "").Replace("]", "")
 
@@ -794,7 +793,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' new file
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.new.ToString}, {String.Format("Create a new {0} object.", My.Application.Info.ProductName), "Default schema is ""dbo""."}, CommandCatalog.eCommandCategory.file, CommandCatalog.CommandDefinition.FilenameText, True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.new.ToString}, {String.Format("Create a new {0} file.", My.Application.Info.ProductName), "Default schema is ""dbo""."}, CommandCatalog.eCommandCategory.file, CommandCatalog.CommandDefinition.FilenameText, True)
         For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(False).Split((New Char() {"|"c}))
             cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(s, s.StartsWith("p")))
         Next
@@ -803,14 +802,14 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' edit files
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.edit.ToString, "e"}, {String.Format("Edit {0} objects.", My.Application.Info.ProductName), String.Format("Uses your configured text editor. See {0} command.", eCommandType.setting.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file, False, True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.edit.ToString, "e"}, {String.Format("Edit {0} files.", My.Application.Info.ProductName), String.Format("Uses your configured text editor. See {0} command.", eCommandType.setting.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file, False, True)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("all;override file limit"))
         cmd.Examples.Add("% dbo.AddEmployee")
         cmd.Examples.Add("% dbo.*")
         MyCommands.Items.Add(cmd)
 
         ' fix files
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.fix.ToString}, {String.Format("Rewrite {0} objects (DESTRUCTIVE).", My.Application.Info.ProductName), String.Format("Original files will be rewritten To {0} specifications. Optionally convert objects to a different type.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.fix.ToString}, {String.Format("Rewrite {0} files (DESTRUCTIVE).", My.Application.Info.ProductName), String.Format("Original files will be rewritten To {0} specifications. Optionally convert objects to a different type.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
         opt = New CommandCatalog.CommandSwitch("c;convert to")
         For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(False).Split((New Char() {"|"c}))
             opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(s))
@@ -822,7 +821,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' generate
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.generate.ToString, "gen"}, {"Generate SQL Server objects.", String.Format("Output is written to a temp file and opened with your configured text editor. See {0} command.", eCommandType.setting.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file, False, True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.generate.ToString, "gen"}, {"Generate SQL Server CREATE or ALTER scripts.", String.Format("Output is written to a temp file and opened with your configured text editor. See {0} command.", eCommandType.setting.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file, False, True)
         opt = New CommandCatalog.CommandSwitch("m;output mode")
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("alt;alter, do not drop original"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("t;test script, limit 1 object"))
@@ -834,7 +833,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' baseline
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.hash.ToString}, {String.Format("Get the hash values for all {0} objects.", My.Application.Info.ProductName), String.Format("This is useful when working with source control such as Git. For example, {0} your files, then change to a different branch, then {1} only files that are different from the {0}. The hash values are kept in memory only; nothing is written to disk.", eCommandType.hash.ToString.ToUpper, eCommandType.generate.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.hash.ToString}, {String.Format("Calculate the hash values for all {0} files.", My.Application.Info.ProductName), String.Format("This is useful when working with source control such as Git. For example, {0} your files, then check out a different branch, then {1} only files that are different from the {0}. The hash values are kept in memory only; nothing is written to disk.", eCommandType.hash.ToString.ToUpper, eCommandType.generate.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("i;information display"))
         MyCommands.Items.Add(cmd)
 
@@ -843,7 +842,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' delete
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.delete.ToString, "del"}, {String.Format("Delete {0} objects.", My.Application.Info.ProductName), "Objects will be sent to the Recycle Bin by default."}, CommandCatalog.eCommandCategory.file, True, True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.delete.ToString, "del"}, {String.Format("Delete {0} files.", My.Application.Info.ProductName), "Objects will be sent to the Recycle Bin by default."}, CommandCatalog.eCommandCategory.file, True, True)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("e;permanently erase"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("all;override file limit"))
         cmd.Examples.Add("% dbo.AddEmployee")
@@ -852,7 +851,7 @@ Module Main
 
 
         ' make
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.make.ToString}, {String.Format("Automatically create {0} objects.", My.Application.Info.ProductName), "Create default insert, update, read, and delete objects for the target database. Define the target database with the " & eCommandType.connection.ToString.ToUpper & " command."}, CommandCatalog.eCommandCategory.file)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.make.ToString}, {String.Format("Automatically create {0} files.", My.Application.Info.ProductName), "Create default INSERT, UPDATE, SELECT, and DELETE files for the target database. Define the target database with the " & eCommandType.connection.ToString.ToUpper & " command."}, CommandCatalog.eCommandCategory.file)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch(String.Format("r;replace existing {0} objects only", My.Application.Info.ProductName)))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("nocomment;omit data source and timestamp from comment section"))
         MyCommands.Items.Add(cmd)
