@@ -112,7 +112,6 @@ Module Main
         [nerfherder]
         [new]
         [open]
-        [raiserror]
         release
         [reverse]
         [setting]
@@ -897,11 +896,6 @@ Module Main
         cmd = New CommandCatalog.CommandDefinition({eCommandType.clear.ToString, "cls"}, {"Clear the console."}, CommandCatalog.eCommandCategory.other)
         MyCommands.Items.Add(cmd)
 
-
-        ' raiserror
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.raiserror.ToString, "err"}, {String.Format("Display the T-SQL for raising errors inside a {0} object.", My.Application.Info.ProductName), My.Application.Info.ProductName & " has specific rules about how to raise errors."}, CommandCatalog.eCommandCategory.other)
-        MyCommands.Items.Add(cmd)
-
         ' about
         cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"Check for updates and display program information."}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("whatsnew;display what's new"))
@@ -1269,10 +1263,6 @@ Module Main
                     End If
                     ChangeFolder(UserInput, WorkingFolder)
 
-
-                ElseIf MyCommand.Keyword = eCommandType.[raiserror].ToString Then
-
-                    Console.WriteLine(My.Resources.RaiseErrors)
 
 
 

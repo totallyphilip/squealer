@@ -241,7 +241,6 @@
     <Content Include="Resources\Sql\SqlFn_Template.txt" />
     <Content Include="Resources\Sql\SqlV_Template.txt" />
     <Content Include="Resources\Text\ChangeLog.txt" />
-    <Content Include="Resources\Text\RaiseErrors.txt" />
     <Content Include="Resources\Text\UserConfig.txt" />
   </ItemGroup>
   <ItemGroup>

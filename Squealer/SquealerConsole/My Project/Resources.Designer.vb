@@ -180,18 +180,19 @@ Namespace My.Resources
         
         '''<summary>
         '''  Looks up a localized string similar to 1.0.6.0
-        '''Added a way to only generate files that have changed (see: HELP HASH, HELP GEN) (Thanks for the suggetion, Chun!).
-        '''
+        '''Added HASH command, and GENERATE -DIFF option.
+        '''^break
         '''1.0.5.0
         '''Added error log to AppData folder to assist with troubleshooting.
         '''Title bar and command prompt information is configurable now.
         '''Added option to keep screen alive.
         '''Fixed error reading filenames containing &quot;$&quot; character.
         '''Several minor improvements.
-        '''
+        '''^break
         '''Earlier
         '''This application has been under development since the late &apos;90s,
-        '''and the version has been reset to 1.0.0.0 a few [rest of string was truncated]&quot;;.
+        '''and has been rewritten from scratch to version 1.0.0.0 several times.
+        '''I&apos;m truncating the change log..
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -719,30 +720,6 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("PigNose", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''There are two ways to cause the stored procedure to roll back the transaction.
-        '''
-        '''
-        '''(1) Set the return code which will bubble up to the outermost nested stored procedure. MSSQL will not generate an error.
-        '''
-        '''begin
-        '''	set @SqlrInternalErrorNumber = ?; -- Value must be between -99999 and -1.
-        '''	raiserror(&apos;&apos;,11,1);
-        '''end;
-        '''
-        '''
-        '''(2) Cause a fatal SQL crash that must be handled by the calling process outside of the outermost nested procedure.
-        '''begin
-        '''	set @SqlrInternalErrorNumber = -999999;
-        '''	raiserror(&apos;An error h [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property RaiseErrors() As String
-            Get
-                Return ResourceManager.GetString("RaiseErrors", resourceCulture)
             End Get
         End Property
         
