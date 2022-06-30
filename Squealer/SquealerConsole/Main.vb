@@ -771,8 +771,9 @@ Module Main
         cmd.Examples.Add("% northwind")
         MyCommands.Items.Add(cmd)
 
-        ' file explorer
+        ' browse
         cmd = New CommandCatalog.CommandDefinition({eCommandType.browse.ToString, "b"}, {"Open file browser.", "Browse files in the current project folder. If {options} is specified, only matching files will be displayed."}, CommandCatalog.eCommandCategory.folder, CommandCatalog.CommandDefinition.WildcardText, False)
+        cmd.Examples.Add("% *employee*")
         MyCommands.Items.Add(cmd)
 
         ' copy path
@@ -828,7 +829,8 @@ Module Main
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("e;with encryption"))
         cmd.Options.Items.Add(opt)
         cmd.Examples.Add("% dbo.*")
-        cmd.Examples.Add("% -alt -v dbo.* -- generate ALTER scripts for dbo.* VIEW objects")
+        cmd.Examples.Add("% -m:alt -v dbo.* -- generate ALTER scripts for dbo.* VIEW objects")
+        cmd.Examples.Add(String.Format("% -diff * -- generate files that have changed (see {0} command)", eCommandType.hash.ToString.ToUpper))
         MyCommands.Items.Add(cmd)
 
         ' baseline
@@ -899,7 +901,7 @@ Module Main
         ' about
         cmd = New CommandCatalog.CommandDefinition({eCommandType.about.ToString}, {"Check for updates and display program information."}, CommandCatalog.eCommandCategory.other)
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("whatsnew;display what's new"))
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("history;display full change log"))
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("changelog;display full change log"))
         MyCommands.Items.Add(cmd)
 
         ' download
@@ -982,7 +984,7 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.about.ToString AndAlso SwitchesValidated Then
 
-                    DisplayAboutInfo(StringInList(MySwitches, "whatsnew"), StringInList(MySwitches, "history"))
+                    DisplayAboutInfo(StringInList(MySwitches, "whatsnew"), StringInList(MySwitches, "changelog"))
 
 
 

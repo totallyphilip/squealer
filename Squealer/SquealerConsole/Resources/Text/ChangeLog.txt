@@ -1,5 +1,6 @@
 ﻿1.0.6.0
 Added HASH command, and GENERATE -DIFF option.
+Truncated the change log.
 ^break
 1.0.5.0
 Added error log to AppData folder to assist with troubleshooting.
@@ -9,6 +10,4 @@ Fixed error reading filenames containing "$" character.
 Several minor improvements.
 ^break
 Earlier
-This application has been under development since the late '90s,
-and has been rewritten from scratch to version 1.0.0.0 several times.
-I'm truncating the change log.
+Thousands of changes. No need to keep a full history.
