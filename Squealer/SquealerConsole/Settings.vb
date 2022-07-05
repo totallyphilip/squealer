@@ -1,6 +1,7 @@
 ﻿Public Class Settings
 
-    Const DefaultMediaUrl As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/"
+    'Const DefaultMediaUrl As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/"
+    Const DefaultMediaUrl As String = "Z:\Software\Squealer\"
 
     Public Class WildcardBehaviorClass
 

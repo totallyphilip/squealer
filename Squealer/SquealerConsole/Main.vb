@@ -809,7 +809,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' fix files
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.fix.ToString}, {String.Format("Rewrite {0} files (DESTRUCTIVE).", My.Application.Info.ProductName), String.Format("Original files will be rewritten To {0} specifications. Optionally convert objects to a different type.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.fix.ToString}, {String.Format("Rewrite {0} files (DESTRUCTIVE).", My.Application.Info.ProductName), String.Format("Files will be validated and reformatted to {0} specifications. Optionally convert files to a different type.", My.Application.Info.ProductName)}, CommandCatalog.eCommandCategory.file, False, True)
         opt = New CommandCatalog.CommandSwitch("c;convert to")
         For Each s As String In New SquealerObjectTypeCollection().ObjectTypesOptionString(False).Split((New Char() {"|"c}))
             opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption(s))
