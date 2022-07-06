@@ -890,7 +890,6 @@ Module Main
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("show;display the connection string"))
         cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("forget;discard the saved connection string"))
         cmd.Examples.Add("% -set " & Constants.DefaultConnectionString)
-        cmd.Examples.Add("% -get")
         MyCommands.Items.Add(cmd)
 
         ' cls
@@ -1292,69 +1291,69 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.[use].ToString Then
 
-                        LoadFolder(UserInput, WorkingFolder)
+                    LoadFolder(UserInput, WorkingFolder)
 
 
-                    ElseIf MyCommand.Keyword = eCommandType.pewpew.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.pewpew.ToString Then
 
-                        If StringInList(MySwitches, "top") Then
-                            ShowLeaderboard(20)
-                        Else
-                            Dim fgColor As ConsoleColor = Console.ForegroundColor
-                            Dim bgColor As ConsoleColor = Console.BackgroundColor
-                            Dim fight As New GoldLeader(False)
-                            fight.TryPlay(MySettings.LeaderboardConnectionString)
-                            Console.ForegroundColor = fgColor
-                            Console.BackgroundColor = bgColor
-                            Console.WriteLine()
-                        End If
+                    If StringInList(MySwitches, "top") Then
+                        ShowLeaderboard(20)
+                    Else
+                        Dim fgColor As ConsoleColor = Console.ForegroundColor
+                        Dim bgColor As ConsoleColor = Console.BackgroundColor
+                        Dim fight As New GoldLeader(False)
+                        fight.TryPlay(MySettings.LeaderboardConnectionString)
+                        Console.ForegroundColor = fgColor
+                        Console.BackgroundColor = bgColor
+                        Console.WriteLine()
+                    End If
 
 
 
-                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "set") AndAlso Not String.IsNullOrEmpty(UserInput) Then
-                        SetConnectionString(WorkingFolder, UserInput)
-                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "show") AndAlso String.IsNullOrEmpty(UserInput) Then
-                        Textify.SayBulletLine(Textify.eBullet.Arrow, GetConnectionString(WorkingFolder))
+                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "set") AndAlso Not String.IsNullOrEmpty(UserInput) Then
+                    SetConnectionString(WorkingFolder, UserInput)
+                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "show") AndAlso String.IsNullOrEmpty(UserInput) Then
+                    Textify.SayBulletLine(Textify.eBullet.Arrow, GetConnectionString(WorkingFolder))
+                    Textify.SayNewLine()
+                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso (StringInList(MySwitches, "t") OrElse MySwitches.Count = 0) AndAlso String.IsNullOrEmpty(UserInput) Then
+                    TestConnectionString(WorkingFolder)
+                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "forget") AndAlso String.IsNullOrEmpty(UserInput) Then
+                    ForgetConnectionString(WorkingFolder)
+                ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "e") AndAlso String.IsNullOrEmpty(UserInput) Then
+                    Dim cs As String
+                    Try
+                        cs = GetConnectionString(WorkingFolder)
+                    Catch ex As Exception
+                        cs = Constants.DefaultConnectionString
+                    End Try
+                    cs = Microsoft.VisualBasic.Interaction.InputBox("Connection String", "", cs)
+                    If Not String.IsNullOrWhiteSpace(cs) Then
+                        SetConnectionString(WorkingFolder, cs)
+                        Textify.SayBulletLine(Textify.eBullet.Arrow, cs)
                         Textify.SayNewLine()
-                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso (StringInList(MySwitches, "t") OrElse MySwitches.Count = 0) AndAlso String.IsNullOrEmpty(UserInput) Then
-                        TestConnectionString(WorkingFolder)
-                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "forget") AndAlso String.IsNullOrEmpty(UserInput) Then
-                        ForgetConnectionString(WorkingFolder)
-                    ElseIf MyCommand.Keyword = eCommandType.connection.ToString AndAlso StringInList(MySwitches, "e") AndAlso String.IsNullOrEmpty(UserInput) Then
-                        Dim cs As String
-                        Try
-                            cs = GetConnectionString(WorkingFolder)
-                        Catch ex As Exception
-                            cs = Constants.DefaultConnectionString
-                        End Try
-                        cs = Microsoft.VisualBasic.Interaction.InputBox("Connection String", "", cs)
-                        If Not String.IsNullOrWhiteSpace(cs) Then
-                            SetConnectionString(WorkingFolder, cs)
-                            Textify.SayBulletLine(Textify.eBullet.Arrow, cs)
-                            Textify.SayNewLine()
-                        End If
+                    End If
 
 
 
-                    ElseIf MyCommand.Keyword = eCommandType.make.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.make.ToString Then
 
 
-                        Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
+                    Automagic(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "r"), Not StringInList(MySwitches, "nocomment"))
 
 
 
 
-                    ElseIf MyCommand.Keyword = eCommandType.reverse.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.reverse.ToString Then
 
-                        ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "clean"))
+                    ReverseEngineer(GetConnectionString(WorkingFolder), WorkingFolder, StringInList(MySwitches, "clean"))
 
 
 
 
 
-                    ElseIf MyCommand.Keyword = eCommandType.release.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.release.ToString Then
 
-                        Dim v As New VersionCheck
+                    Dim v As New VersionCheck
                     v.CreateMetadata(MySettings.MediaSourceUrl)
 
 

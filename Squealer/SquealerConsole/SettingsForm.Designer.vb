@@ -77,14 +77,10 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.tabEasterEgg = New System.Windows.Forms.TabPage()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.txtMediaSourceUrl = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.btnResetUrl = New System.Windows.Forms.Button()
-        Me.lblDefaultUrl = New System.Windows.Forms.Label()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -672,10 +668,6 @@ Partial Class SettingsForm
         '
         'tabEasterEgg
         '
-        Me.tabEasterEgg.Controls.Add(Me.lblDefaultUrl)
-        Me.tabEasterEgg.Controls.Add(Me.btnResetUrl)
-        Me.tabEasterEgg.Controls.Add(Me.Label10)
-        Me.tabEasterEgg.Controls.Add(Me.txtMediaSourceUrl)
         Me.tabEasterEgg.Controls.Add(Me.Label5)
         Me.tabEasterEgg.Controls.Add(Me.txtEzSchema)
         Me.tabEasterEgg.Controls.Add(Me.TextBox1)
@@ -693,25 +685,6 @@ Partial Class SettingsForm
         Me.tabEasterEgg.TabIndex = 4
         Me.tabEasterEgg.Text = "EXTRA"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(6, 330)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(241, 13)
-        Me.Label10.TabIndex = 32
-        Me.Label10.Text = "Path to installation files (be EXTREMELY careful):"
-        '
-        'txtMediaSourceUrl
-        '
-        Me.txtMediaSourceUrl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtMediaSourceUrl.Location = New System.Drawing.Point(65, 349)
-        Me.txtMediaSourceUrl.Name = "txtMediaSourceUrl"
-        Me.txtMediaSourceUrl.Size = New System.Drawing.Size(340, 20)
-        Me.txtMediaSourceUrl.TabIndex = 31
-        Me.txtMediaSourceUrl.Text = "runtime"
         '
         'Label5
         '
@@ -751,25 +724,6 @@ Partial Class SettingsForm
         Me.chkEnableEzObjects.TabIndex = 27
         Me.chkEnableEzObjects.Text = "Script EZ Objects"
         Me.chkEnableEzObjects.UseVisualStyleBackColor = True
-        '
-        'btnResetUrl
-        '
-        Me.btnResetUrl.Location = New System.Drawing.Point(6, 346)
-        Me.btnResetUrl.Name = "btnResetUrl"
-        Me.btnResetUrl.Size = New System.Drawing.Size(53, 23)
-        Me.btnResetUrl.TabIndex = 33
-        Me.btnResetUrl.Text = "Reset"
-        Me.btnResetUrl.UseVisualStyleBackColor = True
-        '
-        'lblDefaultUrl
-        '
-        Me.lblDefaultUrl.AutoSize = True
-        Me.lblDefaultUrl.Location = New System.Drawing.Point(24, 376)
-        Me.lblDefaultUrl.Name = "lblDefaultUrl"
-        Me.lblDefaultUrl.Size = New System.Drawing.Size(179, 13)
-        Me.lblDefaultUrl.TabIndex = 34
-        Me.lblDefaultUrl.Text = "default set at runtime for reset button"
-        Me.lblDefaultUrl.Visible = False
         '
         'SettingsForm
         '
@@ -864,8 +818,4 @@ Partial Class SettingsForm
     Friend WithEvents chkShowProjectNameInTitleBar As Windows.Forms.CheckBox
     Friend WithEvents chkShowProjectNameInCommandPrompt As Windows.Forms.CheckBox
     Friend WithEvents chkKeepScreenOn As Windows.Forms.CheckBox
-    Friend WithEvents txtMediaSourceUrl As Windows.Forms.TextBox
-    Friend WithEvents Label10 As Windows.Forms.Label
-    Friend WithEvents btnResetUrl As Windows.Forms.Button
-    Friend WithEvents lblDefaultUrl As Windows.Forms.Label
 End Class

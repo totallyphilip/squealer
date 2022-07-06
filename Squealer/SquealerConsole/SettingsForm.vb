@@ -135,8 +135,4 @@
         UpdateProgressExample()
     End Sub
 
-    Private Sub btnResetUrl_Click(sender As Object, e As EventArgs) Handles btnResetUrl.Click
-        txtMediaSourceUrl.Text = lblDefaultUrl.Text
-    End Sub
-
 End Class

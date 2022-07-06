@@ -1,6 +1,7 @@
 ﻿1.0.6.0
 Added HASH command, and GENERATE -DIFF option.
 Truncated the change log.
+Corrected some HELP documentation errors.
 ^break
 1.0.5.0
 Added error log to AppData folder to assist with troubleshooting.
