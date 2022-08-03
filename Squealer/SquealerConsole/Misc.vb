@@ -71,4 +71,22 @@
 
     End Function
 
+    Public Function EncryptedBytes(s As String) As Byte()
+
+        Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
+        Dim csbytes As Byte() = System.Text.Encoding.Unicode.GetBytes(s.Trim)
+
+        Return System.Security.Cryptography.ProtectedData.Protect(csbytes, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
+
+    End Function
+
+    Public Function DecryptedString(b As Byte()) As String
+
+        Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
+        Dim decrypted As Byte() = System.Security.Cryptography.ProtectedData.Unprotect(b, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
+
+        Return System.Text.Encoding.Unicode.GetString(decrypted)
+
+    End Function
+
 End Module

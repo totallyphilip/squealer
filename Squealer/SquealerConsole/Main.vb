@@ -2708,14 +2708,11 @@ Module Main
     Private Sub SetConnectionString(workingfolder As String, cs As String)
 
         Dim f As String = String.Format("{0}\{1}", workingfolder, Constants.ConnectionStringFilename)
-        Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
-        Dim csbytes As Byte() = System.Text.Encoding.Unicode.GetBytes(cs.Trim)
 
-        Dim encrypted As Byte() = System.Security.Cryptography.ProtectedData.Protect(csbytes, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
         If My.Computer.FileSystem.FileExists(f) Then
             My.Computer.FileSystem.DeleteFile(f)
         End If
-        My.Computer.FileSystem.WriteAllBytes(f, encrypted, False)
+        My.Computer.FileSystem.WriteAllBytes(f, Misc.EncryptedBytes(cs), False)
         System.IO.File.SetAttributes(f, IO.FileAttributes.Hidden)
 
         Textify.SayBulletLine(Textify.eBullet.Hash, "OK")
@@ -2739,9 +2736,7 @@ Module Main
             Throw New Exception("Connection string not defined.")
         End If
 
-        Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
-        Dim decrypted As Byte() = System.Security.Cryptography.ProtectedData.Unprotect(My.Computer.FileSystem.ReadAllBytes(f), entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
-        GetConnectionString = System.Text.Encoding.Unicode.GetString(decrypted)
+        GetConnectionString = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(f))
 
     End Function
 
