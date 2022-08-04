@@ -81,6 +81,8 @@ select
 	,o.type
 	,o.type_desc
 	,o.fqn
+	,t.temporal_type
+	,t.temporal_type_desc
 	,o.sql_drop_object
 	,(select string_agg(concat('[',c.name,']'),',') within group (order by c.column_id ) from sys.columns c where c.object_id = t.object_id) as column_list
 from
@@ -115,6 +117,45 @@ join
 
 go
 
+create function {Schema}.leftnum
+(
+@s as varchar(1000)
+)
+returns float
+as
+begin
+
+declare @i float = 0;
+
+set @s = ltrim(@s);
+
+while isnumeric(left(@s,@i+1)) = 1 and @i < len(@s)
+	set @i = @i + 1;
+
+if isnumeric(left(@s,@i)) = 0
+	set @i = null
+else
+	set @i = left(@s,@i)
+
+return @i
+end
+
+go
+
+create function {Schema}.leftint
+(
+@s as varchar(1000)
+)
+returns int
+as
+begin
+
+return {Schema}.leftnum(@s)
+
+end
+
+go
+
 create function {Schema}.rightint
 (
 @s as varchar(1000)
@@ -134,6 +175,25 @@ else
 	set @i = right(@s,@i)
 
 return @i
+end
+
+go
+
+create function {Schema}.string_format
+(
+@s as varchar(1000) -- ex: 'Do not compare {0}s and {1}s.'
+,@tokens varchar(1000) -- ex: '0apple,1orange'
+)
+returns varchar(1000)
+as
+begin
+
+select
+	@s = replace(@s,concat('{',ez.leftint(value),'}'),replace(value,ez.leftint(value),''))
+from
+	string_split(@tokens,',')
+
+return @s
 end
 
 go
@@ -250,6 +310,8 @@ select
 	,c.precision
 	,c.scale
 	,c.is_nullable
+	,t.temporal_type
+	,t.temporal_type_desc
 from
 	ez.tables t
 join
@@ -258,5 +320,45 @@ join
 join
 	sys.types tp
 	on tp.system_type_id = c.system_type_id
+
+go
+
+create function {Schema}.trimx
+(
+@s as varchar(max)
+)
+returns varchar(max)
+as
+begin
+
+while charindex(char(9),@s) > 0 -- tab
+	set @s = replace(@s,char(9),' ');
+
+while charindex(char(10),@s) > 0 -- line feed
+	set @s = replace(@s,char(10),' ');
+
+while charindex(char(13),@s) > 0 -- carriage return
+	set @s = replace(@s,char(13),' ');
+
+while charindex('  ',@s) > 0
+	set @s = replace(@s,'  ',' ');
+
+return ltrim(rtrim(@s))
+end
+
+go
+
+create function {Schema}.trimxt
+(
+@schemaname as varchar(100)
+,@tablename as varchar(100)
+,@s as varchar(max)
+)
+returns varchar(max)
+as
+begin
+
+return replace(replace({Schema}.trimx(@s),'SCHEMANAME',@schemaname),'TABLENAME',@tablename)
+end
 
 go

@@ -101,7 +101,7 @@ Module Main
         [directory]
         download
         [edit]
-        ezonly
+        eztool
         [exit]
         [fix]
         [generate]
@@ -335,6 +335,8 @@ Module Main
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
             v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
+
+            ' if .bin file exists in both places, and they're not equal, get the remote one
         End If
 
         ' Are we running this version for the first time?
@@ -712,7 +714,7 @@ Module Main
                     GeneratedOutput = My.Resources._TopScript & GeneratedOutput
                 End If
                 If MySettings.EnableEzObjects Then
-                    GeneratedOutput = EzText.Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
+                    GeneratedOutput = EzText(False).Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
                 End If
             End If
 
@@ -746,7 +748,9 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' show ez script only
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.ezonly.ToString}, {"Display the EZ script from hidden options."}, CommandCatalog.eCommandCategory.other)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.eztool.ToString}, {"Display the EZ script from hidden options."}, CommandCatalog.eCommandCategory.other)
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("encrypt;convert .sql to .bin.new"))
+        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("extract;convert .bin or embedded resource file to .sql"))
         cmd.Visible = False
         MyCommands.Items.Add(cmd)
 
@@ -1005,10 +1009,20 @@ Module Main
                     v.DownloadLatest(MySettings.MediaSourceUrl)
 
 
-                ElseIf MyCommand.Keyword = eCommandType.ezonly.ToString Then
+                ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso StringInList(MySwitches, "encrypt") Then
+
+                    EzConvertSqlToNewBin()
+
+
+                ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso StringInList(MySwitches, "extract") Then
+
+                    EzExtractSqlToFile()
+
+
+                ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso MySwitches.Count = 0 Then
 
                     Dim f As New TempFileHandler("sql")
-                    f.Writeline(EzText.Replace("{Schema}", MySettings.EzSchema))
+                    f.Writeline(EzText(False).Replace("{Schema}", MySettings.EzSchema))
                     f.Show()
 
 
@@ -1370,7 +1384,7 @@ Module Main
 
 
                 Else
-                        Throw New System.Exception(Constants.BadCommandMessage)
+                    Throw New System.Exception(Constants.BadCommandMessage)
                 End If
 
             Catch ex As Exception
@@ -2526,21 +2540,60 @@ Module Main
 
 #End Region
 
-#Region " Misc "
+#Region " Ez "
 
-    Private Function EzText() As String
+    Private Function EzSqlPath() As String
+        Return My.Configger.AppDataFolder & "\ezscript.sql"
+    End Function
+
+    Private Function EzBinPath() As String
+        Return My.Configger.AppDataFolder & "\ezscript.bin"
+    End Function
+    Private Function EzNewBinPath() As String
+        Return EzBinPath() & ".new"
+    End Function
+
+    Private Function EzText(TraceIt As Boolean) As String
         Dim s As String
-        Dim f As String = My.Configger.AppDataFolder & "\ez-script.sql"
         Try
-            ' attempt to get it from disk
-            s = My.Computer.FileSystem.ReadAllText(f)
+            Try
+                ' attempt to read plain text file from disk because local customization takes precedence
+                s = My.Computer.FileSystem.ReadAllText(EzSqlPath)
+                If TraceIt Then
+                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading {0}", EzSqlPath))
+                End If
+            Catch ex As Exception
+                ' attempt to read encrypted file from disk
+                s = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(EzBinPath))
+                If TraceIt Then
+                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading {0}", EzBinPath))
+                End If
+            End Try
         Catch ex As Exception
-            ' create new disk file for next time (user can edit this file if he knows where to find it)
+            ' default text
             s = My.Resources.EzObjects
-            My.Computer.FileSystem.WriteAllText(f, s, False)
+            If TraceIt Then
+                Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading resource file"))
+            End If
         End Try
         Return s
     End Function
+
+    Private Sub EzExtractSqlToFile()
+        My.Computer.FileSystem.WriteAllText(EzSqlPath, EzText(True), False)
+        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("writing {0}", EzSqlPath), 0, New Textify.ColorScheme(ConsoleColor.Cyan))
+        Console.WriteLine()
+    End Sub
+
+    Private Sub EzConvertSqlToNewBin()
+        My.Computer.FileSystem.WriteAllBytes(EzNewBinPath, Misc.EncryptedBytes(EzText(True)), False)
+        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("writing {0}", EzNewBinPath), 0, New Textify.ColorScheme(ConsoleColor.Cyan))
+        Console.WriteLine()
+    End Sub
+
+#End Region
+
+#Region " Misc "
 
     Private Sub ShowLeaderboard(topN As Integer)
         Textify.WriteLine("Retrieving scores...")
