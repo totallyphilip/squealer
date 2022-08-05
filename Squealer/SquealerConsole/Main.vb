@@ -329,14 +329,12 @@ Module Main
         Textify.SayCentered(My.Application.Info.Copyright, True)
         Console.WriteLine()
 
-
         ' Is a newer version available?
         If Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
             v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
-
-            ' if .bin file exists in both places, and they're not equal, get the remote one
+            v.DownloadLatestEzBinary(MySettings.MediaSourceUrl & EzBinFilename(), EzBinPath) ' always get latest binary
         End If
 
         ' Are we running this version for the first time?
@@ -1006,7 +1004,7 @@ Module Main
                 ElseIf MyCommand.Keyword = eCommandType.download.ToString AndAlso String.IsNullOrEmpty(UserInput) Then
 
                     Dim v As New VersionCheck
-                    v.DownloadLatest(MySettings.MediaSourceUrl)
+                    v.DownloadLatestInstaller(MySettings.MediaSourceUrl)
 
 
                 ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso StringInList(MySwitches, "encrypt") Then
@@ -2546,8 +2544,12 @@ Module Main
         Return My.Configger.AppDataFolder & "\ezscript.sql"
     End Function
 
+    Private Function EzBinFilename() As String
+        Return "ezscript.bin"
+    End Function
+
     Private Function EzBinPath() As String
-        Return My.Configger.AppDataFolder & "\ezscript.bin"
+        Return My.Configger.AppDataFolder & "\" & EzBinFilename()
     End Function
     Private Function EzNewBinPath() As String
         Return EzBinPath() & ".new"

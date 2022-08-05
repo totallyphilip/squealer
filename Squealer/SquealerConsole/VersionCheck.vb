@@ -5,6 +5,8 @@
 
     Private Class Metadata
 
+#Region " Properties "
+
         Private _Version As Version
         Public Property Version As Version
             Get
@@ -60,6 +62,8 @@
                 _ZipFile = value
             End Set
         End Property
+
+#End Region
 
         Public Sub New()
         End Sub
@@ -157,7 +161,7 @@
 
     End Function
 
-    Public Sub DownloadLatest(sourceurl As String)
+    Public Sub DownloadLatestInstaller(sourceurl As String)
 
         Dim d As Metadata = DownloadMetadata(sourceurl)
         Dim dest As String = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\" & System.IO.Path.GetFileName(d.ZipFile)
@@ -171,6 +175,16 @@
             client.DownloadFile(d.ZipFile, dest)
         End Using
 
+    End Sub
+
+    Public Sub DownloadLatestEzBinary(sourceurl As String, destfile As String)
+        ' silently get the latest script
+        Try
+            Using client As New System.Net.WebClient()
+                client.DownloadFile(sourceurl, destfile)
+            End Using
+        Catch ex As Exception
+        End Try
     End Sub
 
 #End Region
