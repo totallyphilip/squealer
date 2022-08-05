@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<Squealer Version="1.0.6.0" Updated="7/5/2022 8:01:09 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1060-Install.zip">
-  <About><![CDATA[Added HASH command, and GENERATE -DIFF option.
-Truncated the change log.
-Corrected some HELP documentation errors.]]></About>
+<Squealer Version="1.0.7.1" Updated="8/5/2022 12:56:48 AM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1071-Install.zip">
+  <About><![CDATA[Internal scripts are now auto-updated silently without upgrading the application.]]></About>
 </Squealer>

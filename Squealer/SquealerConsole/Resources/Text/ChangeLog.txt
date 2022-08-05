@@ -1,5 +1,6 @@
-﻿1.0.7.0
+﻿1.0.7.1
 Internal scripts are now auto-updated silently without upgrading the application.
+^break
 1.0.6.0
 Added HASH command, and GENERATE -DIFF option.
 Truncated the change log.
