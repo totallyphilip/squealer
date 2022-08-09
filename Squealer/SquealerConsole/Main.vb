@@ -1402,6 +1402,10 @@ Module Main
 
                 Textify.SayNewLine()
 
+                My.Logging.WriteLog("Command error: " & RawUserInput)
+                My.Logging.WriteLog(ex.Message & vbCrLf & ex.StackTrace)
+
+
             End Try
 
             FirstLoop = False
