@@ -334,7 +334,6 @@ Module Main
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
             v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
-            v.DownloadLatestEzBinary(MySettings.MediaSourceUrl & EzBinFilename(), EzBinPath) ' always get latest binary
         End If
 
         ' Are we running this version for the first time?
@@ -353,6 +352,7 @@ Module Main
         If MySettings.ShowLeaderboardAtStartup Then
             ShowLeaderboard(10)
         End If
+        GetLatestEz()
         HandleUserInput(WorkingFolder)
 
         ' Save the window size
@@ -367,6 +367,11 @@ Module Main
 
         My.Logging.WriteLog("Shutdown.")
 
+    End Sub
+
+    Private Sub GetLatestEz()
+        Dim v As New VersionCheck
+        v.DownloadLatestEzBinary(MySettings.MediaSourceUrl & EzBinFilename(), EzBinPath) ' always get latest binary
     End Sub
 
     Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, hasPrePostCode As Boolean, gf As GitFlags, DifferentOnly As Boolean) As List(Of String)
@@ -2578,7 +2583,7 @@ Module Main
                 Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading resource file"))
             End If
         End Try
-        Return s
+        Return vbCrLf & s.Trim & vbCrLf
     End Function
 
     Private Sub EzExtractSqlToFile()

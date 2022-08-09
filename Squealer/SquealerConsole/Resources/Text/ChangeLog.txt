@@ -1,5 +1,6 @@
-﻿1.0.7.1
-Internal scripts are now auto-updated silently without upgrading the application.
+﻿1.0.7.2
+Fixed a bug in internal scripts.
+Internal scripts are now auto-updated silently without upgrading the application on every app restart.
 ^break
 1.0.6.0
 Added HASH command, and GENERATE -DIFF option.

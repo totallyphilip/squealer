@@ -1,7 +1,8 @@
-﻿
-go
+﻿go
 
-declare @ezdrop varchar(max) =
+-- updated 8/9/2022
+
+declare @sqldrop varchar(max) =
 (
 	select string_agg(
 		'drop '
@@ -18,8 +19,8 @@ declare @ezdrop varchar(max) =
 		on s.schema_id = o.schema_id
 	where s.name = '{Schema}'
 )
-if @ezdrop is not null
-	exec (@ezdrop)
+if @sqldrop is not null
+	exec (@sqldrop)
 
 go
 
@@ -189,7 +190,7 @@ as
 begin
 
 select
-	@s = replace(@s,concat('{',ez.leftint(value),'}'),replace(value,ez.leftint(value),''))
+	@s = replace(@s,concat('{',{Schema}.leftint(value),'}'),replace(value,{Schema}.leftint(value),''))
 from
 	string_split(@tokens,',')
 
@@ -263,7 +264,7 @@ join
 	{Schema}.tables t
 	on t.object_id = i.object_id
 join
-	ez.filegroups fg
+	{Schema}.filegroups fg
 	on fg.object_id = i.object_id
 	and fg.index_id = i.index_id
 where
@@ -313,7 +314,7 @@ select
 	,t.temporal_type
 	,t.temporal_type_desc
 from
-	ez.tables t
+	{Schema}.tables t
 join
 	sys.all_columns c
 	on c.object_id = t.object_id
@@ -359,6 +360,19 @@ as
 begin
 
 return replace(replace({Schema}.trimx(@s),'SCHEMANAME',@schemaname),'TABLENAME',@tablename)
+end
+
+go
+
+create function {Schema}.localtime
+(
+@time as datetime2
+)
+returns datetime2
+as
+begin
+
+return dateadd(minute,datepart(tzoffset,sysdatetimeoffset()),@time)
 end
 
 go

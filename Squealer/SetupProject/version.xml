@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<Squealer Version="1.0.7.1" Updated="8/5/2022 12:56:48 AM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1071-Install.zip">
-  <About><![CDATA[Internal scripts are now auto-updated silently without upgrading the application.]]></About>
+<Squealer Version="1.0.7.2" Updated="8/9/2022 5:00:37 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1072-Install.zip">
+  <About><![CDATA[1.0.7.2
+Fixed a bug in internal scripts.
+Internal scripts are now auto-updated silently without upgrading the application on every app restart.]]></About>
 </Squealer>
