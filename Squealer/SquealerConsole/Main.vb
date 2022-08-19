@@ -130,7 +130,7 @@ Module Main
         My.Computer.FileSystem.CurrentDirectory = newpath ' this will throw an error if the path is not valid
         ProjectFolder = newpath
         RememberFolder(newpath)
-        Textify.SayBulletLine(Textify.eBullet.Hash, "OK")
+        Textify.SayBulletLine(Textify.eBullet.Arrow, newpath)
         Textify.SayNewLine()
 
         ' Temporary code to rename existing connection strings 4/3/2019
@@ -310,13 +310,6 @@ Module Main
         ' Increase input buffer size.
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
-        ' Restore the previous working folder
-        Dim WorkingFolder As String = MySettings.LastProjectFolder
-        If My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
-            ChangeFolder(WorkingFolder, WorkingFolder)
-        End If
-        Console.Clear()
-
         ' Restore the previous window size
         Try
             ' This fails if the console was in full-screen mode at previous exit
@@ -353,6 +346,17 @@ Module Main
             ShowLeaderboard(10)
         End If
         GetLatestEz()
+
+        Textify.SayBulletLine(Textify.eBullet.Hash, "Type HELP to get started.")
+        Console.WriteLine()
+
+        ' Restore the previous working folder
+        Dim WorkingFolder As String = MySettings.LastProjectFolder
+        If My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
+            ChangeFolder(WorkingFolder, WorkingFolder)
+        End If
+        'Console.Clear()
+
         HandleUserInput(WorkingFolder)
 
         ' Save the window size
@@ -947,9 +951,6 @@ Module Main
         Dim UserInput As String = Nothing
         Dim RawUserInput As String = String.Empty
 
-        Textify.SayBulletLine(Textify.eBullet.Hash, "Type HELP to get started.")
-        Console.WriteLine()
-
         Dim MyCommand As CommandCatalog.CommandDefinition = MyCommands.FindCommand(eCommandType.nerfherder.ToString)
         Dim SwitchesValidated As Boolean = True
         Dim MySearchText As String = String.Empty
@@ -1414,6 +1415,11 @@ Module Main
 
             UserInput = String.Empty
             While String.IsNullOrWhiteSpace(UserInput)
+
+                If Not My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
+                    Textify.SayError(WorkingFolder, Textify.eSeverity.error, True)
+                    Console.WriteLine()
+                End If
 
                 If MySettings.ShowProjectNameInCommandPrompt Then
                     Textify.Write(String.Format("[{0}] ", Misc.ProjectName(WorkingFolder)), ConsoleColor.DarkYellow)

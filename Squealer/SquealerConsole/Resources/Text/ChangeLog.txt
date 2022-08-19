@@ -1,4 +1,8 @@
-﻿1.0.7.2
+﻿1.0.7.3
+Path is displayed when switching projects.
+Display error when current project folder is missing.
+^break
+1.0.7.2
 Fixed a bug in internal scripts.
 Internal scripts are now auto-updated silently without upgrading the application on every app restart.
 Added more error logging.
