@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<Squealer Version="1.0.7.2" Updated="8/9/2022 5:00:37 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1072-Install.zip">
-  <About><![CDATA[1.0.7.2
-Fixed a bug in internal scripts.
-Internal scripts are now auto-updated silently without upgrading the application on every app restart.]]></About>
+<Squealer Version="1.0.7.3" Updated="8/29/2022 7:47:57 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1073-Install.zip">
+  <About><![CDATA[1.0.7.3
+Path is displayed when switching projects.
+Display error when current project folder is missing.]]></About>
 </Squealer>
