@@ -311,12 +311,7 @@ Module Main
         Console.SetIn(New IO.StreamReader(Console.OpenStandardInput(8192)))
 
         ' Restore the previous window size
-        Try
-            ' This fails if the console was in full-screen mode at previous exit
-            Console.SetWindowSize(My.Configger.LoadSetting("WindowWidth", 130), My.Configger.LoadSetting("WindowHeight", 30))
-        Catch ex As Exception
-        End Try
-        Console.BufferWidth = Console.WindowWidth
+        ResetWindowSize()
 
         Textify.SayCentered(Constants.HomePage, True)
         Textify.SayCentered(My.Application.Info.Copyright, True)
@@ -355,13 +350,10 @@ Module Main
         If My.Computer.FileSystem.DirectoryExists(WorkingFolder) Then
             ChangeFolder(WorkingFolder, WorkingFolder)
         End If
-        'Console.Clear()
 
         HandleUserInput(WorkingFolder)
 
-        ' Save the window size
-        My.Configger.SaveSetting("WindowWidth", Console.WindowWidth)
-        My.Configger.SaveSetting("WindowHeight", Console.WindowHeight)
+        SaveWindowSize()
 
         ' Save the current working folder for next time
         MySettings.LastProjectFolder = WorkingFolder
@@ -1286,9 +1278,11 @@ Module Main
 
                 ElseIf MyCommand.Keyword = eCommandType.setting.ToString Then
 
+                    Dim w As Boolean = MySettings.LockWindowSize
                     MySettings.Show()
-
-
+                    If MySettings.LockWindowSize AndAlso Not w Then
+                        SaveWindowSize()
+                    End If
 
 
                 ElseIf MyCommand.Keyword = eCommandType.browse.ToString Then
@@ -1440,6 +1434,9 @@ Module Main
                     KA.KeepMonitorActive()
                 End If
                 UserInput = Console.ReadLine
+                If MySettings.LockWindowSize Then
+                    ResetWindowSize()
+                End If
                 KA.RestoreMonitorSettings()
                 Textify.SayNewLine()
 
@@ -2611,6 +2608,20 @@ Module Main
 #End Region
 
 #Region " Misc "
+
+    Private Sub ResetWindowSize()
+        Try
+            ' This fails if the console was in full-screen mode at previous exit
+            Console.SetWindowSize(My.Configger.LoadSetting("WindowWidth", 130), My.Configger.LoadSetting("WindowHeight", 30))
+        Catch ex As Exception
+        End Try
+        Console.BufferWidth = Console.WindowWidth
+    End Sub
+
+    Private Sub SaveWindowSize()
+        My.Configger.SaveSetting("WindowWidth", Console.WindowWidth)
+        My.Configger.SaveSetting("WindowHeight", Console.WindowHeight)
+    End Sub
 
     Private Sub ShowLeaderboard(topN As Integer)
         Textify.WriteLine("Retrieving scores...")

@@ -1,4 +1,7 @@
-﻿1.0.7.3
+﻿1.0.8.0
+Added a "lock window size" setting.
+^break
+1.0.7.3
 Path is displayed when switching projects.
 Display error when current project folder is missing.
 ^break

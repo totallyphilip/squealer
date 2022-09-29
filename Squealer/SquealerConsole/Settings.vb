@@ -291,6 +291,16 @@
         End Set
     End Property
 
+    Private _LockWindowSize As Boolean
+    Public Property LockWindowSize As Boolean
+        Get
+            Return _LockWindowSize
+        End Get
+        Set(value As Boolean)
+            _LockWindowSize = value
+        End Set
+    End Property
+
     Dim CdaPath As String = "Z:\Software\Squealer\"
     Dim s3Path As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/"
     Public ReadOnly Property MediaSourceUrl As String
@@ -331,6 +341,7 @@
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
+        Me.LockWindowSize = My.Configger.LoadSetting(NameOf(Me.LockWindowSize), False)
         Me.ShowProjectDirectoryInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), True)
         Me.ShowProjectNameInCommandPrompt = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInCommandPrompt), True)
         Me.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SqlFiles), False)
@@ -378,6 +389,7 @@
         End Select
         f.chkShowProjectNameInTitleBar.Checked = Me.ShowProjectNameInTitleBar
         f.chkKeepScreenOn.Checked = Me.KeepScreenAlive
+        f.chkLockWindowSize.Checked = Me.LockWindowSize
         f.chkShowProjectDirectoryInTitleBar.Checked = Me.ShowProjectDirectoryInTitleBar
         f.chkShowProjectNameInCommandPrompt.Checked = Me.ShowProjectNameInCommandPrompt
         f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
@@ -419,6 +431,7 @@
         End If
         Me.ShowProjectNameInTitleBar = f.chkShowProjectNameInTitleBar.Checked
         Me.KeepScreenAlive = f.chkKeepScreenOn.Checked
+        Me.LockWindowSize = f.chkLockWindowSize.Checked
         Me.ShowProjectDirectoryInTitleBar = f.chkShowProjectDirectoryInTitleBar.Checked
         Me.ShowProjectNameInCommandPrompt = f.chkShowProjectNameInCommandPrompt.Checked
         Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
@@ -453,6 +466,7 @@
         My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInTitleBar), Me.ShowProjectNameInTitleBar)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), Me.ShowProjectDirectoryInTitleBar)
         My.Configger.SaveSetting(NameOf(Me.KeepScreenAlive), Me.KeepScreenAlive)
+        My.Configger.SaveSetting(NameOf(Me.LockWindowSize), Me.LockWindowSize)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInCommandPrompt), Me.ShowProjectNameInCommandPrompt)
         My.Configger.SaveSetting(NameOf(Me.AutoEditNewFiles), Me.AutoEditNewFiles)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
