@@ -238,7 +238,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.7.3, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5A860E2B030241FBA86166D681B8B621"
@@ -527,15 +527,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer"
-        "ProductCode" = "8:{E680B548-52EE-4623-B5FA-33F33F633A80}"
-        "PackageCode" = "8:{DA881036-B889-4602-9EDF-C6E30DF4197F}"
+        "ProductCode" = "8:{E3466A3D-73A1-4FC7-AF81-6791FDCF80EE}"
+        "PackageCode" = "8:{A8104F5F-124F-4C79-8D69-AB6C52189F70}"
         "UpgradeCode" = "8:{251AC907-8611-45F6-AD97-17492ED52E47}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.14"
+        "ProductVersion" = "8:1.0.15"
         "Manufacturer" = "8:AsciiMotive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:www.asciimotive.com"

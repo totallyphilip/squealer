@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<Squealer Version="1.0.7.3" Updated="8/29/2022 7:47:57 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1073-Install.zip">
-  <About><![CDATA[1.0.7.3
-Path is displayed when switching projects.
-Display error when current project folder is missing.]]></About>
+<Squealer Version="1.0.8.0" Updated="10/24/2022 4:32:34 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer1080-Install.zip">
+  <About><![CDATA[Added a "lock window size" setting.
+Fixed a string matching bug that was causing a file selection dialog to return zero files.]]></About>
 </Squealer>

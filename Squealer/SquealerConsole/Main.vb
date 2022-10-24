@@ -478,7 +478,7 @@ Module Main
         ' Remove any results that don't match hand picked files.
         If usedialog Then
             Dim pickedfiles As List(Of String) = GetFileList(ProjectFolder)
-            DistinctFiles.RemoveAll(Function(x) Not pickedfiles.Exists(Function(y) y = x))
+            DistinctFiles.RemoveAll(Function(x) Not pickedfiles.Exists(Function(y) y.ToLower = x.ToLower))
         End If
 
         ' Remove any results that don't match the requested object types

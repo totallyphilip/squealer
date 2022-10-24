@@ -1,6 +1,17 @@
-﻿go
+﻿
+go
 
--- updated 8/9/2022
+/*
+
+9/28/2022
+	* added ez.datepointvalues()
+9/21/2022
+	* added ez.daterange()
+9/12/2022
+	* added ez.intrange()
+	* added ez.naturalrange()
+
+*/
 
 declare @sqldrop varchar(max) =
 (
@@ -10,6 +21,8 @@ declare @sqldrop varchar(max) =
 			when 'V' then 'view'
 			when 'P' then 'procedure'
 			when 'FN' then 'function'
+			when 'IF' then 'function'
+			when 'TF' then 'function'
 		end
 		+ concat(' [',s.name,'].[',o.name,']')
 			,'; ')
@@ -304,6 +317,7 @@ go
 create view {Schema}.columns as
 select
 	t.table_name
+	,t.object_id
 	,c.name as column_name
 	,c.column_id
 	,tp.name as type_name
@@ -375,4 +389,118 @@ begin
 return dateadd(minute,datepart(tzoffset,sysdatetimeoffset()),@time)
 end
 
+go
+
+create function {Schema}.naturalrange
+(
+@firstvalue as int
+,@lastvalue as int
+)
+returns table
+as
+return
+
+with cteGenerator as
+(
+	select
+		n
+	from
+		(values (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) v(n)
+)
+,cteFullRange as (
+	select
+		row_number() over (order by (select null)) as number
+	from
+		cteGenerator ones
+		,cteGenerator tens
+		,cteGenerator hundreds
+		,cteGenerator K
+		,cteGenerator tenK
+		,cteGenerator hundredK
+)
+select
+	r.number
+from
+	cteFullRange r
+where
+	number between @firstvalue and @lastvalue
+
+go
+
+create function {Schema}.intrange
+(
+@firstvalue int
+,@lastvalue int
+)
+
+returns @TableValue table
+(
+[value] int Not null
+)
+
+as
+begin
+
+while @firstvalue <= @lastvalue
+begin
+	insert @TableValue (value) values (@firstvalue);
+	set @firstvalue = @firstvalue + 1;
+end
+
+return
+end
+go
+
+create function {Schema}.daterange
+(
+@firstvalue date
+,@lastvalue date
+)
+
+returns @TableValue table
+(
+[value] date Not null
+)
+
+as
+begin
+
+while @firstvalue <= @lastvalue
+begin
+	insert @TableValue (value) values (@firstvalue);
+	set @firstvalue = dateadd(day,1,@firstvalue);
+end
+
+return
+end
+go
+
+create function {Schema}.datepointvalues
+(
+@firstvalue float
+,@lastvalue float
+,@firstdate date
+,@lastdate date
+)
+
+returns @TableValue table
+(
+[pointDate] date Not null
+,[pointValue] float null
+)
+
+as
+begin
+
+declare @slope float = (@lastvalue-@firstvalue) / datediff(day,@firstdate,@lastdate);
+
+insert @TableValue (pointDate,pointValue)
+select
+	d.value
+	,convert(float,1) * (datediff(day,@firstdate,d.value) * @slope)+@firstvalue
+from
+	ez.daterange(@firstdate,@lastdate) d
+
+return
+end
 go

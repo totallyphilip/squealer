@@ -1,5 +1,6 @@
 ﻿1.0.8.0
 Added a "lock window size" setting.
+Fixed a string matching bug that was causing a file selection dialog to return zero files.
 ^break
 1.0.7.3
 Path is displayed when switching projects.
