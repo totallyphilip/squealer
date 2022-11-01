@@ -75,18 +75,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CF67681CDF022945BE68167C60422870"
-        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FD0967033EC96E69E62810F341CE880C"
-        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_FD0967033EC96E69E62810F341CE880C"
         "OwnerKey" = "8:_A4C426CB92F44255B9C7A30CB627F503"
         "MsmSig" = "8:_UNDEFINED"
@@ -113,12 +101,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_722A6C014490FABAC1DB08A33F07A06C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -241,11 +223,6 @@
             "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5A860E2B030241FBA86166D681B8B621"
-                    {
-                    "Name" = "8:Squealer.exe"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:..\\SquealerConsole\\bin\\Release\\Squealer.exe"
             "TargetName" = "8:"
@@ -527,15 +504,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer"
-        "ProductCode" = "8:{E3466A3D-73A1-4FC7-AF81-6791FDCF80EE}"
-        "PackageCode" = "8:{A8104F5F-124F-4C79-8D69-AB6C52189F70}"
+        "ProductCode" = "8:{3947BBEF-CEB5-4483-A2AD-D106AA2F5D26}"
+        "PackageCode" = "8:{D20F07E4-9E00-4FB0-B861-A8225846F264}"
         "UpgradeCode" = "8:{251AC907-8611-45F6-AD97-17492ED52E47}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.15"
+        "ProductVersion" = "8:1.0.16"
         "Manufacturer" = "8:AsciiMotive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:www.asciimotive.com"
@@ -1063,7 +1040,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A4C426CB92F44255B9C7A30CB627F503"
             {
-            "SourcePath" = "8:..\\SquealerConsole\\obj\\Release\\Squealer.exe"
+            "SourcePath" = "8:..\\SquealerConsole\\obj\\Debug\\Squealer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4C99EEE6EF9F40078473C339884D801E"

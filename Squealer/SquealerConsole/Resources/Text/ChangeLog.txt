@@ -1,4 +1,8 @@
-﻿1.0.8.0
+﻿1.0.8.1
+Fixed a crash condition when the remote software update source is unavailable.
+Updated .NET Framework target to 4.8.
+^break
+1.0.8.0
 Added a "lock window size" setting.
 Fixed a string matching bug that was causing a file selection dialog to return zero files.
 ^break

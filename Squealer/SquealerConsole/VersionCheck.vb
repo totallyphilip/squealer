@@ -138,10 +138,10 @@
         Dim d As New Metadata()
         Dim client As New Net.WebClient
         Dim x As New Xml.XmlDocument
-        Dim r As New IO.StreamReader(client.OpenRead(sourceurl & VersionInfoFilename))
-        x.LoadXml(r.ReadToEnd)
 
         Try
+            Dim r As New IO.StreamReader(client.OpenRead(sourceurl & VersionInfoFilename))
+            x.LoadXml(r.ReadToEnd)
             Dim Node As Xml.XmlNode = x.SelectSingleNode("/Squealer")
             d.Version = Version.Parse(Node.Attributes(NameOf(d.Version)).Value)
             d.Updated = DateTime.Parse(Node.Attributes(NameOf(d.Updated)).Value)
@@ -151,7 +151,9 @@
             d.About = x.InnerText
             Return d
         Catch ex As Exception
-            Return Nothing
+            Textify.SayError("Could not find """ & sourceurl & """ to check for updates. Contact support for assistance.")
+            Console.WriteLine()
+            Return d
         End Try
 
         '<?xml version="1.0" encoding="us-ascii"?>

@@ -317,18 +317,14 @@ Module Main
         Textify.SayCentered(My.Application.Info.Copyright, True)
         Console.WriteLine()
 
-        ' Is a newer version available?
-        If Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then
+        Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
+        If My.Application.Info.Version.CompareTo(ver) > 0 Then ' Are we running this version for the first time?
+            DisplayAboutInfo(False, False)
+            My.Configger.SaveSetting(NameOf(MySettings.LastVersionNumberExecuted), My.Application.Info.Version.ToString)
+        ElseIf Not MySettings.LastVersionCheckDate.Date = DateTime.Now.Date Then ' Is a newer version available?
             My.Configger.SaveSetting(NameOf(MySettings.LastVersionCheckDate), DateTime.Now)
             Dim v As New VersionCheck
             v.DisplayVersionCheckResults(MySettings.MediaSourceUrl, MySettings.IsDefaultMediaSource)
-        End If
-
-        ' Are we running this version for the first time?
-        Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
-        If My.Application.Info.Version.CompareTo(ver) > 0 Then
-            DisplayAboutInfo(False, False)
-            My.Configger.SaveSetting(NameOf(MySettings.LastVersionNumberExecuted), My.Application.Info.Version.ToString)
         End If
 
         ' Main process
