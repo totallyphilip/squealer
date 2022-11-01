@@ -323,6 +323,16 @@
         End Get
     End Property
 
+    Private _TrackFailedItems As Boolean
+    Public Property TrackFailedItems As Boolean
+        Get
+            Return _TrackFailedItems
+        End Get
+        Set(value As Boolean)
+            _TrackFailedItems = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -339,6 +349,7 @@
 
         ' Load settings.
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
+        Me.TrackFailedItems = My.Configger.LoadSetting(NameOf(Me.TrackFailedItems), False)
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
         Me.LockWindowSize = My.Configger.LoadSetting(NameOf(Me.LockWindowSize), False)
@@ -412,7 +423,7 @@
         f.txtEzSchema.Text = Me.EzSchema
         f.optBeep.Checked = Textify.ErrorAlert.Beep
         f.optDetectOldSquealerObjects.Checked = Me.DetectDeprecatedSquealerObjects
-
+        f.chkTrackFailedItems.Checked = Me.TrackFailedItems
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.ShowDialog()
 
@@ -472,6 +483,7 @@
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
         My.Configger.SaveSetting(NameOf(Me.OutputToClipboard), Me.OutputToClipboard)
         My.Configger.SaveSetting(NameOf(Me.DetectDeprecatedSquealerObjects), Me.DetectDeprecatedSquealerObjects)
+        My.Configger.SaveSetting(NameOf(Me.TrackFailedItems), Me.TrackFailedItems)
         My.Configger.SaveSetting(NameOf(Me.ShowGitBranch), Me.ShowGitBranch)
         My.Configger.SaveSetting(NameOf(Me.EnableEzObjects), Me.EnableEzObjects)
         My.Configger.SaveSetting(NameOf(Me.EzSchema), Me.EzSchema)
