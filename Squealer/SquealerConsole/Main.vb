@@ -708,6 +708,9 @@ Module Main
                 If MySettings.DetectDeprecatedSquealerObjects Then
                     GeneratedOutput = My.Resources._TopScript & GeneratedOutput
                 End If
+                If MySettings.TrackFailedItems Then
+                    GeneratedOutput = My.Resources.TrackFailedItems_Start & vbCrLf & GeneratedOutput & vbCrLf & My.Resources.TrackFailedItems_End
+                End If
                 If MySettings.EnableEzObjects Then
                     GeneratedOutput = EzText(False).Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
                 End If
@@ -2485,7 +2488,13 @@ Module Main
                     Block = Block & vbCrLf & GrantStatement.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{User}", User.Item("Name").ToString).Replace("{Schema}", SchemaName(RootName))
                 Next
                 Block &= vbCrLf & "end" _
-                    & vbCrLf & String.Format("else print 'Permissions not granted on {0}.'", Constants.MyThis)
+                & vbCrLf & "else" _
+                & vbCrLf & "begin" _
+                & vbCrLf & String.Format("print 'Permissions not granted on {0}.';", Constants.MyThis) _
+                & vbCrLf & IIf(MySettings.TrackFailedItems, String.Format("insert ##RetryFailedSquealerItems (ProcName) values ('{0}');", Constants.MyThis), "").ToString() _
+                & vbCrLf & "end"
+
+
             End If
 
             If Not Block = String.Empty Then

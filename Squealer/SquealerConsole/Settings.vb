@@ -423,8 +423,9 @@
         f.txtEzSchema.Text = Me.EzSchema
         f.optBeep.Checked = Textify.ErrorAlert.Beep
         f.optDetectOldSquealerObjects.Checked = Me.DetectDeprecatedSquealerObjects
-        f.chkTrackFailedItems.Checked = Me.TrackFailedItems
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
+        f.chkTrackFailedItems.Checked = Me.TrackFailedItems
+
         f.ShowDialog()
 
         Me.OutputPercentageIncrement = CInt(f.ddIncrement.SelectedItem.ToString)
@@ -461,6 +462,7 @@
         Me.EzSchema = f.txtEzSchema.Text
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
+        Me.TrackFailedItems = f.chkTrackFailedItems.Checked
 
         My.Configger.SaveSetting(NameOf(Me.MediaSourceUrl), Me.MediaSourceUrl)
         My.Configger.SaveSetting(NameOf(Me.OutputPercentageIncrement), Me.OutputPercentageIncrement)

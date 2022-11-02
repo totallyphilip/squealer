@@ -240,6 +240,8 @@
     <Content Include="Resources\Sql\SqlP_Template.txt" />
     <Content Include="Resources\Sql\SqlFn_Template.txt" />
     <Content Include="Resources\Sql\SqlV_Template.txt" />
+    <Content Include="Resources\Sql\TrackFailedItems_End.txt" />
+    <Content Include="Resources\Sql\TrackFailedItems_Start.txt" />
     <Content Include="Resources\Text\ChangeLog.txt" />
     <Content Include="Resources\Text\UserConfig.txt" />
   </ItemGroup>

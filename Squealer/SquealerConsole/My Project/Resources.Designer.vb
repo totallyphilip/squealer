@@ -179,20 +179,21 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 1.0.6.0
-        '''Added HASH command, and GENERATE -DIFF option.
+        '''  Looks up a localized string similar to 1.0.8.1
+        '''Fixed a crash condition when the remote software update source is unavailable.
+        '''Updated .NET Framework target to 4.8.
         '''^break
-        '''1.0.5.0
-        '''Added error log to AppData folder to assist with troubleshooting.
-        '''Title bar and command prompt information is configurable now.
-        '''Added option to keep screen alive.
-        '''Fixed error reading filenames containing &quot;$&quot; character.
-        '''Several minor improvements.
+        '''1.0.8.0
+        '''Added a &quot;lock window size&quot; setting.
+        '''Fixed a string matching bug that was causing a file selection dialog to return zero files.
         '''^break
-        '''Earlier
-        '''This application has been under development since the late &apos;90s,
-        '''and has been rewritten from scratch to version 1.0.0.0 several times.
-        '''I&apos;m truncating the change log..
+        '''1.0.7.3
+        '''Path is displayed when switching projects.
+        '''Display error when current project folder is missing.
+        '''^break
+        '''1.0.7.2
+        '''Fixed a bug in internal scripts.
+        '''Internal scripts are now auto-updated silently without upgrading the ap [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -279,7 +280,19 @@ Namespace My.Resources
         '''  Looks up a localized string similar to 
         '''go
         '''
-        '''declare @ezdrop varchar(max) =
+        '''/*
+        '''
+        '''9/28/2022
+        '''	* added ez.datepointvalues()
+        '''9/21/2022
+        '''	* added ez.daterange()
+        '''9/12/2022
+        '''	* added ez.intrange()
+        '''	* added ez.naturalrange()
+        '''
+        '''*/
+        '''
+        '''declare @sqldrop varchar(max) =
         '''(
         '''	select string_agg(
         '''		&apos;drop &apos;
@@ -287,26 +300,14 @@ Namespace My.Resources
         '''			when &apos;V&apos; then &apos;view&apos;
         '''			when &apos;P&apos; then &apos;procedure&apos;
         '''			when &apos;FN&apos; then &apos;function&apos;
+        '''			when &apos;IF&apos; then &apos;function&apos;
+        '''			when &apos;TF&apos; then &apos;function&apos;
         '''		end
         '''		+ concat(&apos; [&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;)
         '''			,&apos;; &apos;)
         '''		+ &apos;; drop schema {Schema}&apos;
         '''	from sys.objects o
-        '''	join sys.schemas s
-        '''		on s.schema_id = o.schema_id
-        '''	where s.name = &apos;{Schema}&apos;
-        ''')
-        '''if @ezdrop is not null
-        '''	exec (@ezdrop)
-        '''
-        '''go
-        '''
-        '''if schema_id(&apos;{Schema}&apos;) is null
-        '''	exec (&apos;create schema {Schema}&apos;)
-        '''
-        '''go
-        '''
-        '''create view {Sch [rest of string was truncated]&quot;;.
+        '''	join sys [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property EzObjects() As String
             Get
@@ -824,6 +825,28 @@ Namespace My.Resources
         Friend ReadOnly Property TF_Template() As String
             Get
                 Return ResourceManager.GetString("TF_Template", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to declare @RetryFailedSquealerItems varchar(max);
+        '''select @RetryFailedSquealerItems = &apos;gen -x &apos; + string_agg(f.ProcName,&apos;|&apos;) from ##RetryFailedSquealerItems f;
+        '''print @RetryFailedSquealerItems.
+        '''</summary>
+        Friend ReadOnly Property TrackFailedItems_End() As String
+            Get
+                Return ResourceManager.GetString("TrackFailedItems_End", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to declare @RetryFailedSquealerItems varchar(max);
+        '''select @RetryFailedSquealerItems = &apos;gen -x &apos; + string_agg(f.ProcName,&apos;|&apos;) from ##RetryFailedSquealerItems f;
+        '''print @RetryFailedSquealerItems.
+        '''</summary>
+        Friend ReadOnly Property TrackFailedItems_Start() As String
+            Get
+                Return ResourceManager.GetString("TrackFailedItems_Start", resourceCulture)
             End Get
         End Property
         
