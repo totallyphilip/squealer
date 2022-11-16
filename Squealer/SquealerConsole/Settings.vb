@@ -349,7 +349,7 @@
 
         ' Load settings.
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
-        Me.TrackFailedItems = My.Configger.LoadSetting(NameOf(Me.TrackFailedItems), False)
+        Me.TrackFailedItems = My.Configger.LoadSetting(NameOf(Me.TrackFailedItems), True)
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
         Me.LockWindowSize = My.Configger.LoadSetting(NameOf(Me.LockWindowSize), False)

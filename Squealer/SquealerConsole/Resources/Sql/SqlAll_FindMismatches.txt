@@ -32,7 +32,6 @@ where
 	o.ObjectName not like '%{ExcludeFilename}%'
 ;
 
-
 select
 	'' as [ON SQUEALER]
 	,'[' + o.ObjectSchema + '].[' + o.ObjectName + ']' as [ON DATABASE]
@@ -41,7 +40,7 @@ select
 		+ ' [' + o.ObjectSchema + ']'
 		+ '.[' + o.ObjectName + '];'
 		+ ' -- delete from database'
-		as [DESTRUCTIVE COMMAND]
+		as [SQUEALER COMMAND]
 from
 	#AllObjects o
 left outer join
@@ -51,14 +50,14 @@ left outer join
 	and t.[Name] = o.ObjectName collate database_default
 where
 	t.[Name] is null
-	and o.ObjectSchema != 'cdc'
+	and o.ObjectSchema not in ({schemas-to-ignore})
 
 union
 
 select
 	'[' + t.[Schema] + '].[' + t.[Name] + ']'
 	,''
-	,'delete ' + t.[Schema] + '.' + t.[Name] collate database_default
+	,'del ' + t.[Schema] + '.' + t.[Name] collate database_default
 from
 	#CodeToDrop t
 left outer join

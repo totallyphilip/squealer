@@ -703,7 +703,17 @@ Module Main
         If (Action = eFileAction.generate OrElse Action = eFileAction.compare) AndAlso FileCount > 0 Then
 
             If Action = eFileAction.compare Then
+
                 GeneratedOutput = My.Resources.CompareObjects.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
+
+                Dim ignoredschemas As String = "'cdc'"
+                If MySettings.EnableEzObjects Then
+                    ignoredschemas &= ",'" & MySettings.EzSchema & "'"
+                End If
+
+                GeneratedOutput = GeneratedOutput.Replace("{schemas-to-ignore}", ignoredschemas)
+
+
             ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                 If MySettings.DetectDeprecatedSquealerObjects Then
                     GeneratedOutput = My.Resources._TopScript & GeneratedOutput
@@ -2641,7 +2651,6 @@ Module Main
         Next
         Console.WriteLine()
     End Sub
-
 
     Private Function SpitDashes(s As String, marker As String) As String
         Return New String("-"c, 5) & " " & s & " " & New String("-"c, 100 - s.Length) & " " & marker
