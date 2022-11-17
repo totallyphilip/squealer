@@ -333,6 +333,16 @@
         End Set
     End Property
 
+    Private _AlwaysShowSymbols As Boolean
+    Public Property AlwaysShowSymbols As Boolean
+        Get
+            Return _AlwaysShowSymbols
+        End Get
+        Set(value As Boolean)
+            _AlwaysShowSymbols = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -349,6 +359,7 @@
 
         ' Load settings.
         Me.LastVersionCheckDate = My.Configger.LoadSetting(NameOf(Me.LastVersionCheckDate), New DateTime(0))
+        Me.AlwaysShowSymbols = My.Configger.LoadSetting(NameOf(Me.AlwaysShowSymbols), True)
         Me.TrackFailedItems = My.Configger.LoadSetting(NameOf(Me.TrackFailedItems), True)
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
@@ -425,6 +436,7 @@
         f.optDetectOldSquealerObjects.Checked = Me.DetectDeprecatedSquealerObjects
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
         f.chkTrackFailedItems.Checked = Me.TrackFailedItems
+        f.chkAlwaysShowSymbols.Checked = Me.AlwaysShowSymbols
 
         f.ShowDialog()
 
@@ -463,6 +475,7 @@
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
         Me.TrackFailedItems = f.chkTrackFailedItems.Checked
+        Me.AlwaysShowSymbols = f.chkAlwaysShowSymbols.Checked
 
         My.Configger.SaveSetting(NameOf(Me.MediaSourceUrl), Me.MediaSourceUrl)
         My.Configger.SaveSetting(NameOf(Me.OutputPercentageIncrement), Me.OutputPercentageIncrement)
@@ -486,6 +499,7 @@
         My.Configger.SaveSetting(NameOf(Me.OutputToClipboard), Me.OutputToClipboard)
         My.Configger.SaveSetting(NameOf(Me.DetectDeprecatedSquealerObjects), Me.DetectDeprecatedSquealerObjects)
         My.Configger.SaveSetting(NameOf(Me.TrackFailedItems), Me.TrackFailedItems)
+        My.Configger.SaveSetting(NameOf(Me.AlwaysShowSymbols), Me.AlwaysShowSymbols)
         My.Configger.SaveSetting(NameOf(Me.ShowGitBranch), Me.ShowGitBranch)
         My.Configger.SaveSetting(NameOf(Me.EnableEzObjects), Me.EnableEzObjects)
         My.Configger.SaveSetting(NameOf(Me.EzSchema), Me.EzSchema)

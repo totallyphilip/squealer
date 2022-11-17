@@ -584,24 +584,24 @@ Module Main
                 Dim symbol As String = String.Empty
                 Select Case obj.Type.LongType
                     Case SquealerObjectType.eType.StoredProcedure
-                        symbol = ""
+                        symbol = Constants.Psymbol
                     Case SquealerObjectType.eType.ScalarFunction
-                        symbol = "()"
+                        symbol = Constants.FNsymbol
                     Case SquealerObjectType.eType.InlineTableFunction
-                        symbol = "*"
+                        symbol = Constants.IFsymbol
                     Case SquealerObjectType.eType.MultiStatementTableFunction
-                        symbol = "**"
+                        symbol = Constants.TFsymbol
                     Case SquealerObjectType.eType.View
-                        symbol = "+"
+                        symbol = Constants.Vsymbol
                 End Select
 
-                If MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Symbolic Then
+                If MySettings.AlwaysShowSymbols OrElse MySettings.DirectoryStyleSelected = Settings.DirectoryStyle.Symbolic Then
                     Textify.Write(symbol, ConsoleColor.Green)
                 End If
 
             End If
 
-            Try
+                Try
 
                 Dim gitstatuscode As String = String.Empty
                 If git.ShowUncommitted Then

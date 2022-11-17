@@ -59,27 +59,31 @@
     Private Sub UpdateDirectoryExample()
 
         If rbSymbolic.Checked Then
-            txtDirExample.Text = "dbo.MyInlineTableValuedFunction*" _
-                & vbCrLf & "dbo.MyMultiStatementTableValuedFunction**" _
-                & vbCrLf & "dbo.MyScalarFunction()" _
+            txtDirExample.Text = "dbo.MyInlineTableValuedFunction" & Constants.IFsymbol _
+                & vbCrLf & "dbo.MyMultiStatementTableValuedFunction" & Constants.TFsymbol _
+                & vbCrLf & "dbo.MyScalarFunction" & Constants.FNsymbol _
                 & vbCrLf & "dbo.MyStoredProcedure" _
-                & vbCrLf & "dbo.MyView+"
+                & vbCrLf & "dbo.MyView" & Constants.Vsymbol
         End If
 
         If rbCompact.Checked Then
-            txtDirExample.Text = "if dbo.MyInlineTableValuedFunction" _
-                & vbCrLf & "tf dbo.MyMultiStatementTableValuedFunction" _
-                & vbCrLf & "fn dbo.MyScalarFunction" _
+            txtDirExample.Text = "if dbo.MyInlineTableValuedFunction" & Constants.IFsymbol _
+                & vbCrLf & "tf dbo.MyMultiStatementTableValuedFunction" & Constants.TFsymbol _
+                & vbCrLf & "fn dbo.MyScalarFunction" & Constants.FNsymbol _
                 & vbCrLf & "p  dbo.MyStoredProcedure" _
-                & vbCrLf & "v  dbo.MyView"
+                & vbCrLf & "v  dbo.MyView" & Constants.Vsymbol
         End If
 
         If rbFull.Checked Then
-            txtDirExample.Text = "if [flags] dbo.MyInlineTableValuedFunction" _
-                & vbCrLf & "tf [flags] dbo.MyMultiStatementTableValuedFunction" _
-                & vbCrLf & "fn [flags] dbo.MyScalarFunction" _
+            txtDirExample.Text = "if [flags] dbo.MyInlineTableValuedFunction" & Constants.IFsymbol _
+                & vbCrLf & "tf [flags] dbo.MyMultiStatementTableValuedFunction" & Constants.TFsymbol _
+                & vbCrLf & "fn [flags] dbo.MyScalarFunction" & Constants.FNsymbol _
                 & vbCrLf & "p  [flags] dbo.MyStoredProcedure" _
-                & vbCrLf & "v  [flags] dbo.MyView"
+                & vbCrLf & "v  [flags] dbo.MyView" & Constants.Vsymbol
+        End If
+
+        If Not rbSymbolic.Checked AndAlso Not chkAlwaysShowSymbols.Checked Then
+            txtDirExample.Text = txtDirExample.Text.Replace(Constants.IFsymbol, "").Replace(Constants.TFsymbol, "").Replace(Constants.FNsymbol, "").Replace(Constants.Vsymbol, "")
         End If
 
     End Sub
@@ -135,4 +139,7 @@
         UpdateProgressExample()
     End Sub
 
+    Private Sub chkAlwaysShowSymbols_CheckedChanged(sender As Object, e As EventArgs) Handles chkAlwaysShowSymbols.CheckedChanged
+        UpdateDirectoryExample()
+    End Sub
 End Class

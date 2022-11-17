@@ -12,4 +12,10 @@
     Public Const HomePage As String = "www.asciimotive.com"
     Public Const IncludeEzScript As String = "``include-ez-objects``"
 
+    Public Const IFsymbol As String = "()*"
+    Public Const TFsymbol As String = "</>"
+    Public Const Psymbol As String = ""
+    Public Const Vsymbol As String = "*"
+    Public Const FNsymbol As String = "()"
+
 End Class

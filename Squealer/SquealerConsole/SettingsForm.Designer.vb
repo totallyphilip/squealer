@@ -50,6 +50,7 @@ Partial Class SettingsForm
         Me.btnLeaderboardSql = New System.Windows.Forms.Button()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
+        Me.chkTrackFailedItems = New System.Windows.Forms.CheckBox()
         Me.chkLockWindowSize = New System.Windows.Forms.CheckBox()
         Me.chkKeepScreenOn = New System.Windows.Forms.CheckBox()
         Me.chkShowProjectNameInCommandPrompt = New System.Windows.Forms.CheckBox()
@@ -82,7 +83,7 @@ Partial Class SettingsForm
         Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.chkTrackFailedItems = New System.Windows.Forms.CheckBox()
+        Me.chkAlwaysShowSymbols = New System.Windows.Forms.CheckBox()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -370,17 +371,27 @@ Partial Class SettingsForm
         Me.tabGeneral.Controls.Add(Me.optShowGitBranch)
         Me.tabGeneral.Location = New System.Drawing.Point(4, 22)
         Me.tabGeneral.Name = "tabGeneral"
-        Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3)
         Me.tabGeneral.Size = New System.Drawing.Size(411, 497)
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
         '
+        'chkTrackFailedItems
+        '
+        Me.chkTrackFailedItems.AutoSize = True
+        Me.chkTrackFailedItems.Location = New System.Drawing.Point(6, 174)
+        Me.chkTrackFailedItems.Name = "chkTrackFailedItems"
+        Me.chkTrackFailedItems.Size = New System.Drawing.Size(109, 17)
+        Me.chkTrackFailedItems.TabIndex = 23
+        Me.chkTrackFailedItems.Text = "Track failed items"
+        Me.chkTrackFailedItems.UseVisualStyleBackColor = True
+        '
         'chkLockWindowSize
         '
         Me.chkLockWindowSize.AutoSize = True
         Me.chkLockWindowSize.Location = New System.Drawing.Point(6, 152)
-        Me.chkLockWindowSize.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.chkLockWindowSize.Margin = New System.Windows.Forms.Padding(2)
         Me.chkLockWindowSize.Name = "chkLockWindowSize"
         Me.chkLockWindowSize.Size = New System.Drawing.Size(110, 17)
         Me.chkLockWindowSize.TabIndex = 22
@@ -432,6 +443,7 @@ Partial Class SettingsForm
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.chkAlwaysShowSymbols)
         Me.GroupBox1.Controls.Add(Me.rbCompact)
         Me.GroupBox1.Controls.Add(Me.rbSymbolic)
         Me.GroupBox1.Controls.Add(Me.txtDirExample)
@@ -474,8 +486,8 @@ Partial Class SettingsForm
         Me.tabOutput.Controls.Add(Me.Label6)
         Me.tabOutput.Location = New System.Drawing.Point(4, 22)
         Me.tabOutput.Name = "tabOutput"
-        Me.tabOutput.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
-        Me.tabOutput.Size = New System.Drawing.Size(411, 428)
+        Me.tabOutput.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabOutput.Size = New System.Drawing.Size(411, 497)
         Me.tabOutput.TabIndex = 1
         Me.tabOutput.Text = "Output"
         Me.tabOutput.UseVisualStyleBackColor = True
@@ -552,8 +564,8 @@ Partial Class SettingsForm
         Me.tabWildcards.Controls.Add(Me.chkSpacesWild)
         Me.tabWildcards.Location = New System.Drawing.Point(4, 22)
         Me.tabWildcards.Name = "tabWildcards"
-        Me.tabWildcards.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
-        Me.tabWildcards.Size = New System.Drawing.Size(411, 428)
+        Me.tabWildcards.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabWildcards.Size = New System.Drawing.Size(411, 497)
         Me.tabWildcards.TabIndex = 2
         Me.tabWildcards.Text = "RUNTIME"
         Me.tabWildcards.UseVisualStyleBackColor = True
@@ -594,8 +606,8 @@ Partial Class SettingsForm
         Me.TabPage4.Controls.Add(Me.Label7)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
-        Me.TabPage4.Size = New System.Drawing.Size(411, 428)
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage4.Size = New System.Drawing.Size(411, 497)
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Editor"
         Me.TabPage4.UseVisualStyleBackColor = True
@@ -695,8 +707,8 @@ Partial Class SettingsForm
         Me.tabEasterEgg.Controls.Add(Me.txtLeaderboardCs)
         Me.tabEasterEgg.Location = New System.Drawing.Point(4, 22)
         Me.tabEasterEgg.Name = "tabEasterEgg"
-        Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
-        Me.tabEasterEgg.Size = New System.Drawing.Size(411, 428)
+        Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabEasterEgg.Size = New System.Drawing.Size(411, 497)
         Me.tabEasterEgg.TabIndex = 4
         Me.tabEasterEgg.Text = "EXTRA"
         Me.tabEasterEgg.UseVisualStyleBackColor = True
@@ -740,15 +752,15 @@ Partial Class SettingsForm
         Me.chkEnableEzObjects.Text = "Script EZ Objects"
         Me.chkEnableEzObjects.UseVisualStyleBackColor = True
         '
-        'chkTrackFailedItems
+        'chkAlwaysShowSymbols
         '
-        Me.chkTrackFailedItems.AutoSize = True
-        Me.chkTrackFailedItems.Location = New System.Drawing.Point(6, 174)
-        Me.chkTrackFailedItems.Name = "chkTrackFailedItems"
-        Me.chkTrackFailedItems.Size = New System.Drawing.Size(109, 17)
-        Me.chkTrackFailedItems.TabIndex = 23
-        Me.chkTrackFailedItems.Text = "Track failed items"
-        Me.chkTrackFailedItems.UseVisualStyleBackColor = True
+        Me.chkAlwaysShowSymbols.AutoSize = True
+        Me.chkAlwaysShowSymbols.Location = New System.Drawing.Point(194, 19)
+        Me.chkAlwaysShowSymbols.Name = "chkAlwaysShowSymbols"
+        Me.chkAlwaysShowSymbols.Size = New System.Drawing.Size(126, 17)
+        Me.chkAlwaysShowSymbols.TabIndex = 16
+        Me.chkAlwaysShowSymbols.Text = "always show symbols"
+        Me.chkAlwaysShowSymbols.UseVisualStyleBackColor = True
         '
         'SettingsForm
         '
@@ -845,4 +857,5 @@ Partial Class SettingsForm
     Friend WithEvents chkKeepScreenOn As Windows.Forms.CheckBox
     Friend WithEvents chkLockWindowSize As Windows.Forms.CheckBox
     Friend WithEvents chkTrackFailedItems As Windows.Forms.CheckBox
+    Friend WithEvents chkAlwaysShowSymbols As Windows.Forms.CheckBox
 End Class
