@@ -3,6 +3,11 @@ go
 
 /*
 
+11/14/2022
+	* added ez.linked_logins
+11/8/2022
+	* added ez.check_constraints
+	* added ez.foreign_keys
 9/28/2022
 	* added ez.datepointvalues()
 9/21/2022
@@ -75,7 +80,7 @@ select
 		when o.type = 'FN' then 'FUNCTION'
 		else o.type_desc
 	end
-	+ concat(' [',s.name,'].[',o.name,'];') collate SQL_Latin1_General_CP1_CI_AS as sql_drop_object
+	+ concat(' [',s.name,'].[',o.name,'];') collate SQL_Latin1_General_CP1_CI_AS as sql_drop
 from
 	sys.objects o
 join
@@ -97,7 +102,7 @@ select
 	,o.fqn
 	,t.temporal_type
 	,t.temporal_type_desc
-	,o.sql_drop_object
+	,o.sql_drop
 	,(select string_agg(concat('[',c.name,']'),',') within group (order by c.column_id ) from sys.columns c where c.object_id = t.object_id) as column_list
 from
 	sys.tables t
@@ -121,7 +126,7 @@ select
 	,o.type
 	,o.type_desc
 	,o.fqn
-	,o.sql_drop_object
+	,o.sql_drop
 	,(select string_agg(concat('[',c.name,']'),',') within group (order by c.column_id ) from sys.columns c where c.object_id = t.object_id) as column_list
 from
 	sys.views t
@@ -301,7 +306,7 @@ select
 	,st.last_user_seek
 	,st.last_user_scan
 	,st.last_user_update
-	,concat('drop index ',i.index_name,' on ',i.table_name) as sql_dropindex
+	,concat('drop index ',i.index_name,' on ',i.table_name) as sql_drop
 from
 	sys.dm_db_index_usage_stats st
 join
@@ -499,8 +504,56 @@ select
 	d.value
 	,convert(float,1) * (datediff(day,@firstdate,d.value) * @slope)+@firstvalue
 from
-	ez.daterange(@firstdate,@lastdate) d
+	{Schema}.daterange(@firstdate,@lastdate) d
 
 return
 end
 go
+
+create view {Schema}.check_constraints as
+select
+	cc.name
+	,t.table_name
+	,cc.definition
+	,concat('alter table ',t.table_name,' drop constraint [',cc.name,'];') as sql_drop
+from
+	sys.check_constraints cc
+join
+	{Schema}.tables t
+	on t.object_id = cc.parent_object_id
+
+go
+
+create view {Schema}.foreign_keys as
+select
+	fk.name
+	,t.table_name
+	,concat('alter table ',t.table_name,' drop constraint [',fk.name,'];') as sql_drop
+from
+	sys.foreign_keys fk
+join
+	{Schema}.tables t
+	on t.object_id = fk.parent_object_id
+
+go
+
+
+
+create view {Schema}.linked_logins as
+select
+	s.name as server_name
+	,s.provider
+	,ll.uses_self_credential
+	,p.name as local_name
+	,ll.remote_name
+from
+	sys.linked_logins ll
+join
+	sys.servers s
+	on s.server_id = ll.server_id
+join
+	sys.server_principals p
+	on p.principal_id = ll.local_principal_id
+
+go
+
