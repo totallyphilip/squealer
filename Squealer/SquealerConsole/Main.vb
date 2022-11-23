@@ -1677,6 +1677,7 @@ Module Main
             .Add("Name", GetType(String))
             .Add("Type", GetType(String))
             .Add("Output", GetType(Boolean))
+            .Add("ReadOnly", GetType(Boolean))
             .Add("DefaultValue", GetType(String))
             .Add("Comments", GetType(String))
         End With
@@ -1687,6 +1688,7 @@ Module Main
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Name"), String.Empty),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Type"), String.Empty),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Output"), Boolean.FalseString),
+                AttributeDefaultString(Node.Attributes.GetNamedItem("ReadOnly"), Boolean.FalseString),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("DefaultValue"), String.Empty),
                 AttributeDefaultString(Node.Attributes.GetNamedItem("Comments"), String.Empty)
             )
@@ -1848,6 +1850,9 @@ Module Main
                     OutParameter.SetAttribute("Type", InParameter.Item("Type").ToString)
                     If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
                         OutParameter.SetAttribute("Output", InParameter.Item("Output").ToString)
+                    End If
+                    If obj.Type.LongType = SquealerObjectType.eType.ScalarFunction Then
+                        OutParameter.SetAttribute("ReadOnly", InParameter.Item("ReadOnly").ToString)
                     End If
                     OutParameter.SetAttribute("DefaultValue", InParameter.Item("DefaultValue").ToString)
                     OutParameter.SetAttribute("Comments", InParameter.Item("Comments").ToString)
@@ -2273,6 +2278,9 @@ Module Main
                 End If
                 If Parameter.Item("Output").ToString = Boolean.TrueString Then
                     def = def & " output"
+                End If
+                If Parameter.Item("ReadOnly").ToString = Boolean.TrueString Then
+                    def = def & " readonly"
                 End If
                 If Not Parameter.Item("Comments").ToString = String.Empty Then
                     def = def & " -- " & Parameter.Item("Comments").ToString

@@ -1,4 +1,7 @@
-﻿1.0.9.0
+﻿1.0.9.X
+Added readonly option to scalar function parameters.
+^break
+1.0.9.0
 Added a setting to facilitate rebuilding only procs that failed to compile.
 No longer detects internal scripts during COMPARE operations.
 Symbolic notation is updated and is always displayed now in directory listings.
