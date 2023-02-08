@@ -26,7 +26,7 @@ Public Class GitShell
         Return Results(folder, String.Format("{0} glob ""{1}""", gc, glob))
     End Function
 
-    Public Shared Sub DisplayResults(folder As String, gc As String, errormessage As String)
+    Public Shared Sub DisplayResults(folder As String, gc As String)
 
         Try
             For Each s As String In Results(folder, gc)

@@ -124,6 +124,37 @@ Module Main
 
 #Region " Folders "
 
+    Private Class FolderClass
+
+        Private _Name As String
+        Public Property name As String
+            Get
+                Return _Name
+            End Get
+            Set(value As String)
+                _Name = value
+            End Set
+        End Property
+
+        Private _LastCompressed As DateTime
+        Public Property LastCompressed As DateTime
+            Get
+                Return _LastCompressed
+            End Get
+            Set(value As DateTime)
+                _LastCompressed = value
+            End Set
+        End Property
+
+        Public Sub New(n As String)
+            _Name = n
+            _LastCompressed = DateTime.Now.AddYears(-1)
+        End Sub
+
+    End Class
+
+    Private Folders As New List(Of FolderClass)
+
     ' Set a new working folder and remember it for later.
     Private Sub ChangeFolder(ByVal newpath As String, ByRef ProjectFolder As String)
 
@@ -142,6 +173,26 @@ Module Main
         Catch ex As Exception
             ' suppress errors
         End Try
+
+        If MySettings.AutoCompressGit Then
+
+            Dim f As FolderClass
+            f = Folders.Find(Function(x) x.name = newpath)
+            If f Is Nothing Then
+                f = New FolderClass(newpath)
+                Folders.Add(f)
+            End If
+
+            If f.LastCompressed.Date < DateTime.Now.Date Then
+                Dim command As String = "git gc --auto"
+                Textify.SayBullet(Textify.eBullet.Star, command & " ... ")
+                GitShell.DisplayResults(f.name, command)
+                f.LastCompressed = DateTime.Now
+                Console.WriteLine("done.")
+                Console.WriteLine()
+            End If
+
+        End If
 
     End Sub
 
@@ -636,7 +687,7 @@ Module Main
                     Case eFileAction.edit
                         EditFile(info.FullName)
                     Case eFileAction.checkout
-                        GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name, " (oops, wut happened)")
+                        GitShell.DisplayResults(info.DirectoryName, "git checkout -- " & info.Name)
                     Case eFileAction.generate
                         GeneratedOutput &= ExpandIndividual(info, GetStringReplacements(My.Computer.FileSystem.GetFileInfo(FileListing(0)).DirectoryName), bp, FileCount + 1, FileListing.Count, MySettings.OutputStepStyleSelected = Settings.OutputStepStyle.Detailed)
 
@@ -671,7 +722,7 @@ Module Main
                         'End Try
                     End If
                     If git.ShowHistory Then
-                        GitShell.DisplayResults(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name, " (no history)")
+                        GitShell.DisplayResults(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name)
                     End If
 
                     Console.WriteLine()
