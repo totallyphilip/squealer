@@ -57,6 +57,7 @@ Partial Class SettingsForm
         Me.chkShowProjectDirectoryInTitleBar = New System.Windows.Forms.CheckBox()
         Me.chkShowProjectNameInTitleBar = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkAlwaysShowSymbols = New System.Windows.Forms.CheckBox()
         Me.txtDirExample = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.tabOutput = New System.Windows.Forms.TabPage()
@@ -83,7 +84,7 @@ Partial Class SettingsForm
         Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.chkAlwaysShowSymbols = New System.Windows.Forms.CheckBox()
+        Me.chkAutoCompressGit = New System.Windows.Forms.CheckBox()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -183,7 +184,7 @@ Partial Class SettingsForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(6, 213)
+        Me.Label3.Location = New System.Drawing.Point(6, 235)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(85, 13)
         Me.Label3.TabIndex = 1
@@ -191,7 +192,7 @@ Partial Class SettingsForm
         '
         'updnFolderSaves
         '
-        Me.updnFolderSaves.Location = New System.Drawing.Point(97, 211)
+        Me.updnFolderSaves.Location = New System.Drawing.Point(97, 233)
         Me.updnFolderSaves.Name = "updnFolderSaves"
         Me.updnFolderSaves.Size = New System.Drawing.Size(55, 20)
         Me.updnFolderSaves.TabIndex = 0
@@ -220,7 +221,7 @@ Partial Class SettingsForm
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnOK.Location = New System.Drawing.Point(352, 543)
+        Me.btnOK.Location = New System.Drawing.Point(352, 588)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(75, 23)
         Me.btnOK.TabIndex = 18
@@ -271,7 +272,7 @@ Partial Class SettingsForm
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 542)
+        Me.PictureBox1.Location = New System.Drawing.Point(12, 587)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
         Me.PictureBox1.TabIndex = 12
@@ -351,11 +352,12 @@ Partial Class SettingsForm
         Me.Tabs.Location = New System.Drawing.Point(12, 12)
         Me.Tabs.Name = "Tabs"
         Me.Tabs.SelectedIndex = 0
-        Me.Tabs.Size = New System.Drawing.Size(419, 523)
+        Me.Tabs.Size = New System.Drawing.Size(419, 568)
         Me.Tabs.TabIndex = 26
         '
         'tabGeneral
         '
+        Me.tabGeneral.Controls.Add(Me.chkAutoCompressGit)
         Me.tabGeneral.Controls.Add(Me.chkTrackFailedItems)
         Me.tabGeneral.Controls.Add(Me.chkLockWindowSize)
         Me.tabGeneral.Controls.Add(Me.chkKeepScreenOn)
@@ -372,7 +374,7 @@ Partial Class SettingsForm
         Me.tabGeneral.Location = New System.Drawing.Point(4, 22)
         Me.tabGeneral.Name = "tabGeneral"
         Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabGeneral.Size = New System.Drawing.Size(411, 497)
+        Me.tabGeneral.Size = New System.Drawing.Size(411, 542)
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
@@ -448,12 +450,22 @@ Partial Class SettingsForm
         Me.GroupBox1.Controls.Add(Me.rbSymbolic)
         Me.GroupBox1.Controls.Add(Me.txtDirExample)
         Me.GroupBox1.Controls.Add(Me.rbFull)
-        Me.GroupBox1.Location = New System.Drawing.Point(3, 251)
+        Me.GroupBox1.Location = New System.Drawing.Point(3, 278)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(396, 240)
+        Me.GroupBox1.Size = New System.Drawing.Size(396, 258)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Directory format"
+        '
+        'chkAlwaysShowSymbols
+        '
+        Me.chkAlwaysShowSymbols.AutoSize = True
+        Me.chkAlwaysShowSymbols.Location = New System.Drawing.Point(194, 19)
+        Me.chkAlwaysShowSymbols.Name = "chkAlwaysShowSymbols"
+        Me.chkAlwaysShowSymbols.Size = New System.Drawing.Size(126, 17)
+        Me.chkAlwaysShowSymbols.TabIndex = 16
+        Me.chkAlwaysShowSymbols.Text = "always show symbols"
+        Me.chkAlwaysShowSymbols.UseVisualStyleBackColor = True
         '
         'txtDirExample
         '
@@ -465,13 +477,13 @@ Partial Class SettingsForm
         Me.txtDirExample.Name = "txtDirExample"
         Me.txtDirExample.ReadOnly = True
         Me.txtDirExample.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtDirExample.Size = New System.Drawing.Size(384, 192)
+        Me.txtDirExample.Size = New System.Drawing.Size(384, 210)
         Me.txtDirExample.TabIndex = 15
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(158, 213)
+        Me.Label9.Location = New System.Drawing.Point(158, 235)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(73, 13)
         Me.Label9.TabIndex = 16
@@ -752,22 +764,22 @@ Partial Class SettingsForm
         Me.chkEnableEzObjects.Text = "Script EZ Objects"
         Me.chkEnableEzObjects.UseVisualStyleBackColor = True
         '
-        'chkAlwaysShowSymbols
+        'chkAutoCompressGit
         '
-        Me.chkAlwaysShowSymbols.AutoSize = True
-        Me.chkAlwaysShowSymbols.Location = New System.Drawing.Point(194, 19)
-        Me.chkAlwaysShowSymbols.Name = "chkAlwaysShowSymbols"
-        Me.chkAlwaysShowSymbols.Size = New System.Drawing.Size(126, 17)
-        Me.chkAlwaysShowSymbols.TabIndex = 16
-        Me.chkAlwaysShowSymbols.Text = "always show symbols"
-        Me.chkAlwaysShowSymbols.UseVisualStyleBackColor = True
+        Me.chkAutoCompressGit.AutoSize = True
+        Me.chkAutoCompressGit.Location = New System.Drawing.Point(6, 197)
+        Me.chkAutoCompressGit.Name = "chkAutoCompressGit"
+        Me.chkAutoCompressGit.Size = New System.Drawing.Size(152, 17)
+        Me.chkAutoCompressGit.TabIndex = 24
+        Me.chkAutoCompressGit.Text = "Automatically compress Git"
+        Me.chkAutoCompressGit.UseVisualStyleBackColor = True
         '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnOK
-        Me.ClientSize = New System.Drawing.Size(443, 578)
+        Me.ClientSize = New System.Drawing.Size(443, 623)
         Me.Controls.Add(Me.Tabs)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.btnOK)
@@ -858,4 +870,5 @@ Partial Class SettingsForm
     Friend WithEvents chkLockWindowSize As Windows.Forms.CheckBox
     Friend WithEvents chkTrackFailedItems As Windows.Forms.CheckBox
     Friend WithEvents chkAlwaysShowSymbols As Windows.Forms.CheckBox
+    Friend WithEvents chkAutoCompressGit As Windows.Forms.CheckBox
 End Class

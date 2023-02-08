@@ -343,6 +343,16 @@
         End Set
     End Property
 
+    Private _AutoCompressGit As Boolean
+    Public Property AutoCompressGit As Boolean
+        Get
+            Return _AutoCompressGit
+        End Get
+        Set(value As Boolean)
+            _AutoCompressGit = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -364,6 +374,7 @@
         Me.ShowProjectNameInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInTitleBar), True)
         Me.KeepScreenAlive = My.Configger.LoadSetting(NameOf(Me.KeepScreenAlive), False)
         Me.LockWindowSize = My.Configger.LoadSetting(NameOf(Me.LockWindowSize), False)
+        Me.AutoCompressGit = My.Configger.LoadSetting(NameOf(Me.AutoCompressGit), False)
         Me.ShowProjectDirectoryInTitleBar = My.Configger.LoadSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), True)
         Me.ShowProjectNameInCommandPrompt = My.Configger.LoadSetting(NameOf(Me.ShowProjectNameInCommandPrompt), True)
         Me.OpenWithDefault.SqlFiles = My.Configger.LoadSetting(NameOf(Me.OpenWithDefault.SqlFiles), False)
@@ -412,6 +423,7 @@
         f.chkShowProjectNameInTitleBar.Checked = Me.ShowProjectNameInTitleBar
         f.chkKeepScreenOn.Checked = Me.KeepScreenAlive
         f.chkLockWindowSize.Checked = Me.LockWindowSize
+        f.chkAutoCompressGit.Checked = Me.AutoCompressGit
         f.chkShowProjectDirectoryInTitleBar.Checked = Me.ShowProjectDirectoryInTitleBar
         f.chkShowProjectNameInCommandPrompt.Checked = Me.ShowProjectNameInCommandPrompt
         f.chkOutputDefaultEditor.Checked = Me.OpenWithDefault.SqlFiles
@@ -456,6 +468,7 @@
         Me.ShowProjectNameInTitleBar = f.chkShowProjectNameInTitleBar.Checked
         Me.KeepScreenAlive = f.chkKeepScreenOn.Checked
         Me.LockWindowSize = f.chkLockWindowSize.Checked
+        Me.AutoCompressGit = f.chkAutoCompressGit.Checked
         Me.ShowProjectDirectoryInTitleBar = f.chkShowProjectDirectoryInTitleBar.Checked
         Me.ShowProjectNameInCommandPrompt = f.chkShowProjectNameInCommandPrompt.Checked
         Me.OpenWithDefault.SqlFiles = f.chkOutputDefaultEditor.Checked
@@ -493,6 +506,7 @@
         My.Configger.SaveSetting(NameOf(Me.ShowProjectDirectoryInTitleBar), Me.ShowProjectDirectoryInTitleBar)
         My.Configger.SaveSetting(NameOf(Me.KeepScreenAlive), Me.KeepScreenAlive)
         My.Configger.SaveSetting(NameOf(Me.LockWindowSize), Me.LockWindowSize)
+        My.Configger.SaveSetting(NameOf(Me.AutoCompressGit), Me.AutoCompressGit)
         My.Configger.SaveSetting(NameOf(Me.ShowProjectNameInCommandPrompt), Me.ShowProjectNameInCommandPrompt)
         My.Configger.SaveSetting(NameOf(Me.AutoEditNewFiles), Me.AutoEditNewFiles)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
