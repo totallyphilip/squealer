@@ -1902,9 +1902,9 @@ Module Main
                     If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
                         OutParameter.SetAttribute("Output", InParameter.Item("Output").ToString)
                     End If
-                    If obj.Type.LongType = SquealerObjectType.eType.ScalarFunction Then
-                        OutParameter.SetAttribute("ReadOnly", InParameter.Item("ReadOnly").ToString)
-                    End If
+                    'If obj.Type.LongType = SquealerObjectType.eType.ScalarFunction Then
+                    OutParameter.SetAttribute("ReadOnly", InParameter.Item("ReadOnly").ToString)
+                    'End If
                     OutParameter.SetAttribute("DefaultValue", InParameter.Item("DefaultValue").ToString)
                     OutParameter.SetAttribute("Comments", InParameter.Item("Comments").ToString)
                     OutParameters.AppendChild(OutParameter)
@@ -2337,7 +2337,7 @@ Module Main
                     def = def & " -- " & Parameter.Item("Comments").ToString
                 End If
                 ' Write out error logging section.
-                If (Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Parameter.Item("Name").ToString.ToLower.Contains(" readonly")) Then
+                If Parameter.Item("Type").ToString.ToLower.Contains("max") OrElse Boolean.Parse(Parameter.Item("ReadOnly").ToString) Then
                     Dim whynot As String = vbCrLf & vbTab & vbTab & String.Format("--parameter @{0} cannot be logged due to its 'max' or 'readonly' definition", Parameter.Item("Name").ToString)
                     ErrorLogParameters &= whynot
                 Else
