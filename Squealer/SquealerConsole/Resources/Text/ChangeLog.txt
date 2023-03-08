@@ -1,5 +1,6 @@
-﻿1.0.9.X
-Added readonly option to scalar function parameters.
+﻿1.0.10.0
+Added readonly option to parameters.
+Added automatic Git compress function.
 ^break
 1.0.9.0
 Added a setting to facilitate rebuilding only procs that failed to compile.
