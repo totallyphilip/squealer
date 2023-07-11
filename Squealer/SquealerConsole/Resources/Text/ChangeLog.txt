@@ -1,4 +1,7 @@
-﻿1.0.10.0
+﻿1.0.10.1 (unreleased)
+Added Squealer version to comments in generated output.
+^break
+1.0.10.0
 Added readonly option to parameters.
 Added automatic Git compress function.
 ^break

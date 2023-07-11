@@ -2268,7 +2268,7 @@ Module Main
         Catch ex As Exception
             OutComments = String.Empty
         End Try
-        Block = My.Resources.Comment.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Comments}", OutComments).Replace("{Schema}", SchemaName(RootName))
+        Block = My.Resources.Comment.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Comments}", OutComments).Replace("{Schema}", SchemaName(RootName)).Replace("{SquealerVersion}", "Squealer " & My.Application.Info.Version.ToString)
 
         ' Create
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
