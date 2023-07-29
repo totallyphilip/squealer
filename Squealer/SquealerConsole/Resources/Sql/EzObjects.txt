@@ -3,18 +3,22 @@ go
 
 /*
 
+7/28/2023
+	* added .foreign_key_columns
+1/3/2023
+	* added .key_constraints
 11/14/2022
-	* added ez.linked_logins
+	* added .linked_logins
 11/8/2022
-	* added ez.check_constraints
-	* added ez.foreign_keys
+	* added .check_constraints
+	* added .foreign_keys
 9/28/2022
-	* added ez.datepointvalues()
+	* added .datepointvalues()
 9/21/2022
-	* added ez.daterange()
+	* added .daterange()
 9/12/2022
-	* added ez.intrange()
-	* added ez.naturalrange()
+	* added .intrange()
+	* added .naturalrange()
 
 */
 
@@ -102,6 +106,8 @@ select
 	,o.fqn
 	,t.temporal_type
 	,t.temporal_type_desc
+	,ho.object_name as temporal_table_name
+	,ho.object_id as temporal_table_id
 	,o.sql_drop
 	,(select string_agg(concat('[',c.name,']'),',') within group (order by c.column_id ) from sys.columns c where c.object_id = t.object_id) as column_list
 from
@@ -113,6 +119,13 @@ join
 	{Schema}.filegroups fg
 	on fg.object_id = t.object_id
 	and fg.index_id<2 -- heaps and clustered indexes
+left outer join
+	sys.tables h
+	on h.object_id = t.history_table_id
+left outer join
+	{Schema}.objects ho
+	on ho.object_id = h.object_id
+
 
 go
 
@@ -557,3 +570,65 @@ join
 
 go
 
+
+create view {Schema}.key_constraints as
+
+select
+	t.table_name
+	,kc.name
+	,kc.object_id
+	,kc.parent_object_id
+	,kc.type
+	,concat('alter table ',t.table_name,' drop constraint [',kc.name,'];') as sql_drop
+from
+	sys.key_constraints kc
+join
+	{Schema}.tables t
+	on t.object_id = kc.parent_object_id
+
+go
+
+
+create view {Schema}.foreign_key_columns as
+
+select
+	fk.object_id
+	,fk.name
+	,fk.referenced_object_id as parent_table_id
+	,ct.table_name as parent_table_name
+	,(
+		select
+			string_agg(concat('[',c.name,']'),',')
+		from
+			sys.foreign_key_columns fcols
+		join
+			sys.all_columns c
+			on c.object_id = fk.referenced_object_id
+			and c.column_id = fcols.referenced_column_id
+		where
+			fcols.constraint_object_id = fk.object_id
+	) as parent_key_columns
+	,fk.parent_object_id as child_table_id
+	,pt.table_name as child_table_name
+	,(
+		select
+			string_agg(concat('[',c.name,']'),',')
+		from
+			sys.foreign_key_columns fcols
+		join
+			sys.all_columns c
+			on c.object_id = fk.parent_object_id
+			and c.column_id = fcols.parent_column_id
+		where
+			fcols.constraint_object_id = fk.object_id
+	) as foreign_key_columns
+from
+	sys.foreign_keys fk
+join
+	{Schema}.tables pt
+	on pt.object_id = fk.parent_object_id
+join
+	{Schema}.tables ct
+	on ct.object_id = fk.referenced_object_id
+
+go
