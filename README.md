@@ -1,4 +1,4 @@
-# squealer2018
+# Squealer 2022
 A Windows console application to simplify creation and management of stored procedures, views, and functions.
 
 This project is written in VB.NET. I would like to rewrite it as C# but I'm too lazy.
@@ -9,7 +9,7 @@ Once the main goal was accomplished, I added additional features like code gener
 
 I hope you get some use out of this. If you would like to contribute to its ongoing development, please donate to https://paypal.me/totallyphilip. I have spent decades providing support to developers, and at this point I'm not ashamed to ask for some help in return.
 
-This project includes https://github.com/TaoK/PoorMansTSqlFormatter, a very awesome package that deserves your support.
+This project includes https://github.com/TaoK/PoorMansTSqlFormatter, a very awesome package that deserves your support. UPDATE: I removed this function. I don't remember why, but I may re-add it.
 
 Thanks, and happy coding!
 
