@@ -2725,6 +2725,7 @@ Module Main
 
         Console.WriteLine(String.Format("{0} v.{1}", My.Application.Info.Title, My.Application.Info.Version))
         Console.WriteLine(My.Application.Info.Copyright)
+        Console.WriteLine("https://github.com/totallyphilip/squealer")
         Console.WriteLine()
 
         Dim v As New VersionCheck
