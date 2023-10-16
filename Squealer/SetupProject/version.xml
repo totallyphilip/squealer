@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<Squealer Version="1.0.10.0" Updated="3/8/2023 7:19:42 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer10100-Install.zip">
-  <About><![CDATA[Added readonly option to parameters.
-Added automatic Git compress function.]]></About>
+<Squealer Version="1.0.10.1" Updated="9/1/2023 12:15:26 AM" Hidden="False" ZipFile="https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/Squealer10101-Install.zip">
+  <About><![CDATA[(unreleased)
+Added Squealer version to comments in generated output.]]></About>
 </Squealer>
