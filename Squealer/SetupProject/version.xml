@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<Squealer Version="1.0.10.1" Updated="10/23/2023 6:11:13 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer10101-Install.zip">
-  <About><![CDATA[(unreleased)
-Added source repo URL to welcome screen.
+<Squealer Version="1.0.10.2" Updated="10/23/2023 6:34:44 PM" Hidden="False" ZipFile="Z:\Software\Squealer\Squealer10102-Install.zip">
+  <About><![CDATA[Added source repo URL to welcome screen.
 Added Squealer version to comments in generated output.
 Command prompt now shows current folder if no project name is defined.
 Added CD as shortcut to OPEN command.
-Shortened error message when Git is not detected.]]></About>
+Shortened error message when Git is not detected.
+Fixed a typo in the release notes.]]></About>
 </Squealer>

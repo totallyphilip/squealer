@@ -1,9 +1,10 @@
-﻿1.0.10.1 (unreleased)
+﻿1.0.10.2
 Added source repo URL to welcome screen.
 Added Squealer version to comments in generated output.
 Command prompt now shows current folder if no project name is defined.
 Added CD as shortcut to OPEN command.
 Shortened error message when Git is not detected.
+Fixed a typo in the release notes.
 ^break
 1.0.10.0
 Added readonly option to parameters.

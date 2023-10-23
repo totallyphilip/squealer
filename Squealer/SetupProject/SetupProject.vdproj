@@ -15,18 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_256E762B375EDCA3AB6B29733BE899A4"
-        "OwnerKey" = "8:_A4C426CB92F44255B9C7A30CB627F503"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_256E762B375EDCA3AB6B29733BE899A4"
-        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5A860E2B030241FBA86166D681B8B621"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -81,6 +69,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_CF67681CDF022945BE68167C60422870"
+        "OwnerKey" = "8:_A4C426CB92F44255B9C7A30CB627F503"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CF67681CDF022945BE68167C60422870"
+        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FD0967033EC96E69E62810F341CE880C"
         "OwnerKey" = "8:_A4C426CB92F44255B9C7A30CB627F503"
         "MsmSig" = "8:_UNDEFINED"
@@ -130,7 +130,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_256E762B375EDCA3AB6B29733BE899A4"
+        "OwnerKey" = "8:_CF67681CDF022945BE68167C60422870"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -234,42 +234,11 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_256E762B375EDCA3AB6B29733BE899A4"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_256E762B375EDCA3AB6B29733BE899A4"
-                    {
-                    "Name" = "8:GoldLeader.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:GoldLeader.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_24411C82A5DA44109A2F2AD62EC2B656"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5A860E2B030241FBA86166D681B8B621"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.10.2, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5A860E2B030241FBA86166D681B8B621"
@@ -440,6 +409,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CF67681CDF022945BE68167C60422870"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_CF67681CDF022945BE68167C60422870"
+                    {
+                    "Name" = "8:GoldLeader.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:GoldLeader.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_24411C82A5DA44109A2F2AD62EC2B656"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FD0967033EC96E69E62810F341CE880C"
             {
             "AssemblyRegister" = "3:1"
@@ -527,15 +527,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer"
-        "ProductCode" = "8:{D3FD3072-9A62-4B39-A5F0-9C7CFC9BE694}"
-        "PackageCode" = "8:{29C9176F-0149-4610-BAA8-75D95DFFD9F7}"
+        "ProductCode" = "8:{0A6E2169-6D93-4D1C-9A9F-457EAD70523B}"
+        "PackageCode" = "8:{5ABC028B-36F7-4ECB-B984-9601A118FEC6}"
         "UpgradeCode" = "8:{251AC907-8611-45F6-AD97-17492ED52E47}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.21"
+        "ProductVersion" = "8:1.0.22"
         "Manufacturer" = "8:AsciiMotive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:www.asciimotive.com"
