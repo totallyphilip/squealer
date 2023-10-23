@@ -4,7 +4,7 @@ Imports System.Management.Automation.Runspaces
 
 Public Class GitShell
 
-    Public Const GitErrorMessage As String = "\git-error\"
+    Public Const GitErrorMessage As String = "git?"
 
     Public Shared Function ChangedFiles(folder As String, gc As String, glob As String, includeDeleted As Boolean) As List(Of String)
 

@@ -365,6 +365,7 @@ Module Main
         ResetWindowSize()
 
         Textify.SayCentered(Constants.HomePage, True)
+        Textify.SayCentered("https://github.com/totallyphilip/squealer", True)
         Textify.SayCentered(My.Application.Info.Copyright, True)
         Console.WriteLine()
 
@@ -714,12 +715,7 @@ Module Main
                 If Not bp.OutputMode = BatchParametersClass.eOutputMode.string Then
 
                     If git.ShowUncommitted Then
-                        'Try
-                        ' This will fail if we just now deleted the file
-                        'Textify.Write(" " & GitResults(info.DirectoryName, "git status -s ", info.Name)(0).Replace(info.Name, "").TrimStart, ConsoleColor.Red)
                         Textify.Write(gitstatuscode, ConsoleColor.Red)
-                        'Catch ex As Exception
-                        'End Try
                     End If
                     If git.ShowHistory Then
                         GitShell.DisplayResults(info.DirectoryName, "git log --pretty=format:""%h (%cr) %s"" " & info.Name)
@@ -814,7 +810,7 @@ Module Main
         MyCommands.Items.Add(cmd)
 
         ' open folder
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command. Omit path to open folder dialog."}, CommandCatalog.eCommandCategory.folder, "<path>", False)
+        cmd = New CommandCatalog.CommandDefinition({eCommandType.open.ToString, "cd"}, {"Open folder {options}.", "This folder path will be saved for quick access. See " & eCommandType.list.ToString.ToUpper & " command. Omit path to open folder dialog."}, CommandCatalog.eCommandCategory.folder, "<path>", False)
         cmd.Examples.Add("% " & Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))
         cmd.IgnoreSwitches = True
         MyCommands.Items.Add(cmd)
@@ -2725,7 +2721,6 @@ Module Main
 
         Console.WriteLine(String.Format("{0} v.{1}", My.Application.Info.Title, My.Application.Info.Version))
         Console.WriteLine(My.Application.Info.Copyright)
-        Console.WriteLine("https://github.com/totallyphilip/squealer")
         Console.WriteLine()
 
         Dim v As New VersionCheck

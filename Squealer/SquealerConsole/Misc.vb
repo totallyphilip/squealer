@@ -59,14 +59,15 @@
             Dim Node As Xml.XmlNode = Reader.SelectSingleNode("/Settings")
             Dim s As String = Node.Attributes("ProjectName").Value.ToString.Trim()
             If String.IsNullOrWhiteSpace(s) Then
-                s = "?"
+                Throw New SystemException("nope")
+                s = My.Computer.FileSystem.GetDirectoryInfo(WorkingFolder).Name
             End If
             If s.Length > 30 Then
                 s = s.Substring(0, 30)
             End If
             Return s
         Catch ex As Exception
-            Return "?"
+            Return My.Computer.FileSystem.GetDirectoryInfo(WorkingFolder).Name
         End Try
 
     End Function
