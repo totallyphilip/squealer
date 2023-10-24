@@ -1,0 +1,18 @@
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+{WithOptions}
+as
+set ansi_nulls on;
+set nocount on;
+set quoted_identifier on;
+
+declare @Squealer_ReturnValue int = 0;
+declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
+
+print concat('begin - ``this`` - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+
+/*######################################################################
+                         YOUR CODE BEGINS HERE.
+######################################################################*/
+;

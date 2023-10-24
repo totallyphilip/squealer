@@ -2442,6 +2442,16 @@ Module Main
 
         End If
 
+
+
+        Dim InCode As String = String.Empty
+        Try
+            InCode = InRoot.SelectSingleNode("Code").InnerText
+        Catch ex As Exception
+        End Try
+        Dim NoMagic As Boolean = InCode.Trim.ToLower.StartsWith("--nomagic")
+
+
         ' Begin
         Dim BeginBlock As String = Nothing
         Select Case oType
@@ -2449,7 +2459,11 @@ Module Main
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = My.Resources.P_BeginTest
                 Else
-                    BeginBlock = My.Resources.P_Begin
+                    If NoMagic Then
+                        BeginBlock = My.Resources.P_BeginNoMagic
+                    Else
+                        BeginBlock = My.Resources.P_Begin
+                    End If
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 Dim Returns As String = Nothing
@@ -2499,11 +2513,6 @@ Module Main
         Block &= BeginBlock
 
         ' Code
-        Dim InCode As String = String.Empty
-        Try
-            InCode = InRoot.SelectSingleNode("Code").InnerText
-        Catch ex As Exception
-        End Try
         Block &= InCode
 
         ' End
@@ -2512,7 +2521,11 @@ Module Main
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     Block &= My.Resources.P_EndTest
                 Else
-                    Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters) '& ErrorLogParameters & My.Resources.SqlEndProcedure3
+                    If NoMagic Then
+                        Block &= My.Resources.P_EndNoMagic.Replace("{Parameters}", ErrorLogParameters)
+                    Else
+                        Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters)
+                    End If
                 End If
             Case SquealerObjectType.eType.ScalarFunction
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then

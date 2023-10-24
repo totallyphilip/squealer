@@ -179,21 +179,21 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 1.0.8.1
-        '''Fixed a crash condition when the remote software update source is unavailable.
-        '''Updated .NET Framework target to 4.8.
+        '''  Looks up a localized string similar to 1.0.10.2
+        '''Added source repo URL to welcome screen.
+        '''Added Squealer version to comments in generated output.
+        '''Command prompt now shows current folder if no project name is defined.
+        '''Added CD as shortcut to OPEN command.
+        '''Shortened error message when Git is not detected.
+        '''Fixed a typo in the release notes.
         '''^break
-        '''1.0.8.0
-        '''Added a &quot;lock window size&quot; setting.
-        '''Fixed a string matching bug that was causing a file selection dialog to return zero files.
+        '''1.0.10.0
+        '''Added readonly option to parameters.
+        '''Added automatic Git compress function.
         '''^break
-        '''1.0.7.3
-        '''Path is displayed when switching projects.
-        '''Display error when current project folder is missing.
-        '''^break
-        '''1.0.7.2
-        '''Fixed a bug in internal scripts.
-        '''Internal scripts are now auto-updated silently without upgrading the ap [rest of string was truncated]&quot;;.
+        '''1.0.9.0
+        '''Added a setting to facilitate rebuilding only procs that failed to compile.
+        '''No longer detec [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -207,6 +207,8 @@ Namespace My.Resources
         '''
         '''title : {Schema}.{RootProgramName}
         '''{Comments}
+        '''[generated with {SquealerVersion}]
+        '''
         '''***********************************************************************/
         '''.
         '''</summary>
@@ -282,13 +284,22 @@ Namespace My.Resources
         '''
         '''/*
         '''
+        '''7/28/2023
+        '''	* added .foreign_key_columns
+        '''1/3/2023
+        '''	* added .key_constraints
+        '''11/14/2022
+        '''	* added .linked_logins
+        '''11/8/2022
+        '''	* added .check_constraints
+        '''	* added .foreign_keys
         '''9/28/2022
-        '''	* added ez.datepointvalues()
+        '''	* added .datepointvalues()
         '''9/21/2022
-        '''	* added ez.daterange()
+        '''	* added .daterange()
         '''9/12/2022
-        '''	* added ez.intrange()
-        '''	* added ez.naturalrange()
+        '''	* added .intrange()
+        '''	* added .naturalrange()
         '''
         '''*/
         '''
@@ -300,14 +311,7 @@ Namespace My.Resources
         '''			when &apos;V&apos; then &apos;view&apos;
         '''			when &apos;P&apos; then &apos;procedure&apos;
         '''			when &apos;FN&apos; then &apos;function&apos;
-        '''			when &apos;IF&apos; then &apos;function&apos;
-        '''			when &apos;TF&apos; then &apos;function&apos;
-        '''		end
-        '''		+ concat(&apos; [&apos;,s.name,&apos;].[&apos;,o.name,&apos;]&apos;)
-        '''			,&apos;; &apos;)
-        '''		+ &apos;; drop schema {Schema}&apos;
-        '''	from sys.objects o
-        '''	join sys [rest of string was truncated]&quot;;.
+        '''			when  [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property EzObjects() As String
             Get
@@ -614,6 +618,30 @@ Namespace My.Resources
         
         '''<summary>
         '''  Looks up a localized string similar to 
+        '''              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+        '''
+        '''{WithOptions}
+        '''as
+        '''set ansi_nulls on;
+        '''set nocount on;
+        '''set quoted_identifier on;
+        '''
+        '''declare @Squealer_ReturnValue int = 0;
+        '''declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
+        '''
+        '''print concat(&apos;begin - ``this`` - nest level is &apos;,@@nestlevel,&apos;; tran count is &apos;,@@trancount,&apos;; xact state is &apos;,xact_state());
+        '''
+        '''/*######################################################################
+        '''                        [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property P_BeginNoMagic() As String
+            Get
+                Return ResourceManager.GetString("P_BeginNoMagic", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
         '''
         '''set ansi_nulls on;
         '''set quoted_identifier on;
@@ -661,6 +689,27 @@ Namespace My.Resources
         Friend ReadOnly Property P_End() As String
             Get
                 Return ResourceManager.GetString("P_End", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to 
+        '''/*######################################################################
+        '''                          YOUR CODE ENDS HERE.
+        '''######################################################################*/
+        '''
+        '''print concat(&apos;commit - nest level is &apos;,@@nestlevel,&apos;; tran count is &apos;,@@trancount,&apos;; xact state is &apos;,xact_state());
+        '''
+        '''
+        '''if @SqlrInternalErrorNumber is not null
+        '''	set @Squealer_ReturnValue = @SqlrInternalErrorNumber -- for backward compatibility with pre-release squealer
+        '''
+        '''return @Squealer_ReturnValue
+        '''.
+        '''</summary>
+        Friend ReadOnly Property P_EndNoMagic() As String
+            Get
+                Return ResourceManager.GetString("P_EndNoMagic", resourceCulture)
             End Get
         End Property
         
@@ -829,9 +878,13 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to declare @RetryFailedSquealerItems varchar(max);
-        '''select @RetryFailedSquealerItems = &apos;gen -x &apos; + string_agg(f.ProcName,&apos;|&apos;) from ##RetryFailedSquealerItems f;
-        '''print @RetryFailedSquealerItems.
+        '''  Looks up a localized string similar to if exists (select 1 from ##RetryFailedSquealerItems)
+        '''begin
+        '''	declare @RetryFailedSquealerItems varchar(max);
+        '''	select @RetryFailedSquealerItems = &apos;gen -x &apos; + string_agg(f.ProcName,&apos;|&apos;) from ##RetryFailedSquealerItems f;
+        '''	print &apos;Try again?&apos;
+        '''	print @RetryFailedSquealerItems
+        '''end.
         '''</summary>
         Friend ReadOnly Property TrackFailedItems_End() As String
             Get
@@ -840,9 +893,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to declare @RetryFailedSquealerItems varchar(max);
-        '''select @RetryFailedSquealerItems = &apos;gen -x &apos; + string_agg(f.ProcName,&apos;|&apos;) from ##RetryFailedSquealerItems f;
-        '''print @RetryFailedSquealerItems.
+        '''  Looks up a localized string similar to if object_id(&apos;tempdb..##RetryFailedSquealerItems&apos;) is null
+        '''	create table ##RetryFailedSquealerItems (ProcName varchar(100))
+        '''else
+        '''	truncate table ##RetryFailedSquealerItems
+        '''go.
         '''</summary>
         Friend ReadOnly Property TrackFailedItems_Start() As String
             Get

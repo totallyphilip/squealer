@@ -1,4 +1,6 @@
-﻿1.0.10.2
+﻿1.0.11.0 (not published)
+Added --NOMAGIC hint. See website for details.
+1.0.10.2
 Added source repo URL to welcome screen.
 Added Squealer version to comments in generated output.
 Command prompt now shows current folder if no project name is defined.
