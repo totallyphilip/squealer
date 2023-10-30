@@ -42,14 +42,9 @@ Partial Class SettingsForm
         Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
-        Me.txtLeaderboardCs = New System.Windows.Forms.TextBox()
-        Me.lblLeaderboard = New System.Windows.Forms.Label()
-        Me.chkShowLeaderboard = New System.Windows.Forms.CheckBox()
-        Me.lblLeaveBlank = New System.Windows.Forms.Label()
-        Me.btnStarwarsHelp = New System.Windows.Forms.Button()
-        Me.btnLeaderboardSql = New System.Windows.Forms.Button()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
+        Me.chkAutoCompressGit = New System.Windows.Forms.CheckBox()
         Me.chkTrackFailedItems = New System.Windows.Forms.CheckBox()
         Me.chkLockWindowSize = New System.Windows.Forms.CheckBox()
         Me.chkKeepScreenOn = New System.Windows.Forms.CheckBox()
@@ -79,12 +74,11 @@ Partial Class SettingsForm
         Me.chkSquealerDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.tabEasterEgg = New System.Windows.Forms.TabPage()
+        Me.tabExtra = New System.Windows.Forms.TabPage()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.chkAutoCompressGit = New System.Windows.Forms.CheckBox()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -95,7 +89,7 @@ Partial Class SettingsForm
         Me.tabWildcards.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.gbTextEditor.SuspendLayout()
-        Me.tabEasterEgg.SuspendLayout()
+        Me.tabExtra.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -284,61 +278,6 @@ Partial Class SettingsForm
         Me.dlgTextEditor.FileName = "OpenFileDialog1"
         Me.dlgTextEditor.Filter = "*.exe|*.exe"
         '
-        'txtLeaderboardCs
-        '
-        Me.txtLeaderboardCs.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLeaderboardCs.Location = New System.Drawing.Point(167, 6)
-        Me.txtLeaderboardCs.Name = "txtLeaderboardCs"
-        Me.txtLeaderboardCs.Size = New System.Drawing.Size(244, 20)
-        Me.txtLeaderboardCs.TabIndex = 21
-        '
-        'lblLeaderboard
-        '
-        Me.lblLeaderboard.AutoSize = True
-        Me.lblLeaderboard.Location = New System.Drawing.Point(8, 9)
-        Me.lblLeaderboard.Name = "lblLeaderboard"
-        Me.lblLeaderboard.Size = New System.Drawing.Size(151, 13)
-        Me.lblLeaderboard.TabIndex = 22
-        Me.lblLeaderboard.Text = "Leaderboard ConnectionString"
-        '
-        'chkShowLeaderboard
-        '
-        Me.chkShowLeaderboard.AutoSize = True
-        Me.chkShowLeaderboard.Location = New System.Drawing.Point(11, 60)
-        Me.chkShowLeaderboard.Name = "chkShowLeaderboard"
-        Me.chkShowLeaderboard.Size = New System.Drawing.Size(134, 17)
-        Me.chkShowLeaderboard.TabIndex = 23
-        Me.chkShowLeaderboard.Text = "Show scores at startup"
-        Me.chkShowLeaderboard.UseVisualStyleBackColor = True
-        '
-        'lblLeaveBlank
-        '
-        Me.lblLeaveBlank.AutoSize = True
-        Me.lblLeaveBlank.Location = New System.Drawing.Point(164, 29)
-        Me.lblLeaveBlank.Name = "lblLeaveBlank"
-        Me.lblLeaveBlank.Size = New System.Drawing.Size(176, 13)
-        Me.lblLeaveBlank.TabIndex = 26
-        Me.lblLeaveBlank.Text = "Leave blank to disable leaderboard."
-        '
-        'btnStarwarsHelp
-        '
-        Me.btnStarwarsHelp.Location = New System.Drawing.Point(11, 83)
-        Me.btnStarwarsHelp.Name = "btnStarwarsHelp"
-        Me.btnStarwarsHelp.Size = New System.Drawing.Size(121, 23)
-        Me.btnStarwarsHelp.TabIndex = 25
-        Me.btnStarwarsHelp.Text = "Help me Obi Wan"
-        Me.btnStarwarsHelp.UseVisualStyleBackColor = True
-        '
-        'btnLeaderboardSql
-        '
-        Me.btnLeaderboardSql.Location = New System.Drawing.Point(11, 112)
-        Me.btnLeaderboardSql.Name = "btnLeaderboardSql"
-        Me.btnLeaderboardSql.Size = New System.Drawing.Size(121, 23)
-        Me.btnLeaderboardSql.TabIndex = 24
-        Me.btnLeaderboardSql.Text = "TOP SECRET"
-        Me.btnLeaderboardSql.UseVisualStyleBackColor = True
-        '
         'Tabs
         '
         Me.Tabs.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -348,7 +287,7 @@ Partial Class SettingsForm
         Me.Tabs.Controls.Add(Me.tabOutput)
         Me.Tabs.Controls.Add(Me.tabWildcards)
         Me.Tabs.Controls.Add(Me.TabPage4)
-        Me.Tabs.Controls.Add(Me.tabEasterEgg)
+        Me.Tabs.Controls.Add(Me.tabExtra)
         Me.Tabs.Location = New System.Drawing.Point(12, 12)
         Me.Tabs.Name = "Tabs"
         Me.Tabs.SelectedIndex = 0
@@ -378,6 +317,16 @@ Partial Class SettingsForm
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
+        '
+        'chkAutoCompressGit
+        '
+        Me.chkAutoCompressGit.AutoSize = True
+        Me.chkAutoCompressGit.Location = New System.Drawing.Point(6, 197)
+        Me.chkAutoCompressGit.Name = "chkAutoCompressGit"
+        Me.chkAutoCompressGit.Size = New System.Drawing.Size(152, 17)
+        Me.chkAutoCompressGit.TabIndex = 24
+        Me.chkAutoCompressGit.Text = "Automatically compress Git"
+        Me.chkAutoCompressGit.UseVisualStyleBackColor = True
         '
         'chkTrackFailedItems
         '
@@ -499,7 +448,7 @@ Partial Class SettingsForm
         Me.tabOutput.Location = New System.Drawing.Point(4, 22)
         Me.tabOutput.Name = "tabOutput"
         Me.tabOutput.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabOutput.Size = New System.Drawing.Size(411, 497)
+        Me.tabOutput.Size = New System.Drawing.Size(411, 542)
         Me.tabOutput.TabIndex = 1
         Me.tabOutput.Text = "Output"
         Me.tabOutput.UseVisualStyleBackColor = True
@@ -577,7 +526,7 @@ Partial Class SettingsForm
         Me.tabWildcards.Location = New System.Drawing.Point(4, 22)
         Me.tabWildcards.Name = "tabWildcards"
         Me.tabWildcards.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabWildcards.Size = New System.Drawing.Size(411, 497)
+        Me.tabWildcards.Size = New System.Drawing.Size(411, 542)
         Me.tabWildcards.TabIndex = 2
         Me.tabWildcards.Text = "RUNTIME"
         Me.tabWildcards.UseVisualStyleBackColor = True
@@ -619,7 +568,7 @@ Partial Class SettingsForm
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage4.Size = New System.Drawing.Size(411, 497)
+        Me.TabPage4.Size = New System.Drawing.Size(411, 542)
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Editor"
         Me.TabPage4.UseVisualStyleBackColor = True
@@ -705,30 +654,24 @@ Partial Class SettingsForm
         Me.Label7.TabIndex = 4
         Me.Label7.Text = "Use default Windows application to open:"
         '
-        'tabEasterEgg
+        'tabExtra
         '
-        Me.tabEasterEgg.Controls.Add(Me.Label5)
-        Me.tabEasterEgg.Controls.Add(Me.txtEzSchema)
-        Me.tabEasterEgg.Controls.Add(Me.TextBox1)
-        Me.tabEasterEgg.Controls.Add(Me.chkEnableEzObjects)
-        Me.tabEasterEgg.Controls.Add(Me.btnStarwarsHelp)
-        Me.tabEasterEgg.Controls.Add(Me.lblLeaveBlank)
-        Me.tabEasterEgg.Controls.Add(Me.btnLeaderboardSql)
-        Me.tabEasterEgg.Controls.Add(Me.chkShowLeaderboard)
-        Me.tabEasterEgg.Controls.Add(Me.lblLeaderboard)
-        Me.tabEasterEgg.Controls.Add(Me.txtLeaderboardCs)
-        Me.tabEasterEgg.Location = New System.Drawing.Point(4, 22)
-        Me.tabEasterEgg.Name = "tabEasterEgg"
-        Me.tabEasterEgg.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabEasterEgg.Size = New System.Drawing.Size(411, 497)
-        Me.tabEasterEgg.TabIndex = 4
-        Me.tabEasterEgg.Text = "EXTRA"
-        Me.tabEasterEgg.UseVisualStyleBackColor = True
+        Me.tabExtra.Controls.Add(Me.Label5)
+        Me.tabExtra.Controls.Add(Me.txtEzSchema)
+        Me.tabExtra.Controls.Add(Me.TextBox1)
+        Me.tabExtra.Controls.Add(Me.chkEnableEzObjects)
+        Me.tabExtra.Location = New System.Drawing.Point(4, 22)
+        Me.tabExtra.Name = "tabExtra"
+        Me.tabExtra.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabExtra.Size = New System.Drawing.Size(411, 542)
+        Me.tabExtra.TabIndex = 4
+        Me.tabExtra.Text = "EXTRA"
+        Me.tabExtra.UseVisualStyleBackColor = True
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(147, 206)
+        Me.Label5.Location = New System.Drawing.Point(144, 15)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(44, 13)
         Me.Label5.TabIndex = 30
@@ -738,7 +681,7 @@ Partial Class SettingsForm
         '
         Me.txtEzSchema.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEzSchema.Location = New System.Drawing.Point(192, 203)
+        Me.txtEzSchema.Location = New System.Drawing.Point(189, 12)
         Me.txtEzSchema.Name = "txtEzSchema"
         Me.txtEzSchema.Size = New System.Drawing.Size(188, 20)
         Me.txtEzSchema.TabIndex = 29
@@ -747,7 +690,7 @@ Partial Class SettingsForm
         '
         Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(6, 228)
+        Me.TextBox1.Location = New System.Drawing.Point(3, 37)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(374, 71)
@@ -757,22 +700,12 @@ Partial Class SettingsForm
         'chkEnableEzObjects
         '
         Me.chkEnableEzObjects.AutoSize = True
-        Me.chkEnableEzObjects.Location = New System.Drawing.Point(7, 205)
+        Me.chkEnableEzObjects.Location = New System.Drawing.Point(4, 14)
         Me.chkEnableEzObjects.Name = "chkEnableEzObjects"
         Me.chkEnableEzObjects.Size = New System.Drawing.Size(109, 17)
         Me.chkEnableEzObjects.TabIndex = 27
         Me.chkEnableEzObjects.Text = "Script EZ Objects"
         Me.chkEnableEzObjects.UseVisualStyleBackColor = True
-        '
-        'chkAutoCompressGit
-        '
-        Me.chkAutoCompressGit.AutoSize = True
-        Me.chkAutoCompressGit.Location = New System.Drawing.Point(6, 197)
-        Me.chkAutoCompressGit.Name = "chkAutoCompressGit"
-        Me.chkAutoCompressGit.Size = New System.Drawing.Size(152, 17)
-        Me.chkAutoCompressGit.TabIndex = 24
-        Me.chkAutoCompressGit.Text = "Automatically compress Git"
-        Me.chkAutoCompressGit.UseVisualStyleBackColor = True
         '
         'SettingsForm
         '
@@ -804,8 +737,8 @@ Partial Class SettingsForm
         Me.TabPage4.PerformLayout()
         Me.gbTextEditor.ResumeLayout(False)
         Me.gbTextEditor.PerformLayout()
-        Me.tabEasterEgg.ResumeLayout(False)
-        Me.tabEasterEgg.PerformLayout()
+        Me.tabExtra.ResumeLayout(False)
+        Me.tabExtra.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -827,13 +760,7 @@ Partial Class SettingsForm
     Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents txtLeaderboardCs As System.Windows.Forms.TextBox
-    Friend WithEvents lblLeaderboard As System.Windows.Forms.Label
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents chkShowLeaderboard As System.Windows.Forms.CheckBox
-    Friend WithEvents btnLeaderboardSql As System.Windows.Forms.Button
-    Friend WithEvents btnStarwarsHelp As System.Windows.Forms.Button
-    Friend WithEvents lblLeaveBlank As System.Windows.Forms.Label
     Friend WithEvents Tabs As Windows.Forms.TabControl
     Friend WithEvents tabGeneral As Windows.Forms.TabPage
     Friend WithEvents tabOutput As Windows.Forms.TabPage
@@ -847,7 +774,7 @@ Partial Class SettingsForm
     Friend WithEvents chkOutputDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents Label7 As Windows.Forms.Label
     Friend WithEvents btnEditorDialog As Windows.Forms.Button
-    Friend WithEvents tabEasterEgg As Windows.Forms.TabPage
+    Friend WithEvents tabExtra As Windows.Forms.TabPage
     Friend WithEvents Label8 As Windows.Forms.Label
     Friend WithEvents Label4 As Windows.Forms.Label
     Friend WithEvents Label9 As Windows.Forms.Label

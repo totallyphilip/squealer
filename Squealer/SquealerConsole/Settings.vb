@@ -430,12 +430,10 @@
         f.chkConfigDefaultEditor.Checked = Me.OpenWithDefault.ConfigFiles
         f.chkSquealerDefaultEditor.Checked = Me.OpenWithDefault.SquealerFiles
         f.txtEditorProgram.Text = Me.TextEditorPath
-        f.txtLeaderboardCs.Text = Me.LeaderboardConnectionString
         f.updnFolderSaves.Value = Me.ProjectFoldersLimit
         f.chkSpacesWild.Checked = Me.WildcardBehavior.UseSpaces
         f.chkEdgesWild.Checked = Me.WildcardBehavior.UseEdges
         f.optEditNewFiles.Checked = Me.AutoEditNewFiles
-        f.chkShowLeaderboard.Checked = Me.ShowLeaderboardAtStartup
         If Me.OutputToClipboard Then
             f.rbClipboard.Checked = True
         Else
@@ -475,12 +473,10 @@
         Me.OpenWithDefault.ConfigFiles = f.chkConfigDefaultEditor.Checked
         Me.OpenWithDefault.SquealerFiles = f.chkSquealerDefaultEditor.Checked
         Me.TextEditorPath = f.txtEditorProgram.Text
-        Me.LeaderboardConnectionString = f.txtLeaderboardCs.Text
         Me.ProjectFoldersLimit = CInt(f.updnFolderSaves.Value)
         Me.WildcardBehavior.UseSpaces = f.chkSpacesWild.Checked
         Me.WildcardBehavior.UseEdges = f.chkEdgesWild.Checked
         Me.AutoEditNewFiles = f.optEditNewFiles.Checked
-        Me.ShowLeaderboardAtStartup = f.chkShowLeaderboard.Checked
         Me.OutputToClipboard = f.rbClipboard.Checked
         Me.ShowGitBranch = f.optShowGitBranch.Checked
         Me.EnableEzObjects = f.chkEnableEzObjects.Checked

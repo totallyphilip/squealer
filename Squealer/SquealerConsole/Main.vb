@@ -115,7 +115,6 @@ Module Main
         release
         [reverse]
         [setting]
-        pewpew
         [test]
         [use]
     End Enum
@@ -381,13 +380,11 @@ Module Main
 
         ' Main process
         Console.WriteLine()
-        If Misc.IsStarWarsDay() Then
-            Console.WriteLine("May the Fourth be with you! (easter egg revealed - see HELP)")
+        If Misc.IsTodayStarWarsDay() Then
+            Console.WriteLine("May the Fourth be with you!")
             Console.WriteLine()
         End If
-        If MySettings.ShowLeaderboardAtStartup Then
-            ShowLeaderboard(10)
-        End If
+
         GetLatestEz()
 
         Textify.SayBulletLine(Textify.eBullet.Hash, "Type HELP to get started.")
@@ -969,12 +966,6 @@ Module Main
         cmd = New CommandCatalog.CommandDefinition({eCommandType.exit.ToString, "x"}, {"Quit."}, CommandCatalog.eCommandCategory.other)
         MyCommands.Items.Add(cmd)
 
-        ' star wars
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.pewpew.ToString, "pew"}, {"I've got a bad feeling about this.", "Jump in an X-Wing and blow something up!"}, CommandCatalog.eCommandCategory.other)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("top;display leaderboard"))
-        cmd.Visible = Misc.IsStarWarsDay()
-        MyCommands.Items.Add(cmd)
-
         ' test 
         cmd = New CommandCatalog.CommandDefinition({eCommandType.test.ToString}, {"Hidden command. Debugging/testing only."}, CommandCatalog.eCommandCategory.other)
         cmd.Visible = False
@@ -1360,21 +1351,6 @@ Module Main
                 ElseIf MyCommand.Keyword = eCommandType.[use].ToString Then
 
                     LoadFolder(UserInput, WorkingFolder)
-
-
-                ElseIf MyCommand.Keyword = eCommandType.pewpew.ToString Then
-
-                    If StringInList(MySwitches, "top") Then
-                        ShowLeaderboard(20)
-                    Else
-                        Dim fgColor As ConsoleColor = Console.ForegroundColor
-                        Dim bgColor As ConsoleColor = Console.BackgroundColor
-                        Dim fight As New GoldLeader(False)
-                        fight.TryPlay(MySettings.LeaderboardConnectionString)
-                        Console.ForegroundColor = fgColor
-                        Console.BackgroundColor = bgColor
-                        Console.WriteLine()
-                    End If
 
 
 
@@ -2704,20 +2680,6 @@ Module Main
     Private Sub SaveWindowSize()
         My.Configger.SaveSetting("WindowWidth", Console.WindowWidth)
         My.Configger.SaveSetting("WindowHeight", Console.WindowHeight)
-    End Sub
-
-    Private Sub ShowLeaderboard(topN As Integer)
-        Textify.WriteLine("Retrieving scores...")
-        Console.WriteLine()
-        Dim lb As New AsciiEngine.Leaderboard
-        lb.SqlConnectionString = MySettings.LeaderboardConnectionString
-        lb.SqlLoadScores(topN)
-        Dim i As Integer = 0
-        For Each s As AsciiEngine.Leaderboard.Score In lb.Items
-            i += 1
-            Textify.SayCentered(String.Format("|  {0}  {1}  |", s.Signature, s.Points.ToString("00000#"), i.ToString("0#")))
-        Next
-        Console.WriteLine()
     End Sub
 
     Private Function SpitDashes(s As String, marker As String) As String

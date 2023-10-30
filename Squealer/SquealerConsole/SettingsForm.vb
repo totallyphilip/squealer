@@ -1,11 +1,11 @@
 ﻿Public Class SettingsForm
 
-    Private _Blasts As Integer = 0
+    Private _Clicks As Integer = 0
     Private Sub Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Icon = My.Resources.PigNose
         UpdateWildcardExample()
         UpdateDirectoryExample()
-        Tabs.TabPages.Remove(tabEasterEgg)
+        Tabs.TabPages.Remove(tabExtra)
         tabWildcards.Text = Constants.WildcardAsterisks
         SetEditorAccess()
         chkSquealerDefaultEditor.Text = String.Format("Squealer files (*{0})", Constants.SquealerFileExtension)
@@ -26,27 +26,15 @@
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        Dim blaster As New Microsoft.VisualBasic.Devices.Audio
-        _Blasts += 1
-        Const MaxBlasts As Integer = 7
-        Select Case _Blasts
+        _Clicks += 1
+        Const MaxClicks As Integer = 7
+        Select Case _Clicks
             Case 3
-                Tabs.TabPages.Add(tabEasterEgg)
-                Tabs.SelectTab(tabEasterEgg)
-            Case MaxBlasts
-                blaster.Play(My.Resources.DroidScream, AudioPlayMode.Background)
+                Tabs.TabPages.Add(tabExtra)
+                Tabs.SelectTab(tabExtra)
+            Case MaxClicks
                 PictureBox1.Visible = False
         End Select
-    End Sub
-
-    Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles btnLeaderboardSql.Click
-        Dim f As New TempFileHandler(".sql")
-        f.Writeline(My.Resources.LeaderboardCreate)
-        f.Show()
-    End Sub
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles btnStarwarsHelp.Click
-        System.Windows.Forms.MessageBox.Show(My.Resources.HowToPlay)
     End Sub
 
     Private Sub rbCompact_CheckedChanged(sender As Object, e As EventArgs) Handles rbCompact.CheckedChanged, rbFull.CheckedChanged, rbSymbolic.CheckedChanged

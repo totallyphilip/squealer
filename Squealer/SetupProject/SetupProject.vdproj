@@ -45,12 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7DE3754601AF49EBAA63134A3E1C4764"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A4C426CB92F44255B9C7A30CB627F503"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -101,12 +95,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_FD0967033EC96E69E62810F341CE880C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7DE3754601AF49EBAA63134A3E1C4764"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -238,7 +226,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.10.2, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5A860E2B030241FBA86166D681B8B621"
@@ -331,37 +319,6 @@
             {
             "SourcePath" = "8:..\\SquealerConsole\\Resources\\PigNose.ico"
             "TargetName" = "8:PigNose.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_4C99EEE6EF9F40078473C339884D801E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7DE3754601AF49EBAA63134A3E1C4764"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GoldLeader, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_7DE3754601AF49EBAA63134A3E1C4764"
-                    {
-                    "Name" = "8:GoldLeader.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\..\\goldleader\\GoldLeader\\GoldLeader\\bin\\Release\\GoldLeader.dll"
-            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4C99EEE6EF9F40078473C339884D801E"
             "Condition" = "8:"
@@ -527,15 +484,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer"
-        "ProductCode" = "8:{0A6E2169-6D93-4D1C-9A9F-457EAD70523B}"
-        "PackageCode" = "8:{5ABC028B-36F7-4ECB-B984-9601A118FEC6}"
+        "ProductCode" = "8:{7D78F863-ED96-4E1A-8F20-400FEF3FCAAF}"
+        "PackageCode" = "8:{93FE973C-FDC9-4E09-B5B1-56AE3BD45FC0}"
         "UpgradeCode" = "8:{251AC907-8611-45F6-AD97-17492ED52E47}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.22"
+        "ProductVersion" = "8:1.0.23"
         "Manufacturer" = "8:AsciiMotive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:www.asciimotive.com"

@@ -95,9 +95,6 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GoldLeader">
-      <HintPath>..\..\..\goldleader\GoldLeader\GoldLeader\bin\Release\GoldLeader.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -200,11 +197,7 @@
     <Content Include="Resources\Auto\AutoGetColumns.txt" />
     <Content Include="Resources\Auto\AutoGetTables.txt" />
     <Content Include="Resources\Auto\AutoProcTemplate.txt" />
-    <Content Include="Resources\Egg\HowToPlay.txt" />
-    <Content Include="Resources\Egg\LeaderboardCreate.txt" />
     <Content Include="Resources\Images\Folder.png" />
-    <Content Include="Resources\Images\RebelAlliance.png" />
-    <Content Include="Resources\r2d2scream.wav" />
     <Content Include="Resources\Reverse\ObjectList.txt" />
     <Content Include="Resources\Reverse\ObjectParameters.txt" />
     <Content Include="Resources\Reverse\ObjectPermissions.txt" />

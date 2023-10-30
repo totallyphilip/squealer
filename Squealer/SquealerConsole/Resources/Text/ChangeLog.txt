@@ -1,5 +1,6 @@
-﻿1.0.11.0 (not published)
+﻿1.0.11.0
 Added --NOMAGIC hint. See website for details.
+Removed easter egg. Nobody ever found it, so it was just project bloat.
 ^break
 1.0.10.2
 Added source repo URL to welcome screen.

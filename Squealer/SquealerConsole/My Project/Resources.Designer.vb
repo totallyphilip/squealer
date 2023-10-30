@@ -179,7 +179,10 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 1.0.10.2
+        '''  Looks up a localized string similar to 1.0.11.0 (not published)
+        '''Added --NOMAGIC hint. See website for details.
+        '''^break
+        '''1.0.10.2
         '''Added source repo URL to welcome screen.
         '''Added Squealer version to comments in generated output.
         '''Command prompt now shows current folder if no project name is defined.
@@ -192,8 +195,7 @@ Namespace My.Resources
         '''Added automatic Git compress function.
         '''^break
         '''1.0.9.0
-        '''Added a setting to facilitate rebuilding only procs that failed to compile.
-        '''No longer detec [rest of string was truncated]&quot;;.
+        '''Added a se [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -248,15 +250,6 @@ Namespace My.Resources
         Friend ReadOnly Property CompareObjects() As String
             Get
                 Return ResourceManager.GetString("CompareObjects", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        '''</summary>
-        Friend ReadOnly Property DroidScream() As System.IO.UnmanagedMemoryStream
-            Get
-                Return ResourceManager.GetStream("DroidScream", resourceCulture)
             End Get
         End Property
         
@@ -444,21 +437,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to To join an existing leaderboard, fill in the connection string.
-        '''
-        '''To create a new leaderboard, find the TOP SECRET script. It&apos;s really hard to find. Then share the connection string with your fellow rebel scum.
-        '''
-        '''If you do not want to connect to a leaderboard, make sure your connection string is blank. Otherwise, the game will attempt to connect and you will have to wait for it to time out.
-        '''
-        '''To play the game, type HELP PEWPEW at the command prompt..
-        '''</summary>
-        Friend ReadOnly Property HowToPlay() As String
-            Get
-                Return ResourceManager.GetString("HowToPlay", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized string similar to 
         ''')
         '''
@@ -489,32 +467,6 @@ Namespace My.Resources
         Friend ReadOnly Property IF_Template() As String
             Get
                 Return ResourceManager.GetString("IF_Template", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to /***********************************************
-        '''
-        '''	How to create a leaderboard in SQL Server!
-        '''
-        '''	INSTRUCTIONS (THIS IS THE WAY):
-        '''	
-        '''	Execute this script on a database of your choosing.
-        '''
-        '''	Upon execution, three things will be created:
-        '''	1. dbo.Leaderboard (table)
-        '''	2. dbo.LeaderboardAdd (stored procedure)
-        '''	3. dbo.LeaderboardRead (stored procedure)
-        '''
-        '''	Make sure all players have permission to execute 
-        '''	the two stored procedures, and share your
-        '''	connection string with them!
-        '''	
-        '''	NOTE: If these objects  [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property LeaderboardCreate() As String
-            Get
-                Return ResourceManager.GetString("LeaderboardCreate", resourceCulture)
             End Get
         End Property
         
@@ -770,16 +722,6 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("PigNose", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property RebelAlliance() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("RebelAlliance", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
