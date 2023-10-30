@@ -301,7 +301,7 @@
         End Set
     End Property
 
-    Dim CdaPath As String = "Z:\Software\Squealer\"
+    Dim CdaPath As String = "S:\Software\Squealer\"
     Dim s3Path As String = "https://s3-us-west-1.amazonaws.com/public-10ec013b-b521-4150-9eab-56e1e1bb63a4/Squealer/"
     Public ReadOnly Property MediaSourceUrl As String
         Get
