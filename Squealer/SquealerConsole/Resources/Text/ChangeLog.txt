@@ -1,4 +1,7 @@
-﻿1.0.11.0
+﻿1.0.11.1 (not published)
+Updated to .NET Framework 4.8.1
+^break
+1.0.11.1
 Added --NOMAGIC hint. See website for details.
 Removed easter egg. Nobody ever found it, so it was just project bloat.
 ^break
