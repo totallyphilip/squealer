@@ -179,8 +179,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 1.0.11.0 (not published)
+        '''  Looks up a localized string similar to 1.0.11.0
         '''Added --NOMAGIC hint. See website for details.
+        '''Removed easter egg. Nobody ever found it, so it was just project bloat.
         '''^break
         '''1.0.10.2
         '''Added source repo URL to welcome screen.
@@ -192,10 +193,7 @@ Namespace My.Resources
         '''^break
         '''1.0.10.0
         '''Added readonly option to parameters.
-        '''Added automatic Git compress function.
-        '''^break
-        '''1.0.9.0
-        '''Added a se [rest of string was truncated]&quot;;.
+        '''Added auto [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
