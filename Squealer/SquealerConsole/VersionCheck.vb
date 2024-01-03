@@ -151,7 +151,7 @@
             d.About = x.InnerText
             Return d
         Catch ex As Exception
-            Textify.SayError("Could not find """ & sourceurl & """ to check for updates. Contact support for assistance.")
+            Textify.SayError("Could not find """ & sourceurl & """ to check for updates. Check your connection and try again.")
             Console.WriteLine()
             Return d
         End Try
