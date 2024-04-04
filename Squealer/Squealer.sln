@@ -7,6 +7,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SquealerConsole", "Squealer
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProject\SetupProject.vdproj", "{7082CEBA-51EA-4D9B-9B2F-F9B6C4F90459}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquealerConsoleCSharp", "SquealerConsoleCSharp\SquealerConsoleCSharp.csproj", "{26B49495-1A6C-4854-9544-886520B59F62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,26 @@ Global
 		{7082CEBA-51EA-4D9B-9B2F-F9B6C4F90459}.Release|ARM64.ActiveCfg = Release
 		{7082CEBA-51EA-4D9B-9B2F-F9B6C4F90459}.Release|x64.ActiveCfg = Release
 		{7082CEBA-51EA-4D9B-9B2F-F9B6C4F90459}.Release|x86.ActiveCfg = Release
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|ARM.Build.0 = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|x64.Build.0 = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Debug|x86.Build.0 = Debug|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|ARM.ActiveCfg = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|ARM.Build.0 = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|ARM64.Build.0 = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|x64.ActiveCfg = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|x64.Build.0 = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|x86.ActiveCfg = Release|Any CPU
+		{26B49495-1A6C-4854-9544-886520B59F62}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
