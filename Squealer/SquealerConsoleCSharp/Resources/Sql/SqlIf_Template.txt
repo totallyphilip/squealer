@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Squealer Type="{RootType}">
+<Parameters>
+<!--Parameters-->
+</Parameters>
+<Code/>
+<Users/>
+</Squealer>

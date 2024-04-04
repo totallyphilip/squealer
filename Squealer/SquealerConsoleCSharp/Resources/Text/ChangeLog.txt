@@ -1,0 +1,53 @@
+﻿1.0.11.2
+Updated to .NET Framework 4.8.1
+Added --NOMAGIC hint. See website for details.
+Removed easter egg. Nobody ever found it, so it was just project bloat.
+^break
+1.0.10.2
+Added source repo URL to welcome screen.
+Added Squealer version to comments in generated output.
+Command prompt now shows current folder if no project name is defined.
+Added CD as shortcut to OPEN command.
+Shortened error message when Git is not detected.
+Fixed a typo in the release notes.
+^break
+1.0.10.0
+Added readonly option to parameters.
+Added automatic Git compress function.
+^break
+1.0.9.0
+Added a setting to facilitate rebuilding only procs that failed to compile.
+No longer detects internal scripts during COMPARE operations.
+Symbolic notation is updated and is always displayed now in directory listings.
+^break
+1.0.8.1
+Fixed a crash condition when the remote software update source is unavailable.
+Updated .NET Framework target to 4.8.
+^break
+1.0.8.0
+Added a "lock window size" setting.
+Fixed a string matching bug that was causing a file selection dialog to return zero files.
+^break
+1.0.7.3
+Path is displayed when switching projects.
+Display error when current project folder is missing.
+^break
+1.0.7.2
+Fixed a bug in internal scripts.
+Internal scripts are now auto-updated silently without upgrading the application on every app restart.
+Added more error logging.
+^break
+1.0.6.0
+Added HASH command, and GENERATE -DIFF option.
+Truncated the change log.
+Corrected some HELP documentation errors.
+^break
+1.0.5.0
+Added error log to AppData folder to assist with troubleshooting.
+Title bar and command prompt information is configurable now.
+Added option to keep screen alive.
+Fixed error reading filenames containing "$" character.
+Several minor improvements.
+^break
+Earlier
+Thousands of changes. No need to keep a full history.

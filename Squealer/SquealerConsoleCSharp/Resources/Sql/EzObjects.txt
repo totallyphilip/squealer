@@ -1,0 +1,634 @@
+﻿
+go
+
+/*
+
+7/28/2023
+	* added .foreign_key_columns
+1/3/2023
+	* added .key_constraints
+11/14/2022
+	* added .linked_logins
+11/8/2022
+	* added .check_constraints
+	* added .foreign_keys
+9/28/2022
+	* added .datepointvalues()
+9/21/2022
+	* added .daterange()
+9/12/2022
+	* added .intrange()
+	* added .naturalrange()
+
+*/
+
+declare @sqldrop varchar(max) =
+(
+	select string_agg(
+		'drop '
+		+case o.type
+			when 'V' then 'view'
+			when 'P' then 'procedure'
+			when 'FN' then 'function'
+			when 'IF' then 'function'
+			when 'TF' then 'function'
+		end
+		+ concat(' [',s.name,'].[',o.name,']')
+			,'; ')
+		+ '; drop schema {Schema}'
+	from sys.objects o
+	join sys.schemas s
+		on s.schema_id = o.schema_id
+	where s.name = '{Schema}'
+)
+if @sqldrop is not null
+	exec (@sqldrop)
+
+go
+
+if schema_id('{Schema}') is null
+	exec ('create schema {Schema}')
+
+go
+
+create view {Schema}.filegroups as
+select
+	fg.name as filegroup_name
+	,t.object_id
+	,i.index_id
+from
+	sys.indexes i
+join
+	sys.filegroups fg
+	on fg.data_space_id = i.data_space_id
+join
+	sys.tables t
+	on t.object_id = i.object_id
+
+go
+
+create view {Schema}.objects as
+select
+	concat('[',s.name,'].[',o.name,']') as object_name
+	,s.schema_id
+	,o.object_id
+	,s.name as schema_name
+	,o.name as name
+	,o.type
+	,o.type_desc
+	,concat('[',db_name(),']','.','[',s.name,']','.','[',o.name,']') as fqn
+	,'drop '
+	+ case
+		when o.type = 'P' then 'PROCEDURE'
+		when o.type = 'U' then 'TABLE'
+		when o.type = 'FN' then 'FUNCTION'
+		else o.type_desc
+	end
+	+ concat(' [',s.name,'].[',o.name,'];') collate SQL_Latin1_General_CP1_CI_AS as sql_drop
+from
+	sys.objects o
+join
+	sys.schemas s
+	on s.schema_id = o.schema_id
+
+go
+
+create view {Schema}.tables as
+select
+	fg.filegroup_name
+	,o.object_name as table_name
+	,o.schema_id
+	,o.object_id
+	,o.schema_name
+	,o.name as name
+	,o.type
+	,o.type_desc
+	,o.fqn
+	,t.temporal_type
+	,t.temporal_type_desc
+	,ho.object_name as temporal_table_name
+	,ho.object_id as temporal_table_id
+	,o.sql_drop
+	,(select string_agg(concat('[',c.name,']'),',') within group (order by c.column_id ) from sys.columns c where c.object_id = t.object_id) as column_list
+from
+	sys.tables t
+join
+	{Schema}.objects o
+	on o.object_id = t.object_id
+join
+	{Schema}.filegroups fg
+	on fg.object_id = t.object_id
+	and fg.index_id<2 -- heaps and clustered indexes
+left outer join
+	sys.tables h
+	on h.object_id = t.history_table_id
+left outer join
+	{Schema}.objects ho
+	on ho.object_id = h.object_id
+
+
+go
+
+create view {Schema}.views as
+select
+	o.object_name as view_name
+	,o.schema_id
+	,o.object_id
+	,o.schema_name
+	,o.name
+	,o.type
+	,o.type_desc
+	,o.fqn
+	,o.sql_drop
+	,(select string_agg(concat('[',c.name,']'),',') within group (order by c.column_id ) from sys.columns c where c.object_id = t.object_id) as column_list
+from
+	sys.views t
+join
+	{Schema}.objects o
+	on o.object_id = t.object_id
+
+go
+
+create function {Schema}.leftnum
+(
+@s as varchar(1000)
+)
+returns float
+as
+begin
+
+declare @i float = 0;
+
+set @s = ltrim(@s);
+
+while isnumeric(left(@s,@i+1)) = 1 and @i < len(@s)
+	set @i = @i + 1;
+
+if isnumeric(left(@s,@i)) = 0
+	set @i = null
+else
+	set @i = left(@s,@i)
+
+return @i
+end
+
+go
+
+create function {Schema}.leftint
+(
+@s as varchar(1000)
+)
+returns int
+as
+begin
+
+return {Schema}.leftnum(@s)
+
+end
+
+go
+
+create function {Schema}.rightint
+(
+@s as varchar(1000)
+)
+returns int
+as
+begin
+
+declare @i int = len(@s);
+
+while isnumeric(right(@s,@i)) = 0 and @i > 0
+	set @i = @i - 1
+
+if isnumeric(right(@s,@i)) = 0
+	set @i = 0
+else
+	set @i = right(@s,@i)
+
+return @i
+end
+
+go
+
+create function {Schema}.string_format
+(
+@s as varchar(1000) -- ex: 'Do not compare {0}s and {1}s.'
+,@tokens varchar(1000) -- ex: '0apple,1orange'
+)
+returns varchar(1000)
+as
+begin
+
+select
+	@s = replace(@s,concat('{',{Schema}.leftint(value),'}'),replace(value,{Schema}.leftint(value),''))
+from
+	string_split(@tokens,',')
+
+return @s
+end
+
+go
+
+create view {Schema}.indexcolumns as
+select
+	i.name as index_name
+	,i.index_id
+	,t.schema_id
+	,t.object_id
+	,t.schema_name
+	,t.table_name
+	,ic.index_column_id
+	,c.name as column_name
+	,ic.column_id
+	,ic.is_included_column
+from
+	sys.index_columns ic
+join
+	sys.indexes i
+	on i.object_id = ic.object_id
+	and i.index_id = ic.index_id
+join
+	sys.columns c
+	on c.object_id = ic.object_id
+	and c.column_id = ic.column_id
+join
+	{Schema}.tables t
+	on t.object_id = ic.object_id
+
+go
+
+create view {Schema}.indexes as
+select
+	fg.filegroup_name
+	,i.name as index_name
+	,t.table_name
+	,i.type
+	,i.type_desc
+	,i.index_id
+	,t.object_id
+	,t.type as object_type
+	,t.type_desc as object_type_desc
+	,(
+		select
+			string_agg(c.column_name,',') within group (order by c.column_id)
+		from
+			{Schema}.indexcolumns c
+		where
+			c.object_id = i.object_id
+			and c.index_id = i.index_id
+			and c.is_included_column = 0
+	) as index_columns
+	,(
+		select
+			string_agg(c.column_name,',') within group (order by c.column_id)
+		from
+			{Schema}.indexcolumns c
+		where
+			c.object_id = i.object_id
+			and c.index_id = i.index_id
+			and c.is_included_column = 1
+	) as included_columns
+from
+	sys.indexes i
+join
+	{Schema}.tables t
+	on t.object_id = i.object_id
+join
+	{Schema}.filegroups fg
+	on fg.object_id = i.object_id
+	and fg.index_id = i.index_id
+where
+	i.type > 0
+
+go
+
+create view {Schema}.indexusage as
+select
+	i.table_name
+	,i.index_name
+	,i.index_id
+	,i.type_desc
+	,i.index_columns
+	,i.included_columns
+	,convert(float,1) * (st.user_seeks+st.user_scans) / isnull(nullif(st.user_updates,0),1) as usage_ratio
+	,st.user_seeks
+	,st.user_scans
+	,st.user_lookups
+	,st.user_updates
+	,st.last_user_seek
+	,st.last_user_scan
+	,st.last_user_update
+	,concat('drop index ',i.index_name,' on ',i.table_name) as sql_drop
+from
+	sys.dm_db_index_usage_stats st
+join
+	{Schema}.indexes i
+	on i.object_id = st.object_id
+	and i.index_id = st.index_id
+where
+	st.database_id = db_id()
+	--and i.type = 2
+
+go
+
+create view {Schema}.columns as
+select
+	t.table_name
+	,t.object_id
+	,c.name as column_name
+	,c.column_id
+	,tp.name as type_name
+	,c.max_length
+	,c.precision
+	,c.scale
+	,c.is_nullable
+	,t.temporal_type
+	,t.temporal_type_desc
+from
+	{Schema}.tables t
+join
+	sys.all_columns c
+	on c.object_id = t.object_id
+join
+	sys.types tp
+	on tp.system_type_id = c.system_type_id
+
+go
+
+create function {Schema}.trimx
+(
+@s as varchar(max)
+)
+returns varchar(max)
+as
+begin
+
+while charindex(char(9),@s) > 0 -- tab
+	set @s = replace(@s,char(9),' ');
+
+while charindex(char(10),@s) > 0 -- line feed
+	set @s = replace(@s,char(10),' ');
+
+while charindex(char(13),@s) > 0 -- carriage return
+	set @s = replace(@s,char(13),' ');
+
+while charindex('  ',@s) > 0
+	set @s = replace(@s,'  ',' ');
+
+return ltrim(rtrim(@s))
+end
+
+go
+
+create function {Schema}.trimxt
+(
+@schemaname as varchar(100)
+,@tablename as varchar(100)
+,@s as varchar(max)
+)
+returns varchar(max)
+as
+begin
+
+return replace(replace({Schema}.trimx(@s),'SCHEMANAME',@schemaname),'TABLENAME',@tablename)
+end
+
+go
+
+create function {Schema}.localtime
+(
+@time as datetime2
+)
+returns datetime2
+as
+begin
+
+return dateadd(minute,datepart(tzoffset,sysdatetimeoffset()),@time)
+end
+
+go
+
+create function {Schema}.naturalrange
+(
+@firstvalue as int
+,@lastvalue as int
+)
+returns table
+as
+return
+
+with cteGenerator as
+(
+	select
+		n
+	from
+		(values (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) v(n)
+)
+,cteFullRange as (
+	select
+		row_number() over (order by (select null)) as number
+	from
+		cteGenerator ones
+		,cteGenerator tens
+		,cteGenerator hundreds
+		,cteGenerator K
+		,cteGenerator tenK
+		,cteGenerator hundredK
+)
+select
+	r.number
+from
+	cteFullRange r
+where
+	number between @firstvalue and @lastvalue
+
+go
+
+create function {Schema}.intrange
+(
+@firstvalue int
+,@lastvalue int
+)
+
+returns @TableValue table
+(
+[value] int Not null
+)
+
+as
+begin
+
+while @firstvalue <= @lastvalue
+begin
+	insert @TableValue (value) values (@firstvalue);
+	set @firstvalue = @firstvalue + 1;
+end
+
+return
+end
+go
+
+create function {Schema}.daterange
+(
+@firstvalue date
+,@lastvalue date
+)
+
+returns @TableValue table
+(
+[value] date Not null
+)
+
+as
+begin
+
+while @firstvalue <= @lastvalue
+begin
+	insert @TableValue (value) values (@firstvalue);
+	set @firstvalue = dateadd(day,1,@firstvalue);
+end
+
+return
+end
+go
+
+create function {Schema}.datepointvalues
+(
+@firstvalue float
+,@lastvalue float
+,@firstdate date
+,@lastdate date
+)
+
+returns @TableValue table
+(
+[pointDate] date Not null
+,[pointValue] float null
+)
+
+as
+begin
+
+declare @slope float = (@lastvalue-@firstvalue) / datediff(day,@firstdate,@lastdate);
+
+insert @TableValue (pointDate,pointValue)
+select
+	d.value
+	,convert(float,1) * (datediff(day,@firstdate,d.value) * @slope)+@firstvalue
+from
+	{Schema}.daterange(@firstdate,@lastdate) d
+
+return
+end
+go
+
+create view {Schema}.check_constraints as
+select
+	cc.name
+	,t.table_name
+	,cc.definition
+	,concat('alter table ',t.table_name,' drop constraint [',cc.name,'];') as sql_drop
+from
+	sys.check_constraints cc
+join
+	{Schema}.tables t
+	on t.object_id = cc.parent_object_id
+
+go
+
+create view {Schema}.foreign_keys as
+select
+	fk.name
+	,t.table_name
+	,concat('alter table ',t.table_name,' drop constraint [',fk.name,'];') as sql_drop
+from
+	sys.foreign_keys fk
+join
+	{Schema}.tables t
+	on t.object_id = fk.parent_object_id
+
+go
+
+
+
+create view {Schema}.linked_logins as
+select
+	s.name as server_name
+	,s.provider
+	,ll.uses_self_credential
+	,p.name as local_name
+	,ll.remote_name
+from
+	sys.linked_logins ll
+join
+	sys.servers s
+	on s.server_id = ll.server_id
+join
+	sys.server_principals p
+	on p.principal_id = ll.local_principal_id
+
+go
+
+
+create view {Schema}.key_constraints as
+
+select
+	t.table_name
+	,kc.name
+	,kc.object_id
+	,kc.parent_object_id
+	,kc.type
+	,concat('alter table ',t.table_name,' drop constraint [',kc.name,'];') as sql_drop
+from
+	sys.key_constraints kc
+join
+	{Schema}.tables t
+	on t.object_id = kc.parent_object_id
+
+go
+
+
+create view {Schema}.foreign_key_columns as
+
+select
+	fk.object_id
+	,fk.name
+	,fk.referenced_object_id as parent_table_id
+	,ct.table_name as parent_table_name
+	,(
+		select
+			string_agg(concat('[',c.name,']'),',')
+		from
+			sys.foreign_key_columns fcols
+		join
+			sys.all_columns c
+			on c.object_id = fk.referenced_object_id
+			and c.column_id = fcols.referenced_column_id
+		where
+			fcols.constraint_object_id = fk.object_id
+	) as parent_key_columns
+	,fk.parent_object_id as child_table_id
+	,pt.table_name as child_table_name
+	,(
+		select
+			string_agg(concat('[',c.name,']'),',')
+		from
+			sys.foreign_key_columns fcols
+		join
+			sys.all_columns c
+			on c.object_id = fk.parent_object_id
+			and c.column_id = fcols.parent_column_id
+		where
+			fcols.constraint_object_id = fk.object_id
+	) as foreign_key_columns
+from
+	sys.foreign_keys fk
+join
+	{Schema}.tables pt
+	on pt.object_id = fk.parent_object_id
+join
+	{Schema}.tables ct
+	on ct.object_id = fk.referenced_object_id
+
+go

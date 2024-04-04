@@ -1,0 +1,27 @@
+﻿with cteOperations as
+(
+	select 'Insert' as [operation]
+	union select 'Update'
+	union select 'Delete'
+	union select 'Get'
+	union select 'List'
+)
+select
+	s.name as [schema]
+	,t.name as [table]
+	,t.object_id as [table_id]
+	,o.Operation
+from
+	sys.tables t
+join
+	sys.schemas s
+	on s.schema_id = t.schema_id
+cross join
+	cteOperations o
+--where
+--	s.name like '%' + @schemafilter + '%'
+--	and t.name like '%' + @tablefilter + '%'
+order by
+	s.name
+	,t.name
+	,o.Operation

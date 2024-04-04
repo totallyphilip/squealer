@@ -1,0 +1,5 @@
+if object_id('tempdb..##RetryFailedSquealerItems') is null
+	create table ##RetryFailedSquealerItems (ProcName varchar(100))
+else
+	truncate table ##RetryFailedSquealerItems
+go

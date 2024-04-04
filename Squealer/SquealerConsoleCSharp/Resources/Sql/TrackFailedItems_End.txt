@@ -1,0 +1,7 @@
+if exists (select 1 from ##RetryFailedSquealerItems)
+begin
+	declare @RetryFailedSquealerItems varchar(max);
+	select @RetryFailedSquealerItems = 'gen -x ' + string_agg(f.ProcName,'|') from ##RetryFailedSquealerItems f;
+	print 'Try again?'
+	print @RetryFailedSquealerItems
+end

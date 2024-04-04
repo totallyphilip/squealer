@@ -1,0 +1,13 @@
+﻿
+
+set ansi_nulls on;
+set quoted_identifier on;
+
+declare @SqlrInternalErrorNumber int = 0; -- Not used in test scripts, but declared to avoid errors.
+
+begin transaction
+
+/*######################################################################
+                         YOUR CODE BEGINS HERE.
+######################################################################*/
+;

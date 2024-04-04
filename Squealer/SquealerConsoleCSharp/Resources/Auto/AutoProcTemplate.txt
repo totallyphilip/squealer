@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="us-ascii"?>
+<Squealer Type="StoredProcedure">
+<Comments><![CDATA[{Comments}]]></Comments>
+<Parameters>{Parameters}</Parameters>
+<Code><![CDATA[{Code}]]></Code>
+<Users>{Users}</Users>
+</Squealer>

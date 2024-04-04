@@ -1,0 +1,13 @@
+
+)
+
+returns {ReturnDataType}
+
+{WithOptions}
+as
+begin
+set ansi_nulls on;
+
+declare @Result {ReturnDataType}
+
+;

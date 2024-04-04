@@ -1,0 +1,6 @@
+﻿
+set ansi_nulls on;
+
+declare @Result {ReturnDataType};
+
+;

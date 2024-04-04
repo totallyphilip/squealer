@@ -1,0 +1,11 @@
+﻿
+if object_id('[{Schema}].[{RootProgramName}]','p') is not null
+	drop procedure [{Schema}].[{RootProgramName}];
+if object_id('[{Schema}].[{RootProgramName}]','fn') is not null
+	drop function [{Schema}].[{RootProgramName}];
+if object_id('[{Schema}].[{RootProgramName}]','if') is not null
+	drop function [{Schema}].[{RootProgramName}];
+if object_id('[{Schema}].[{RootProgramName}]','tf') is not null
+	drop function [{Schema}].[{RootProgramName}];
+if object_id('[{Schema}].[{RootProgramName}]','v') is not null
+	drop view [{Schema}].[{RootProgramName}];

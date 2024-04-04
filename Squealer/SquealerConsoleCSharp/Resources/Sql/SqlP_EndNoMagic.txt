@@ -1,0 +1,12 @@
+
+/*######################################################################
+                          YOUR CODE ENDS HERE.
+######################################################################*/
+
+print concat('commit - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+
+
+if @SqlrInternalErrorNumber is not null
+	set @Squealer_ReturnValue = @SqlrInternalErrorNumber -- for backward compatibility with pre-release squealer
+
+return @Squealer_ReturnValue

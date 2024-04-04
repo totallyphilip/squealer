@@ -1,0 +1,66 @@
+
+/*######################################################################
+                          YOUR CODE ENDS HERE.
+######################################################################*/
+
+/***********************************************************************
+	Commit the transaction. If we are in a nested transaction, this
+	decrements the transaction count.
+***********************************************************************/
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+	commit transaction
+
+	print concat('commit - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+
+end try
+
+
+/***********************************************************************
+	Rollback the transaction if we're at the top procedure.
+***********************************************************************/
+
+              -- !!!!!  DO NOT EDIT THIS SECTION  !!!!! --
+
+begin catch
+
+	declare @Squealer_ErrorNumber int = error_number();
+
+	print concat('exception - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+
+	if @@nestlevel = 1
+	-- We're at the outermost procedure, so rollback the whole transaction.
+	begin
+		if xact_state() in (1,-1)
+			rollback transaction
+	end
+	else
+	-- We are still	within a nested	procedure, so just decrement the transaction count.
+	begin
+		if xact_state() = 1
+			commit transaction
+	end
+
+	declare @Squealer_ErrorSeverity int = error_severity();
+	declare @Squealer_ErrorState int = error_state();
+	declare @Squealer_ErrorMessage varchar(max);
+	if @Squealer_ErrorNumber = 50000
+		set @Squealer_ErrorMessage = concat(error_message(),char(13),char(10),'-> from ``this``')
+	else
+		set @Squealer_ErrorMessage = concat(
+			'Procedure: ',isnull(error_procedure(),'n/a')
+			,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
+			,char(13),char(10),'Line: ',convert(varchar,error_line())
+			,char(13),char(10),'Message: ',error_message()
+		);
+{Parameters}
+
+	raiserror(@Squealer_ErrorMessage,@Squealer_ErrorSeverity,@Squealer_ErrorState)
+
+end catch
+
+if @SqlrInternalErrorNumber is not null
+	set @Squealer_ReturnValue = @SqlrInternalErrorNumber -- for backward compatibility with pre-release squealer
+
+return @Squealer_ReturnValue

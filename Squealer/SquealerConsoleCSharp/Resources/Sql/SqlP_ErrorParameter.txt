@@ -1,0 +1,5 @@
+		set @Squealer_ErrorMessage =
+			@Squealer_ErrorMessage
+			+ char(10)
+			+ '@{ErrorParameterName} = '
+			+ isnull(convert(varchar(max),@{ErrorParameterName}),'[NULL]');

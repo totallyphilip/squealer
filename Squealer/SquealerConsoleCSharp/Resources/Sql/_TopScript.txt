@@ -1,0 +1,37 @@
+/***********************************************************************
+	Delete deprecated squealer log tables.
+***********************************************************************/
+
+if exists (select 1 from sys.objects where name like '%squealer%')
+	or exists (select 1 from sys.schemas where name = 'squealer')
+select 
+	s.name
+	,o.name
+	,o.type_desc
+from
+	sys.objects o
+join
+	sys.schemas s
+	on s.schema_id = o.schema_id
+where
+	o.name like '%squealer%'
+	or s.name = 'squealer'
+union
+select
+	s.name
+	,null
+	,'SCHEMA'
+from
+	sys.schemas s
+where
+	s.name = 'squealer'
+union
+select
+	'!!!'
+	,'DROP THESE OBJECTS'
+	,'!!!'
+order by
+	s.name;
+
+go
+
