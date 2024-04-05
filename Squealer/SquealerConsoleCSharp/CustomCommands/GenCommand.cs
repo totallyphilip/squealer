@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace SquealerConsoleCSharp.CustomCommand
 {
-    public class GenCommand : ICustomeCommand
+    public class GenCommand : CustomCommands
     {
         public Command CreateCommand()
         {
