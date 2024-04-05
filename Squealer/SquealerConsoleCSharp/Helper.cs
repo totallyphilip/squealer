@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp
@@ -70,6 +71,33 @@ namespace SquealerConsoleCSharp
             {
                 return value.ToString();
             }
+        }
+
+        public static void HandlePatterns(string patterns)
+        {
+            var patternList = patterns.Split('|');
+            var baseDirectory = "path/to/xml/files"; // Update this path to your XML files directory
+
+            foreach (var pattern in patternList)
+            {
+                // Convert wildcard to regex pattern (e.g., *abc* -> .*abc.*)
+                var regexPattern = WildcardToRegex(pattern);
+
+                var matchingFiles = Directory.GetFiles(baseDirectory, "*.xml", SearchOption.TopDirectoryOnly)
+                    .Where(filePath => Regex.IsMatch(Path.GetFileName(filePath), regexPattern, RegexOptions.IgnoreCase));
+
+                foreach (var file in matchingFiles)
+                {
+                    // Here, process each file to generate SQL script
+                    Console.WriteLine($"Processing {file}");
+                    // Add your logic to parse the XML and generate SQL script here
+                }
+            }
+        }
+
+        public static string WildcardToRegex(string pattern)
+        {
+            return "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$";
         }
 
     }
