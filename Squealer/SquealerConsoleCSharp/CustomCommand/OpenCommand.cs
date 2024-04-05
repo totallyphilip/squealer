@@ -32,9 +32,19 @@ namespace SquealerConsoleCSharp.CustomCommand
         {
             if (path != null) 
             {
-                AppState.Instance.LastOpenedPath = path.Trim();
+                path = path.Trim();
+                if (Directory.Exists(path))
+                {
+                    AppState.Instance.LastOpenedPath = path;
+                    Console.WriteLine($"Currect path: {AppState.Instance.LastOpenedPath}");
+
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Path");
+                }
             }
-            Console.WriteLine($"Currect path: {AppState.Instance.LastOpenedPath}");
+            
         }
     }
 }

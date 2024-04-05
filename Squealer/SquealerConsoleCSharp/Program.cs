@@ -13,7 +13,7 @@ namespace SquealerConsoleCSharp
 
             rootCommand.AddCommand(CommandBuilder.Build<OpenCommand>().CreateCommand());
             rootCommand.AddCommand(CommandBuilder.Build<DirectoryCommand>().CreateCommand());
-
+            rootCommand.AddCommand(CommandBuilder.Build<GenCommand>().CreateCommand());
 
 
             while (true)

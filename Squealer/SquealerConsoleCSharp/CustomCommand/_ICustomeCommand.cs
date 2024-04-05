@@ -12,7 +12,6 @@ namespace SquealerConsoleCSharp.CustomCommand
 
         public Command CreateCommand();
 
-        private void HandleOpenCommand(params object[] args) { }
     }
 
 

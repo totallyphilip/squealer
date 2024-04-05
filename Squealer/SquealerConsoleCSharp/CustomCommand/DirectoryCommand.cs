@@ -24,26 +24,14 @@ namespace SquealerConsoleCSharp.CustomCommand
 
         private void HandleOpenCommand()
         {
-            if (string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath))
+            if (Helper.CheckFolderValid())
             {
-                Console.WriteLine("No folder path. Use open to set folder path");
-            }
-            else
-            {
-                if (!Directory.Exists(AppState.Instance.LastOpenedPath))
+                string[] files = Directory.GetFiles(AppState.Instance.LastOpenedPath);
+                foreach (string file in files.OrderBy(x => x))
                 {
-                    Console.WriteLine("Invalid folder path.");
+                    Console.WriteLine(Path.GetFileName(file));
                 }
-                else
-                {
-                    string[] files = Directory.GetFiles(AppState.Instance.LastOpenedPath);
-                    foreach (string file in files.OrderBy(x =>x))
-                    {
-                        Console.WriteLine(Path.GetFileName(file));
-                    }
-                }    
-            }
-            
+            }  
         }
     }
 }
