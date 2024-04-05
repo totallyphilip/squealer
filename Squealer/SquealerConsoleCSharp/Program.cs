@@ -1,4 +1,4 @@
-﻿using SquealerConsoleCSharp.CustomCommand;
+﻿using SquealerConsoleCSharp.CustomCommands;
 using System.CommandLine;
 
 namespace SquealerConsoleCSharp

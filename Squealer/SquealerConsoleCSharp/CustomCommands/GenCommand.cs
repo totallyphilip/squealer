@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SquealerConsoleCSharp.CustomCommands;
+using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace SquealerConsoleCSharp.CustomCommand
+namespace SquealerConsoleCSharp.CustomCommands
 {
-    public class GenCommand : CustomCommands
+    public class GenCommand : ICustomeCommand
     {
         public Command CreateCommand()
         {

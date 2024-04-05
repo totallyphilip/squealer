@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SquealerConsoleCSharp.CustomCommand
+namespace SquealerConsoleCSharp.CustomCommands
 {
-    public class OpenCommand: CustomCommands
+    public class OpenCommand: ICustomeCommand
     {
         public Command CreateCommand()
         {
