@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# Default severity for analyzer diagnostics with category 'Security'
+dotnet_analyzer_diagnostic.category-Security.severity = none

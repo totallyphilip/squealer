@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using SquealerConsoleCSharp.MyXml;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
@@ -34,21 +35,11 @@ namespace SquealerConsoleCSharp.CustomCommands
         {
             if (Helper.CheckFolderValid() && !string.IsNullOrWhiteSpace(searchtext))
             {
-                var filePath = Helper.GetFilePath(searchtext);
 
-                XDocument doc = XDocument.Load(filePath); // Load the XML file
+                var xmlToSql = new XmlToSql(searchtext);
 
-                // Query elements using LINQ
-                var childNodes = from node in doc.Descendants("Child")
-                                 select new
-                                 {
-                                     Content = node.Value
-                                 };
 
-                foreach (var child in childNodes)
-                {
-                    Console.WriteLine(child.Content);
-                }
+                Console.WriteLine(xmlToSql.GetSqlScript());
             }
         }
     }

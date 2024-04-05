@@ -7,7 +7,12 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SquealerConsole", "Squealer
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProject\SetupProject.vdproj", "{7082CEBA-51EA-4D9B-9B2F-F9B6C4F90459}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquealerConsoleCSharp", "SquealerConsoleCSharp\SquealerConsoleCSharp.csproj", "{26B49495-1A6C-4854-9544-886520B59F62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SquealerConsoleCSharp", "SquealerConsoleCSharp\SquealerConsoleCSharp.csproj", "{26B49495-1A6C-4854-9544-886520B59F62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F3C86A96-AB6E-4927-B154-DC31C71FAEA4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

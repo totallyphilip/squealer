@@ -1,5 +1,6 @@
 ﻿using SquealerConsoleCSharp.CustomCommands;
 using System.CommandLine;
+using System.Resources;
 
 namespace SquealerConsoleCSharp
 {
@@ -9,7 +10,6 @@ namespace SquealerConsoleCSharp
         {
 
             var rootCommand = new RootCommand("Interactive Shell Example");
-
 
             rootCommand.AddCommand(CommandBuilder.Build<OpenCommand>().CreateCommand());
             rootCommand.AddCommand(CommandBuilder.Build<DirectoryCommand>().CreateCommand());
