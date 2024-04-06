@@ -8,17 +8,17 @@ namespace SquealerConsoleCSharp.Models
 {
     public class SqlrFile
     {
-        public string FileName { get; }
+        public string FileName { get => Path.GetFileName(FilePath) };
 
-        public string FilePath { get => Helper.GetFilePath(FileName); }
+        public string FilePath { get; }
 
         public string Schema { get => FileName.Split(".")[0]; }
 
         public string RootProgramName { get => FileName.Split(".")[1]; }
 
-        public SqlrFile(string fileName)
+        public SqlrFile(string filePath)
         {
-            FileName = fileName;
+            FilePath = filePath;
             if (!File.Exists(FilePath))
             {
                 throw new FileNotFoundException();

@@ -36,10 +36,18 @@ namespace SquealerConsoleCSharp.CustomCommands
             if (Helper.CheckFolderValid() && !string.IsNullOrWhiteSpace(searchtext))
             {
 
-                var xmlToSql = new XmlToSql(searchtext);
+                var sqlrfiles = Helper.ParseFileNames(searchtext);
 
 
-                Console.WriteLine(xmlToSql.GetSqlScript());
+                foreach(var sqlrfile in sqlrfiles)
+                {
+                    Console.WriteLine(sqlrfile.FileName);
+                }
+
+                //var xmlToSql = new XmlToSql(searchtext);
+
+
+                //Console.WriteLine(xmlToSql.GetSqlScript());
             }
         }
     }

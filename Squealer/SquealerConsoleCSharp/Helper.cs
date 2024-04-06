@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SquealerConsoleCSharp.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -73,32 +74,21 @@ namespace SquealerConsoleCSharp
             }
         }
 
-        public static void HandlePatterns(string patterns)
+        public static List<SqlrFile> ParseFileNames(string patterns)
         {
-            var patternList = patterns.Split('|');
-            var baseDirectory = "path/to/xml/files"; // Update this path to your XML files directory
+            string[] searchPatterns = patterns.Split('|');
+           
 
-            foreach (var pattern in patternList)
-            {
-                // Convert wildcard to regex pattern (e.g., *abc* -> .*abc.*)
-                var regexPattern = WildcardToRegex(pattern);
+            // Get files matching any of the patterns and remove duplicates
+            var files = searchPatterns.SelectMany(pattern =>
+                             Directory.EnumerateFiles(AppState.Instance.LastOpenedPath, pattern))
+                             .Distinct()
+                             .Select(x=> new SqlrFile(x))
+                             .ToList();
 
-                var matchingFiles = Directory.GetFiles(baseDirectory, "*.xml", SearchOption.TopDirectoryOnly)
-                    .Where(filePath => Regex.IsMatch(Path.GetFileName(filePath), regexPattern, RegexOptions.IgnoreCase));
-
-                foreach (var file in matchingFiles)
-                {
-                    // Here, process each file to generate SQL script
-                    Console.WriteLine($"Processing {file}");
-                    // Add your logic to parse the XML and generate SQL script here
-                }
-            }
+            return files;
         }
 
-        public static string WildcardToRegex(string pattern)
-        {
-            return "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$";
-        }
 
     }
 }
