@@ -9,7 +9,6 @@ namespace SquealerConsoleCSharp.CustomCommands
 {
     public interface ICustomeCommand
     {
-
         public Command CreateCommand();
 
     }

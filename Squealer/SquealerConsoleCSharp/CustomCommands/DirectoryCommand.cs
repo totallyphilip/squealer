@@ -7,31 +7,16 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    public class DirectoryCommand : ICustomeCommand
+    public class DirectoryCommand : BaseDirCommand
     {
-        public Command CreateCommand()
+        public DirectoryCommand() : base("dir", "xxx")
         {
 
-            var command = new Command("dir", "Directory.")
-            {
-            };
-
-
-            command.SetHandler(HandleOpenCommand);
-
-            return command;
         }
 
-        private void HandleOpenCommand()
+        protected override void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, string? searchtext)
         {
-            if (Helper.CheckFolderValid())
-            {
-                string[] files = Directory.GetFiles(AppState.Instance.LastOpenedPath);
-                foreach (string file in files.OrderBy(x => x))
-                {
-                    Console.WriteLine(Path.GetFileName(file));
-                }
-            }  
+            return;
         }
     }
 }

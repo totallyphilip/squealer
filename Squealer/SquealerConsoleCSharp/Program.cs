@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using SquealerConsoleCSharp.CustomCommands;
+using SquealerConsoleCSharp.Models;
 using System.CommandLine;
 using System.Resources;
 
@@ -14,19 +15,21 @@ namespace SquealerConsoleCSharp
                     .LeftJustified()
                     .Color(Color.Blue));
 
+            
 
             var rootCommand = new RootCommand("Interactive Shell Example");
 
-            rootCommand.AddCommand(CommandBuilder.Build<OpenCommand>().CreateCommand());
-            rootCommand.AddCommand(CommandBuilder.Build<DirectoryCommand>().CreateCommand());
-            rootCommand.AddCommand(CommandBuilder.Build<GenCommand>().CreateCommand());
+            rootCommand.AddCommand(new OpenCommand().CreateCommand());
+            rootCommand.AddCommand(new DirectoryCommand().CreateCommand());
+            rootCommand.AddCommand(new GenCommand().CreateCommand());
 
+            
 
             while (true)
             {
-                string directoryCharacter = string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath) ? "?" : ">";
+                string directoryCharacter = Helper.GitHelper.GetGitProejctBranchName() + " >";
 
-                Console.Write($"{directoryCharacter} ");
+                AnsiConsole.Markup($"{directoryCharacter}");
                 string input = Console.ReadLine();
                 if (input.ToLower() == "exit") break;
 
