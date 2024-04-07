@@ -1,12 +1,15 @@
-﻿using SquealerConsoleCSharp;
+﻿using Microsoft.VisualBasic.FileIO;
+using SquealerConsoleCSharp;
 using SquealerConsoleCSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using SquealerConsoleCSharp.Extensions;
+
 
 namespace SquealerConsoleCSharp.Models
 {
-
+    #region Squealer
     [XmlRoot("Squealer")]
     public class SquealerObject
     {
@@ -17,7 +20,7 @@ namespace SquealerConsoleCSharp.Models
         public string TypeString
         {
             get => Helper.GetEnumDescription(Type);
-            set => Type = Helper.ParseDescriptionToEnum<EType>(value);
+            set => Type = typeof(EType).GetFileTypeByName(value);
         }
 
         [XmlAttribute("Flags")]
@@ -65,7 +68,28 @@ namespace SquealerConsoleCSharp.Models
 
         [XmlElement("PostCode")]
         public string PostCode { get; set; } = default!;
+
+
+        public string GetNumericaSymbolString() 
+        {
+            string res = Type switch
+            {
+                EType.StoredProcedure => "",
+                EType.ScalarFunction or EType.InlineTableFunction or EType.MultiStatementTableFunction => "[green3]()[/]",
+                EType.View => "[green3]*[/]",
+                _ => throw new InvalidOperationException()
+            };
+            return res;
+        }
+
+
+
     }
+
+
+    #endregion
+
+    #region parameter
 
     public class Parameter
     {
@@ -122,10 +146,16 @@ namespace SquealerConsoleCSharp.Models
         public string Comments { get; set; } = default!;
     }
 
+    #endregion
+
+    #region User
+
     public class User
     {
         [XmlAttribute("Name")]
         public string Name { get; set; } = default!;
     }
+
+    #endregion
 
 }

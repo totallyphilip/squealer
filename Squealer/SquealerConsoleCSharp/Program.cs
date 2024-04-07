@@ -1,4 +1,5 @@
-﻿using SquealerConsoleCSharp.CustomCommands;
+﻿using Spectre.Console;
+using SquealerConsoleCSharp.CustomCommands;
 using System.CommandLine;
 using System.Resources;
 
@@ -8,6 +9,11 @@ namespace SquealerConsoleCSharp
     {
         static async Task<int> Main(string[] args)
         {
+            AnsiConsole.Write(
+                new FigletText("Squealer")
+                    .LeftJustified()
+                    .Color(Color.Blue));
+
 
             var rootCommand = new RootCommand("Interactive Shell Example");
 

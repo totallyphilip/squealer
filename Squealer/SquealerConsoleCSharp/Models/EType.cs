@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using SquealerConsoleCSharp.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,21 +12,20 @@ namespace SquealerConsoleCSharp.Models
 {
     public enum EType
     {
-        [Description("Stored Procedure")]
+        [ObjectType("StoredProcedure", "p", "")]
         StoredProcedure = 1,
 
-        [Description("Scalar Function")]
+        [ObjectType("ScalarFunction", "fn", "()")]
         ScalarFunction,
 
-        [Description("Inline Table-Valued Function")]
+        [ObjectType("Inline Table-Valued Function", "fn", "()")]
         InlineTableFunction,
 
-        [Description("Multi-Statement Table-Valued Function")]
+        [ObjectType("Multi-Statement Table-Valued Function", "fn", "()")]
         MultiStatementTableFunction,
 
-        [Description("View")]
+        [ObjectType("View", "v", "*")]
         View
-
 
     }
 }

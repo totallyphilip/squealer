@@ -9,18 +9,18 @@ using System.Xml.Serialization;
 
 namespace SquealerConsoleCSharp.MyXml
 {
-    public class XmlToSql
+    public class XmlToSqlConverter
     {
 
         public SquealerObject SquealerObject { get;}
 
-        public SqlrFile SqlrFile { get;}
+        public SqlrFileInfo SqlrFileInfo { get;}
 
-        public XmlToSql(string fileName)
+        public XmlToSqlConverter(string filePath)
         {
-            SqlrFile = new SqlrFile(fileName);
+            SqlrFileInfo = new SqlrFileInfo(filePath);
 
-            string xmlContent = File.ReadAllText(SqlrFile.FilePath);
+            string xmlContent = File.ReadAllText(SqlrFileInfo.FilePath);
 
             using (StringReader reader = new StringReader(xmlContent))
             {
@@ -41,8 +41,8 @@ namespace SquealerConsoleCSharp.MyXml
                 _ => throw new InvalidOperationException()
             };
 
-            create = create.Replace("{Schema}", SqlrFile.Schema);
-            create = create.Replace("{RootProgramName}", SqlrFile.RootProgramName);
+            create = create.Replace("{Schema}", SqlrFileInfo.Schema);
+            create = create.Replace("{RootProgramName}", SqlrFileInfo.RootProgramName);
             return create;
         }
     }

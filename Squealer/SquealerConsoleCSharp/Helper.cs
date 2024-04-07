@@ -1,4 +1,7 @@
-﻿using SquealerConsoleCSharp.Models;
+﻿using Spectre.Console;
+using SquealerConsoleCSharp.Extensions;
+using SquealerConsoleCSharp.Models;
+using SquealerConsoleCSharp.MyXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -74,19 +77,44 @@ namespace SquealerConsoleCSharp
             }
         }
 
-        public static List<SqlrFile> ParseFileNames(string patterns)
+        public static List<string> SearchSqlrFilesInFolder(string? patterns)
         {
-            string[] searchPatterns = patterns.Split('|');
-           
+            if (string.IsNullOrEmpty(patterns))
+            {
+                patterns = "*";
+            }
+            List<string> searchPatterns = patterns.Split('|').ToList();
+
+
+            searchPatterns = searchPatterns.Select(x => x + ".sqlr").ToList();
+            
+
+            Console.WriteLine($"# finding all files matching {string.Join('|', searchPatterns)}");
 
             // Get files matching any of the patterns and remove duplicates
-            var files = searchPatterns.SelectMany(pattern =>
+            var filePaths = searchPatterns.SelectMany(pattern =>
                              Directory.EnumerateFiles(AppState.Instance.LastOpenedPath, pattern))
                              .Distinct()
-                             .Select(x=> new SqlrFile(x))
                              .ToList();
 
-            return files;
+            return filePaths.ToList();
+        }
+
+
+        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList)
+        {
+
+            var table = new Table();
+            table.AddColumn("Type");
+            table.AddColumn("Name");
+            foreach (var x in xmlToSqlList)
+            {
+                var attr = x.SquealerObject.Type.GetObjectTypeAttribute();
+                table.AddRow(attr.ShortName, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]");
+            }
+            AnsiConsole.Write(table);
+
+            AnsiConsole.Write($"\n# {xmlToSqlList.Count} files.\n");
         }
 
 
