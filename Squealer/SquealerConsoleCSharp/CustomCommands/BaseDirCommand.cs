@@ -23,15 +23,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         public Command CreateCommand()
         {
-            var command = new Command(_name, _description);
-
-            var pathArgument = new Argument<string?>(
-                name: "searchtext",
-                description: "searchtext",
-                getDefaultValue: () => null // Optional: Provide a default value or leave it as null if not provided
-            );
-
-            command.AddArgument(pathArgument);
+            var command = new Command(_name, $"{_description} \n Usage: {_name} [[-p] [-fn] [-_if] [-tf] [-v]] [-u]] && [-diff <branch-name>]] && [searchText]");
 
             var procOpt =
                 Helper.CreateFlagOption("-p", "proc");
@@ -43,22 +35,46 @@ namespace SquealerConsoleCSharp.CustomCommands
                 Helper.CreateFlagOption("-tf", "multi-statement table-valued function");
             var viewOpt =
                 Helper.CreateFlagOption("-v", "view");
+            var unCommittedOpt =
+                Helper.CreateFlagOption("-u", "uncommited files");
+            var diffOpt = new Option<string?>(
+                aliases: new[] { "-diff" },
+                description: "-diff <Target Branch Name>",
+                getDefaultValue: () => string.Empty
+                );
+
+
 
             command.AddOption(procOpt);
             command.AddOption(scalarFunctionOpt);
             command.AddOption(inlineTVFOpt);
             command.AddOption(multiStatementTVFOpt);
             command.AddOption(viewOpt);
+            command.AddOption(unCommittedOpt);
+            command.AddOption(diffOpt);
 
-            command.SetHandler((bool p, bool fn, bool _if, bool tf, bool v, string? searchtext) =>
-            {
-                HandleCommand(p, fn, _if, tf, v, searchtext);
-            }, procOpt, scalarFunctionOpt, inlineTVFOpt, multiStatementTVFOpt, viewOpt, pathArgument);
+            var pathArgument = new Argument<string?>(
+                    name: "searchtext",
+                    description: "searchtext",
+                    getDefaultValue: () => null // Optional: Provide a default value or leave it as null if not provided
+                );
+
+            command.AddArgument(pathArgument);
+
+            command.SetHandler(HandleCommand, 
+                procOpt, 
+                scalarFunctionOpt, 
+                inlineTVFOpt, 
+                multiStatementTVFOpt, 
+                viewOpt, 
+                unCommittedOpt,
+                diffOpt,
+                pathArgument);
 
             return command;
         }
 
-        protected void HandleCommand(bool p, bool fn, bool _if, bool tf, bool v, string? searchtext)
+        protected void HandleCommand(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? searchtext)
         {
             if (Helper.CheckFolderValid())
             {
@@ -85,6 +101,30 @@ namespace SquealerConsoleCSharp.CustomCommands
                                         (x.SquealerObject.Type == EType.MultiStatementTableFunction && tf) ||
                                         (x.SquealerObject.Type == EType.View && v);
                             })
+                            .ToList();
+                    }
+
+                    if (u)
+                    {
+                        var uncommmitedFileNames = Helper.GitHelper.GetGitUnCommittedFiles().ToHashSet();
+
+                        xmlToSqlList = xmlToSqlList
+                            .Where(x => uncommmitedFileNames.Contains(x.SqlrFileInfo.FileName))
+                            .ToList();
+
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(diff_targetBranch))
+                    {
+                        if (!Helper.GitHelper.IsBranchExists(diff_targetBranch))
+                        {
+                            AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
+                            return;
+                        }
+                        var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch).ToHashSet();
+
+                        xmlToSqlList = xmlToSqlList
+                            .Where(x => diffFiles.Contains(x.SqlrFileInfo.FileName))
                             .ToList();
                     }
 

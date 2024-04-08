@@ -135,40 +135,50 @@ namespace SquealerConsoleCSharp
             {
                 return string.IsNullOrEmpty(AppState.Instance.LastOpenedPath) ?
                                 "[red](git?)[/]" :
-                                $"[green][[{GetGitProject()}]] ({GetGitBranch()})[/]";
+                                $"[green][[{GetGitProject()}]][/] [blue]({GetGitBranch()})[/]";
             }
 
             public static string GetGitProject()
             {
-                var res = ExecuteGitCommand(EGitCommand.GetProject);
+                var res = ExecuteGitCommand("rev-parse --show-toplevel");
                 return res.Count != 0 ? Path.GetFileName(res[0]) : string.Empty;
             }
 
             public static string GetGitBranch()
             {
-                var res = ExecuteGitCommand(EGitCommand.GetBranch);
+                var res = ExecuteGitCommand("rev-parse --abbrev-ref HEAD");
                 return res.Count != 0 ? Path.GetFileName(res[0]) : string.Empty;
             }
 
-            public static string GetGitUnCommittedFiles()
+            public static List<string> GetGitUnCommittedFiles()
             {
-                var res = ExecuteGitCommand(EGitCommand.GetUnCommitedFiles);
-                return res.Count != 0 ? Path.GetFileName(res[0]) : string.Empty;
+                var res = ExecuteGitCommand("status --porcelain");
+                return res
+                    .Select(x=>Path.GetFileName(x))
+                    .ToList();
             }
 
-            private static List<string> ExecuteGitCommand(EGitCommand gitCommand)
+            public static List<string> GetDiffFiles(string targetBranch)
             {
-                if (string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath))
-                    return new List<string>();
+                var command = $"diff --name-status {targetBranch} -- \"{AppState.Instance.LastOpenedPath}\"";
+                var res = ExecuteGitCommand(command);
+                return res
+                    .Select(x => Path.GetFileName(x))
+                    .ToList();
+            }
 
-                var attribute = gitCommand.GetGitCommandAttribute();
-                if (attribute == null)
-                {
-                    throw new InvalidOperationException("The specified command does not have an associated Git command string.");
-                }
 
+            public static bool IsBranchExists(string branch)
+            {
+                return ExecuteGitCommand($"branch --list {branch}").Count != 0;
+            }
+
+
+            private static List<string> ExecuteGitCommand(string command)
+            {
+                
                 List<string> results = new List<string>();
-                ProcessStartInfo startInfo = new ProcessStartInfo("git", attribute.Command)
+                ProcessStartInfo startInfo = new ProcessStartInfo("git", command)
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -181,21 +191,10 @@ namespace SquealerConsoleCSharp
                 {
                     process.Start();
 
-                    if (attribute.MultiLineOutput)
+                    string line;
+                    while ((line = process.StandardOutput.ReadLine()) != null)
                     {
-                        string line;
-                        while ((line = process.StandardOutput.ReadLine()) != null)
-                        {
-                            results.Add(line);
-                        }
-                    }
-                    else
-                    {
-                        string result = process.StandardOutput.ReadLine();
-                        if (!string.IsNullOrEmpty(result))
-                        {
-                            results.Add(result);
-                        }
+                        results.Add(line);
                     }
 
                     process.WaitForExit();
@@ -203,6 +202,21 @@ namespace SquealerConsoleCSharp
 
                 return results;
             }
+
+
+            //private static List<string> ExecuteGitCommand(EGitCommand gitCommand)
+            //{
+            //    if (string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath))
+            //        return new List<string>();
+
+            //    var attribute = gitCommand.GetGitCommandAttribute();
+            //    if (attribute == null)
+            //    {
+            //        throw new InvalidOperationException("The specified command does not have an associated Git command string.");
+            //    }
+
+            //    return ExecuteGitCommand(attribute.Command);
+            //}
         }
 
         

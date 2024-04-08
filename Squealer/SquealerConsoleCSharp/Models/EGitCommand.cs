@@ -8,13 +8,11 @@ namespace SquealerConsoleCSharp.Models
 {
     public enum EGitCommand
     {
-        [GitCommand("rev-parse --show-toplevel", false)]
+
         GetProject = 1,
 
-        [GitCommand("rev-parse --abbrev-ref HEAD", false)]
         GetBranch,
 
-        [GitCommand("status --porcelain", true)]
         GetUnCommitedFiles
     }
 }

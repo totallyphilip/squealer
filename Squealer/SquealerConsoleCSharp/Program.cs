@@ -28,13 +28,15 @@ namespace SquealerConsoleCSharp
             while (true)
             {
                 string directoryCharacter = Helper.GitHelper.GetGitProejctBranchName() + " >";
-
-                AnsiConsole.Markup($"{directoryCharacter}");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "exit") break;
-
                 string[] inputArgs;
 
+
+                AnsiConsole.Markup($"{directoryCharacter}");
+                string? input = Console.ReadLine();
+                if ( string.IsNullOrWhiteSpace(input))
+                {
+                    continue;
+                }
                 if (input.StartsWith("open", StringComparison.OrdinalIgnoreCase))
                 {
                     var indexOfFirstSpace = input.IndexOf(' ');
