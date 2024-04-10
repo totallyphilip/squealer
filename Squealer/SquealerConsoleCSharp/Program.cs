@@ -22,8 +22,8 @@ namespace SquealerConsoleCSharp
             rootCommand.AddCommand(new OpenCommand().CreateCommand());
             rootCommand.AddCommand(new DirectoryCommand().CreateCommand());
             rootCommand.AddCommand(new GenCommand().CreateCommand());
+            rootCommand.AddCommand(new NewCommand().CreateCommand());
 
-            
 
             while (true)
             {
@@ -33,6 +33,7 @@ namespace SquealerConsoleCSharp
 
                 AnsiConsole.Markup($"{directoryCharacter}");
                 string? input = Console.ReadLine();
+                AnsiConsole.WriteLine();
                 if ( string.IsNullOrWhiteSpace(input))
                 {
                     continue;
@@ -48,9 +49,8 @@ namespace SquealerConsoleCSharp
                 }
                 // Invoke the command system with the input arguments
                 await rootCommand.InvokeAsync(inputArgs);
+                AnsiConsole.WriteLine();
             }
-
-            return 0;
         }
 
     }

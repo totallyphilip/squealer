@@ -11,41 +11,6 @@ namespace SquealerConsoleCSharp.Models
 {
     public class SqlrFileInfo
     {
-        private SquealerObject? _squealerObject;
-
-        public SquealerObject SquealerObject { get
-            {
-                if (_squealerObject == null)
-                {
-                    try
-                    {
-                        string xmlContent = File.ReadAllText(FilePath);
-
-                        using (StringReader reader = new StringReader(xmlContent))
-                        {
-                            XmlSerializer serializer = new XmlSerializer(typeof(SquealerObject));
-
-                            var x = serializer.Deserialize(reader);
-
-                            _squealerObject = (SquealerObject)serializer.Deserialize(reader);
-
-                            return _squealerObject;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        AnsiConsole.MarkupInterpolated($"{FileName} is not valid xml");
-                        Console.WriteLine(ex.Message);
-                        throw;
-                    }
-                }
-                else
-                {
-                    return _squealerObject;
-                }
-            }
-        }
-
         public string FileName { get => Path.GetFileName(FilePath); }
 
         public string FilePath { get; }
@@ -69,31 +34,33 @@ namespace SquealerConsoleCSharp.Models
                 throw new InvalidOperationException($"{FileName} is not a sqlr file.");
             }
 
-            if(FileName.Split(".").Length != 3)
+            if (FileName.Split(".").Length != 3)
             {
                 throw new InvalidOperationException($"The file name '{FileName}' is invalid.\nFile names must follow the format: [Schema].[ObjectName].sqlr, for example, 'dbo.TableExample.sqlr'. Please rename your file accordingly.\n");
             }
+        }
 
-            
+        public static bool ValidateSqlrFileName(string filename)
+        {
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                AnsiConsole.MarkupLine("[red]<filename> not provided.");
+                return false;
+            }
 
-            //try
-            //{
-            //    using (StringReader reader = new StringReader(xmlContent))
-            //    {
-            //        XmlSerializer serializer = new XmlSerializer(typeof(SquealerObject));
+            if (!Helper.IsValidFilename(filename))
+            {
+                AnsiConsole.MarkupLine("[red]<filename> not valid.");
+                return false;
+            }
 
-            //        var x = serializer.Deserialize(reader);
+            if (filename.Split(".").Length != 3)
+            {
+                AnsiConsole.MarkupLine("The file name '{FileName}' is invalid.\nFile names must follow the format: [Schema].[ObjectName].sqlr, for example, 'dbo.TableExample.sqlr'. Please rename your file accordingly.");
+                return false;
+            }
 
-            //        SquealerObject = (SquealerObject)serializer.Deserialize(reader);
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    AnsiConsole.MarkupInterpolated($"{FileName} is not valid xml");
-            //    Console.WriteLine(ex.Message);
-            //    throw;
-            //}
+            return true;
         }
     }
 }

@@ -15,11 +15,14 @@ namespace SquealerConsoleCSharp.Attributes
         public string ShortName { get; }
         public string NumericSymbol { get; }
 
-        public ObjectTypeAttribute(string name, string shortname, string symbol)
+        public string VariableName { get; }
+
+        public ObjectTypeAttribute(string name, string shortname, string symbol, string variableName)
         {
             Name = name;
             ShortName = shortname;
             NumericSymbol = symbol;
+            VariableName = variableName;
         }
     }
 }

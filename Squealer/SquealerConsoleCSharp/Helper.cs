@@ -1,4 +1,5 @@
 ﻿using Spectre.Console;
+using SquealerConsoleCSharp.Attributes;
 using SquealerConsoleCSharp.Extensions;
 using SquealerConsoleCSharp.Models;
 using SquealerConsoleCSharp.MyXml;
@@ -18,7 +19,7 @@ namespace SquealerConsoleCSharp
     public class Helper
     {
 
-        public static bool CheckFolderValid()
+        public static bool VadilateFolder()
         {
             if (string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath))
             {
@@ -36,7 +37,7 @@ namespace SquealerConsoleCSharp
 
         public static string GetFilePath(string fileName)
         {
-            if (CheckFolderValid())
+            if (VadilateFolder())
             {
                 var filePath = Path.Combine(AppState.Instance.LastOpenedPath, fileName);
                 return filePath;
@@ -66,18 +67,6 @@ namespace SquealerConsoleCSharp
             throw new ArgumentException($"Not found: {description}", nameof(description));
         }
 
-        public static string GetEnumDescription(Enum value)
-        {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-            if (fi.GetCustomAttributes(typeof(DescriptionAttribute), false) is DescriptionAttribute[] attributes && attributes.Length > 0)
-            {
-                return attributes[0].Description;
-            }
-            else
-            {
-                return value.ToString();
-            }
-        }
 
         public static List<string> SearchSqlrFilesInFolder(string? patterns)
         {
@@ -106,7 +95,7 @@ namespace SquealerConsoleCSharp
         public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList)
         {
 
-            var table = new Table();
+            var table = new Spectre.Console.Table();
             table.AddColumn("Type");
             table.AddColumn("Name");
             foreach (var x in xmlToSqlList)
@@ -127,6 +116,27 @@ namespace SquealerConsoleCSharp
                 description: description,
                 getDefaultValue: () => false
                 );
+        }
+
+        public static bool IsValidFilename(string filename)
+        {
+            // Check for invalid characters.
+            if (filename.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
+            {
+                return false;
+            }
+
+            // Optional: Add check for reserved names here if targeting Windows.
+
+            // Check for length. This is a simple example; you may need to adjust based on your requirements.
+            if (filename.Length > 255) // Using 255 as a generic safe limit.
+            {
+                return false;
+            }
+
+            // Add any additional checks you require here.
+
+            return true; // Passed all checks.
         }
 
         public class GitHelper
@@ -204,19 +214,7 @@ namespace SquealerConsoleCSharp
             }
 
 
-            //private static List<string> ExecuteGitCommand(EGitCommand gitCommand)
-            //{
-            //    if (string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath))
-            //        return new List<string>();
 
-            //    var attribute = gitCommand.GetGitCommandAttribute();
-            //    if (attribute == null)
-            //    {
-            //        throw new InvalidOperationException("The specified command does not have an associated Git command string.");
-            //    }
-
-            //    return ExecuteGitCommand(attribute.Command);
-            //}
         }
 
         

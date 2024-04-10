@@ -15,6 +15,8 @@ namespace SquealerConsoleCSharp.CustomCommands
         private readonly string _name;
         private readonly string _description;
 
+        private List<XmlToSqlConverter> _xmlToSqls;
+
         protected BaseDirCommand(string name, string description)
         {
             _name = name;
@@ -76,73 +78,73 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         protected void HandleCommand(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? searchtext)
         {
-            if (Helper.CheckFolderValid())
+            if (!Helper.VadilateFolder())
+                return;
+
+            if (searchtext != null && searchtext.StartsWith("-"))
             {
-
-                if (searchtext != null && searchtext.StartsWith("-"))
-                {
-                    AnsiConsole.MarkupLineInterpolated($"[red]{searchtext} is not a valid flag.[/]");
-                    return;
-                }
-
-                try
-                {
-                    var filePaths = Helper.SearchSqlrFilesInFolder(searchtext);
-                    var xmlToSqlList = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
-
-                    if (p || fn || _if || tf || v)
-                    {
-                        xmlToSqlList = xmlToSqlList
-                            .Where(x =>
-                            {
-                                return (x.SquealerObject.Type == EType.StoredProcedure && p) ||
-                                        (x.SquealerObject.Type == EType.ScalarFunction && fn) ||
-                                        (x.SquealerObject.Type == EType.InlineTableFunction && _if) ||
-                                        (x.SquealerObject.Type == EType.MultiStatementTableFunction && tf) ||
-                                        (x.SquealerObject.Type == EType.View && v);
-                            })
-                            .ToList();
-                    }
-
-                    if (u)
-                    {
-                        var uncommmitedFileNames = Helper.GitHelper.GetGitUnCommittedFiles().ToHashSet();
-
-                        xmlToSqlList = xmlToSqlList
-                            .Where(x => uncommmitedFileNames.Contains(x.SqlrFileInfo.FileName))
-                            .ToList();
-
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(diff_targetBranch))
-                    {
-                        if (!Helper.GitHelper.IsBranchExists(diff_targetBranch))
-                        {
-                            AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
-                            return;
-                        }
-                        var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch).ToHashSet();
-
-                        xmlToSqlList = xmlToSqlList
-                            .Where(x => diffFiles.Contains(x.SqlrFileInfo.FileName))
-                            .ToList();
-                    }
-
-                    Helper.PrintTable(xmlToSqlList);
-
-
-                    //extra implemenation
-
-                }
-                catch (Exception ex)
-                {
-                    AnsiConsole.MarkupInterpolated($"[underline red]{ex.Message}[/]\n");
-                    throw;
-                }
-
-                // At the point where you want to allow for extension:
-                ExtraImplementation(p, fn, _if, tf, v, searchtext);
+                AnsiConsole.MarkupLineInterpolated($"[red]{searchtext} is not a valid flag.[/]");
+                return;
             }
+
+            try
+            {
+                var filePaths = Helper.SearchSqlrFilesInFolder(searchtext);
+                _xmlToSqls = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
+
+                if (p || fn || _if || tf || v)
+                {
+                    _xmlToSqls = _xmlToSqls
+                        .Where(x =>
+                        {
+                            return (x.SquealerObject.Type == EType.StoredProcedure && p) ||
+                                    (x.SquealerObject.Type == EType.ScalarFunction && fn) ||
+                                    (x.SquealerObject.Type == EType.InlineTableFunction && _if) ||
+                                    (x.SquealerObject.Type == EType.MultiStatementTableFunction && tf) ||
+                                    (x.SquealerObject.Type == EType.View && v);
+                        })
+                        .ToList();
+                }
+
+                if (u)
+                {
+                    var uncommmitedFileNames = Helper.GitHelper.GetGitUnCommittedFiles().ToHashSet();
+
+                    _xmlToSqls = _xmlToSqls
+                        .Where(x => uncommmitedFileNames.Contains(x.SqlrFileInfo.FileName))
+                        .ToList();
+
+                }
+
+                if (!string.IsNullOrWhiteSpace(diff_targetBranch))
+                {
+                    if (!Helper.GitHelper.IsBranchExists(diff_targetBranch))
+                    {
+                        AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
+                        return;
+                    }
+                    var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch).ToHashSet();
+
+                    _xmlToSqls = _xmlToSqls
+                        .Where(x => diffFiles.Contains(x.SqlrFileInfo.FileName))
+                        .ToList();
+                }
+
+                Helper.PrintTable(_xmlToSqls);
+
+
+                //extra implemenation
+
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupInterpolated($"[underline red]{ex.Message}[/]\n");
+                throw;
+            }
+
+            // At the point where you want to allow for extension:
+            ExtraImplementation(p, fn, _if, tf, v, searchtext);
+            
         }
 
         // Define an abstract or virtual method for extra implementation.

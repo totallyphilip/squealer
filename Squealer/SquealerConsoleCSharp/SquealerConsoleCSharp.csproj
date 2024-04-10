@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\CommonXML\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

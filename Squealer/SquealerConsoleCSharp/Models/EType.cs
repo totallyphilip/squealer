@@ -12,19 +12,19 @@ namespace SquealerConsoleCSharp.Models
 {
     public enum EType
     {
-        [ObjectType("StoredProcedure", "p", "")]
+        [ObjectType("StoredProcedure", "p", "", "p")]
         StoredProcedure = 1,
 
-        [ObjectType("ScalarFunction", "fn", "()")]
+        [ObjectType("ScalarFunction", "fn", "()", "fn")]
         ScalarFunction,
 
-        [ObjectType("Inline Table-Valued Function", "fn", "()")]
+        [ObjectType("Inline Table-Valued Function", "fn", "()", "_if")]
         InlineTableFunction,
 
-        [ObjectType("Multi-Statement Table-Valued Function", "fn", "()")]
+        [ObjectType("Multi-Statement Table-Valued Function", "fn", "()", "tf")]
         MultiStatementTableFunction,
 
-        [ObjectType("View", "v", "*")]
+        [ObjectType("View", "v", "*", "v")]
         View
 
     }
