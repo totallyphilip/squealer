@@ -2,6 +2,7 @@
 using SquealerConsoleCSharp.Attributes;
 using SquealerConsoleCSharp.Extensions;
 using SquealerConsoleCSharp.Models;
+using SquealerConsoleCSharp.Models.Git;
 using SquealerConsoleCSharp.MyXml;
 using System;
 using System.Collections.Generic;
@@ -92,16 +93,20 @@ namespace SquealerConsoleCSharp
         }
 
 
-        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList)
+        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList, List<GitFileInfo> gitFileInfos) 
         {
-
+            var gitFileInfosDict = gitFileInfos.ToDictionary(x => x.FileName, x => x.Status);
             var table = new Spectre.Console.Table();
             table.AddColumn("Type");
             table.AddColumn("Name");
+            table.AddColumn("Git Status");
             foreach (var x in xmlToSqlList)
             {
                 var attr = x.SquealerObject.Type.GetObjectTypeAttribute();
-                table.AddRow(attr.Acronym, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]");
+                
+                var hasGitInfo = gitFileInfosDict.TryGetValue(x.SqlrFileInfo.FileName, out var gitStatus);
+
+                table.AddRow(attr.Acronym, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]", hasGitInfo ? $"{gitStatus}" : "");
             }
             AnsiConsole.Write(table);
 
@@ -160,21 +165,60 @@ namespace SquealerConsoleCSharp
                 return res.Count != 0 ? Path.GetFileName(res[0]) : string.Empty;
             }
 
-            public static List<string> GetGitUnCommittedFiles()
+            public static List<GitFileInfo> GetUnTrackedFiles()
             {
-                var res = ExecuteGitCommand("status --porcelain");
-                return res
-                    .Select(x=>Path.GetFileName(x))
+                var lines = ExecuteGitCommand("status --porcelain");
+                var res = lines
+                    .Select(line =>
+                    {
+                        var x = line;
+                        var parts = line.Split(' ');
+                        var status = parts[0];
+                        var filename = parts[1];
+                        return new GitFileInfo
+                        {
+                            FileName = Path.GetFileName(filename),
+                            Status = status
+                        };
+                    })
                     .ToList();
+                return res;
             }
 
-            public static List<string> GetDiffFiles(string targetBranch)
+            public static List<GitFileInfo> GetDiffFiles(string targetBranch)
             {
                 var command = $"diff --name-status {targetBranch} -- \"{AppState.Instance.LastOpenedPath}\"";
-                var res = ExecuteGitCommand(command);
-                return res
-                    .Select(x => Path.GetFileName(x))
-                    .ToList();
+                var lines = ExecuteGitCommand(command);
+                var res = lines
+                    .Select(line => {
+                        // Split the line by tabs (\t)
+                        var parts = line.Split('\t');
+
+                        // Check the number of parts to determine if it's a rename or an add/modify
+                        if (parts.Length == 3) // Renamed file
+                        {
+                            var status = parts[0];
+                            var oldFilename = parts[1];
+                            var newFilename = parts[2];
+                            return new GitFileInfo
+                            {
+                                FileName = Path.GetFileName(newFilename),
+                                Status = $"{status} {Path.GetFileName(oldFilename)}"
+                            };
+                        }
+                        else // Added or Modified file
+                        {
+                            var status = parts[0];
+                            var filename = parts[1];
+                            return new GitFileInfo
+                            {
+                                FileName = Path.GetFileName(filename),
+                                Status = status
+                            };
+                        }
+                    }).ToList();
+
+                 return res;
             }
 
 

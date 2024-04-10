@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using SquealerConsoleCSharp.Models;
+using SquealerConsoleCSharp.Models.Git;
 using SquealerConsoleCSharp.MyXml;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         public Command CreateCommand()
         {
-            var command = new Command(_name, $"{_description} \n Usage: {_name} [[-p] [-fn] [-_if] [-tf] [-v]] [-u]] && [-diff <branch-name>]] && [searchText]");
+            var command = new Command(_name, $"{_description} \n Usage: {_name} [ -p | -fn | -if | -tf | -v ] && [ -u | -diff <branch-name> ] && [searchText]");
 
             var procOpt =
                 Helper.CreateFlagOption("-p", "proc");
@@ -87,10 +88,20 @@ namespace SquealerConsoleCSharp.CustomCommands
                 return;
             }
 
+            if (!string.IsNullOrWhiteSpace(diff_targetBranch))
+            {
+                if (!Helper.GitHelper.IsBranchExists(diff_targetBranch))
+                {
+                    AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
+                    return;
+                }
+            }
+
             try
             {
                 var filePaths = Helper.SearchSqlrFilesInFolder(searchtext);
-                _xmlToSqls = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
+                var _xmlToSqls = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
+                List<GitFileInfo> _gitFileInfos = Helper.GitHelper.GetUnTrackedFiles();
 
                 if (p || fn || _if || tf || v)
                 {
@@ -106,14 +117,29 @@ namespace SquealerConsoleCSharp.CustomCommands
                         .ToList();
                 }
 
-                if (u)
+                if (u || !string.IsNullOrWhiteSpace(diff_targetBranch))
                 {
-                    var uncommmitedFileNames = Helper.GitHelper.GetGitUnCommittedFiles().ToHashSet();
+                    // only change _gitFileInfos in -diff option
+                    if (!string.IsNullOrWhiteSpace(diff_targetBranch))
+                    {
+                        var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch);
+                        if (u)
+                        {
+                            
+                            _gitFileInfos.AddRange(diffFiles);
+                            _gitFileInfos = _gitFileInfos.DistinctBy(x => x.FileName).ToList();
+                        }
+                        else
+                        {
+                            _gitFileInfos = diffFiles;
+                        }
+                    }
+
+                    var fileNameSet = _gitFileInfos.Select(x => x.FileName).ToHashSet();
 
                     _xmlToSqls = _xmlToSqls
-                        .Where(x => uncommmitedFileNames.Contains(x.SqlrFileInfo.FileName))
+                        .Where(x => fileNameSet.Contains(x.SqlrFileInfo.FileName))
                         .ToList();
-
                 }
 
                 if (!string.IsNullOrWhiteSpace(diff_targetBranch))
@@ -123,14 +149,12 @@ namespace SquealerConsoleCSharp.CustomCommands
                         AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
                         return;
                     }
-                    var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch).ToHashSet();
+                    var gitFilesSet = _gitFileInfos.Select(x=>x.FileName).ToHashSet() ;
+                    _xmlToSqls = _xmlToSqls.Where(x=>gitFilesSet.Contains(x.SqlrFileInfo.FileName)).ToList();
 
-                    _xmlToSqls = _xmlToSqls
-                        .Where(x => diffFiles.Contains(x.SqlrFileInfo.FileName))
-                        .ToList();
                 }
 
-                Helper.PrintTable(_xmlToSqls);
+                Helper.PrintTable(_xmlToSqls, _gitFileInfos);
 
 
                 //extra implemenation

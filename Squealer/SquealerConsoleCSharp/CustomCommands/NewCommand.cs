@@ -78,7 +78,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                 return;
             }
 
-            string filePath = Helper.GetFilePath(filename);
+            string filePath = Helper.GetFilePath(filename_w_ext);
             if (File.Exists(filePath))
             {
                 AnsiConsole.MarkupLine("[red]File already exists.[/]\n");
@@ -101,6 +101,8 @@ namespace SquealerConsoleCSharp.CustomCommands
             var mySquealer = new SquealerObject(type, true);
 
             mySquealer.ExportXmlFile(filePath, ConfigObject.GetConfig());
+
+            AnsiConsole.MarkupLine($"file [yellow]{filename_w_ext}[/] Created.");
         }
     }
 }
