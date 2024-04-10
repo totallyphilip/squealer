@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    public class OpenCommand: ICustomeCommand
+    internal class OpenCommand: ICustomeCommand
     {
         public Command CreateCommand()
         {

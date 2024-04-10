@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    public class DirectoryCommand : BaseDirCommand
+    internal class DirectoryCommand : BaseDirCommand
     {
         public DirectoryCommand() : base("dir", "xxx")
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp
 {
-    public class AppState
+    internal class AppState
     {
         private static AppState? instance;
         public static AppState Instance => instance ??= new AppState();

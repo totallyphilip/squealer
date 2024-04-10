@@ -12,7 +12,7 @@ using Spectre.Console;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    public class GenCommand : BaseDirCommand
+    internal class GenCommand : BaseDirCommand
     {
         public GenCommand() : base("gen", "xxxxx")
         {

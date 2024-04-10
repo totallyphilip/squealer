@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace SquealerConsoleCSharp.Models
 {
-    public class SqlrFileInfo
+    internal class SqlrFileInfo
     {
         public string FileName { get => Path.GetFileName(FilePath); }
 

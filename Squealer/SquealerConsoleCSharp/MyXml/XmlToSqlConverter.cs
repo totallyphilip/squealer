@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace SquealerConsoleCSharp.MyXml
 {
-    public class XmlToSqlConverter
+    internal class XmlToSqlConverter
     {
 
         public SquealerObject SquealerObject { get;}

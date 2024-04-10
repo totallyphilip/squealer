@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SquealerConsoleCSharp.Extensions
 {
 
-    public static class ETypeExtensions
+    internal static class ETypeExtensions
     {
         public static EType GetFileTypeByName(this Type eType, string name)
         {

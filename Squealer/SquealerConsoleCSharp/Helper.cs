@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp
 {
-    public class Helper
+    internal class Helper
     {
 
         public static bool VadilateFolder()

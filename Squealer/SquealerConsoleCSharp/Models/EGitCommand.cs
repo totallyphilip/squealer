@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.Models
 {
-    public enum EGitCommand
+    internal enum EGitCommand
     {
 
         GetProject = 1,

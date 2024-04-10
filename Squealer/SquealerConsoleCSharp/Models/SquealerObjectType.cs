@@ -3,7 +3,7 @@
 
 namespace SquealerConsoleCSharp.Models
 {
-    public class SquealerObjectType
+    internal class SquealerObjectType
     {
         public enum eType
         {

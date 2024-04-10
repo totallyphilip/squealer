@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SquealerConsoleCSharp.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
-    public class ObjectTypeAttribute : Attribute
+    internal class ObjectTypeAttribute : Attribute
     {
         public string Name { get; }
 
