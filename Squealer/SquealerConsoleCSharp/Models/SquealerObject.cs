@@ -13,7 +13,7 @@ namespace SquealerConsoleCSharp.Models
 {
     #region Squealer
     [XmlRoot("Squealer")]
-    internal class SquealerObject
+    public class SquealerObject
     {
 
         public SquealerObject(EType type, bool isNewFile)

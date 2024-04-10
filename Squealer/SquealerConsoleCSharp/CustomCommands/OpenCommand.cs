@@ -37,6 +37,11 @@ namespace SquealerConsoleCSharp.CustomCommands
                 {
                     AppState.Instance.LastOpenedPath = path;
                     Console.WriteLine($"Currect path: {AppState.Instance.LastOpenedPath}");
+                    var gitProjectName = Helper.GitHelper.GetGitProject();
+                    if(!string.IsNullOrEmpty( gitProjectName )) 
+                    { 
+                        AppState.Instance.GitPprojectName = gitProjectName;
+                    }
 
                 }
                 else

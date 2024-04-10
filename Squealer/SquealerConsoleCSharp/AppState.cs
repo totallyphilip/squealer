@@ -13,6 +13,8 @@ namespace SquealerConsoleCSharp
 
         public string LastOpenedPath { get; set; } = string.Empty;
 
+        public string GitPprojectName { get; set; } = string.Empty;
+
         // Private constructor to prevent instantiation outside
         private AppState() { }
     }

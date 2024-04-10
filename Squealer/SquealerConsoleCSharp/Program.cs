@@ -23,6 +23,7 @@ namespace SquealerConsoleCSharp
             rootCommand.AddCommand(new DirectoryCommand().CreateCommand());
             rootCommand.AddCommand(new GenCommand().CreateCommand());
             rootCommand.AddCommand(new NewCommand().CreateCommand());
+            rootCommand.AddCommand(new ClearCommand().CreateCommand());
 
 
             while (true)

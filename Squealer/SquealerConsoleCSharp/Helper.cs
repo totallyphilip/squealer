@@ -145,7 +145,7 @@ namespace SquealerConsoleCSharp
             {
                 return string.IsNullOrEmpty(AppState.Instance.LastOpenedPath) ?
                                 "[red](git?)[/]" :
-                                $"[green][[{GetGitProject()}]][/] [blue]({GetGitBranch()})[/]";
+                                $"[green][[{AppState.Instance.GitPprojectName}]][/] [blue]({GetGitBranch()})[/]";
             }
 
             public static string GetGitProject()

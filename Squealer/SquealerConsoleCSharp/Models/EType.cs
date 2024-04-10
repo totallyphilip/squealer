@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.Models
 {
-    internal enum EType
+    public enum EType
     {
         [ObjectType("StoredProcedure", "P", "", "p", "Stored Procedure")]
         StoredProcedure = 1,

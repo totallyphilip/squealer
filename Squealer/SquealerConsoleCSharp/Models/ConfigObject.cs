@@ -6,7 +6,7 @@ namespace SquealerConsoleCSharp.Models
 {
 
     [XmlRoot(ElementName = "Settings")]
-    internal class ConfigObject
+    public class ConfigObject
     {
         [XmlAttribute(AttributeName = "ProjectName")]
         public string ProjectName { get; set; } = string.Empty;
