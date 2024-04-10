@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    public interface ICustomeCommand
+    internal interface ICustomeCommand
     {
         public Command CreateCommand();
 
     }
 
 
-    public static class CommandBuilder
+    internal static class CommandBuilder
     {
         public static T Build<T>() where T : ICustomeCommand, new()
         {

@@ -139,7 +139,7 @@ namespace SquealerConsoleCSharp.Models
 
                 // Start the Squealer element
                 writer.WriteStartElement("Squealer");
-                writer.WriteAttributeString("Type", TypeString);
+                writer.WriteAttributeString("Type", Type.GetObjectTypeAttribute().Name);
                 writer.WriteAttributeString("Flags", Flags);
                 writer.WriteAttributeString("WithOptions", WithOptions);
 
@@ -150,7 +150,7 @@ namespace SquealerConsoleCSharp.Models
                 writer.WriteEndElement(); // PreCode
 
                 // Comments with comment
-                writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().Name} and any difficult concepts. ");
+                writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().FriendlyName} and any difficult concepts. ");
                 writer.WriteStartElement("Comments");
                 writer.WriteCData(Comments);
                 writer.WriteEndElement(); // Comments

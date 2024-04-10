@@ -101,7 +101,7 @@ namespace SquealerConsoleCSharp
             foreach (var x in xmlToSqlList)
             {
                 var attr = x.SquealerObject.Type.GetObjectTypeAttribute();
-                table.AddRow(attr.ShortName, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]");
+                table.AddRow(attr.Acronym, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]");
             }
             AnsiConsole.Write(table);
 
