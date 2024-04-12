@@ -16,7 +16,8 @@ namespace SquealerConsoleCSharp.CustomCommands
         private readonly string _name;
         private readonly string _description;
 
-        private List<XmlToSqlConverter> _xmlToSqls;
+        protected List<XmlToSqlConverter> _xmlToSqls = [];
+        protected List<GitFileInfo> _gitFileInfos = [];
 
         protected BaseDirCommand(string name, string description)
         {
@@ -86,7 +87,10 @@ namespace SquealerConsoleCSharp.CustomCommands
             if (!Helper.VadilateFolder())
                 return;
 
-            if (searchtext != null && searchtext.StartsWith("-"))
+            if (searchtext != null)
+                searchtext = searchtext.Replace("[", "").Replace("]", "");
+
+            if (!string.IsNullOrWhiteSpace(searchtext) && searchtext.StartsWith("-"))
             {
                 AnsiConsole.MarkupLineInterpolated($"[red]{searchtext} is not a valid flag.[/]");
                 return;
@@ -104,8 +108,8 @@ namespace SquealerConsoleCSharp.CustomCommands
             try
             {
                 var filePaths = Helper.SearchSqlrFilesInFolder(searchtext);
-                var _xmlToSqls = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
-                List<GitFileInfo> _gitFileInfos = Helper.GitHelper.GetUnTrackedFiles();
+                _xmlToSqls = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
+                _gitFileInfos = Helper.GitHelper.GetUnTrackedFiles();
 
                 if (p || fn || _if || tf || v)
                 {
@@ -145,6 +149,9 @@ namespace SquealerConsoleCSharp.CustomCommands
                         .Where(x => fileNameSet.Contains(x.SqlrFileInfo.FileName))
                         .ToList();
                 }
+
+                // re order 
+                _xmlToSqls = _xmlToSqls.OrderBy(x => x.SqlrFileInfo.SqlObjectName).ToList(); 
 
                 if (!string.IsNullOrWhiteSpace(diff_targetBranch))
                 {

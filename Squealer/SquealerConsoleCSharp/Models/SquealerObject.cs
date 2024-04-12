@@ -68,10 +68,10 @@ namespace SquealerConsoleCSharp.Models
         }
 
         [XmlElement("PreCode")]
-        public string PreCode { get; set; } = "\n\n\n\n";
+        public string PreCode { get; set; } = string.Empty;
 
         [XmlElement("Comments")]
-        public string Comments { get; set; } = "\n\n\n\n";
+        public string Comments { get; set; } = string.Empty;
 
         [XmlArray("Parameters")]
         [XmlArrayItem("Parameter")]
@@ -88,19 +88,54 @@ namespace SquealerConsoleCSharp.Models
         [XmlElement("Code")]
         public string Code { get; set; } = string.Empty;
 
+
         [XmlArray("Users")]
         [XmlArrayItem("User")]
         public List<User> Users { get; set; } = new List<User>();
 
         [XmlElement("PostCode")]
-        public string PostCode { get; set; } = "\n\n\n\n";
+        public string PostCode { get; set; } = string.Empty;
+
+
+        private static Dictionary<(EType, ESqlResourseType), string> sqlResourceMap = new Dictionary<(EType, ESqlResourseType), string>
+        {
+            {(EType.StoredProcedure, ESqlResourseType.Create), MyResources.Resources.P_Create},
+            {(EType.StoredProcedure, ESqlResourseType.Begin), MyResources.Resources.P_Begin},
+            {(EType.StoredProcedure, ESqlResourseType.End), MyResources.Resources.P_End},
+
+            {(EType.ScalarFunction, ESqlResourseType.Create), MyResources.Resources.FN_Create},
+            {(EType.ScalarFunction, ESqlResourseType.Begin), MyResources.Resources.FN_Begin},
+            {(EType.ScalarFunction, ESqlResourseType.End), MyResources.Resources.FN_End},
+
+            {(EType.InlineTableFunction, ESqlResourseType.Create), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Begin), MyResources.Resources.IF_Begin},
+            {(EType.InlineTableFunction, ESqlResourseType.End), string.Empty},
+
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Create), string.Empty},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin), MyResources.Resources.Tf_Begin},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.End),MyResources.Resources.TF_EndTest},
+
+            {(EType.View, ESqlResourseType.Create), MyResources.Resources.V_Create},
+            {(EType.View, ESqlResourseType.Begin), MyResources.Resources.V_Begin},
+            {(EType.View, ESqlResourseType.End), string.Empty},
+        };
+
+        public string GetSqlResource(ESqlResourseType resourseType)
+        {
+            if (sqlResourceMap.TryGetValue((Type, resourseType), out var resource))
+            {
+                return resource;
+            }
+
+            throw new ArgumentException("Invalid type or resource type");
+        }
 
 
         /***
          * Combine the config to create xml file
          *  - 
          */
-        public void ExportXmlFile(string filePath, ConfigObject config)
+        public void ExportXmlFile(string filePath)
         {
             // Override Property for 
             string? placeHolder_code = null;
@@ -242,9 +277,9 @@ namespace SquealerConsoleCSharp.Models
                 writer.WriteStartElement("Users");
 
                 // add the config users
-                Users.AddRange(config.Users);
-                Users = Users.DistinctBy(x=>x.Name).ToList();
 
+                if (Users.Count == 0)
+                    Users.Add(new User { Name = "$DBUSER$" });
                 foreach (var user in Users)
                 {
                     writer.WriteStartElement("User");
@@ -252,6 +287,7 @@ namespace SquealerConsoleCSharp.Models
                     writer.WriteEndElement(); // User
                 }
                 writer.WriteEndElement(); // Users
+                
 
                 // PostCode with comment
                 writer.WriteComment(" Optional T-SQL to execute after the main object is created. ");
@@ -294,6 +330,26 @@ namespace SquealerConsoleCSharp.Models
                 if (bool.TryParse(value, out bool result))
                 {
                     Output = result;
+                }
+                else
+                {
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Output. Expected 'true' or 'false'.");
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool ReadOnly { get; set; }
+
+        [XmlAttribute("ReadOnly")]
+        public string ReadOnlyString
+        {
+            get => ReadOnly.ToString().ToLower();
+            set
+            {
+                if (bool.TryParse(value, out bool result))
+                {
+                    ReadOnly = result;
                 }
                 else
                 {

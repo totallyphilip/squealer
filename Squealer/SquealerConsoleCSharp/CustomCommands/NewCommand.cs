@@ -100,7 +100,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             var mySquealer = new SquealerObject(type, true);
 
-            mySquealer.ExportXmlFile(filePath, ConfigObject.GetConfig());
+            mySquealer.ExportXmlFile(filePath);
 
             AnsiConsole.MarkupLine($"file [yellow]{filename_w_ext}[/] Created.");
         }

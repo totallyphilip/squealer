@@ -19,6 +19,8 @@ namespace SquealerConsoleCSharp.Models
 
         public string RootProgramName { get => FileName.Split(".")[1]; }
 
+        public string SqlObjectName_w_Bracket { get => $"[{Schema}].[{RootProgramName}]"; }
+
         public string SqlObjectName { get => Path.GetFileNameWithoutExtension(FileName);  }
 
         public SqlrFileInfo(string filePath)

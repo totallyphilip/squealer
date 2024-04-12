@@ -19,13 +19,19 @@ namespace SquealerConsoleCSharp.Attributes
 
         public string FriendlyName { get; set; }
 
-        public ObjectTypeAttribute(string name, string acronym, string numericSymbol, string variableName, string friendlyName)
+        public string ObjectTypeCode { get; set; }
+
+        public string Permission {  get; set; }
+
+        public ObjectTypeAttribute(string name, string acronym, string numericSymbol, string variableName, string friendlyName, string objectTypeCode, string permission)
         {
             Name = name;
             Acronym = acronym;
             NumericSymbol = numericSymbol;
             VariableName = variableName;
             FriendlyName = friendlyName;
+            ObjectTypeCode = objectTypeCode;
+            Permission = permission;
         }
     }
 }

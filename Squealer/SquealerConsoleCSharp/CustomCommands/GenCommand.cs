@@ -9,6 +9,8 @@ using System.Xml.Linq;
 using SquealerConsoleCSharp.MyXml;
 using SquealerConsoleCSharp.Models;
 using Spectre.Console;
+using SquealerConsoleCSharp.Extensions;
+using System.Reflection;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
@@ -21,7 +23,161 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         protected override void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, string? searchtext)
         {
-            AnsiConsole.MarkupLine("[red] nothing to gen yet!![/]");
+            if(_xmlToSqls.Count == 0)
+            {
+                return;
+            }
+
+            var config = ConfigObject.GetConfig();
+
+            StringBuilder output = new StringBuilder();
+            output.AppendLine(MyResources.Resources.TrackFailedItems_Start);
+            output.Append(MyResources.Resources._TopScript);
+
+            foreach (var item in _xmlToSqls.Select((xml,index)=> (xml, index)))
+            {
+                var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                var countString = $"{item.index+1}/{_xmlToSqls.Count}";
+
+                output.AppendLine(GetSqlOfOneFile(item.xml, version, config, countString));
+            }
+
+            output.AppendLine();
+            output.Append(MyResources.Resources.TrackFailedItems_End);
+
+            AnsiConsole.WriteLine(output.ToString());
+
+            Helper.SaveAndOpenFileWithDefaultProgram("_test.sql", output.ToString());
+
+        }
+
+
+        private string GetSqlOfOneFile(XmlToSqlConverter xml, string version, ConfigObject config, string countString)
+        {
+            var methodName = xml.SqlrFileInfo.SqlObjectName_w_Bracket;
+            var type = xml.SquealerObject.Type;
+
+            StringBuilder oneSql = new StringBuilder();
+
+            oneSql.AppendLine($"----- {methodName} ".PadRight(107, '-')+" <BOF>\n");
+            oneSql.AppendLine($"-- additional code to execute after {type.GetObjectTypeAttribute().Name} is created");
+            oneSql.AppendLine($"print '{countString} creating {methodName}, {type.GetObjectTypeAttribute().Name}'\r\ngo");
+            oneSql.Append($"\r\n\r\n\r\n\r\n\r\ngo\n\n");
+            oneSql.AppendLine($"if object_id('{methodName}','p') is not null\r\n" +
+                $"\tdrop procedure {methodName};\r\n" +
+                $"if object_id('{methodName}','fn') is not null\r\n" +
+                $"\tdrop function {methodName};\r\n" +
+                $"if object_id('{methodName}','if') is not null\r\n" +
+                $"\tdrop function {methodName};\r\n" +
+                $"if object_id('{methodName}','tf') is not null\r\n" +
+                $"\tdrop function {methodName};\r\nif object_id('{methodName}','v') is not null\r\n" +
+                $"\tdrop view {methodName};\r\n\r\n" +
+                $"go\n");
+
+
+            oneSql.AppendLine("/***********************************************************************\r\n\r\n" +
+                                $"title : {xml.SqlrFileInfo.SqlObjectName}\r\n\r\n\r\n" +
+                                $"{xml.SquealerObject.Comments.Trim()}" +
+                                $"\r\n\r\n\r\n[generated with Squealer {version}]\r\n\r\n" +
+                                $"***********************************************************************/\n");
+
+            // CREATE
+            oneSql.AppendLine(xml.SquealerObject.GetSqlResource(ESqlResourseType.Create)
+                .Replace("[{Schema}].[{RootProgramName}]", methodName)
+                .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
+                .Trim() + "\n");
+
+            // declare para
+            if (xml.SquealerObject.Parameters.Count > 0)
+            {
+                oneSql.AppendLine(string.Join('\n', GetParaDeclarationList(xml)));
+            }
+
+            // local fucntion for with options
+            string getWithOption()
+            {
+                if(string.IsNullOrWhiteSpace(xml.SquealerObject.WithOptions))
+                    return string.Empty;
+                return $"with {xml.SquealerObject.WithOptions}";
+            }
+
+            // BEGIN
+            oneSql.Append(xml.SquealerObject.GetSqlResource(ESqlResourseType.Begin)
+                    .Replace("{WithOptions}", getWithOption())
+                    .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
+                    .Replace("``this``", methodName)
+                    .Trim());
+
+            //code
+            oneSql.Append($"\n\n{xml.SquealerObject.Code.Trim()}\n\n");
+
+            //End
+            oneSql.AppendLine(
+                xml.SquealerObject.GetSqlResource(ESqlResourseType.End)
+                .Replace("``this``", methodName)
+                .Replace("{Parameters}", $"{(xml.SquealerObject.Parameters.Count == 0 ? "": "\n")}" + string.Join('\n', GetParaErrorList(xml))));
+
+            // permission
+            oneSql.Append("go\r\n" +
+                $"if object_id('{methodName}','{type.GetObjectTypeAttribute().ObjectTypeCode}') is not null\r\n" +
+                $"begin\n");
+            foreach (var user in xml.SquealerObject.Users)
+            {
+                oneSql.Append($"grant {type.GetObjectTypeAttribute().Permission} on {methodName} to [{user.Name}];\n");
+            }
+
+            oneSql.Append("end\r\n" +
+                $"else\r\n" +
+                $"begin\r\n" +
+                $"print 'Permissions not granted on {methodName}.';\r\n" +
+                $"insert ##RetryFailedSquealerItems (ProcName) values ('{methodName}');\r\n" +
+                $"end\r\n" +
+                $"go\n\n");
+
+            oneSql.Append($"----- {methodName} ".PadRight(107, '-') +" <EOF>\n");
+
+
+            foreach (var replacement in config.StringReplacements)
+            {
+                oneSql.Replace(replacement.Original, replacement.Replacement);
+            }
+
+
+            
+            return oneSql.ToString();
+        }
+
+
+        // para declarations
+        private List<string> GetParaDeclarationList(XmlToSqlConverter xml)
+        {
+            return xml.SquealerObject.Parameters
+                        .Select((p, index) => (p, index))
+                        .Select(item =>  
+                            $"{(item.index == 0 ? "" : ",")}@{item.p.Name} {item.p.DataType}" +
+                            $"{(!string.IsNullOrWhiteSpace(item.p.DefaultValue) ? $" = {item.p.DefaultValue}" : "")}" +
+                            $"{(item.p.Output ? " output" : "")}" +
+                            $"{(!string.IsNullOrWhiteSpace(item.p.Comments) ? $" -- {item.p.Comments}" : "")}")
+                        .ToList();
+        }
+
+        // para error log
+        private List<string> GetParaErrorList(XmlToSqlConverter xml) 
+        { 
+            return xml.SquealerObject.Parameters
+                    .Select((p, index) => (p, index))
+                    .Select(item => {
+                        if (item.p.DataType.ToLower().Contains("max") || item.p.ReadOnly)
+                        {
+                            return $"--parameter @{item.p.Name} cannot be logged due to its 'max' or 'readonly' definition";
+                        }
+                        return $"\t\tset @Squealer_ErrorMessage =\r\n" +
+                                $"\t\t\t@Squealer_ErrorMessage\r\n" +
+                                $"\t\t\t+ char(10)\r\n" +
+                                $"\t\t\t+ '@{item.p.Name} = '\r\n" +
+                                $"\t\t\t+ isnull(convert(varchar(max),@{item.p.Name}),'[NULL]');";
+                            })
+                    .ToList();
         }
     }
 }

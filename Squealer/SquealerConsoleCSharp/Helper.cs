@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -144,6 +145,12 @@ namespace SquealerConsoleCSharp
             return true; // Passed all checks.
         }
 
+        public static void SaveAndOpenFileWithDefaultProgram(string filename, string content)
+        {
+            var filePath = Path.Combine(AppState.Instance.LastOpenedPath, filename);
+            File.WriteAllText(filePath, content);
+            Process.Start("explorer.exe", filePath);
+        }
         public class GitHelper
         {
             public static string GetGitProejctBranchName()
