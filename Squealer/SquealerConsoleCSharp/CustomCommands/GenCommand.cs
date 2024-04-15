@@ -11,6 +11,8 @@ using SquealerConsoleCSharp.Models;
 using Spectre.Console;
 using SquealerConsoleCSharp.Extensions;
 using System.Reflection;
+using System.Windows.Forms;
+using TextCopy;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
@@ -45,9 +47,11 @@ namespace SquealerConsoleCSharp.CustomCommands
             output.AppendLine();
             output.Append(MyResources.Resources.TrackFailedItems_End);
 
-            AnsiConsole.WriteLine(output.ToString());
+            AnsiConsole.WriteLine("# Output copied to Windows clipboard.");
 
-            Helper.SaveAndOpenFileWithDefaultProgram("_test.sql", output.ToString());
+            ClipboardService.SetText(output.ToString());
+
+            //Helper.SaveAndOpenFileWithDefaultProgram("_test.sql", output.ToString());
 
         }
 
