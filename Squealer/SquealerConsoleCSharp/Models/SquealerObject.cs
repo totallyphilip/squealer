@@ -163,34 +163,68 @@ namespace SquealerConsoleCSharp.Models
         }
 
 
+        public static SquealerObject GetNewObject(EType type)
+        {
+            var res = new SquealerObject(type, true);
+            string selectPlaceHolder = type switch
+            {
+                EType.StoredProcedure => "select 'hello world! love, ``this``'\r\n\r\n\r\n--optional (see https://docs.microsoft.com/en-us/sql/t-sql/language-elements/return-transact-sql?view=sql-server-ver15)\r\n--set @Squealer_ReturnValue = [ integer_expression ]",
+                EType.ScalarFunction => "set @Result = 'hello world! love, ``this``'",
+                EType.InlineTableFunction => "select 'hello world! love, ``this``' as [MyColumn]",
+                EType.MultiStatementTableFunction => "insert @TableValue select 'hello world! love, ``this``'",
+                EType.View => "select 'hello world! love, ``this``' as hello",
+                _ => throw new InvalidOperationException()
+            };
+
+            res.Code = $"\n\n" +
+                $"/***********************************************************************\n" +
+                $"\tComments.\n" +
+                $"***********************************************************************/\n" +
+                $"\n{selectPlaceHolder}\n\n";
+
+            res.PreCode = "\n\n\n\n";
+            res.Comments = "\n\n\n\n";
+            res.PostCode = "\n\n\n\n";
+
+            var config = ConfigObject.GetConfig();
+            if (config != null && config.Users.Count > 0)
+            {
+                foreach(var u in config.Users)
+                {
+                    res.Users.Add(new User { Name = u.Name});
+                }
+            }
+
+            if(type == EType.MultiStatementTableFunction)
+            {
+                res.Table.Columns.Add(new Column
+                {
+                    Name = "MyColumn",
+                    Type = "varchar(50)",
+                    Nullable = false,
+                    Identity = false,
+                    IncludeInPrimaryKey = false,
+                    Comments = ""
+                });
+            }
+
+            if(type == EType.ScalarFunction)
+            {
+                res.Returns.Type = "varchar(100)";
+            }
+
+
+            return res;
+     
+        }
+
+
         /***
          * Combine the config to create xml file
          *  - 
          */
         public void ExportXmlFile(string filePath)
         {
-            // Override Property for 
-            string? placeHolder_code = null;
-            if (IsNewFile)
-            {
-                string selectPlaceHolder = Type switch
-                {
-                    EType.StoredProcedure => "select 'hello world! love, ``this``'\r\n\r\n\r\n--optional (see https://docs.microsoft.com/en-us/sql/t-sql/language-elements/return-transact-sql?view=sql-server-ver15)\r\n--set @Squealer_ReturnValue = [ integer_expression ]",
-                    EType.ScalarFunction => "set @Result = 'hello world! love, ``this``'",
-                    EType.InlineTableFunction => "select 'hello world! love, ``this``' as [MyColumn]",
-                    EType.MultiStatementTableFunction => "insert @TableValue select 'hello world! love, ``this``'",
-                    EType.View => "select 'hello world! love, ``this``' as hello",
-                    _ => throw new InvalidOperationException()
-                };
-
-                placeHolder_code = $"\n\n" +
-                    $"/***********************************************************************\n" +
-                    $"\tComments.\n" +
-                    $"***********************************************************************/\n" +
-                    $"\n{selectPlaceHolder}\n\n";
-
-            }
-
             XmlWriterSettings settings = new XmlWriterSettings
             {
                 Indent = true, // For readability
@@ -225,13 +259,13 @@ namespace SquealerConsoleCSharp.Models
 
   
                 // PARAMETERS
-                if (Type == EType.StoredProcedure || Type == EType.ScalarFunction || Type == EType.MultiStatementTableFunction)
+                if (Type == EType.StoredProcedure || Type == EType.ScalarFunction || Type == EType.MultiStatementTableFunction || Type == EType.InlineTableFunction)
                 {
                     writer.WriteStartElement("Parameters");
                     if (IsNewFile)
                     {
                         var outputString = Type == EType.StoredProcedure ? "Output=\"False\" " : "";
-                        writer.WriteComment($"<Parameter Name=\"MyParameter\" Type=\"varchar(50)\" {outputString}DefaultValue=\"\" Comments=\"\"/>");
+                        writer.WriteComment($"<Parameter Name=\"MyParameter\" Type=\"varchar(50)\" {outputString}DefaultValue=\"\" Comments=\"\" />");
                     }
                     // Assuming Parameter is a class with Name, Type, Output, DefaultValue, Comments
                     foreach (var parameter in Parameters)
@@ -250,7 +284,14 @@ namespace SquealerConsoleCSharp.Models
                 // TABLE
                 if (Type == EType.View || Type == EType.MultiStatementTableFunction)
                 {
-                    writer.WriteComment(" Define the column(s) to return from this view. ");
+                    if (Type == EType.View)
+                    {
+                        writer.WriteComment(" Define the column(s) to return from this view. ");
+                    }
+                    else if (Type == EType.MultiStatementTableFunction)
+                    {
+                        writer.WriteComment(" Define the column(s) for @TableValue, your table-valued return variable. ");
+                    }
 
                     // Table
                     writer.WriteStartElement("Table");
@@ -258,16 +299,9 @@ namespace SquealerConsoleCSharp.Models
                     {
                         writer.WriteAttributeString("PrimaryKeyClustered", Table.PrimaryKeyClustered);
                     }
-                    if (IsNewFile)
+                    if (IsNewFile && Type == EType.View)
                     {
-                        var tableComment = Type switch
-                        {
-                            EType.View => "<Column Name=\"MyColumn\" Comments=\"\" />",
-                            EType.MultiStatementTableFunction => "<!--<Column Name=\"MyColumn\" Type=\"varchar(50)\" Nullable=\"False\" Identity=\"False\" IncludeInPrimaryKey=\"False\" Comments=\"\" />-->",
-                            _ => ""
-                        };
-                        // Write the Column element as a comment.
-                        writer.WriteComment(tableComment);
+                        writer.WriteComment("<Column Name=\"MyColumn\" Comments=\"\" />");
 
                     }
                     foreach (var col in Table.Columns)
@@ -302,7 +336,7 @@ namespace SquealerConsoleCSharp.Models
 
                 // Code
                 writer.WriteStartElement("Code");
-                writer.WriteCData(placeHolder_code ?? Code);
+                writer.WriteCData(Code);
                 writer.WriteEndElement(); // Code
 
                 // Users
@@ -356,7 +390,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("Output")]
         public string OutputString
         {
-            get => Output.ToString().ToLower();
+            get => Output.ToString();
             set
             {
                 if (bool.TryParse(value, out bool result))
@@ -376,7 +410,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("ReadOnly")]
         public string ReadOnlyString
         {
-            get => ReadOnly.ToString().ToLower();
+            get => ReadOnly.ToString();
             set
             {
                 if (bool.TryParse(value, out bool result))
@@ -396,7 +430,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("RunLog")]
         public string RunLogString
         {
-            get => RunLog.ToString().ToLower();
+            get => RunLog.ToString();
             set
             {
                 if (bool.TryParse(value, out bool result))
@@ -452,7 +486,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("Nullable")]
         public string NullableString
         {
-            get => Nullable.ToString().ToLower();
+            get => Nullable.ToString();
             set
             {
                 if (bool.TryParse(value, out bool result))
@@ -472,7 +506,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("Identity")]
         public string IdentityString
         {
-            get => Identity.ToString().ToLower();
+            get => Identity.ToString();
             set
             {
                 if (bool.TryParse(value, out bool result))
@@ -492,7 +526,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("IncludeInPrimaryKey")]
         public string IncludeInPrimaryKeyString
         {
-            get => IncludeInPrimaryKey.ToString().ToLower();
+            get => IncludeInPrimaryKey.ToString();
             set
             {
                 if (bool.TryParse(value, out bool result))
@@ -507,12 +541,12 @@ namespace SquealerConsoleCSharp.Models
         }
 
         [XmlAttribute("Comments")]
-        public string Comments { get; set; } = default!;
+        public string Comments { get; set; } = string.Empty;
     }
     public class Returns
     {
         [XmlAttribute("Type")]
-        public string Type { get; set; } = "varchar(100)";
+        public string Type { get; set; } = string.Empty;
     }
 
 }

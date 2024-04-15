@@ -21,12 +21,12 @@ namespace SquealerConsoleCSharp.Models
         [XmlArrayItem("String")]
         public List<StringReplacement> StringReplacements { get; set; } = new List<StringReplacement>();
 
-        public static ConfigObject GetConfig()
+        public static ConfigObject? GetConfig()
         {
             var filePath = Helper.GetFilePath("Squealer.config");
             if (!Path.Exists(filePath))
             {
-                throw new InvalidOperationException("Cannot find Squealer.config");
+                return null;
             }
 
             string xmlContent = File.ReadAllText(filePath);

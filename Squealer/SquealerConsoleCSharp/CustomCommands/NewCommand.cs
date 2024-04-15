@@ -98,7 +98,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             else
                 type = EType.StoredProcedure; // default
 
-            var mySquealer = new SquealerObject(type, true);
+            var mySquealer = SquealerObject.GetNewObject(type);
 
             mySquealer.ExportXmlFile(filePath);
 
