@@ -5,6 +5,7 @@ using SquealerConsoleCSharp.MyXml;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,15 +70,21 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             command.AddArgument(pathArgument);
 
-            command.SetHandler(HandleCommand, 
-                procOpt, 
-                scalarFunctionOpt, 
-                inlineTVFOpt, 
-                multiStatementTVFOpt, 
-                viewOpt, 
-                unCommittedOpt,
-                diffOpt,
-                pathArgument);
+            command.SetHandler((InvocationContext context) =>
+            {
+                // Retrieve the values for options and arguments
+                bool proc = context.ParseResult.GetValueForOption(procOpt);
+                bool scalarFunction = context.ParseResult.GetValueForOption(scalarFunctionOpt);
+                bool inlineTVF = context.ParseResult.GetValueForOption(inlineTVFOpt);
+                bool multiStatementTVF = context.ParseResult.GetValueForOption(multiStatementTVFOpt);
+                bool view = context.ParseResult.GetValueForOption(viewOpt);
+                bool unCommitted = context.ParseResult.GetValueForOption(unCommittedOpt);
+                string? diff = context.ParseResult.GetValueForOption(diffOpt);
+                string? searchText = context.ParseResult.GetValueForArgument(pathArgument);
+
+                // Call your method to handle the command
+                HandleCommand(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
+            });
 
             return command;
         }
