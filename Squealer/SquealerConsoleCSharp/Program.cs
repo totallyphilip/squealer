@@ -17,7 +17,7 @@ namespace SquealerConsoleCSharp
 
             
 
-            var rootCommand = new RootCommand("Interactive Shell Example");
+            var rootCommand = new RootCommand("Squealer");
 
             rootCommand.AddCommand(new OpenCommand().CreateCommand());
             rootCommand.AddCommand(new DirectoryCommand().CreateCommand());

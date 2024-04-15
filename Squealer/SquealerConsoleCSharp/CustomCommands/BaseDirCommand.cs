@@ -31,8 +31,8 @@ namespace SquealerConsoleCSharp.CustomCommands
             var command = new Command(_name, $"{_description} \n Note on Syntax:\r\n- [ ] indicates an optional group of options or arguments. " +
                 $"Anything inside these brackets is not required for the command to run but specifies additional filters or parameters when included.\r\n" +
                 $"- | (pipe) signifies an \"or\" relationship between options within a group. You can choose one or more options to apply.\r\n" +
-                $"- && means \"and\" and is used to indicate that options or groups of options can be used in combination with each other.\r\n\r\n" +
-                $"\r\n- {_name} [ -p | -fn | -if | -tf | -v ] && [ -u | -diff <branch-name> ] && [searchText]");
+                $"- && means \"and\" and is used to indicate that options or groups of options can be used in combination with each other.\r\n" +
+                $"- {_name} [ -p | -fn | -if | -tf | -v ] && [ -u | -diff <branch-name> ] && [searchText]\r\n");
 
             var procOpt =
                 Helper.CreateFlagOption("-p", "proc");
