@@ -62,7 +62,19 @@ namespace SquealerConsoleCSharp.CustomCommands
             oneSql.AppendLine($"----- {methodName} ".PadRight(107, '-')+" <BOF>\n");
             oneSql.AppendLine($"-- additional code to execute after {type.GetObjectTypeAttribute().Name} is created");
             oneSql.AppendLine($"print '{countString} creating {methodName}, {type.GetObjectTypeAttribute().Name}'\r\ngo");
-            oneSql.Append($"\r\n\r\n\r\n\r\n\r\ngo\n\n");
+            
+
+            if(xml.SquealerObject.PreCode.Trim().Length > 0)
+            {
+                oneSql.Append($"\n\n{xml.SquealerObject.PreCode.Trim()}\n\n\ngo\n\n");
+            }
+            else
+            {
+                oneSql.Append($"\r\n\r\n\r\n\r\n\r\ngo\n\n");
+            }
+
+
+
             oneSql.AppendLine($"if object_id('{methodName}','p') is not null\r\n" +
                 $"\tdrop procedure {methodName};\r\n" +
                 $"if object_id('{methodName}','fn') is not null\r\n" +
@@ -110,8 +122,20 @@ namespace SquealerConsoleCSharp.CustomCommands
             {
                 var colStr = string.Join('\n', GetTableColumns(xml));
                 if (type == EType.View)
-                    colStr = $"(\n{colStr}\n)";
-                oneSql.Append($"{colStr}\n\n\n");
+                    colStr = $"(\n{colStr}\n\n)";
+                else
+                    colStr = $"\n{colStr}";
+                oneSql.Append($"{colStr}\n\n");
+
+                // to match format
+                if (type == EType.View)
+                    oneSql.AppendLine();
+            }
+
+            // to match format
+            if(type == EType.View && xml.SquealerObject.Table.Columns.Count == 0)
+            {
+                oneSql.Append("\n");
             }
 
             // BEGIN
@@ -120,7 +144,11 @@ namespace SquealerConsoleCSharp.CustomCommands
                     .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
                     .Trim());
 
-
+            // to match format
+            if (type == EType.View || type == EType.MultiStatementTableFunction)
+            {
+                oneSql.AppendLine();
+            }
 
             //code
             oneSql.Append($"\n\n{xml.SquealerObject.Code.Trim()}\n\n");
@@ -196,6 +224,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                             $"{(item.index == 0 ? "" : ",")}@{item.p.Name} {item.p.DataType}" +
                             $"{(!string.IsNullOrWhiteSpace(item.p.DefaultValue) ? $" = {item.p.DefaultValue}" : "")}" +
                             $"{(item.p.Output ? " output" : "")}" +
+                            $"{(item.p.ReadOnly ? " readonly" : "")}" +
                             $"{(!string.IsNullOrWhiteSpace(item.p.Comments) ? $" -- {item.p.Comments}" : "")}")
                         .ToList();
         }
@@ -203,12 +232,17 @@ namespace SquealerConsoleCSharp.CustomCommands
         // table columns
         private List<string> GetTableColumns(XmlToSqlConverter xml)
         {
+            string notNull()
+            {
+                return xml.SquealerObject.Type == EType.View ? "" : " Not null";
+            }
+
             return xml.SquealerObject.Table.Columns
                         .Select((c, index) => (c, index))
                         .Select(item =>
                             $"{(item.index == 0 ? "" : ",")}[{item.c.Name}] {item.c.Type}" +
-                            $"{(item.c.Nullable ? " null" : "")}{(item.c.Identity ? " identity\n" : "\n")}" +
-                            $"{(item.c.IncludeInPrimaryKey ? $"primary key clustered ({item.c.Name})" : "")}"
+                            $"{(item.c.Nullable ? " null" : notNull())}{(item.c.Identity ? " identity" : "")}" +
+                            $"{(item.c.IncludeInPrimaryKey ? $"\nprimary key clustered ({item.c.Name})" : "")}"
                             )
                         .ToList();
         }

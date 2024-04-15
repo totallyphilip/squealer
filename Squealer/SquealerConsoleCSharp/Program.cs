@@ -39,10 +39,24 @@ namespace SquealerConsoleCSharp
                 {
                     continue;
                 }
+
+                if(input.Length > 1000)
+                {
+                    AnsiConsole.MarkupLine("[red]Cannot exceed 1000 chars limit.[/]");
+                    continue;
+                }
+
                 if (input.StartsWith("open", StringComparison.OrdinalIgnoreCase))
                 {
                     var indexOfFirstSpace = input.IndexOf(' ');
-                    inputArgs = new string[]{ input.Substring(0, indexOfFirstSpace), input.Substring(indexOfFirstSpace)};
+                    if (indexOfFirstSpace != -1)
+                    {
+                        inputArgs = new string[] { input.Substring(0, indexOfFirstSpace), input.Substring(indexOfFirstSpace) };
+                    }
+                    else
+                    {
+                        inputArgs = input.Split(' ');
+                    }
                 }
                 else 
                 { 
