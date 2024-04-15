@@ -47,26 +47,6 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("WithOptions")]
         public string WithOptions { get; set; } = default!;
 
-        [XmlIgnore]
-        public bool RunLog { get; set; }
-
-        [XmlAttribute("RunLog")]
-        public string RunLogString
-        {
-            get => RunLog.ToString().ToLower();
-            set
-            {
-                if (bool.TryParse(value, out bool result))
-                {
-                    RunLog = result;
-                }
-                else
-                {
-                    throw new FormatException($"The value '{value}' is not a valid Boolean value for RunLog. Expected 'true' or 'false'.");
-                }
-            }
-        }
-
         [XmlElement("PreCode")]
         public string PreCode { get; set; } = string.Empty;
 
@@ -424,26 +404,6 @@ namespace SquealerConsoleCSharp.Models
             }
         }
 
-        [XmlIgnore]
-        public bool RunLog { get; set; }
-
-        [XmlAttribute("RunLog")]
-        public string RunLogString
-        {
-            get => RunLog.ToString();
-            set
-            {
-                if (bool.TryParse(value, out bool result))
-                {
-                    RunLog = result;
-                }
-                else
-                {
-                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
-                }
-            }
-        }
-
         [XmlAttribute("DefaultValue")]
         public string DefaultValue { get; set; } = default!;
 
@@ -495,7 +455,7 @@ namespace SquealerConsoleCSharp.Models
                 }
                 else
                 {
-                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => Nullable. Expected 'true' or 'false'.");
                 }
             }
         }
@@ -515,7 +475,7 @@ namespace SquealerConsoleCSharp.Models
                 }
                 else
                 {
-                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => Identity. Expected 'true' or 'false'.");
                 }
             }
         }
@@ -535,7 +495,7 @@ namespace SquealerConsoleCSharp.Models
                 }
                 else
                 {
-                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => IncludeInPrimaryKey. Expected 'true' or 'false'.");
                 }
             }
         }
