@@ -107,7 +107,7 @@ namespace SquealerConsoleCSharp
                 
                 var hasGitInfo = gitFileInfosDict.TryGetValue(x.SqlrFileInfo.FileName, out var gitStatus);
 
-                table.AddRow(attr.Acronym, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]", hasGitInfo ? $"{gitStatus}" : "");
+                table.AddRow(attr.ObjectTypeCode, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]", hasGitInfo ? $"{gitStatus}" : "");
             }
             AnsiConsole.Write(table);
 

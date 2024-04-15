@@ -88,6 +88,11 @@ namespace SquealerConsoleCSharp.Models
         [XmlElement("Code")]
         public string Code { get; set; } = string.Empty;
 
+        public bool NoMagic { get
+            {
+                return Code.Trim().StartsWith("--nomagic");
+            } }
+
 
         [XmlArray("Users")]
         [XmlArrayItem("User")]
@@ -97,32 +102,59 @@ namespace SquealerConsoleCSharp.Models
         public string PostCode { get; set; } = string.Empty;
 
 
-        private static Dictionary<(EType, ESqlResourseType), string> sqlResourceMap = new Dictionary<(EType, ESqlResourseType), string>
+        // 
+        private static Dictionary<(EType, ESqlResourseType, bool), string> sqlResourceMap = new Dictionary<(EType, ESqlResourseType, bool), string>
         {
-            {(EType.StoredProcedure, ESqlResourseType.Create), MyResources.Resources.P_Create},
-            {(EType.StoredProcedure, ESqlResourseType.Begin), MyResources.Resources.P_Begin},
-            {(EType.StoredProcedure, ESqlResourseType.End), MyResources.Resources.P_End},
+            {(EType.StoredProcedure, ESqlResourseType.Create, false), MyResources.Resources.P_Create},
+            {(EType.StoredProcedure, ESqlResourseType.Table, false), string.Empty},
+            {(EType.StoredProcedure, ESqlResourseType.Begin, false), MyResources.Resources.P_Begin},
+            {(EType.StoredProcedure, ESqlResourseType.End, false), MyResources.Resources.P_End},
+            {(EType.StoredProcedure, ESqlResourseType.Create, true), MyResources.Resources.P_Create},
+            {(EType.StoredProcedure, ESqlResourseType.Table, true), string.Empty},
+            {(EType.StoredProcedure, ESqlResourseType.Begin, true), MyResources.Resources.P_BeginNoMagic},
+            {(EType.StoredProcedure, ESqlResourseType.End, true), MyResources.Resources.P_EndNoMagic},
 
-            {(EType.ScalarFunction, ESqlResourseType.Create), MyResources.Resources.FN_Create},
-            {(EType.ScalarFunction, ESqlResourseType.Begin), MyResources.Resources.FN_Begin},
-            {(EType.ScalarFunction, ESqlResourseType.End), MyResources.Resources.FN_End},
+            {(EType.ScalarFunction, ESqlResourseType.Create, false), MyResources.Resources.FN_Create},
+            {(EType.ScalarFunction, ESqlResourseType.Begin, false), MyResources.Resources.FN_Begin},
+            {(EType.ScalarFunction, ESqlResourseType.Table, false), string.Empty},
+            {(EType.ScalarFunction, ESqlResourseType.End, false), MyResources.Resources.FN_End},
+            {(EType.ScalarFunction, ESqlResourseType.Create, true), MyResources.Resources.FN_Create},
+            {(EType.ScalarFunction, ESqlResourseType.Begin, true), MyResources.Resources.FN_Begin},
+            {(EType.ScalarFunction, ESqlResourseType.Table, true), string.Empty},
+            {(EType.ScalarFunction, ESqlResourseType.End, true), MyResources.Resources.FN_End},
 
-            {(EType.InlineTableFunction, ESqlResourseType.Create), string.Empty},
-            {(EType.InlineTableFunction, ESqlResourseType.Begin), MyResources.Resources.IF_Begin},
-            {(EType.InlineTableFunction, ESqlResourseType.End), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Create, false), MyResources.Resources.FN_Create},
+            {(EType.InlineTableFunction, ESqlResourseType.Begin, false), MyResources.Resources.IF_Begin},
+            {(EType.InlineTableFunction, ESqlResourseType.Table, false), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.End, false), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Create, true), MyResources.Resources.FN_Create},
+            {(EType.InlineTableFunction, ESqlResourseType.Begin, true), MyResources.Resources.IF_Begin},
+            {(EType.InlineTableFunction, ESqlResourseType.Table, true), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.End, true), string.Empty},
 
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Create), string.Empty},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin), MyResources.Resources.Tf_Begin},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.End),MyResources.Resources.TF_EndTest},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, false), MyResources.Resources.FN_Create},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, false), MyResources.Resources.Tf_Begin},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, false), MyResources.Resources.TF_Table},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.End, false),MyResources.Resources.TF_End},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, true), MyResources.Resources.FN_Create},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, true), MyResources.Resources.Tf_Begin},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, true), MyResources.Resources.TF_Table},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.End, true),MyResources.Resources.TF_End},
 
-            {(EType.View, ESqlResourseType.Create), MyResources.Resources.V_Create},
-            {(EType.View, ESqlResourseType.Begin), MyResources.Resources.V_Begin},
-            {(EType.View, ESqlResourseType.End), string.Empty},
+
+            {(EType.View, ESqlResourseType.Create, false), MyResources.Resources.V_Create},
+            {(EType.View, ESqlResourseType.Begin, false), MyResources.Resources.V_Begin},
+            {(EType.View, ESqlResourseType.Table, false), string.Empty},
+            {(EType.View, ESqlResourseType.End, false), string.Empty},
+            {(EType.View, ESqlResourseType.Create, true), MyResources.Resources.V_Create},
+            {(EType.View, ESqlResourseType.Begin, true), MyResources.Resources.V_Begin},
+            {(EType.View, ESqlResourseType.Table, true), string.Empty},
+            {(EType.View, ESqlResourseType.End, true), string.Empty},
         };
 
         public string GetSqlResource(ESqlResourseType resourseType)
         {
-            if (sqlResourceMap.TryGetValue((Type, resourseType), out var resource))
+            if (sqlResourceMap.TryGetValue((Type, resourseType, NoMagic), out var resource))
             {
                 return resource;
             }
@@ -246,9 +278,9 @@ namespace SquealerConsoleCSharp.Models
                         if (Type == EType.MultiStatementTableFunction)
                         {
                             writer.WriteAttributeString("Type", col.Type);
-                            writer.WriteAttributeString("Nullable", col.Nullable);
-                            writer.WriteAttributeString("Identity", col.Identity);
-                            writer.WriteAttributeString("IncludeInPrimaryKey", col.IncludeInPrimaryKey);
+                            writer.WriteAttributeString("Nullable", col.NullableString);
+                            writer.WriteAttributeString("Identity", col.IdentityString);
+                            writer.WriteAttributeString("IncludeInPrimaryKey", col.IncludeInPrimaryKeyString);
                             writer.WriteAttributeString("Comments", col.Comments);
                         }
                         writer.WriteEndElement(); // End of Column
@@ -402,7 +434,7 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("PrimaryKeyClustered")]
         public string PrimaryKeyClustered { get; set; } = "False";
 
-        [XmlElement(ElementName = "User")]
+        [XmlElement(ElementName = "Column")]
         public List<Column> Columns { get; set; } = new List<Column>();
     }
 
@@ -414,15 +446,65 @@ namespace SquealerConsoleCSharp.Models
         [XmlAttribute("Type")]
         public string Type { get; set; } = default!;
 
+        [XmlIgnore]
+        public bool Nullable { get; set; }
+
         [XmlAttribute("Nullable")]
-        public string Nullable { get; set; } = default!;
+        public string NullableString
+        {
+            get => Nullable.ToString().ToLower();
+            set
+            {
+                if (bool.TryParse(value, out bool result))
+                {
+                    Nullable = result;
+                }
+                else
+                {
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool Identity { get; set; }
 
         [XmlAttribute("Identity")]
-        public string Identity { get; set; } = default!;
+        public string IdentityString
+        {
+            get => Identity.ToString().ToLower();
+            set
+            {
+                if (bool.TryParse(value, out bool result))
+                {
+                    Identity = result;
+                }
+                else
+                {
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
+                }
+            }
+        }
+
+        [XmlIgnore]
+        public bool IncludeInPrimaryKey { get; set; }
 
         [XmlAttribute("IncludeInPrimaryKey")]
-        public string IncludeInPrimaryKey { get; set; } = default!;
-
+        public string IncludeInPrimaryKeyString
+        {
+            get => IncludeInPrimaryKey.ToString().ToLower();
+            set
+            {
+                if (bool.TryParse(value, out bool result))
+                {
+                    IncludeInPrimaryKey = result;
+                }
+                else
+                {
+                    throw new FormatException($"The value '{value}' is not a valid Boolean value for Parameter => RunLog. Expected 'true' or 'false'.");
+                }
+            }
+        }
 
         [XmlAttribute("Comments")]
         public string Comments { get; set; } = default!;

@@ -101,12 +101,26 @@ namespace SquealerConsoleCSharp.CustomCommands
                 return $"with {xml.SquealerObject.WithOptions}";
             }
 
+            // TABLE
+            oneSql.Append(xml.SquealerObject.GetSqlResource(ESqlResourseType.Table)
+                    .Trim());
+
+
+            if (xml.SquealerObject.Table.Columns.Count > 0)
+            {
+                var colStr = string.Join('\n', GetTableColumns(xml));
+                if (type == EType.View)
+                    colStr = $"(\n{colStr}\n)";
+                oneSql.Append($"{colStr}\n\n\n");
+            }
+
             // BEGIN
             oneSql.Append(xml.SquealerObject.GetSqlResource(ESqlResourseType.Begin)
                     .Replace("{WithOptions}", getWithOption())
                     .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
-                    .Replace("``this``", methodName)
                     .Trim());
+
+
 
             //code
             oneSql.Append($"\n\n{xml.SquealerObject.Code.Trim()}\n\n");
@@ -114,28 +128,53 @@ namespace SquealerConsoleCSharp.CustomCommands
             //End
             oneSql.AppendLine(
                 xml.SquealerObject.GetSqlResource(ESqlResourseType.End)
-                .Replace("``this``", methodName)
-                .Replace("{Parameters}", $"{(xml.SquealerObject.Parameters.Count == 0 ? "": "\n")}" + string.Join('\n', GetParaErrorList(xml))));
+                .Replace("{Parameters}", $"{(xml.SquealerObject.Parameters.Count == 0 ? "": "\n")}" + string.Join('\n', GetParaErrorList(xml)))
+                );
 
-            // permission
-            oneSql.Append("go\r\n" +
-                $"if object_id('{methodName}','{type.GetObjectTypeAttribute().ObjectTypeCode}') is not null\r\n" +
-                $"begin\n");
-            foreach (var user in xml.SquealerObject.Users)
+            if (xml.SquealerObject.Users.Count > 0)
             {
-                oneSql.Append($"grant {type.GetObjectTypeAttribute().Permission} on {methodName} to [{user.Name}];\n");
+                // permission
+                oneSql.Append("go\r\n" +
+                    $"if object_id('{methodName}','{type.GetObjectTypeAttribute().ObjectTypeCode}') is not null\r\n" +
+                    $"begin\n");
+                foreach (var user in xml.SquealerObject.Users)
+                {
+                    oneSql.Append($"grant {type.GetObjectTypeAttribute().Permission} on {methodName} to [{user.Name}];\n");
+                }
+
+                oneSql.Append("end\r\n" +
+                    $"else\r\n" +
+                    $"begin\r\n" +
+                    $"print 'Permissions not granted on {methodName}.';\r\n" +
+                    $"insert ##RetryFailedSquealerItems (ProcName) values ('{methodName}');\r\n" +
+                    $"end\r\n" +
+                    $"go\n\n");
+            }
+            else
+            {
+                oneSql.Append("go\n\n");
             }
 
-            oneSql.Append("end\r\n" +
-                $"else\r\n" +
-                $"begin\r\n" +
-                $"print 'Permissions not granted on {methodName}.';\r\n" +
-                $"insert ##RetryFailedSquealerItems (ProcName) values ('{methodName}');\r\n" +
-                $"end\r\n" +
-                $"go\n\n");
+
+            //Post Code
+            if (!string.IsNullOrWhiteSpace(xml.SquealerObject.PostCode))
+            {
+                oneSql.Append($"-- additional code to execute after {type.GetObjectTypeAttribute().Name} is created\n" +
+                    $"if object_id('{xml.SqlrFileInfo.SqlObjectName_w_Bracket}','{type.GetObjectTypeAttribute().ObjectTypeCode}') is not null\n" +
+                    $"begin\n");
+
+                oneSql.Append($"\n\n{xml.SquealerObject.PostCode.Trim()}\n\n\n");
+
+                oneSql.Append("end\n" +
+                    "else print 'PostCode not executed.'\n" +
+                    "go\n\n");
+            }
+
 
             oneSql.Append($"----- {methodName} ".PadRight(107, '-') +" <EOF>\n");
 
+
+            oneSql.Replace("``this``", methodName);
 
             foreach (var replacement in config.StringReplacements)
             {
@@ -160,6 +199,20 @@ namespace SquealerConsoleCSharp.CustomCommands
                             $"{(!string.IsNullOrWhiteSpace(item.p.Comments) ? $" -- {item.p.Comments}" : "")}")
                         .ToList();
         }
+
+        // table columns
+        private List<string> GetTableColumns(XmlToSqlConverter xml)
+        {
+            return xml.SquealerObject.Table.Columns
+                        .Select((c, index) => (c, index))
+                        .Select(item =>
+                            $"{(item.index == 0 ? "" : ",")}[{item.c.Name}] {item.c.Type}" +
+                            $"{(item.c.Nullable ? " null" : "")}{(item.c.Identity ? " identity\n" : "\n")}" +
+                            $"{(item.c.IncludeInPrimaryKey ? $"primary key clustered ({item.c.Name})" : "")}"
+                            )
+                        .ToList();
+        }
+
 
         // para error log
         private List<string> GetParaErrorList(XmlToSqlConverter xml) 

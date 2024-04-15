@@ -10,6 +10,7 @@ namespace SquealerConsoleCSharp.Models
     {
         Create = 1,
         Begin,
+        Table,
         End
     }
 }
