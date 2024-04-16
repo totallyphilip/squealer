@@ -51,8 +51,14 @@ namespace SquealerConsoleCSharp.CustomCommands
                 description: "-diff <Target Branch Name>",
                 getDefaultValue: () => string.Empty
                 );
-
-
+            var modeOpt = new Option<string?>(
+                aliases: new[] { "-mode" },
+                description: "-mode alt|e|t; only useful when there is text output.\n" +
+                            "alt - alter\n" +
+                            "e - encrption\n" +
+                            "t - test: one object only",
+                getDefaultValue: () => string.Empty
+                );
 
             command.AddOption(procOpt);
             command.AddOption(scalarFunctionOpt);
@@ -61,6 +67,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             command.AddOption(viewOpt);
             command.AddOption(unCommittedOpt);
             command.AddOption(diffOpt);
+            command.AddOption(modeOpt);
 
             var pathArgument = new Argument<string?>(
                     name: "searchtext",
@@ -80,22 +87,42 @@ namespace SquealerConsoleCSharp.CustomCommands
                 bool view = context.ParseResult.GetValueForOption(viewOpt);
                 bool unCommitted = context.ParseResult.GetValueForOption(unCommittedOpt);
                 string? diff = context.ParseResult.GetValueForOption(diffOpt);
+                string? modes = context.ParseResult.GetValueForOption(modeOpt);
                 string? searchText = context.ParseResult.GetValueForArgument(pathArgument);
 
                 // Call your method to handle the command
-                HandleCommand(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
+                HandleCommand(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, modes, searchText);
             });
 
             return command;
         }
 
-        protected void HandleCommand(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? searchtext)
+        protected void HandleCommand(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? modes, string? searchtext)
         {
             if (!Helper.VadilateFolder())
                 return;
 
             if (searchtext != null)
                 searchtext = searchtext.Replace("[", "").Replace("]", "");
+
+            bool alt = false, e = false, t = false;
+
+            if(!string.IsNullOrWhiteSpace(modes))
+            {
+                var modeSet = modes.Split('|').Select(m => m.Trim().ToLower()).Distinct().ToHashSet();
+                if (modeSet.Contains("alt"))
+                    alt = true;
+                if (modeSet.Contains("e"))
+                    e = true;
+                if (modeSet.Contains("t"))
+                    t = true;
+                if (!modeSet.Any(m => new[] { "alt", "e", "t" }.Contains(m)) && modeSet.Count > 0)
+                {
+                    Console.WriteLine("Invalid mode(s) specified.");
+                    return;
+                }
+            }
+
 
             if (!string.IsNullOrWhiteSpace(searchtext) && searchtext.StartsWith("-"))
             {
@@ -140,7 +167,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                         var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch);
                         if (u)
                         {
-                            
+
                             _gitFileInfos.AddRange(diffFiles);
                             _gitFileInfos = _gitFileInfos.DistinctBy(x => x.FileName).ToList();
                         }
@@ -158,7 +185,14 @@ namespace SquealerConsoleCSharp.CustomCommands
                 }
 
                 // re order 
-                _xmlToSqls = _xmlToSqls.OrderBy(x => x.SqlrFileInfo.SqlObjectName).ToList(); 
+                _xmlToSqls = _xmlToSqls.OrderBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
+
+                if (t && _xmlToSqls.Count != 1)
+                {
+                    AnsiConsole.MarkupLine($"[red]More than 1 object Selected.[/]");
+                    return;
+                }
+
 
                 if (!string.IsNullOrWhiteSpace(diff_targetBranch))
                 {
@@ -185,14 +219,14 @@ namespace SquealerConsoleCSharp.CustomCommands
             }
 
             // At the point where you want to allow for extension:
-            ExtraImplementation(p, fn, _if, tf, v, searchtext);
+            ExtraImplementation(p, fn, _if, tf, v, alt, t, e, searchtext);
             
         }
 
         // Define an abstract or virtual method for extra implementation.
         // If abstract, derived classes are forced to implement it.
         // If virtual, you can provide a default implementation that can be overridden.
-        protected abstract void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, string? searchtext);
+        protected abstract void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alt, bool t, bool e, string? searchtext);
     }
 
 }

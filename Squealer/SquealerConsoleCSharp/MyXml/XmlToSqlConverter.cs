@@ -30,20 +30,5 @@ namespace SquealerConsoleCSharp.MyXml
             }
         }
 
-
-        public string GetSqlScript() 
-        {
-            string create = SquealerObject.Type switch
-            {
-                EType.StoredProcedure => MyResources.Resources.P_Create,
-                EType.ScalarFunction or EType.InlineTableFunction or EType.MultiStatementTableFunction => MyResources.Resources.FN_Create,
-                EType.View => MyResources.Resources.V_Create,
-                _ => throw new InvalidOperationException()
-            };
-
-            create = create.Replace("{Schema}", SqlrFileInfo.Schema);
-            create = create.Replace("{RootProgramName}", SqlrFileInfo.RootProgramName);
-            return create;
-        }
     }
 }

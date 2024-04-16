@@ -151,6 +151,17 @@ namespace SquealerConsoleCSharp
             File.WriteAllText(filePath, content);
             Process.Start("explorer.exe", filePath);
         }
+
+        public static string ReplaceFirstOccurrence(string source, string find, string replace)
+        {
+            int place = source.IndexOf(find);
+            if (place < 0)
+                return source; // No occurrence found
+
+            string result = source.Remove(place, find.Length).Insert(place, replace);
+            return result;
+        }
+
         public class GitHelper
         {
             public static string GetGitProejctBranchName()

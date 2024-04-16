@@ -82,59 +82,11 @@ namespace SquealerConsoleCSharp.Models
         public string PostCode { get; set; } = string.Empty;
 
 
-        // 
-        private static Dictionary<(EType, ESqlResourseType, bool), string> sqlResourceMap = new Dictionary<(EType, ESqlResourseType, bool), string>
+
+
+        public string GetSqlResource(ESqlResourseType resourseType, EsqlScriptMode mode)
         {
-            {(EType.StoredProcedure, ESqlResourseType.Create, false), MyResources.Resources.P_Create},
-            {(EType.StoredProcedure, ESqlResourseType.Table, false), string.Empty},
-            {(EType.StoredProcedure, ESqlResourseType.Begin, false), MyResources.Resources.P_Begin},
-            {(EType.StoredProcedure, ESqlResourseType.End, false), MyResources.Resources.P_End},
-            {(EType.StoredProcedure, ESqlResourseType.Create, true), MyResources.Resources.P_Create},
-            {(EType.StoredProcedure, ESqlResourseType.Table, true), string.Empty},
-            {(EType.StoredProcedure, ESqlResourseType.Begin, true), MyResources.Resources.P_BeginNoMagic},
-            {(EType.StoredProcedure, ESqlResourseType.End, true), MyResources.Resources.P_EndNoMagic},
-
-            {(EType.ScalarFunction, ESqlResourseType.Create, false), MyResources.Resources.FN_Create},
-            {(EType.ScalarFunction, ESqlResourseType.Begin, false), MyResources.Resources.FN_Begin},
-            {(EType.ScalarFunction, ESqlResourseType.Table, false), string.Empty},
-            {(EType.ScalarFunction, ESqlResourseType.End, false), MyResources.Resources.FN_End},
-            {(EType.ScalarFunction, ESqlResourseType.Create, true), MyResources.Resources.FN_Create},
-            {(EType.ScalarFunction, ESqlResourseType.Begin, true), MyResources.Resources.FN_Begin},
-            {(EType.ScalarFunction, ESqlResourseType.Table, true), string.Empty},
-            {(EType.ScalarFunction, ESqlResourseType.End, true), MyResources.Resources.FN_End},
-
-            {(EType.InlineTableFunction, ESqlResourseType.Create, false), MyResources.Resources.FN_Create},
-            {(EType.InlineTableFunction, ESqlResourseType.Begin, false), MyResources.Resources.IF_Begin},
-            {(EType.InlineTableFunction, ESqlResourseType.Table, false), string.Empty},
-            {(EType.InlineTableFunction, ESqlResourseType.End, false), string.Empty},
-            {(EType.InlineTableFunction, ESqlResourseType.Create, true), MyResources.Resources.FN_Create},
-            {(EType.InlineTableFunction, ESqlResourseType.Begin, true), MyResources.Resources.IF_Begin},
-            {(EType.InlineTableFunction, ESqlResourseType.Table, true), string.Empty},
-            {(EType.InlineTableFunction, ESqlResourseType.End, true), string.Empty},
-
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, false), MyResources.Resources.FN_Create},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, false), MyResources.Resources.Tf_Begin},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, false), MyResources.Resources.TF_Table},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.End, false),MyResources.Resources.TF_End},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, true), MyResources.Resources.FN_Create},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, true), MyResources.Resources.Tf_Begin},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, true), MyResources.Resources.TF_Table},
-            {(EType.MultiStatementTableFunction, ESqlResourseType.End, true),MyResources.Resources.TF_End},
-
-
-            {(EType.View, ESqlResourseType.Create, false), MyResources.Resources.V_Create},
-            {(EType.View, ESqlResourseType.Begin, false), MyResources.Resources.V_Begin},
-            {(EType.View, ESqlResourseType.Table, false), string.Empty},
-            {(EType.View, ESqlResourseType.End, false), string.Empty},
-            {(EType.View, ESqlResourseType.Create, true), MyResources.Resources.V_Create},
-            {(EType.View, ESqlResourseType.Begin, true), MyResources.Resources.V_Begin},
-            {(EType.View, ESqlResourseType.Table, true), string.Empty},
-            {(EType.View, ESqlResourseType.End, true), string.Empty},
-        };
-
-        public string GetSqlResource(ESqlResourseType resourseType)
-        {
-            if (sqlResourceMap.TryGetValue((Type, resourseType, NoMagic), out var resource))
+            if (sqlResourceMap.TryGetValue((Type, resourseType, mode), out var resource))
             {
                 return resource;
             }
@@ -143,60 +95,7 @@ namespace SquealerConsoleCSharp.Models
         }
 
 
-        public static SquealerObject GetNewObject(EType type)
-        {
-            var res = new SquealerObject(type, true);
-            string selectPlaceHolder = type switch
-            {
-                EType.StoredProcedure => "select 'hello world! love, ``this``'\r\n\r\n\r\n--optional (see https://docs.microsoft.com/en-us/sql/t-sql/language-elements/return-transact-sql?view=sql-server-ver15)\r\n--set @Squealer_ReturnValue = [ integer_expression ]",
-                EType.ScalarFunction => "set @Result = 'hello world! love, ``this``'",
-                EType.InlineTableFunction => "select 'hello world! love, ``this``' as [MyColumn]",
-                EType.MultiStatementTableFunction => "insert @TableValue select 'hello world! love, ``this``'",
-                EType.View => "select 'hello world! love, ``this``' as hello",
-                _ => throw new InvalidOperationException()
-            };
-
-            res.Code = $"\n\n" +
-                $"/***********************************************************************\n" +
-                $"\tComments.\n" +
-                $"***********************************************************************/\n" +
-                $"\n{selectPlaceHolder}\n\n";
-
-            res.PreCode = "\n\n\n\n";
-            res.Comments = "\n\n\n\n";
-            res.PostCode = "\n\n\n\n";
-
-            var config = ConfigObject.GetConfig();
-            if (config != null && config.Users.Count > 0)
-            {
-                foreach(var u in config.Users)
-                {
-                    res.Users.Add(new User { Name = u.Name});
-                }
-            }
-
-            if(type == EType.MultiStatementTableFunction)
-            {
-                res.Table.Columns.Add(new Column
-                {
-                    Name = "MyColumn",
-                    Type = "varchar(50)",
-                    Nullable = false,
-                    Identity = false,
-                    IncludeInPrimaryKey = false,
-                    Comments = ""
-                });
-            }
-
-            if(type == EType.ScalarFunction)
-            {
-                res.Returns.Type = "varchar(100)";
-            }
-
-
-            return res;
-     
-        }
+        
 
 
         /***
@@ -349,9 +248,136 @@ namespace SquealerConsoleCSharp.Models
             }
         }
 
+
+        #region static
+        private static Dictionary<(EType, ESqlResourseType, EsqlScriptMode), string> sqlResourceMap = new Dictionary<(EType, ESqlResourseType, EsqlScriptMode), string>
+        {
+            {(EType.StoredProcedure, ESqlResourseType.Create, EsqlScriptMode.Normal), MyResources.Resources.P_Create},
+            {(EType.StoredProcedure, ESqlResourseType.Table, EsqlScriptMode.Normal), string.Empty},
+            {(EType.StoredProcedure, ESqlResourseType.Begin, EsqlScriptMode.Normal), MyResources.Resources.P_Begin},
+            {(EType.StoredProcedure, ESqlResourseType.End, EsqlScriptMode.Normal), MyResources.Resources.P_End},
+            {(EType.StoredProcedure, ESqlResourseType.Create, EsqlScriptMode.NoMagic), MyResources.Resources.P_Create},
+            {(EType.StoredProcedure, ESqlResourseType.Table, EsqlScriptMode.NoMagic), string.Empty},
+            {(EType.StoredProcedure, ESqlResourseType.Begin, EsqlScriptMode.NoMagic), MyResources.Resources.P_BeginNoMagic},
+            {(EType.StoredProcedure, ESqlResourseType.End, EsqlScriptMode.NoMagic), MyResources.Resources.P_EndNoMagic},
+            {(EType.StoredProcedure, ESqlResourseType.Create, EsqlScriptMode.Test), string.Empty},
+            {(EType.StoredProcedure, ESqlResourseType.Table, EsqlScriptMode.Test), string.Empty},
+            {(EType.StoredProcedure, ESqlResourseType.Begin, EsqlScriptMode.Test), MyResources.Resources.P_BeginTest},
+            {(EType.StoredProcedure, ESqlResourseType.End, EsqlScriptMode.Test), MyResources.Resources.P_EndTest},
+
+            {(EType.ScalarFunction, ESqlResourseType.Create, EsqlScriptMode.Normal), MyResources.Resources.FN_Create},
+            {(EType.ScalarFunction, ESqlResourseType.Table, EsqlScriptMode.Normal), string.Empty},
+            {(EType.ScalarFunction, ESqlResourseType.Begin, EsqlScriptMode.Normal), MyResources.Resources.FN_Begin},
+            {(EType.ScalarFunction, ESqlResourseType.End, EsqlScriptMode.Normal), MyResources.Resources.FN_End},
+            {(EType.ScalarFunction, ESqlResourseType.Create, EsqlScriptMode.NoMagic), MyResources.Resources.FN_Create},
+            {(EType.ScalarFunction, ESqlResourseType.Table, EsqlScriptMode.NoMagic), string.Empty},
+            {(EType.ScalarFunction, ESqlResourseType.Begin, EsqlScriptMode.NoMagic), MyResources.Resources.FN_Begin},
+            {(EType.ScalarFunction, ESqlResourseType.End, EsqlScriptMode.NoMagic), MyResources.Resources.FN_End},
+            {(EType.ScalarFunction, ESqlResourseType.Create, EsqlScriptMode.Test), string.Empty},
+            {(EType.ScalarFunction, ESqlResourseType.Table, EsqlScriptMode.Test), string.Empty},
+            {(EType.ScalarFunction, ESqlResourseType.Begin, EsqlScriptMode.Test), MyResources.Resources.FN_BeginTest},
+            {(EType.ScalarFunction, ESqlResourseType.End, EsqlScriptMode.Test), MyResources.Resources.FN_EndTest},
+
+
+            {(EType.InlineTableFunction, ESqlResourseType.Create, EsqlScriptMode.Normal), MyResources.Resources.FN_Create},
+            {(EType.InlineTableFunction, ESqlResourseType.Table, EsqlScriptMode.Normal), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Begin, EsqlScriptMode.Normal), MyResources.Resources.IF_Begin},
+            {(EType.InlineTableFunction, ESqlResourseType.End, EsqlScriptMode.Normal), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Create, EsqlScriptMode.NoMagic), MyResources.Resources.FN_Create},
+            {(EType.InlineTableFunction, ESqlResourseType.Table, EsqlScriptMode.NoMagic), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Begin, EsqlScriptMode.NoMagic), MyResources.Resources.IF_Begin},
+            {(EType.InlineTableFunction, ESqlResourseType.End, EsqlScriptMode.NoMagic), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Create, EsqlScriptMode.Test), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Table, EsqlScriptMode.Test), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.Begin, EsqlScriptMode.Test), string.Empty},
+            {(EType.InlineTableFunction, ESqlResourseType.End, EsqlScriptMode.Test), string.Empty},
+
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, EsqlScriptMode.Normal), MyResources.Resources.FN_Create},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, EsqlScriptMode.Normal), MyResources.Resources.TF_Table},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, EsqlScriptMode.Normal), MyResources.Resources.Tf_Begin},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.End, EsqlScriptMode.Normal),MyResources.Resources.TF_End},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, EsqlScriptMode.NoMagic), MyResources.Resources.FN_Create},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, EsqlScriptMode.NoMagic), MyResources.Resources.TF_Table},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, EsqlScriptMode.NoMagic), MyResources.Resources.Tf_Begin},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.End, EsqlScriptMode.NoMagic),MyResources.Resources.TF_End},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Create, EsqlScriptMode.Test), string.Empty},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Table, EsqlScriptMode.Test), MyResources.Resources.TF_TableTest},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.Begin, EsqlScriptMode.Test), MyResources.Resources.Tf_BeginTest},
+            {(EType.MultiStatementTableFunction, ESqlResourseType.End, EsqlScriptMode.Test),MyResources.Resources.TF_EndTest},
+
+            {(EType.View, ESqlResourseType.Create, EsqlScriptMode.Normal), MyResources.Resources.V_Create},
+            {(EType.View, ESqlResourseType.Table, EsqlScriptMode.Normal), string.Empty},
+            {(EType.View, ESqlResourseType.Begin, EsqlScriptMode.Normal), MyResources.Resources.V_Begin},
+            {(EType.View, ESqlResourseType.End, EsqlScriptMode.Normal), string.Empty},
+            {(EType.View, ESqlResourseType.Create, EsqlScriptMode.NoMagic), MyResources.Resources.V_Create},
+            {(EType.View, ESqlResourseType.Table, EsqlScriptMode.NoMagic), string.Empty},
+            {(EType.View, ESqlResourseType.Begin, EsqlScriptMode.NoMagic), MyResources.Resources.V_Begin},
+            {(EType.View, ESqlResourseType.End, EsqlScriptMode.NoMagic), string.Empty},
+            {(EType.View, ESqlResourseType.Create, EsqlScriptMode.Test), string.Empty},
+            {(EType.View, ESqlResourseType.Table, EsqlScriptMode.Test), string.Empty},
+            {(EType.View, ESqlResourseType.Begin, EsqlScriptMode.Test), string.Empty},
+            {(EType.View, ESqlResourseType.End, EsqlScriptMode.Test), string.Empty},
+        };
+
+        public static SquealerObject GetNewObject(EType type)
+        {
+            var res = new SquealerObject(type, true);
+            string selectPlaceHolder = type switch
+            {
+                EType.StoredProcedure => "select 'hello world! love, ``this``'\r\n\r\n\r\n--optional (see https://docs.microsoft.com/en-us/sql/t-sql/language-elements/return-transact-sql?view=sql-server-ver15)\r\n--set @Squealer_ReturnValue = [ integer_expression ]",
+                EType.ScalarFunction => "set @Result = 'hello world! love, ``this``'",
+                EType.InlineTableFunction => "select 'hello world! love, ``this``' as [MyColumn]",
+                EType.MultiStatementTableFunction => "insert @TableValue select 'hello world! love, ``this``'",
+                EType.View => "select 'hello world! love, ``this``' as hello",
+                _ => throw new InvalidOperationException()
+            };
+
+            res.Code = $"\n\n" +
+                $"/***********************************************************************\n" +
+                $"\tComments.\n" +
+                $"***********************************************************************/\n" +
+                $"\n{selectPlaceHolder}\n\n";
+
+            res.PreCode = "\n\n\n\n";
+            res.Comments = "\n\n\n\n";
+            res.PostCode = "\n\n\n\n";
+
+            var config = ConfigObject.GetConfig();
+            if (config != null && config.Users.Count > 0)
+            {
+                foreach (var u in config.Users)
+                {
+                    res.Users.Add(new User { Name = u.Name });
+                }
+            }
+
+            if (type == EType.MultiStatementTableFunction)
+            {
+                res.Table.Columns.Add(new Column
+                {
+                    Name = "MyColumn",
+                    Type = "varchar(50)",
+                    Nullable = false,
+                    Identity = false,
+                    IncludeInPrimaryKey = false,
+                    Comments = ""
+                });
+            }
+
+            if (type == EType.ScalarFunction)
+            {
+                res.Returns.Type = "varchar(100)";
+            }
+
+
+            return res;
+
+        }
+
+
+        #endregion
+
     }
-
-
     #endregion
 
     #region parameter

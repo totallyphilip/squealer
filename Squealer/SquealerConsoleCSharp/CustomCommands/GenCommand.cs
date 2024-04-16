@@ -23,7 +23,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         }
 
-        protected override void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, string? searchtext)
+        protected override void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alter, bool test, bool encryption, string? searchtext)
         {
             if(_xmlToSqls.Count == 0)
             {
@@ -33,62 +33,82 @@ namespace SquealerConsoleCSharp.CustomCommands
             var config = ConfigObject.GetConfig();
 
             StringBuilder output = new StringBuilder();
-            output.AppendLine(MyResources.Resources.TrackFailedItems_Start);
-            output.Append(MyResources.Resources._TopScript);
+            if (!test)
+            {
+                output.AppendLine(MyResources.Resources.TrackFailedItems_Start);
+                output.Append(MyResources.Resources._TopScript);
+            }
 
             foreach (var item in _xmlToSqls.Select((xml,index)=> (xml, index)))
             {
                 var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 var countString = $"{item.index+1}/{_xmlToSqls.Count}";
 
-                output.AppendLine(GetSqlOfOneFile(item.xml, version, config, countString));
+                output.AppendLine(GetSqlOfOneFile(item.xml, version, config, countString, alter, test, encryption));
             }
 
-            output.AppendLine();
-            output.Append(MyResources.Resources.TrackFailedItems_End);
+            if (!test)
+            {
+                output.AppendLine();
+                output.Append(MyResources.Resources.TrackFailedItems_End);
+            }
 
             AnsiConsole.WriteLine("# Output copied to Windows clipboard.");
 
             ClipboardService.SetText(output.ToString());
 
-            //Helper.SaveAndOpenFileWithDefaultProgram("_test.sql", output.ToString());
+            Helper.SaveAndOpenFileWithDefaultProgram("_test.sql", output.ToString());
 
         }
 
 
-        private string GetSqlOfOneFile(XmlToSqlConverter xml, string version, ConfigObject config, string countString)
+        private string GetSqlOfOneFile(XmlToSqlConverter xml, string version, ConfigObject config, string countString, bool alter, bool test, bool encrytion)
         {
             var methodName = xml.SqlrFileInfo.SqlObjectName_w_Bracket;
             var type = xml.SquealerObject.Type;
 
-            StringBuilder oneSql = new StringBuilder();
 
-            oneSql.AppendLine($"----- {methodName} ".PadRight(107, '-')+" <BOF>\n");
-            oneSql.AppendLine($"-- additional code to execute after {type.GetObjectTypeAttribute().Name} is created");
-            oneSql.AppendLine($"print '{countString} creating {methodName}, {type.GetObjectTypeAttribute().Name}'\r\ngo");
+            string GetSqlResourceByType(ESqlResourseType type)
+            {
+                var mode = test ? EsqlScriptMode.Test :
+                xml.SquealerObject.NoMagic ? EsqlScriptMode.NoMagic : EsqlScriptMode.Normal;
+                return xml.SquealerObject.GetSqlResource(type, mode);
+            }
             
 
-            if(xml.SquealerObject.PreCode.Trim().Length > 0)
+            StringBuilder oneSql = new StringBuilder();
+
+            oneSql.AppendLine($"----- {methodName} ".PadRight(107, '-') + " <BOF>\n");
+            if (!test)
             {
-                oneSql.Append($"\n\n{xml.SquealerObject.PreCode.Trim()}\n\n\ngo\n\n");
+                oneSql.AppendLine($"-- additional code to execute after {type.GetObjectTypeAttribute().Name} is created");
+                oneSql.AppendLine($"print '{countString} creating {methodName}, {type.GetObjectTypeAttribute().Name}'\r\ngo");
+
+
+                if (xml.SquealerObject.PreCode.Trim().Length > 0)
+                {
+                    oneSql.Append($"\n\n{xml.SquealerObject.PreCode.Trim()}\n\n\ngo\n\n");
+                }
+                else
+                {
+                    oneSql.Append($"\r\n\r\n\r\n\r\n\r\ngo\n\n");
+                }
             }
-            else
+
+
+            if (!alter && !test)
             {
-                oneSql.Append($"\r\n\r\n\r\n\r\n\r\ngo\n\n");
+                oneSql.AppendLine($"if object_id('{methodName}','p') is not null\r\n" +
+                    $"\tdrop procedure {methodName};\r\n" +
+                    $"if object_id('{methodName}','fn') is not null\r\n" +
+                    $"\tdrop function {methodName};\r\n" +
+                    $"if object_id('{methodName}','if') is not null\r\n" +
+                    $"\tdrop function {methodName};\r\n" +
+                    $"if object_id('{methodName}','tf') is not null\r\n" +
+                    $"\tdrop function {methodName};\r\nif object_id('{methodName}','v') is not null\r\n" +
+                    $"\tdrop view {methodName};\r\n\r\n" +
+                    $"go\n");
             }
-
-
-
-            oneSql.AppendLine($"if object_id('{methodName}','p') is not null\r\n" +
-                $"\tdrop procedure {methodName};\r\n" +
-                $"if object_id('{methodName}','fn') is not null\r\n" +
-                $"\tdrop function {methodName};\r\n" +
-                $"if object_id('{methodName}','if') is not null\r\n" +
-                $"\tdrop function {methodName};\r\n" +
-                $"if object_id('{methodName}','tf') is not null\r\n" +
-                $"\tdrop function {methodName};\r\nif object_id('{methodName}','v') is not null\r\n" +
-                $"\tdrop view {methodName};\r\n\r\n" +
-                $"go\n");
 
 
             oneSql.AppendLine("/***********************************************************************\r\n\r\n" +
@@ -97,28 +117,49 @@ namespace SquealerConsoleCSharp.CustomCommands
                                 $"\r\n\r\n\r\n[generated with Squealer {version}]\r\n\r\n" +
                                 $"***********************************************************************/\n");
 
-            // CREATE
-            oneSql.AppendLine(xml.SquealerObject.GetSqlResource(ESqlResourseType.Create)
-                .Replace("[{Schema}].[{RootProgramName}]", methodName)
-                .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
-                .Trim() + "\n");
+            if (!test)
+            {
+                // CREATE
+                var createScript = alter ?
+                    Helper.ReplaceFirstOccurrence(GetSqlResourceByType(ESqlResourseType.Create), "create", "alter") :
+                    GetSqlResourceByType(ESqlResourseType.Create);
+
+                oneSql.AppendLine(createScript
+                    .Replace("[{Schema}].[{RootProgramName}]", methodName)
+                    .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
+                    .Trim() + "\n");
+            }
 
             // declare para
             if (xml.SquealerObject.Parameters.Count > 0)
             {
-                oneSql.AppendLine(string.Join('\n', GetParaDeclarationList(xml)));
+                var declarations = test ? GetVariablesDeclarationList(xml) : GetParaDeclarationList(xml);
+                {
+                    oneSql.AppendLine(string.Join('\n', declarations));
+                }
+                if (test)
+                    oneSql.AppendLine();
             }
 
             // local fucntion for with options
             string getWithOption()
             {
-                if(string.IsNullOrWhiteSpace(xml.SquealerObject.WithOptions))
-                    return string.Empty;
-                return $"with {xml.SquealerObject.WithOptions}";
+                if (encrytion)
+                {
+                    if (string.IsNullOrWhiteSpace(xml.SquealerObject.WithOptions))
+                        return "with encryption";
+                    return $"with {xml.SquealerObject.WithOptions},encryption";
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(xml.SquealerObject.WithOptions))
+                        return string.Empty;
+                    return $"with {xml.SquealerObject.WithOptions}";
+                }
             }
 
             // TABLE
-            oneSql.Append(xml.SquealerObject.GetSqlResource(ESqlResourseType.Table)
+            oneSql.Append(GetSqlResourceByType(ESqlResourseType.Table)
                     .Trim());
 
 
@@ -137,13 +178,13 @@ namespace SquealerConsoleCSharp.CustomCommands
             }
 
             // to match format
-            if(type == EType.View && xml.SquealerObject.Table.Columns.Count == 0)
+            if(type == EType.View && xml.SquealerObject.Table.Columns.Count == 0 && getWithOption().Length == 0)
             {
                 oneSql.Append("\n");
             }
 
             // BEGIN
-            oneSql.Append(xml.SquealerObject.GetSqlResource(ESqlResourseType.Begin)
+            oneSql.Append(GetSqlResourceByType(ESqlResourseType.Begin)
                     .Replace("{WithOptions}", getWithOption())
                     .Replace("{ReturnDataType}", xml.SquealerObject.Returns.Type)
                     .Trim());
@@ -159,11 +200,11 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             //End
             oneSql.AppendLine(
-                xml.SquealerObject.GetSqlResource(ESqlResourseType.End)
+                GetSqlResourceByType(ESqlResourseType.End)
                 .Replace("{Parameters}", $"{(xml.SquealerObject.Parameters.Count == 0 ? "": "\n")}" + string.Join('\n', GetParaErrorList(xml)))
                 );
 
-            if (xml.SquealerObject.Users.Count > 0)
+            if (!alter && !test && xml.SquealerObject.Users.Count > 0)
             {
                 // permission
                 oneSql.Append("go\r\n" +
@@ -184,7 +225,10 @@ namespace SquealerConsoleCSharp.CustomCommands
             }
             else
             {
-                oneSql.Append("go\n\n");
+                if (!test)
+                    oneSql.Append("go\n\n");
+                else
+                    oneSql.AppendLine();
             }
 
 
@@ -218,6 +262,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             return oneSql.ToString();
         }
 
+        #region private
 
         // para declarations
         private List<string> GetParaDeclarationList(XmlToSqlConverter xml)
@@ -229,6 +274,17 @@ namespace SquealerConsoleCSharp.CustomCommands
                             $"{(!string.IsNullOrWhiteSpace(item.p.DefaultValue) ? $" = {item.p.DefaultValue}" : "")}" +
                             $"{(item.p.Output ? " output" : "")}" +
                             $"{(item.p.ReadOnly ? " readonly" : "")}" +
+                            $"{(!string.IsNullOrWhiteSpace(item.p.Comments) ? $" -- {item.p.Comments}" : "")}")
+                        .ToList();
+        }
+
+        // para declarations for TEST
+        private List<string> GetVariablesDeclarationList(XmlToSqlConverter xml)
+        {
+            return xml.SquealerObject.Parameters
+                        .Select((p, index) => (p, index))
+                        .Select(item =>
+                            $"declare @{item.p.Name} {item.p.DataType} = {item.p.DefaultValue};" +
                             $"{(!string.IsNullOrWhiteSpace(item.p.Comments) ? $" -- {item.p.Comments}" : "")}")
                         .ToList();
         }
@@ -260,7 +316,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                     .Select(item => {
                         if (item.p.DataType.ToLower().Contains("max") || item.p.ReadOnly)
                         {
-                            return $"--parameter @{item.p.Name} cannot be logged due to its 'max' or 'readonly' definition";
+                            return $"\t\t--parameter @{item.p.Name} cannot be logged due to its 'max' or 'readonly' definition";
                         }
                         return $"\t\tset @Squealer_ErrorMessage =\r\n" +
                                 $"\t\t\t@Squealer_ErrorMessage\r\n" +
@@ -270,5 +326,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                             })
                     .ToList();
         }
+
+        #endregion
     }
 }
