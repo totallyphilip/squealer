@@ -185,12 +185,11 @@ namespace SquealerConsoleCSharp
 
             public static List<GitFileInfo> GetUnTrackedFiles()
             {
-                var lines = ExecuteGitCommand("status --porcelain");
+                var lines = ExecuteGitCommand($"status --porcelain -- \"{AppState.Instance.LastOpenedPath}\"");
                 var res = lines
                     .Select(line =>
                     {
-                        var x = line;
-                        var parts = line.Split(' ');
+                        var parts = line.Trim().Split(' ');
                         var status = parts[0];
                         var filename = parts[1];
                         return new GitFileInfo
