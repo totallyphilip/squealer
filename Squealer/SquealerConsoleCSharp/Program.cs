@@ -15,7 +15,37 @@ namespace SquealerConsoleCSharp
                     .LeftJustified()
                     .Color(Color.Blue));
 
-            
+            try
+            {
+                var settingsPaths = Helper.GetSettingsPath();
+                if (!File.Exists(settingsPaths))
+                {
+                    var newSettings = Settings.GetNewSettings();
+                    Settings.SaveSettings(newSettings, settingsPaths);
+                }
+
+                AppState.Instance.Settings = Settings.LoadSettings(settingsPaths);
+
+                AnsiConsole.MarkupLine($"Load Settings from {settingsPaths}");
+
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                watcher.Path = Path.GetDirectoryName(settingsPaths);
+                watcher.Filter = Path.GetFileName(settingsPaths);
+                watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+
+                // Add event handlers
+                watcher.Changed += OnChanged;
+                watcher.Deleted += OnChanged;
+                watcher.Renamed += OnChanged;
+
+                // Begin watching
+                watcher.EnableRaisingEvents = true;
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine("Cannot load settings");
+            }
+
 
             var rootCommand = new RootCommand("Squealer");
 
@@ -65,6 +95,21 @@ namespace SquealerConsoleCSharp
                 // Invoke the command system with the input arguments
                 await rootCommand.InvokeAsync(inputArgs);
                 AnsiConsole.WriteLine();
+            }
+        }
+
+        private static void OnChanged(object source, FileSystemEventArgs e)
+        {
+            Console.WriteLine($"File {e.FullPath} has been modified or deleted.");
+            try
+            {
+                // Reload the settings
+                AppState.Instance.Settings = Settings.LoadSettings(e.FullPath);
+                Console.WriteLine("Settings reloaded successfully.");
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine($"Error reloading settings: {ex.Message}");
             }
         }
 

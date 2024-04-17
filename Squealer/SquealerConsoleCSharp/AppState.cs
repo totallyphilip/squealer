@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SquealerConsoleCSharp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace SquealerConsoleCSharp
         public string LastOpenedPath { get; set; } = string.Empty;
 
         public string GitPprojectName { get; set; } = string.Empty;
+
+        public Settings Settings { get; set; } = default!;
 
         // Private constructor to prevent instantiation outside
         private AppState() { }

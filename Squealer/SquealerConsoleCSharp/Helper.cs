@@ -37,6 +37,19 @@ namespace SquealerConsoleCSharp
                 
         }
 
+
+        public static string GetSettingsPath()
+        {
+            string fileName = "settings.xml";
+            string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string appFolder = Path.Combine(localAppDataPath, "Squealer");
+
+            Directory.CreateDirectory(appFolder);
+
+            string fullPath = Path.Combine(appFolder, fileName);
+            return fullPath;
+        }
+
         public static string GetFilePath(string fileName)
         {
             if (VadilateFolder())
