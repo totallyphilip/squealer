@@ -132,7 +132,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             if (!string.IsNullOrWhiteSpace(diff_targetBranch))
             {
-                if (!Helper.GitHelper.IsBranchExists(diff_targetBranch))
+                if (!GitHelper.IsBranchExists(diff_targetBranch))
                 {
                     AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
                     return;
@@ -143,7 +143,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             {
                 var filePaths = Helper.SearchSqlrFilesInFolder(searchtext);
                 _xmlToSqls = filePaths.Select(x => new XmlToSqlConverter(x)).ToList();
-                _gitFileInfos = Helper.GitHelper.GetUnTrackedFiles();
+                _gitFileInfos = GitHelper.GetUnTrackedFiles();
 
                 if (p || fn || _if || tf || v)
                 {
@@ -164,7 +164,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                     // only change _gitFileInfos in -diff option
                     if (!string.IsNullOrWhiteSpace(diff_targetBranch))
                     {
-                        var diffFiles = Helper.GitHelper.GetDiffFiles(diff_targetBranch);
+                        var diffFiles = GitHelper.GetDiffFiles(diff_targetBranch);
                         if (u)
                         {
 
@@ -196,7 +196,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
                 if (!string.IsNullOrWhiteSpace(diff_targetBranch))
                 {
-                    if (!Helper.GitHelper.IsBranchExists(diff_targetBranch))
+                    if (!GitHelper.IsBranchExists(diff_targetBranch))
                     {
                         AnsiConsole.MarkupLine($"[red]Invalid banchName {diff_targetBranch}[/]");
                         return;

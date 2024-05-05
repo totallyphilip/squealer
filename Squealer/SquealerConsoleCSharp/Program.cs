@@ -58,7 +58,7 @@ namespace SquealerConsoleCSharp
 
             while (true)
             {
-                string directoryCharacter = Helper.GitHelper.GetGitProejctBranchName() + " >";
+                string directoryCharacter = GitHelper.GetGitProejctBranchName() + " >";
                 string[] inputArgs;
 
 
