@@ -28,18 +28,6 @@ namespace SquealerConsoleCSharp
 
                 AnsiConsole.MarkupLine($"Load Settings from {settingsPaths}");
 
-                FileSystemWatcher watcher = new FileSystemWatcher();
-                watcher.Path = Path.GetDirectoryName(settingsPaths);
-                watcher.Filter = Path.GetFileName(settingsPaths);
-                watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-
-                // Add event handlers
-                watcher.Changed += OnChanged;
-                watcher.Deleted += OnChanged;
-                watcher.Renamed += OnChanged;
-
-                // Begin watching
-                watcher.EnableRaisingEvents = true;
             }
             catch (Exception ex)
             {
@@ -54,6 +42,7 @@ namespace SquealerConsoleCSharp
             rootCommand.AddCommand(new GenCommand().CreateCommand());
             rootCommand.AddCommand(new NewCommand().CreateCommand());
             rootCommand.AddCommand(new ClearCommand().CreateCommand());
+            rootCommand.AddCommand(new SetCommand().CreateCommand());
 
 
             while (true)
@@ -98,20 +87,7 @@ namespace SquealerConsoleCSharp
             }
         }
 
-        private static void OnChanged(object source, FileSystemEventArgs e)
-        {
-            Console.WriteLine($"File {e.FullPath} has been modified or deleted.");
-            try
-            {
-                // Reload the settings
-                AppState.Instance.Settings = Settings.LoadSettings(e.FullPath);
-                Console.WriteLine("Settings reloaded successfully.");
-            }
-            catch (Exception ex)
-            {
-                //Console.WriteLine($"Error reloading settings: {ex.Message}");
-            }
-        }
+
 
     }
 }

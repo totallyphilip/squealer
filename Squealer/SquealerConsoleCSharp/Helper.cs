@@ -40,7 +40,7 @@ namespace SquealerConsoleCSharp
 
         public static string GetSettingsPath()
         {
-            string fileName = "settings.xml";
+            string fileName = "settings.sqlrxml";
             string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string appFolder = Path.Combine(localAppDataPath, "Squealer");
 
@@ -162,7 +162,20 @@ namespace SquealerConsoleCSharp
         {
             var filePath = Path.Combine(AppState.Instance.LastOpenedPath, filename);
             File.WriteAllText(filePath, content);
-            Process.Start("explorer.exe", filePath);
+            OpenFileWithDefaultProgram(filePath);
+        }
+
+        public static void OpenFileWithDefaultProgram(string filename)
+        {
+            var filePath = Path.Combine(AppState.Instance.LastOpenedPath, filename);
+            try
+            {
+                Process.Start("explorer.exe", filePath);
+            }
+            catch (Exception e)
+            {
+                AnsiConsole.MarkupLine($"[red]{e.Message}[/]");
+            }
         }
 
         public static string ReplaceFirstOccurrence(string source, string find, string replace)
