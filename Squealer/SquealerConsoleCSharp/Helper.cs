@@ -170,7 +170,13 @@ namespace SquealerConsoleCSharp
             var filePath = Path.Combine(AppState.Instance.LastOpenedPath, filename);
             try
             {
-                Process.Start("explorer.exe", filePath);
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = filePath,
+                    UseShellExecute = true // Open the file with the system's default associated application
+                };
+
+                Process.Start(startInfo); // Start the process with this configuration
             }
             catch (Exception e)
             {

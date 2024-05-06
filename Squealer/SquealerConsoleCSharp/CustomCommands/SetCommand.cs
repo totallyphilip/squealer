@@ -10,6 +10,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 {
     internal class SetCommand : ICustomeCommand
     {
+        private FileSystemWatcher _watcher;
         public Command CreateCommand()
         {
             var command = new Command("set", "Edit Setting File.")
@@ -28,18 +29,18 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             Helper.OpenFileWithDefaultProgram(settingsPaths);
 
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path = Path.GetDirectoryName(settingsPaths);
-            watcher.Filter = Path.GetFileName(settingsPaths);
-            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            _watcher = new FileSystemWatcher();
+            _watcher.Path = Path.GetDirectoryName(settingsPaths);
+            _watcher.Filter = Path.GetFileName(settingsPaths);
+            _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
 
             // Add event handlers
-            watcher.Changed += OnChanged;
-            watcher.Deleted += OnChanged;
-            watcher.Renamed += OnChanged;
+            _watcher.Changed += OnChanged;
+            _watcher.Deleted += OnChanged;
+            _watcher.Renamed += OnChanged;
 
             // Begin watching
-            watcher.EnableRaisingEvents = true;
+            _watcher.EnableRaisingEvents = true;
 
         }
 
