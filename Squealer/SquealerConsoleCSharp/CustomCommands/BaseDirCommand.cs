@@ -1,4 +1,5 @@
 ﻿using Spectre.Console;
+using SquealerConsoleCSharp.Extensions;
 using SquealerConsoleCSharp.Models;
 using SquealerConsoleCSharp.Models.Git;
 using SquealerConsoleCSharp.MyXml;
@@ -184,8 +185,10 @@ namespace SquealerConsoleCSharp.CustomCommands
                         .ToList();
                 }
 
-                // re order 
-                _xmlToSqls = _xmlToSqls.OrderBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
+                // re order by type and then file name
+                _xmlToSqls = _xmlToSqls
+                     .OrderBy(x=>x.SquealerObject.Type.GetObjectTypeAttribute().Order)
+                     .ThenBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
 
                 if (t && _xmlToSqls.Count != 1)
                 {

@@ -22,7 +22,9 @@ namespace SquealerConsoleCSharp.Attributes
 
         public string Permission {  get; set; }
 
-        public ObjectTypeAttribute(string name, string objectTypeCode, string numericSymbol, string variableName, string friendlyName, string permission)
+        public int Order { get; set; }
+
+        public ObjectTypeAttribute(string name, string objectTypeCode, string numericSymbol, string variableName, string friendlyName, string permission, int order)
         {
             Name = name;
             NumericSymbol = numericSymbol;
@@ -30,6 +32,7 @@ namespace SquealerConsoleCSharp.Attributes
             FriendlyName = friendlyName;
             ObjectTypeCode = objectTypeCode;
             Permission = permission;
+            Order = order;
         }
     }
 }

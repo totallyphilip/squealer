@@ -158,12 +158,7 @@ namespace SquealerConsoleCSharp
             return true; // Passed all checks.
         }
 
-        public static void SaveAndOpenFileWithDefaultProgram(string filename, string content)
-        {
-            var filePath = Path.Combine(AppState.Instance.LastOpenedPath, filename);
-            File.WriteAllText(filePath, content);
-            OpenFileWithDefaultProgram(filePath);
-        }
+        
 
         public static void OpenFileWithDefaultProgram(string filename)
         {

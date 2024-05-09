@@ -55,9 +55,32 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             AnsiConsole.WriteLine("# Output copied to Windows clipboard.");
 
-            ClipboardService.SetText(output.ToString());
+            if (AppState.Instance.Settings.Output.CopyToClipboard)
+            {
+                AnsiConsole.MarkupLine("\n#Output copied to clipboard.");
+                ClipboardService.SetText(output.ToString());
+            }
 
-            Helper.SaveAndOpenFileWithDefaultProgram("_test.sql", output.ToString());
+            if(AppState.Instance.Settings.Output.ExportToSqlFile) 
+            {
+                // Get the system temp directory
+                string tempBase = Path.GetTempPath();
+
+                // Define a subdirectory specific to your application
+                string appTempDir = Path.Combine(tempBase, "SqlrTempFiles");
+
+                Directory.CreateDirectory(appTempDir);
+
+                // Generate a unique filename within the temp folder
+                string tempFile = Path.Combine(appTempDir, $"TempFile_{Guid.NewGuid()}.sql");
+
+               
+
+                File.WriteAllText(tempFile, output.ToString());
+
+                Helper.OpenFileWithDefaultProgram(tempFile);
+            }
+
 
         }
 
