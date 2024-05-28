@@ -63,7 +63,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             return command;
         }
 
-        private void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, string? modes, string? searchtext)
+        private void ExtraImplementation(string? modes)
         {
 
             bool alter = false, encrypt = false;
@@ -90,11 +90,10 @@ namespace SquealerConsoleCSharp.CustomCommands
             var config = ConfigObject.GetConfig();
 
             StringBuilder output = new StringBuilder();
-            //if (!test)
-            //{
-            //    output.AppendLine(MyResources.Resources.TrackFailedItems_Start);
-            //    output.Append(MyResources.Resources._TopScript);
-            //}
+
+            output.AppendLine(MyResources.Resources.TrackFailedItems_Start);
+            output.Append(MyResources.Resources._TopScript);
+            
 
             foreach (var item in _xmlToSqls.Select((xml,index)=> (xml, index)))
             {
@@ -104,11 +103,9 @@ namespace SquealerConsoleCSharp.CustomCommands
                 output.AppendLine(Helper.GetSqlOfOneFile(item.xml, config, countString, alter, false, encrypt));
             }
 
-            //if (!test)
-            //{
-            //    output.AppendLine();
-            //    output.Append(MyResources.Resources.TrackFailedItems_End);
-            //}
+            output.AppendLine();
+            output.Append(MyResources.Resources.TrackFailedItems_End);
+
 
             AnsiConsole.WriteLine("# Output copied to Windows clipboard.");
 
