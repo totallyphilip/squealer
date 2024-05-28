@@ -18,6 +18,16 @@ namespace SquealerConsoleCSharp.CustomCommands
         private readonly string _name;
         private readonly string _description;
 
+        protected Option<bool> _procOpt;
+        protected Option<bool> _scalarFunctionOpt;
+        protected Option<bool> _inlineTVFOpt;
+        protected Option<bool> _multiStatementTVFOpt;
+        protected Option<bool> _viewOpt;
+        protected Option<bool> _unCommittedOpt;
+        protected Option<string?> _diffOpt;
+        protected Argument<string?> _pathArgument;
+
+
         protected List<XmlToSqlConverter> _xmlToSqls = [];
         protected List<GitFileInfo> _gitFileInfos = [];
 
@@ -35,19 +45,19 @@ namespace SquealerConsoleCSharp.CustomCommands
                 $"- && means \"and\" and is used to indicate that options or groups of options can be used in combination with each other.\r\n" +
                 $"- {_name} [ -p | -fn | -if | -tf | -v ] && [ -u | -diff <branch-name> ] && [searchText]\r\n");
 
-            var procOpt =
+            _procOpt =
                 Helper.CreateFlagOption("-p", "proc");
-            var scalarFunctionOpt =
+            _scalarFunctionOpt =
                 Helper.CreateFlagOption("-fn", "scalar function");
-            var inlineTVFOpt =
+            _inlineTVFOpt =
                 Helper.CreateFlagOption("-if", "inline table-valued function");
-            var multiStatementTVFOpt =
+            _multiStatementTVFOpt =
                 Helper.CreateFlagOption("-tf", "multi-statement table-valued function");
-            var viewOpt =
+            _viewOpt =
                 Helper.CreateFlagOption("-v", "view");
-            var unCommittedOpt =
+            _unCommittedOpt =
                 Helper.CreateFlagOption("-u", "uncommited files");
-            var diffOpt = new Option<string?>(
+            _diffOpt = new Option<string?>(
                 aliases: new[] { "-diff" },
                 description: "-diff <Target Branch Name>",
                 getDefaultValue: () => string.Empty
@@ -60,36 +70,37 @@ namespace SquealerConsoleCSharp.CustomCommands
             //    getDefaultValue: () => string.Empty
             //    ); ;
 
-            command.AddOption(procOpt);
-            command.AddOption(scalarFunctionOpt);
-            command.AddOption(inlineTVFOpt);
-            command.AddOption(multiStatementTVFOpt);
-            command.AddOption(viewOpt);
-            command.AddOption(unCommittedOpt);
-            command.AddOption(diffOpt);
+            command.AddOption(_procOpt);
+            command.AddOption(_scalarFunctionOpt);
+            command.AddOption(_inlineTVFOpt);
+            command.AddOption(_multiStatementTVFOpt);
+            command.AddOption(_viewOpt);
+            command.AddOption(_unCommittedOpt);
+            command.AddOption(_diffOpt);
             //command.AddOption(modeOpt);
 
-            var pathArgument = new Argument<string?>(
+            _pathArgument = new Argument<string?>(
                     name: "searchtext",
                     description: "searchtext",
                     getDefaultValue: () => null // Optional: Provide a default value or leave it as null if not provided
                 );
 
-            command.AddArgument(pathArgument);
+            command.AddArgument(_pathArgument);
 
             command.SetHandler((InvocationContext context) =>
             {
                 // Retrieve the values for options and arguments
-                bool proc = context.ParseResult.GetValueForOption(procOpt);
-                bool scalarFunction = context.ParseResult.GetValueForOption(scalarFunctionOpt);
-                bool inlineTVF = context.ParseResult.GetValueForOption(inlineTVFOpt);
-                bool multiStatementTVF = context.ParseResult.GetValueForOption(multiStatementTVFOpt);
-                bool view = context.ParseResult.GetValueForOption(viewOpt);
-                bool unCommitted = context.ParseResult.GetValueForOption(unCommittedOpt);
-                string? diff = context.ParseResult.GetValueForOption(diffOpt);
-                string? searchText = context.ParseResult.GetValueForArgument(pathArgument);
+                bool proc = context.ParseResult.GetValueForOption(_procOpt);
+                bool scalarFunction = context.ParseResult.GetValueForOption(_scalarFunctionOpt);
+                bool inlineTVF = context.ParseResult.GetValueForOption(_inlineTVFOpt);
+                bool multiStatementTVF = context.ParseResult.GetValueForOption(_multiStatementTVFOpt);
+                bool view = context.ParseResult.GetValueForOption(_viewOpt);
+                bool unCommitted = context.ParseResult.GetValueForOption(_unCommittedOpt);
+                string? diff = context.ParseResult.GetValueForOption(_diffOpt);
+                string? searchText = context.ParseResult.GetValueForArgument(_pathArgument);
 
                 // Call your method to handle the command
+                
                 BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
             });
 

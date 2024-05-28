@@ -44,6 +44,7 @@ namespace SquealerConsoleCSharp
             rootCommand.AddCommand(new ClearCommand().CreateCommand());
             rootCommand.AddCommand(new SetCommand().CreateCommand());
             rootCommand.AddCommand(new TestCommand().CreateCommand());
+            rootCommand.AddCommand(new FixCommand().CreateCommand());
 
             while (true)
             {
