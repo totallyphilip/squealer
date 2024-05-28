@@ -14,9 +14,5 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         }
 
-        protected override void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alt, bool e, string? searchtext)
-        {
-            return;
-        }
     }
 }

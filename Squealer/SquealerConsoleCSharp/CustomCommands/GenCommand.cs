@@ -13,6 +13,7 @@ using SquealerConsoleCSharp.Extensions;
 using System.Reflection;
 using System.Windows.Forms;
 using TextCopy;
+using System.CommandLine.Invocation;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
@@ -23,9 +24,65 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         }
 
-        protected override void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alter, bool encryption, string? searchtext)
+        public override Command CreateCommand()
         {
-            if(_xmlToSqls.Count == 0)
+            var command = base.CreateCommand();
+
+            // Add additional options specific to the derived class
+            var modeOpt = new Option<string?>(
+                aliases: new[] { "-mode" },
+                description: "-mode alt|e|t; only useful when there is text output.\n" +
+                            "alt - alter\n" +
+                            "e - encrption\n",
+                getDefaultValue: () => string.Empty
+                );
+
+            command.AddOption(modeOpt);
+
+            // Update the handler to handle the additional options
+            command.SetHandler((InvocationContext context) =>
+            {
+                // Retrieve the values for base options
+                bool proc = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-p", "proc"));
+                bool scalarFunction = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-fn", "scalar function"));
+                bool inlineTVF = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-if", "inline table-valued function"));
+                bool multiStatementTVF = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-tf", "multi-statement table-valued function"));
+                bool view = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-v", "view"));
+                bool unCommitted = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-u", "uncommited files"));
+                string? diff = context.ParseResult.GetValueForOption(new Option<string?>("-diff", getDefaultValue: () => string.Empty));
+                string? modes = context.ParseResult.GetValueForOption(new Option<string?>("-mode", getDefaultValue: () => string.Empty));
+                string? searchText = context.ParseResult.GetValueForArgument(new Argument<string?>("searchtext", getDefaultValue: () => null));
+
+                // Call the base handle method
+                BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
+
+                // Handle additional logic
+                ExtraImplementation(proc, scalarFunction, inlineTVF, multiStatementTVF, view, modes, searchText);
+            });
+
+            return command;
+        }
+
+        private void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, string? modes, string? searchtext)
+        {
+
+            bool alter = false, encrypt = false;
+
+            if (!string.IsNullOrWhiteSpace(modes))
+            {
+                var modeSet = modes.Split('|').Select(m => m.Trim().ToLower()).Distinct().ToHashSet();
+                if (modeSet.Contains("alt"))
+                    alter = true;
+                if (modeSet.Contains("e"))
+                    encrypt = true;
+                if (!modeSet.Any(m => new[] { "alt", "e",  }.Contains(m)) && modeSet.Count > 0)
+                {
+                    Console.WriteLine("Invalid mode(s) specified.");
+                    return;
+                }
+            }
+
+            if (_xmlToSqls.Count == 0)
             {
                 return;
             }
@@ -44,7 +101,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                 var version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 var countString = $"{item.index+1}/{_xmlToSqls.Count}";
 
-                output.AppendLine(Helper.GetSqlOfOneFile(item.xml, config, countString, alter, false, encryption));
+                output.AppendLine(Helper.GetSqlOfOneFile(item.xml, config, countString, alter, false, encrypt));
             }
 
             //if (!test)

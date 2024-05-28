@@ -27,7 +27,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             _description = description;
         }
 
-        public Command CreateCommand()
+        public virtual Command CreateCommand()
         {
             var command = new Command(_name, $"{_description} \n Note on Syntax:\r\n- [ ] indicates an optional group of options or arguments. " +
                 $"Anything inside these brackets is not required for the command to run but specifies additional filters or parameters when included.\r\n" +
@@ -52,13 +52,13 @@ namespace SquealerConsoleCSharp.CustomCommands
                 description: "-diff <Target Branch Name>",
                 getDefaultValue: () => string.Empty
                 );
-            var modeOpt = new Option<string?>(
-                aliases: new[] { "-mode" },
-                description: "-mode alt|e|t; only useful when there is text output.\n" +
-                            "alt - alter\n" +
-                            "e - encrption\n",
-                getDefaultValue: () => string.Empty
-                ); ;
+            //var modeOpt = new Option<string?>(
+            //    aliases: new[] { "-mode" },
+            //    description: "-mode alt|e|t; only useful when there is text output.\n" +
+            //                "alt - alter\n" +
+            //                "e - encrption\n",
+            //    getDefaultValue: () => string.Empty
+            //    ); ;
 
             command.AddOption(procOpt);
             command.AddOption(scalarFunctionOpt);
@@ -67,7 +67,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             command.AddOption(viewOpt);
             command.AddOption(unCommittedOpt);
             command.AddOption(diffOpt);
-            command.AddOption(modeOpt);
+            //command.AddOption(modeOpt);
 
             var pathArgument = new Argument<string?>(
                     name: "searchtext",
@@ -87,40 +87,22 @@ namespace SquealerConsoleCSharp.CustomCommands
                 bool view = context.ParseResult.GetValueForOption(viewOpt);
                 bool unCommitted = context.ParseResult.GetValueForOption(unCommittedOpt);
                 string? diff = context.ParseResult.GetValueForOption(diffOpt);
-                string? modes = context.ParseResult.GetValueForOption(modeOpt);
                 string? searchText = context.ParseResult.GetValueForArgument(pathArgument);
 
                 // Call your method to handle the command
-                HandleCommand(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, modes, searchText);
+                BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
             });
 
             return command;
         }
 
-        protected void HandleCommand(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? modes, string? searchtext)
+        protected void BasicHandling(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? searchtext)
         {
             if (!Helper.VadilateFolder())
                 return;
 
             if (searchtext != null)
                 searchtext = searchtext.Replace("[", "").Replace("]", "");
-
-            bool alt = false, e = false;
-
-            if(!string.IsNullOrWhiteSpace(modes))
-            {
-                var modeSet = modes.Split('|').Select(m => m.Trim().ToLower()).Distinct().ToHashSet();
-                if (modeSet.Contains("alt"))
-                    alt = true;
-                if (modeSet.Contains("e"))
-                    e = true;
-                if (!modeSet.Any(m => new[] { "alt", "e", "t" }.Contains(m)) && modeSet.Count > 0)
-                {
-                    Console.WriteLine("Invalid mode(s) specified.");
-                    return;
-                }
-            }
-
 
             if (!string.IsNullOrWhiteSpace(searchtext) && searchtext.StartsWith("-"))
             {
@@ -210,16 +192,8 @@ namespace SquealerConsoleCSharp.CustomCommands
                 AnsiConsole.MarkupInterpolated($"[underline red]{ex.Message}[/]\n");
                 throw;
             }
-
-            // At the point where you want to allow for extension:
-            ExtraImplementation(p, fn, _if, tf, v, alt, e, searchtext);
             
         }
-
-        // Define an abstract or virtual method for extra implementation.
-        // If abstract, derived classes are forced to implement it.
-        // If virtual, you can provide a default implementation that can be overridden.
-        protected abstract void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alt, bool e, string? searchtext);
     }
 
 }
