@@ -43,7 +43,7 @@ namespace SquealerConsoleCSharp
             rootCommand.AddCommand(new NewCommand().CreateCommand());
             rootCommand.AddCommand(new ClearCommand().CreateCommand());
             rootCommand.AddCommand(new SetCommand().CreateCommand());
-
+            rootCommand.AddCommand(new TestCommand().CreateCommand());
 
             while (true)
             {

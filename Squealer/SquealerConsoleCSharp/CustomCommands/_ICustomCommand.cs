@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    internal interface ICustomeCommand
+    internal interface ICustomCommand
     {
         public Command CreateCommand();
 
@@ -16,7 +16,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
     internal static class CommandBuilder
     {
-        public static T Build<T>() where T : ICustomeCommand, new()
+        public static T Build<T>() where T : ICustomCommand, new()
         {
             return new T();
         }

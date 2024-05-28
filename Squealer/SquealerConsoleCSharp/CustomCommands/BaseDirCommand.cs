@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    internal abstract class BaseDirCommand : ICustomeCommand
+    internal abstract class BaseDirCommand : ICustomCommand
     {
         private readonly string _name;
         private readonly string _description;
@@ -56,10 +56,9 @@ namespace SquealerConsoleCSharp.CustomCommands
                 aliases: new[] { "-mode" },
                 description: "-mode alt|e|t; only useful when there is text output.\n" +
                             "alt - alter\n" +
-                            "e - encrption\n" +
-                            "t - test: one object only",
+                            "e - encrption\n",
                 getDefaultValue: () => string.Empty
-                );
+                ); ;
 
             command.AddOption(procOpt);
             command.AddOption(scalarFunctionOpt);
@@ -106,7 +105,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             if (searchtext != null)
                 searchtext = searchtext.Replace("[", "").Replace("]", "");
 
-            bool alt = false, e = false, t = false;
+            bool alt = false, e = false;
 
             if(!string.IsNullOrWhiteSpace(modes))
             {
@@ -115,8 +114,6 @@ namespace SquealerConsoleCSharp.CustomCommands
                     alt = true;
                 if (modeSet.Contains("e"))
                     e = true;
-                if (modeSet.Contains("t"))
-                    t = true;
                 if (!modeSet.Any(m => new[] { "alt", "e", "t" }.Contains(m)) && modeSet.Count > 0)
                 {
                     Console.WriteLine("Invalid mode(s) specified.");
@@ -190,13 +187,6 @@ namespace SquealerConsoleCSharp.CustomCommands
                      .OrderBy(x=>x.SquealerObject.Type.GetObjectTypeAttribute().Order)
                      .ThenBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
 
-                if (t && _xmlToSqls.Count != 1)
-                {
-                    AnsiConsole.MarkupLine($"[red]More than 1 object Selected.[/]");
-                    return;
-                }
-
-
                 if (!string.IsNullOrWhiteSpace(diff_targetBranch))
                 {
                     if (!GitHelper.IsBranchExists(diff_targetBranch))
@@ -222,14 +212,14 @@ namespace SquealerConsoleCSharp.CustomCommands
             }
 
             // At the point where you want to allow for extension:
-            ExtraImplementation(p, fn, _if, tf, v, alt, t, e, searchtext);
+            ExtraImplementation(p, fn, _if, tf, v, alt, e, searchtext);
             
         }
 
         // Define an abstract or virtual method for extra implementation.
         // If abstract, derived classes are forced to implement it.
         // If virtual, you can provide a default implementation that can be overridden.
-        protected abstract void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alt, bool t, bool e, string? searchtext);
+        protected abstract void ExtraImplementation(bool p, bool fn, bool _if, bool tf, bool v, bool alt, bool e, string? searchtext);
     }
 
 }

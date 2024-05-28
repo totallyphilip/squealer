@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    internal class SetCommand : ICustomeCommand
+    internal class SetCommand : ICustomCommand
     {
         private FileSystemWatcher _watcher;
         public Command CreateCommand()

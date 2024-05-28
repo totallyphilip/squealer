@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
-    internal class NewCommand : ICustomeCommand
+    internal class NewCommand : ICustomCommand
     {
         public Command CreateCommand()
         {
