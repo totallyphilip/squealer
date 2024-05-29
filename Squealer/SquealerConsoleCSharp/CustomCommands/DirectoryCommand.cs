@@ -9,7 +9,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 {
     internal class DirectoryCommand : BaseDirCommand
     {
-        public DirectoryCommand() : base("dir", "Directory")
+        public DirectoryCommand() : base("dir", "Directory", true)
         {
 
         }

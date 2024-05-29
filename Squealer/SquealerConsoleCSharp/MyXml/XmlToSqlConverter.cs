@@ -1,4 +1,5 @@
-﻿using SquealerConsoleCSharp.Models;
+﻿using Spectre.Console;
+using SquealerConsoleCSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +19,23 @@ namespace SquealerConsoleCSharp.MyXml
 
         public XmlToSqlConverter(string filePath)
         {
-            SqlrFileInfo = new SqlrFileInfo(filePath);
-
-            string xmlContent = File.ReadAllText(SqlrFileInfo.FilePath);
-
-            using (StringReader reader = new StringReader(xmlContent))
+            try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(SquealerObject));
-                SquealerObject = (SquealerObject)serializer.Deserialize(reader);
+                SqlrFileInfo = new SqlrFileInfo(filePath);
 
+                string xmlContent = File.ReadAllText(SqlrFileInfo.FilePath);
+
+                using (StringReader reader = new StringReader(xmlContent))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(SquealerObject));
+                    SquealerObject = (SquealerObject)serializer.Deserialize(reader);
+
+                }
+            }
+            catch (Exception ex) 
+            {
+                AnsiConsole.MarkupLine($"[yellow]Error on {filePath}[/]");
+                throw;
             }
         }
 

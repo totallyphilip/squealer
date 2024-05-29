@@ -17,6 +17,7 @@ namespace SquealerConsoleCSharp.CustomCommands
     {
         private readonly string _name;
         private readonly string _description;
+        private readonly bool _showFilesSelected;
 
         protected Option<bool> _procOpt;
         protected Option<bool> _scalarFunctionOpt;
@@ -31,10 +32,11 @@ namespace SquealerConsoleCSharp.CustomCommands
         protected List<XmlToSqlConverter> _xmlToSqls = [];
         protected List<GitFileInfo> _gitFileInfos = [];
 
-        protected BaseDirCommand(string name, string description)
+        protected BaseDirCommand(string name, string description, bool showFilesSelected)
         {
             _name = name;
             _description = description;
+            _showFilesSelected = showFilesSelected;
         }
 
         public virtual Command CreateCommand()
@@ -62,13 +64,6 @@ namespace SquealerConsoleCSharp.CustomCommands
                 description: "-diff <Target Branch Name>",
                 getDefaultValue: () => string.Empty
                 );
-            //var modeOpt = new Option<string?>(
-            //    aliases: new[] { "-mode" },
-            //    description: "-mode alt|e|t; only useful when there is text output.\n" +
-            //                "alt - alter\n" +
-            //                "e - encrption\n",
-            //    getDefaultValue: () => string.Empty
-            //    ); ;
 
             command.AddOption(_procOpt);
             command.AddOption(_scalarFunctionOpt);
@@ -77,7 +72,6 @@ namespace SquealerConsoleCSharp.CustomCommands
             command.AddOption(_viewOpt);
             command.AddOption(_unCommittedOpt);
             command.AddOption(_diffOpt);
-            //command.AddOption(modeOpt);
 
             _pathArgument = new Argument<string?>(
                     name: "searchtext",
@@ -192,7 +186,10 @@ namespace SquealerConsoleCSharp.CustomCommands
 
                 }
 
-                Helper.PrintTable(_xmlToSqls, _gitFileInfos);
+                if (_showFilesSelected)
+                {
+                    Helper.PrintTable(_xmlToSqls, _gitFileInfos);
+                }
 
 
                 //extra implemenation

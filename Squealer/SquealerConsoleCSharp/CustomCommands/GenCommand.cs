@@ -19,7 +19,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 {
     internal class GenCommand : BaseDirCommand
     {
-        public GenCommand() : base("gen", "Generate SQL Scripts")
+        public GenCommand() : base("gen", "Generate SQL Scripts", true)
         {
 
         }

@@ -178,7 +178,7 @@ namespace SquealerConsoleCSharp.Models
                     {
                         writer.WriteAttributeString("PrimaryKeyClustered", Table.PrimaryKeyClustered);
                     }
-                    if (IsNewFile && Type == EType.View)
+                    if (Type == EType.View && Table.Columns.Count == 0)
                     {
                         writer.WriteComment("<Column Name=\"MyColumn\" Comments=\"\" />");
 

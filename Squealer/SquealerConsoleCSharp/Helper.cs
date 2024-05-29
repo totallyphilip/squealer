@@ -107,24 +107,46 @@ namespace SquealerConsoleCSharp
         }
 
 
-        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList, List<GitFileInfo> gitFileInfos) 
+        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList, List<GitFileInfo> gitFileInfos, HashSet<string>? fixedFiles = null) 
         {
             var gitFileInfosDict = gitFileInfos.ToDictionary(x => x.FileName, x => x.Status);
             var table = new Spectre.Console.Table();
             table.AddColumn("Type");
             table.AddColumn("Name");
             table.AddColumn("Git Status");
+            if(fixedFiles != null)
+            {
+                table.AddColumn("Fixed Or Not");
+            }
             foreach (var x in xmlToSqlList)
             {
                 var attr = x.SquealerObject.Type.GetObjectTypeAttribute();
                 
                 var hasGitInfo = gitFileInfosDict.TryGetValue(x.SqlrFileInfo.FileName, out var gitStatus);
+                if (fixedFiles != null)
+                {
+                    table.AddRow(
+                        attr.ObjectTypeCode, 
+                        $"{x.SqlrFileInfo.SqlObjectName}[green]{attr.NumericSymbol}[/]", 
+                        hasGitInfo ? $"{gitStatus}" : "",
+                        fixedFiles.Contains(x.SqlrFileInfo.FileName) ? "Fixed": ""
+                        );
+                }
+                else
+                    table.AddRow(
+                        attr.ObjectTypeCode, 
+                        $"{x.SqlrFileInfo.SqlObjectName}[green]{attr.NumericSymbol}[/]", 
+                        hasGitInfo ? $"{gitStatus}" : ""
+                        );
 
-                table.AddRow(attr.ObjectTypeCode, $"{x.SqlrFileInfo.SqlObjectName}[green]{ attr.NumericSymbol}[/]", hasGitInfo ? $"{gitStatus}" : "");
             }
             AnsiConsole.Write(table);
 
-            AnsiConsole.Write($"\n# {xmlToSqlList.Count} files.\n");
+            string fixedCount = fixedFiles != null ?
+                $"Fixed {fixedFiles.Count.ToString()} files" :
+                "";
+
+            AnsiConsole.Write($"\n# {xmlToSqlList.Count} files.{fixedCount}\n");
         }
 
 

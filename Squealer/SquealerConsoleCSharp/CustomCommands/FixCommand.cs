@@ -14,7 +14,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 {
     internal class FixCommand: BaseDirCommand
     {
-        public FixCommand() : base("fix", "Regenerate sqlr files")
+        public FixCommand() : base("fix", "Regenerate sqlr files", false)
         {
 
         }
@@ -36,15 +36,15 @@ namespace SquealerConsoleCSharp.CustomCommands
             command.SetHandler((InvocationContext context) =>
             {
                 // Retrieve the values for base options
-                bool proc = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-p", "proc"));
-                bool scalarFunction = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-fn", "scalar function"));
-                bool inlineTVF = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-if", "inline table-valued function"));
-                bool multiStatementTVF = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-tf", "multi-statement table-valued function"));
-                bool view = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-v", "view"));
-                bool unCommitted = context.ParseResult.GetValueForOption(Helper.CreateFlagOption("-u", "uncommited files"));
-                string? diff = context.ParseResult.GetValueForOption(new Option<string?>("-diff", getDefaultValue: () => string.Empty));
+                bool proc = context.ParseResult.GetValueForOption(_procOpt);
+                bool scalarFunction = context.ParseResult.GetValueForOption(_scalarFunctionOpt);
+                bool inlineTVF = context.ParseResult.GetValueForOption(_inlineTVFOpt);
+                bool multiStatementTVF = context.ParseResult.GetValueForOption(_multiStatementTVFOpt);
+                bool view = context.ParseResult.GetValueForOption(_viewOpt);
+                bool unCommitted = context.ParseResult.GetValueForOption(_unCommittedOpt);
+                string? diff = context.ParseResult.GetValueForOption(_diffOpt);
+                string? searchText = context.ParseResult.GetValueForArgument(_pathArgument);
                 string? convertOpt = context.ParseResult.GetValueForOption(convertaOpt);
-                string? searchText = context.ParseResult.GetValueForArgument(new Argument<string?>("searchtext", getDefaultValue: () => null));
 
                 // Call the base handle method
                 BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
