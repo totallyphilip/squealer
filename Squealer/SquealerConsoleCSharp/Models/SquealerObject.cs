@@ -130,7 +130,15 @@ namespace SquealerConsoleCSharp.Models
                 writer.WriteEndElement(); // PreCode
 
                 // Comments with comment
-                writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().FriendlyName} and any difficult concepts. ");
+                if (Type != EType.StoredProcedure)
+                {
+                    writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().FriendlyName} and any difficult concepts. ");
+                }
+                else
+                {
+                    writer.WriteComment($" Describe the purpose of this procedure, the return values, and any difficult concepts. ");
+                }
+
                 writer.WriteStartElement("Comments");
                 writer.WriteCData(Comments);
                 writer.WriteEndElement(); // Comments

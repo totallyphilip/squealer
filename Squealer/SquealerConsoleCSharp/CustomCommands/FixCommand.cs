@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TextCopy;
+using System.Security.Cryptography;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
@@ -58,14 +59,50 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         private void ExtraImplementation(string? convertOpt)
         {
-
+            HashSet<string> fixedFiles = new HashSet<string>();
             foreach(var file in _xmlToSqls) 
             {
+                // save the output in a temp file
+                // use checksum to see if the temp file same as the original
+                // if changed, re
                 var filePath = file.SqlrFileInfo.FilePath;
-                file.SquealerObject.ExportXmlFile(filePath);
+                var tempFilePath = GenerateTempFilePath();
+                file.SquealerObject.ExportXmlFile(tempFilePath);
+
+                if (IsFileChanged(filePath, tempFilePath))
+                {
+                    // Replace the original file with the fixed file
+                    File.Copy(tempFilePath, filePath, overwrite: true);
+                    fixedFiles.Add(file.SqlrFileInfo.FileName);
+                }
             }
 
+            Helper.PrintTable(_xmlToSqls, _gitFileInfos, fixedFiles);
 
+        }
+
+        private static string GenerateTempFilePath()
+        {
+            string tempPath = Path.GetTempPath();
+            string tempFileName = Guid.NewGuid().ToString() + "sqlr";
+            return Path.Combine(tempPath, tempFileName);
+        }
+
+        private static bool IsFileChanged(string originalFilePath, string fixedFilePath)
+        {
+            string originalChecksum = ComputeChecksum(originalFilePath);
+            string fixedChecksum = ComputeChecksum(fixedFilePath);
+            return !originalChecksum.Equals(fixedChecksum);
+        }
+
+        private static string ComputeChecksum(string filePath)
+        {
+            using (var stream = File.OpenRead(filePath))
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] hash = sha256.ComputeHash(stream);
+                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            }
         }
     }
 }

@@ -125,11 +125,13 @@ namespace SquealerConsoleCSharp
                 var hasGitInfo = gitFileInfosDict.TryGetValue(x.SqlrFileInfo.FileName, out var gitStatus);
                 if (fixedFiles != null)
                 {
+                    var fileNameDisplay = fixedFiles.Contains(x.SqlrFileInfo.FileName) ? $"[yellow]{x.SqlrFileInfo.SqlObjectName}[/]" : x.SqlrFileInfo.SqlObjectName;
+
                     table.AddRow(
                         attr.ObjectTypeCode, 
-                        $"{x.SqlrFileInfo.SqlObjectName}[green]{attr.NumericSymbol}[/]", 
+                        $"{fileNameDisplay}[green]{attr.NumericSymbol}[/]", 
                         hasGitInfo ? $"{gitStatus}" : "",
-                        fixedFiles.Contains(x.SqlrFileInfo.FileName) ? "Fixed": ""
+                        fixedFiles.Contains(x.SqlrFileInfo.FileName) ? "[yellow]Fixed[/]" : ""
                         );
                 }
                 else

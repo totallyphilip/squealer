@@ -170,9 +170,11 @@ namespace SquealerConsoleCSharp.CustomCommands
                 }
 
                 // re order by type and then file name
-                _xmlToSqls = _xmlToSqls
-                     .OrderBy(x=>x.SquealerObject.Type.GetObjectTypeAttribute().Order)
-                     .ThenBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
+                //_xmlToSqls = _xmlToSqls
+                //     .OrderBy(x=>x.SquealerObject.Type.GetObjectTypeAttribute().Order)
+                //     .ThenBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
+
+                _xmlToSqls = _xmlToSqls.OrderBy(x => x.SqlrFileInfo.SqlObjectName).ToList();
 
                 if (!string.IsNullOrWhiteSpace(diff_targetBranch))
                 {
