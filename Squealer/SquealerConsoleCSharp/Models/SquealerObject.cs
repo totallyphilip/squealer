@@ -152,7 +152,7 @@ namespace SquealerConsoleCSharp.Models
                     if (IsNewFile)
                     {
                         var outputString = Type == EType.StoredProcedure ? "Output=\"False\" " : "";
-                        writer.WriteComment($"<Parameter Name=\"MyParameter\" Type=\"varchar(50)\" {outputString}DefaultValue=\"\" Comments=\"\" />");
+                        writer.WriteComment($"<Parameter Name=\"MyParameter\" Type=\"varchar(50)\" ReadOnly=\"False\" {outputString}DefaultValue=\"\" Comments=\"\" />");
                     }
                     // Assuming Parameter is a class with Name, Type, Output, DefaultValue, Comments
                     foreach (var parameter in Parameters)
@@ -161,6 +161,7 @@ namespace SquealerConsoleCSharp.Models
                         writer.WriteAttributeString("Name", parameter.Name);
                         writer.WriteAttributeString("Type", parameter.DataType);
                         writer.WriteAttributeString("Output", parameter.Output.ToString());
+                        writer.WriteAttributeString("ReadOnly", parameter.ReadOnly.ToString());
                         writer.WriteAttributeString("DefaultValue", parameter.DefaultValue);
                         writer.WriteAttributeString("Comments", parameter.Comments);
                         writer.WriteEndElement(); // Parameter

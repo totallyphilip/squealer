@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TextCopy;
 using System.Security.Cryptography;
+using System.Diagnostics.Metrics;
 
 namespace SquealerConsoleCSharp.CustomCommands
 {
@@ -59,6 +60,21 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         private void ExtraImplementation(string? convertOpt)
         {
+
+            if (!string.IsNullOrWhiteSpace(convertOpt))
+            {
+                //var modeSet = convertOpt.Split('|').Select(m => m.Trim().ToLower()).Distinct().ToHashSet();
+                //if (modeSet.Contains("alt"))
+                //    alter = true;
+                //if (modeSet.Contains("e"))
+                //    encrypt = true;
+                //if (!modeSet.Any(m => new[] { "alt", "e", }.Contains(m)) && modeSet.Count > 0)
+                //{
+                //    Console.WriteLine("Invalid mode(s) specified.");
+                //    return;
+                //}
+            }
+
             HashSet<string> fixedFiles = new HashSet<string>();
             foreach(var file in _xmlToSqls) 
             {
