@@ -14,7 +14,7 @@ namespace SquealerConsoleCSharp
 
         public string LastOpenedPath { get; set; } = string.Empty;
 
-        public string GitPprojectName { get; set; } = string.Empty;
+        public string GitProjectName { get; set; } = string.Empty;
 
         public Settings Settings { get; set; } = default!;
 

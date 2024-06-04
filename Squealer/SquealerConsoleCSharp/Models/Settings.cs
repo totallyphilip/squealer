@@ -11,7 +11,7 @@ namespace SquealerConsoleCSharp.Models
     public class Settings
     {
         public OutputSettings Output { get; set; } = new OutputSettings();
-        public DisplaySettings Display { get; set; } = new DisplaySettings();
+        public PromptSettings Prompt { get; set; } = new PromptSettings();
 
         public string Version { get; set; } = "1.0";
 
@@ -50,7 +50,7 @@ namespace SquealerConsoleCSharp.Models
         public bool ExportToSqlFile { get; set; }
     }
 
-    public class DisplaySettings
+    public class PromptSettings
     {
         public ProjectName ProjectName { get; set; } = new ProjectName();
         public BranchName BranchName { get; set; } = new BranchName();

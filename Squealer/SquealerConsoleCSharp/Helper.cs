@@ -21,6 +21,47 @@ namespace SquealerConsoleCSharp
     internal class Helper
     {
 
+        public static string GetPromptText()
+        {
+            var settings = AppState.Instance.Settings;
+
+            string getProjectName()
+            {
+                if (!settings.Prompt.ProjectName.Show)
+                {
+                    return string.Empty;
+                }
+
+                return GetShortName(AppState.Instance.GitProjectName, settings.Prompt.ProjectName.MaxLength ?? 99);
+            }
+
+            string getBranchName()
+            {
+                if (!settings.Prompt.BranchName.Show)
+                {
+                    return string.Empty;
+                }
+
+                return GetShortName(AppState.Instance.GitProjectName, settings.Prompt.BranchName.MaxLength ?? 99);
+            }
+
+            return string.IsNullOrEmpty(AppState.Instance.LastOpenedPath) ?
+                            "[red](git?)[/]" :
+                            $"[green][[{getProjectName()}]][/] [blue]({GitHelper.GetGitBranch()})[/]";
+        }
+
+        public static string GetShortName(string name, int length)
+        {
+            if (name.Length > length)
+            {
+                return name.Substring(0, length);
+            }
+            else
+            {
+                return name;
+            }
+        }
+
         public static bool VadilateFolder()
         {
             if (string.IsNullOrWhiteSpace(AppState.Instance.LastOpenedPath))

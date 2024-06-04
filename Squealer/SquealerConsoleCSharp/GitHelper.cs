@@ -10,12 +10,7 @@ namespace SquealerConsoleCSharp
 {
     internal class GitHelper
     {
-        public static string GetGitProejctBranchName()
-        {
-            return string.IsNullOrEmpty(AppState.Instance.LastOpenedPath) ?
-                            "[red](git?)[/]" :
-                            $"[green][[{AppState.Instance.GitPprojectName}]][/] [blue]({GetGitBranch()})[/]";
-        }
+        
 
         public static string GetGitProject()
         {

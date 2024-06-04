@@ -40,7 +40,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                     var gitProjectName = GitHelper.GetGitProject();
                     if(!string.IsNullOrEmpty( gitProjectName )) 
                     { 
-                        AppState.Instance.GitPprojectName = gitProjectName;
+                        AppState.Instance.GitProjectName = gitProjectName;
                     }
 
                 }
