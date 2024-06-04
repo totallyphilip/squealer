@@ -27,7 +27,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             // Add additional options specific to the derived class
             var convertaOpt = new Option<string?>(
-                aliases: new[] { "-c" },
+                aliases: new[] { "-convert" },
                 description: "",
                 getDefaultValue: () => string.Empty
                 );
@@ -60,12 +60,12 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         private void ExtraImplementation(string? convertOpt)
         {
-            EType? eType = null;
+            EType? newType = null;
             if (!string.IsNullOrWhiteSpace(convertOpt))
             {
                 try
                 {
-                    eType = EnumHelper.GetEnumByObjectTypeCode<EType>(convertOpt);
+                    newType = EnumHelper.GetEnumByObjectTypeCode<EType>(convertOpt);
                 }catch (Exception ex) 
                 {
                     AnsiConsole.MarkupLine("Invalid Convert Type");
@@ -81,9 +81,9 @@ namespace SquealerConsoleCSharp.CustomCommands
                 var filePath = file.SqlrFileInfo.FilePath;
                 var tempFilePath = GenerateTempFilePath();
                 
-                if(eType != null)
+                if(newType != null)
                 {
-                    file.SquealerObject.Type = eType.Value;
+                    file.SquealerObject.Type = newType.Value;
                 }
 
 
@@ -97,7 +97,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                 }
             }
 
-            Helper.PrintTable(_xmlToSqls, _gitFileInfos, fixedFiles);
+            Helper.PrintTable(_xmlToSqls, _gitFileInfos, fixedFiles, newType);
 
         }
 

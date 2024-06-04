@@ -107,9 +107,12 @@ namespace SquealerConsoleCSharp
         }
 
 
-        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList, List<GitFileInfo> gitFileInfos, HashSet<string>? fixedFiles = null) 
+        public static void PrintTable(List<XmlToSqlConverter> xmlToSqlList, List<GitFileInfo> gitFileInfos, HashSet<string>? fixedFiles = null, EType? newType = null) 
         {
             var gitFileInfosDict = gitFileInfos.ToDictionary(x => x.FileName, x => x.Status);
+
+            string statusText = newType == null ? "Fixed" : "Convert";
+
             var table = new Spectre.Console.Table();
             table.AddColumn("Type");
             table.AddColumn("Name");
@@ -131,7 +134,7 @@ namespace SquealerConsoleCSharp
                         attr.ObjectTypeCode, 
                         $"{fileNameDisplay}[green]{attr.NumericSymbol}[/]", 
                         hasGitInfo ? $"{gitStatus}" : "",
-                        fixedFiles.Contains(x.SqlrFileInfo.FileName) ? "[yellow]Fixed[/]" : ""
+                        fixedFiles.Contains(x.SqlrFileInfo.FileName) ? $"[yellow]{statusText}[/]" : ""
                         );
                 }
                 else
@@ -144,8 +147,9 @@ namespace SquealerConsoleCSharp
             }
             AnsiConsole.Write(table);
 
+            
             string fixedCount = fixedFiles != null ?
-                $"Fixed {fixedFiles.Count.ToString()} files" :
+                $"{statusText} {fixedFiles.Count.ToString()} files" :
                 "";
 
             AnsiConsole.Write($"\n# {xmlToSqlList.Count} files.{fixedCount}\n");
