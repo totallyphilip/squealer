@@ -138,6 +138,10 @@ namespace SquealerConsoleCSharp.Models
                 {
                     writer.WriteComment($" Describe the output of this view and any difficult concepts. ");
                 }
+                else if(Type == EType.ScalarFunction)
+                {
+                    writer.WriteComment($" Describe the output of this scalar function and any difficult concepts. ");
+                }
                 else
                 {
                     writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().FriendlyName} and any difficult concepts. ");
@@ -153,18 +157,22 @@ namespace SquealerConsoleCSharp.Models
                 if (Type == EType.StoredProcedure || Type == EType.ScalarFunction || Type == EType.MultiStatementTableFunction || Type == EType.InlineTableFunction)
                 {
                     writer.WriteStartElement("Parameters");
-                    if (IsNewFile)
+                    if (IsNewFile || Parameters.Count == 0)
                     {
                         var outputString = Type == EType.StoredProcedure ? "Output=\"False\" " : "";
                         writer.WriteComment($"<Parameter Name=\"MyParameter\" Type=\"varchar(50)\" ReadOnly=\"False\" {outputString}DefaultValue=\"\" Comments=\"\" />");
                     }
                     // Assuming Parameter is a class with Name, Type, Output, DefaultValue, Comments
+
                     foreach (var parameter in Parameters)
                     {
                         writer.WriteStartElement("Parameter");
                         writer.WriteAttributeString("Name", parameter.Name);
                         writer.WriteAttributeString("Type", parameter.DataType);
-                        writer.WriteAttributeString("Output", parameter.Output.ToString());
+                        if (Type == EType.StoredProcedure)
+                        {
+                            writer.WriteAttributeString("Output", parameter.Output.ToString());
+                        }
                         writer.WriteAttributeString("ReadOnly", parameter.ReadOnly.ToString());
                         writer.WriteAttributeString("DefaultValue", parameter.DefaultValue);
                         writer.WriteAttributeString("Comments", parameter.Comments);
