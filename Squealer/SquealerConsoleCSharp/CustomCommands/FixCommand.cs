@@ -27,7 +27,7 @@ namespace SquealerConsoleCSharp.CustomCommands
 
             // Add additional options specific to the derived class
             var convertaOpt = new Option<string?>(
-                aliases: new[] { "-mode" },
+                aliases: new[] { "-c" },
                 description: "",
                 getDefaultValue: () => string.Empty
                 );
@@ -60,19 +60,16 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         private void ExtraImplementation(string? convertOpt)
         {
-
+            EType? eType = null;
             if (!string.IsNullOrWhiteSpace(convertOpt))
             {
-                //var modeSet = convertOpt.Split('|').Select(m => m.Trim().ToLower()).Distinct().ToHashSet();
-                //if (modeSet.Contains("alt"))
-                //    alter = true;
-                //if (modeSet.Contains("e"))
-                //    encrypt = true;
-                //if (!modeSet.Any(m => new[] { "alt", "e", }.Contains(m)) && modeSet.Count > 0)
-                //{
-                //    Console.WriteLine("Invalid mode(s) specified.");
-                //    return;
-                //}
+                try
+                {
+                    eType = EnumHelper.GetEnumByObjectTypeCode<EType>(convertOpt);
+                }catch (Exception ex) 
+                {
+                    AnsiConsole.MarkupLine("Invalid Convert Type");
+                }
             }
 
             HashSet<string> fixedFiles = new HashSet<string>();
@@ -83,6 +80,13 @@ namespace SquealerConsoleCSharp.CustomCommands
                 // if changed, re
                 var filePath = file.SqlrFileInfo.FilePath;
                 var tempFilePath = GenerateTempFilePath();
+                
+                if(eType != null)
+                {
+                    file.SquealerObject.Type = eType.Value;
+                }
+
+
                 file.SquealerObject.ExportXmlFile(tempFilePath);
 
                 if (IsFileChanged(filePath, tempFilePath))

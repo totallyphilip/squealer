@@ -130,13 +130,17 @@ namespace SquealerConsoleCSharp.Models
                 writer.WriteEndElement(); // PreCode
 
                 // Comments with comment
-                if (Type != EType.StoredProcedure)
+                if (Type == EType.StoredProcedure)
                 {
-                    writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().FriendlyName} and any difficult concepts. ");
+                    writer.WriteComment($" Describe the purpose of this procedure, the return values, and any difficult concepts. ");
+                }
+                else if (Type == EType.View)
+                {
+                    writer.WriteComment($" Describe the output of this view and any difficult concepts. ");
                 }
                 else
                 {
-                    writer.WriteComment($" Describe the purpose of this procedure, the return values, and any difficult concepts. ");
+                    writer.WriteComment($" Describe the purpose of this {Type.GetObjectTypeAttribute().FriendlyName} and any difficult concepts. ");
                 }
 
                 writer.WriteStartElement("Comments");
@@ -203,8 +207,8 @@ namespace SquealerConsoleCSharp.Models
                             writer.WriteAttributeString("Nullable", col.NullableString);
                             writer.WriteAttributeString("Identity", col.IdentityString);
                             writer.WriteAttributeString("IncludeInPrimaryKey", col.IncludeInPrimaryKeyString);
-                            writer.WriteAttributeString("Comments", col.Comments);
                         }
+                        writer.WriteAttributeString("Comments", col.Comments);
                         writer.WriteEndElement(); // End of Column
                     }
 
@@ -232,13 +236,18 @@ namespace SquealerConsoleCSharp.Models
 
                 // add the config users
 
-                if (Users.Count == 0)
-                    Users.Add(new User { Name = "$DBUSER$" });
-                foreach (var user in Users)
+                if (Users.Count > 0)
                 {
-                    writer.WriteStartElement("User");
-                    writer.WriteAttributeString("Name", user.Name);
-                    writer.WriteEndElement(); // User
+                    foreach (var user in Users)
+                    {
+                        writer.WriteStartElement("User");
+                        writer.WriteAttributeString("Name", user.Name);
+                        writer.WriteEndElement(); // User
+                    }
+                }
+                else
+                {
+                    writer.WriteComment(" <User Name=\"MyUser\"/> ");
                 }
                 writer.WriteEndElement(); // Users
                 
