@@ -24,6 +24,7 @@ namespace SquealerConsoleCSharp.CustomCommands
         protected Option<bool> _inlineTVFOpt;
         protected Option<bool> _multiStatementTVFOpt;
         protected Option<bool> _viewOpt;
+        protected Option<bool> _exactOpt;
         protected Option<bool> _unCommittedOpt;
         protected Option<string?> _diffOpt;
         protected Argument<string?> _pathArgument;
@@ -57,6 +58,8 @@ namespace SquealerConsoleCSharp.CustomCommands
                 Helper.CreateFlagOption("-tf", "multi-statement table-valued function");
             _viewOpt =
                 Helper.CreateFlagOption("-v", "view");
+            _exactOpt =
+                Helper.CreateFlagOption("-x", "do nothing, only for backward compatibility");
             _unCommittedOpt =
                 Helper.CreateFlagOption("-u", "uncommited files");
             _diffOpt = new Option<string?>(
@@ -70,6 +73,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             command.AddOption(_inlineTVFOpt);
             command.AddOption(_multiStatementTVFOpt);
             command.AddOption(_viewOpt);
+            command.AddOption(_exactOpt);
             command.AddOption(_unCommittedOpt);
             command.AddOption(_diffOpt);
 
