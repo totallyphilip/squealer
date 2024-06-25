@@ -501,6 +501,7 @@ namespace SquealerConsoleCSharp
                             $"{(item.c.Nullable ? " null" : notNull())}{(item.c.Identity ? " identity" : "")}" +
                             $"{(item.c.IncludeInPrimaryKey ? $"\nprimary key clustered ({item.c.Name})" : "")}"
                             )
+                        .Select(x=>x.Trim())
                         .ToList();
         }
 
