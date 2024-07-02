@@ -26,6 +26,7 @@ namespace SquealerConsoleCSharp.CustomCommands
         protected Option<bool> _viewOpt;
         protected Option<bool> _exactOpt;
         protected Option<bool> _unCommittedOpt;
+        protected Option<bool> _codeOpt;
         protected Option<string?> _diffOpt;
         protected Argument<string?> _pathArgument;
 
@@ -46,7 +47,7 @@ namespace SquealerConsoleCSharp.CustomCommands
                 $"Anything inside these brackets is not required for the command to run but specifies additional filters or parameters when included.\r\n" +
                 $"- | (pipe) signifies an \"or\" relationship between options within a group. You can choose one or more options to apply.\r\n" +
                 $"- && means \"and\" and is used to indicate that options or groups of options can be used in combination with each other.\r\n" +
-                $"- {_name} [ -p | -fn | -if | -tf | -v ] && [ -u | -diff <branch-name> ] && [searchText]\r\n");
+                $"- {_name} [ -p | -fn | -if | -tf | -v ] && [code] && [ -u | -diff <branch-name> ] && [searchText]\r\n");
 
             _procOpt =
                 Helper.CreateFlagOption("-p", "proc");
@@ -62,6 +63,8 @@ namespace SquealerConsoleCSharp.CustomCommands
                 Helper.CreateFlagOption("-x", "do nothing, only for backward compatibility");
             _unCommittedOpt =
                 Helper.CreateFlagOption("-u", "uncommited files");
+            _codeOpt =
+                Helper.CreateFlagOption("-code", "files with pre/post code");
             _diffOpt = new Option<string?>(
                 aliases: new[] { "-diff" },
                 description: "-diff <Target Branch Name>",
@@ -75,6 +78,7 @@ namespace SquealerConsoleCSharp.CustomCommands
             command.AddOption(_viewOpt);
             command.AddOption(_exactOpt);
             command.AddOption(_unCommittedOpt);
+            command.AddOption(_codeOpt);
             command.AddOption(_diffOpt);
 
             _pathArgument = new Argument<string?>(
@@ -94,18 +98,19 @@ namespace SquealerConsoleCSharp.CustomCommands
                 bool multiStatementTVF = context.ParseResult.GetValueForOption(_multiStatementTVFOpt);
                 bool view = context.ParseResult.GetValueForOption(_viewOpt);
                 bool unCommitted = context.ParseResult.GetValueForOption(_unCommittedOpt);
+                bool code = context.ParseResult.GetValueForOption(_codeOpt);
                 string? diff = context.ParseResult.GetValueForOption(_diffOpt);
                 string? searchText = context.ParseResult.GetValueForArgument(_pathArgument);
 
                 // Call your method to handle the command
                 
-                BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
+                BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, code, diff, searchText);
             });
 
             return command;
         }
 
-        protected void BasicHandling(bool p, bool fn, bool _if, bool tf, bool v, bool u, string? diff_targetBranch, string? searchtext)
+        protected void BasicHandling(bool p, bool fn, bool _if, bool tf, bool v, bool u, bool code, string? diff_targetBranch, string? searchtext)
         {
             if (!Helper.VadilateFolder())
                 return;
@@ -171,6 +176,15 @@ namespace SquealerConsoleCSharp.CustomCommands
                     _xmlToSqls = _xmlToSqls
                         .Where(x => fileNameSet.Contains(x.SqlrFileInfo.FileName))
                         .ToList();
+                }
+
+
+                if (code)
+                {
+                    _xmlToSqls = _xmlToSqls
+                        .Where(x => !string.IsNullOrWhiteSpace(x.SquealerObject.PreCode) || !string.IsNullOrWhiteSpace(x.SquealerObject.PostCode))
+                        .ToList();
+                        
                 }
 
                 // re order by type and then file name

@@ -44,12 +44,13 @@ namespace SquealerConsoleCSharp.CustomCommands
                 bool multiStatementTVF = context.ParseResult.GetValueForOption(_multiStatementTVFOpt);
                 bool view = context.ParseResult.GetValueForOption(_viewOpt);
                 bool unCommitted = context.ParseResult.GetValueForOption(_unCommittedOpt);
+                bool code = context.ParseResult.GetValueForOption(_codeOpt);
                 string? diff = context.ParseResult.GetValueForOption(_diffOpt);
                 string? searchText = context.ParseResult.GetValueForArgument(_pathArgument);
                 string? convertOpt = context.ParseResult.GetValueForOption(convertaOpt);
 
                 // Call the base handle method
-                BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, diff, searchText);
+                BasicHandling(proc, scalarFunction, inlineTVF, multiStatementTVF, view, unCommitted, code, diff, searchText);
 
                 // Handle additional logic
                 ExtraImplementation(convertOpt);
