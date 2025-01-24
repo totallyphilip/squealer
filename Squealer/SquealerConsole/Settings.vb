@@ -241,16 +241,6 @@
         End Set
     End Property
 
-    Private _EzSchema As String
-    Public Property EzSchema As String
-        Get
-            Return _EzSchema.Trim.ToLower.Replace(".", "")
-        End Get
-        Set(value As String)
-            _EzSchema = value.Trim.ToLower.Replace(".", "")
-        End Set
-    End Property
-
     Private _ShowProjectNameInTitleBar As Boolean
     Public Property ShowProjectNameInTitleBar As Boolean
         Get
@@ -390,7 +380,6 @@
         Me.DetectDeprecatedSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectDeprecatedSquealerObjects), True)
         Me.ShowGitBranch = My.Configger.LoadSetting(NameOf(Me.ShowGitBranch), True)
         Me.EnableEzObjects = My.Configger.LoadSetting(NameOf(Me.EnableEzObjects), False)
-        Me.EzSchema = My.Configger.LoadSetting(NameOf(Me.EzSchema), "ez")
         Me.WildcardBehavior.UseSpaces = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseSpaces), False)
         Me.DirectoryStyleSelected = DirectoryStyleParse(My.Configger.LoadSetting(NameOf(Me.DirectoryStyleSelected), DirectoryStyle.Full.ToString))
         Me.OutputStepStyleSelected = OutputStepStyleParse(My.Configger.LoadSetting(NameOf(Me.OutputStepStyleSelected), OutputStepStyle.Detailed.ToString))
@@ -441,7 +430,6 @@
         End If
         f.optShowGitBranch.Checked = Me.ShowGitBranch
         f.chkEnableEzObjects.Checked = Me.EnableEzObjects
-        f.txtEzSchema.Text = Me.EzSchema
         f.optBeep.Checked = Textify.ErrorAlert.Beep
         f.optDetectOldSquealerObjects.Checked = Me.DetectDeprecatedSquealerObjects
         f.StartPosition = Windows.Forms.FormStartPosition.CenterScreen
@@ -480,7 +468,6 @@
         Me.OutputToClipboard = f.rbClipboard.Checked
         Me.ShowGitBranch = f.optShowGitBranch.Checked
         Me.EnableEzObjects = f.chkEnableEzObjects.Checked
-        Me.EzSchema = f.txtEzSchema.Text
         Textify.ErrorAlert.Beep = f.optBeep.Checked
         Me.DetectDeprecatedSquealerObjects = f.optDetectOldSquealerObjects.Checked
         Me.TrackFailedItems = f.chkTrackFailedItems.Checked
@@ -512,7 +499,6 @@
         My.Configger.SaveSetting(NameOf(Me.AlwaysShowSymbols), Me.AlwaysShowSymbols)
         My.Configger.SaveSetting(NameOf(Me.ShowGitBranch), Me.ShowGitBranch)
         My.Configger.SaveSetting(NameOf(Me.EnableEzObjects), Me.EnableEzObjects)
-        My.Configger.SaveSetting(NameOf(Me.EzSchema), Me.EzSchema)
         My.Configger.SaveSetting(NameOf(Textify.ErrorAlert.Beep), Textify.ErrorAlert.Beep)
 
     End Sub

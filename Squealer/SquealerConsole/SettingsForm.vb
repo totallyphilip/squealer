@@ -130,4 +130,5 @@
     Private Sub chkAlwaysShowSymbols_CheckedChanged(sender As Object, e As EventArgs) Handles chkAlwaysShowSymbols.CheckedChanged
         UpdateDirectoryExample()
     End Sub
+
 End Class

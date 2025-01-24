@@ -750,9 +750,9 @@ Module Main
 
                 GeneratedOutput = My.Resources.CompareObjects.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
 
-                Dim ignoredschemas As String = "'cdc'"
+                Dim ignoredschemas As String = "'cdc','std'"
                 If MySettings.EnableEzObjects Then
-                    ignoredschemas &= ",'" & MySettings.EzSchema & "'"
+                    ignoredschemas &= ",'ez'"
                 End If
 
                 GeneratedOutput = GeneratedOutput.Replace("{schemas-to-ignore}", ignoredschemas)
@@ -766,7 +766,7 @@ Module Main
                     GeneratedOutput = My.Resources.TrackFailedItems_Start & vbCrLf & GeneratedOutput & vbCrLf & My.Resources.TrackFailedItems_End
                 End If
                 If MySettings.EnableEzObjects Then
-                    GeneratedOutput = EzText(False).Replace("{Schema}", MySettings.EzSchema) & GeneratedOutput
+                    GeneratedOutput = EzText(False) & GeneratedOutput
                 End If
             End If
 
@@ -1065,7 +1065,7 @@ Module Main
                 ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso MySwitches.Count = 0 Then
 
                     Dim f As New TempFileHandler("sql")
-                    f.Writeline(EzText(False).Replace("{Schema}", MySettings.EzSchema))
+                    f.Writeline(EzText(False))
                     f.Show()
 
 

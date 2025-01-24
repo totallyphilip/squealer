@@ -75,8 +75,6 @@ Partial Class SettingsForm
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.tabExtra = New System.Windows.Forms.TabPage()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.txtEzSchema = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -656,8 +654,6 @@ Partial Class SettingsForm
         '
         'tabExtra
         '
-        Me.tabExtra.Controls.Add(Me.Label5)
-        Me.tabExtra.Controls.Add(Me.txtEzSchema)
         Me.tabExtra.Controls.Add(Me.TextBox1)
         Me.tabExtra.Controls.Add(Me.chkEnableEzObjects)
         Me.tabExtra.Location = New System.Drawing.Point(4, 22)
@@ -667,24 +663,6 @@ Partial Class SettingsForm
         Me.tabExtra.TabIndex = 4
         Me.tabExtra.Text = "EXTRA"
         Me.tabExtra.UseVisualStyleBackColor = True
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(144, 15)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(44, 13)
-        Me.Label5.TabIndex = 30
-        Me.Label5.Text = "schema"
-        '
-        'txtEzSchema
-        '
-        Me.txtEzSchema.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEzSchema.Location = New System.Drawing.Point(189, 12)
-        Me.txtEzSchema.Name = "txtEzSchema"
-        Me.txtEzSchema.Size = New System.Drawing.Size(188, 20)
-        Me.txtEzSchema.TabIndex = 29
         '
         'TextBox1
         '
@@ -788,8 +766,6 @@ Partial Class SettingsForm
     Friend WithEvents GroupBox2 As Windows.Forms.GroupBox
     Friend WithEvents chkEnableEzObjects As Windows.Forms.CheckBox
     Friend WithEvents TextBox1 As Windows.Forms.TextBox
-    Friend WithEvents Label5 As Windows.Forms.Label
-    Friend WithEvents txtEzSchema As Windows.Forms.TextBox
     Friend WithEvents chkShowProjectDirectoryInTitleBar As Windows.Forms.CheckBox
     Friend WithEvents chkShowProjectNameInTitleBar As Windows.Forms.CheckBox
     Friend WithEvents chkShowProjectNameInCommandPrompt As Windows.Forms.CheckBox
