@@ -1,4 +1,7 @@
-﻿1.0.11.2
+﻿1.0.12.20
+Internal improvements to EZ script handling.
+^break
+1.0.11.2
 Updated to .NET Framework 4.8.1
 Added --NOMAGIC hint. See website for details.
 Removed easter egg. Nobody ever found it, so it was just project bloat.

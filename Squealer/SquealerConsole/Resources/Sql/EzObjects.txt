@@ -3,6 +3,8 @@ go
 
 /*
 
+1/24/2024
+	* added .schemas
 7/28/2023
 	* added .foreign_key_columns
 1/3/2023
@@ -35,23 +37,36 @@ declare @sqldrop varchar(max) =
 		end
 		+ concat(' [',s.name,'].[',o.name,']')
 			,'; ')
-		+ '; drop schema {Schema}'
+		+ '; drop schema ez'
 	from sys.objects o
 	join sys.schemas s
 		on s.schema_id = o.schema_id
-	where s.name = '{Schema}'
+	where s.name = 'ez'
 )
 if @sqldrop is not null
 	exec (@sqldrop)
 
 go
 
-if schema_id('{Schema}') is null
-	exec ('create schema {Schema}')
+if schema_id('ez') is null
+	exec ('create schema ez')
 
 go
 
-create view {Schema}.filegroups as
+
+create view ez.schemas as
+select
+	s.name
+	,s.schema_id
+	,s.principal_id
+	,(select count(1) from sys.objects o where o.schema_id = s.schema_id) as object_count
+from
+	sys.schemas s
+
+go
+
+
+create view ez.filegroups as
 select
 	fg.name as filegroup_name
 	,t.object_id
@@ -67,7 +82,7 @@ join
 
 go
 
-create view {Schema}.objects as
+create view ez.objects as
 select
 	concat('[',s.name,'].[',o.name,']') as object_name
 	,s.schema_id
@@ -93,7 +108,7 @@ join
 
 go
 
-create view {Schema}.tables as
+create view ez.tables as
 select
 	fg.filegroup_name
 	,o.object_name as table_name
@@ -113,23 +128,23 @@ select
 from
 	sys.tables t
 join
-	{Schema}.objects o
+	ez.objects o
 	on o.object_id = t.object_id
 join
-	{Schema}.filegroups fg
+	ez.filegroups fg
 	on fg.object_id = t.object_id
 	and fg.index_id<2 -- heaps and clustered indexes
 left outer join
 	sys.tables h
 	on h.object_id = t.history_table_id
 left outer join
-	{Schema}.objects ho
+	ez.objects ho
 	on ho.object_id = h.object_id
 
 
 go
 
-create view {Schema}.views as
+create view ez.views as
 select
 	o.object_name as view_name
 	,o.schema_id
@@ -144,12 +159,12 @@ select
 from
 	sys.views t
 join
-	{Schema}.objects o
+	ez.objects o
 	on o.object_id = t.object_id
 
 go
 
-create function {Schema}.leftnum
+create function ez.leftnum
 (
 @s as varchar(1000)
 )
@@ -174,7 +189,7 @@ end
 
 go
 
-create function {Schema}.leftint
+create function ez.leftint
 (
 @s as varchar(1000)
 )
@@ -182,13 +197,13 @@ returns int
 as
 begin
 
-return {Schema}.leftnum(@s)
+return ez.leftnum(@s)
 
 end
 
 go
 
-create function {Schema}.rightint
+create function ez.rightint
 (
 @s as varchar(1000)
 )
@@ -211,7 +226,7 @@ end
 
 go
 
-create function {Schema}.string_format
+create function ez.string_format
 (
 @s as varchar(1000) -- ex: 'Do not compare {0}s and {1}s.'
 ,@tokens varchar(1000) -- ex: '0apple,1orange'
@@ -221,7 +236,7 @@ as
 begin
 
 select
-	@s = replace(@s,concat('{',{Schema}.leftint(value),'}'),replace(value,{Schema}.leftint(value),''))
+	@s = replace(@s,concat('{',ez.leftint(value),'}'),replace(value,ez.leftint(value),''))
 from
 	string_split(@tokens,',')
 
@@ -230,7 +245,7 @@ end
 
 go
 
-create view {Schema}.indexcolumns as
+create view ez.indexcolumns as
 select
 	i.name as index_name
 	,i.index_id
@@ -253,12 +268,12 @@ join
 	on c.object_id = ic.object_id
 	and c.column_id = ic.column_id
 join
-	{Schema}.tables t
+	ez.tables t
 	on t.object_id = ic.object_id
 
 go
 
-create view {Schema}.indexes as
+create view ez.indexes as
 select
 	fg.filegroup_name
 	,i.name as index_name
@@ -267,13 +282,14 @@ select
 	,i.type_desc
 	,i.index_id
 	,t.object_id
+	,i.filter_definition
 	,t.type as object_type
 	,t.type_desc as object_type_desc
 	,(
 		select
 			string_agg(c.column_name,',') within group (order by c.column_id)
 		from
-			{Schema}.indexcolumns c
+			ez.indexcolumns c
 		where
 			c.object_id = i.object_id
 			and c.index_id = i.index_id
@@ -283,7 +299,7 @@ select
 		select
 			string_agg(c.column_name,',') within group (order by c.column_id)
 		from
-			{Schema}.indexcolumns c
+			ez.indexcolumns c
 		where
 			c.object_id = i.object_id
 			and c.index_id = i.index_id
@@ -292,10 +308,10 @@ select
 from
 	sys.indexes i
 join
-	{Schema}.tables t
+	ez.tables t
 	on t.object_id = i.object_id
 join
-	{Schema}.filegroups fg
+	ez.filegroups fg
 	on fg.object_id = i.object_id
 	and fg.index_id = i.index_id
 where
@@ -303,7 +319,7 @@ where
 
 go
 
-create view {Schema}.indexusage as
+create view ez.indexusage as
 select
 	i.table_name
 	,i.index_name
@@ -311,6 +327,7 @@ select
 	,i.type_desc
 	,i.index_columns
 	,i.included_columns
+	,i.filter_definition
 	,convert(float,1) * (st.user_seeks+st.user_scans) / isnull(nullif(st.user_updates,0),1) as usage_ratio
 	,st.user_seeks
 	,st.user_scans
@@ -323,7 +340,7 @@ select
 from
 	sys.dm_db_index_usage_stats st
 join
-	{Schema}.indexes i
+	ez.indexes i
 	on i.object_id = st.object_id
 	and i.index_id = st.index_id
 where
@@ -332,7 +349,7 @@ where
 
 go
 
-create view {Schema}.columns as
+create view ez.columns as
 select
 	t.table_name
 	,t.object_id
@@ -346,7 +363,7 @@ select
 	,t.temporal_type
 	,t.temporal_type_desc
 from
-	{Schema}.tables t
+	ez.tables t
 join
 	sys.all_columns c
 	on c.object_id = t.object_id
@@ -356,7 +373,7 @@ join
 
 go
 
-create function {Schema}.trimx
+create function ez.trimx
 (
 @s as varchar(max)
 )
@@ -381,7 +398,7 @@ end
 
 go
 
-create function {Schema}.trimxt
+create function ez.trimxt
 (
 @schemaname as varchar(100)
 ,@tablename as varchar(100)
@@ -391,12 +408,12 @@ returns varchar(max)
 as
 begin
 
-return replace(replace({Schema}.trimx(@s),'SCHEMANAME',@schemaname),'TABLENAME',@tablename)
+return replace(replace(ez.trimx(@s),'SCHEMANAME',@schemaname),'TABLENAME',@tablename)
 end
 
 go
 
-create function {Schema}.localtime
+create function ez.localtime
 (
 @time as datetime2
 )
@@ -409,7 +426,7 @@ end
 
 go
 
-create function {Schema}.naturalrange
+create function ez.naturalrange
 (
 @firstvalue as int
 ,@lastvalue as int
@@ -445,7 +462,7 @@ where
 
 go
 
-create function {Schema}.intrange
+create function ez.intrange
 (
 @firstvalue int
 ,@lastvalue int
@@ -469,7 +486,7 @@ return
 end
 go
 
-create function {Schema}.daterange
+create function ez.daterange
 (
 @firstvalue date
 ,@lastvalue date
@@ -493,7 +510,7 @@ return
 end
 go
 
-create function {Schema}.datepointvalues
+create function ez.datepointvalues
 (
 @firstvalue float
 ,@lastvalue float
@@ -517,13 +534,13 @@ select
 	d.value
 	,convert(float,1) * (datediff(day,@firstdate,d.value) * @slope)+@firstvalue
 from
-	{Schema}.daterange(@firstdate,@lastdate) d
+	ez.daterange(@firstdate,@lastdate) d
 
 return
 end
 go
 
-create view {Schema}.check_constraints as
+create view ez.check_constraints as
 select
 	cc.name
 	,t.table_name
@@ -532,27 +549,33 @@ select
 from
 	sys.check_constraints cc
 join
-	{Schema}.tables t
+	ez.tables t
 	on t.object_id = cc.parent_object_id
 
 go
 
-create view {Schema}.foreign_keys as
+create view ez.foreign_keys as
 select
 	fk.name
 	,t.table_name
+	,ct.table_name as parent_table_name
+	,fk.delete_referential_action_desc
+	,fk.update_referential_action_desc
 	,concat('alter table ',t.table_name,' drop constraint [',fk.name,'];') as sql_drop
 from
 	sys.foreign_keys fk
 join
-	{Schema}.tables t
+	ez.tables t
 	on t.object_id = fk.parent_object_id
+join
+	ez.tables ct
+	on ct.object_id = fk.referenced_object_id
 
 go
 
 
 
-create view {Schema}.linked_logins as
+create view ez.linked_logins as
 select
 	s.name as server_name
 	,s.provider
@@ -571,7 +594,7 @@ join
 go
 
 
-create view {Schema}.key_constraints as
+create view ez.key_constraints as
 
 select
 	t.table_name
@@ -583,13 +606,13 @@ select
 from
 	sys.key_constraints kc
 join
-	{Schema}.tables t
+	ez.tables t
 	on t.object_id = kc.parent_object_id
 
 go
 
 
-create view {Schema}.foreign_key_columns as
+create view ez.foreign_key_columns as
 
 select
 	fk.object_id
@@ -625,10 +648,10 @@ select
 from
 	sys.foreign_keys fk
 join
-	{Schema}.tables pt
+	ez.tables pt
 	on pt.object_id = fk.parent_object_id
 join
-	{Schema}.tables ct
+	ez.tables ct
 	on ct.object_id = fk.referenced_object_id
 
 go

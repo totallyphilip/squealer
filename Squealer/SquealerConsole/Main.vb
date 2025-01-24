@@ -2637,7 +2637,7 @@ Module Main
                 End If
             Catch ex As Exception
                 ' attempt to read encrypted file from disk
-                s = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(EzBinPath))
+                s = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(EzBinPath), eEncryptionMode.Stupid)
                 If TraceIt Then
                     Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading {0}", EzBinPath))
                 End If
@@ -2659,7 +2659,7 @@ Module Main
     End Sub
 
     Private Sub EzConvertSqlToNewBin()
-        My.Computer.FileSystem.WriteAllBytes(EzNewBinPath, Misc.EncryptedBytes(EzText(True)), False)
+        My.Computer.FileSystem.WriteAllBytes(EzNewBinPath, Misc.EncryptedBytes(EzText(True), eEncryptionMode.Stupid), False)
         Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("writing {0}", EzNewBinPath), 0, New Textify.ColorScheme(ConsoleColor.Cyan))
         Console.WriteLine()
     End Sub
@@ -2837,7 +2837,7 @@ Module Main
         If My.Computer.FileSystem.FileExists(f) Then
             My.Computer.FileSystem.DeleteFile(f)
         End If
-        My.Computer.FileSystem.WriteAllBytes(f, Misc.EncryptedBytes(cs), False)
+        My.Computer.FileSystem.WriteAllBytes(f, Misc.EncryptedBytes(cs, eEncryptionMode.Smart), False)
         System.IO.File.SetAttributes(f, IO.FileAttributes.Hidden)
 
         Textify.SayBulletLine(Textify.eBullet.Hash, "OK")
@@ -2861,7 +2861,7 @@ Module Main
             Throw New Exception("Connection string not defined.")
         End If
 
-        GetConnectionString = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(f))
+        GetConnectionString = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(f), eEncryptionMode.Smart)
 
     End Function
 

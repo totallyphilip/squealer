@@ -72,21 +72,66 @@
 
     End Function
 
-    Public Function EncryptedBytes(s As String) As Byte()
+    Public Enum eEncryptionMode
+        Stupid
+        Smart
+    End Enum
 
-        Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
+    Private StupidCryptOffset As Integer = 77
+
+    Public Function EncryptedBytes(s As String, mode As eEncryptionMode) As Byte()
+
         Dim csbytes As Byte() = System.Text.Encoding.Unicode.GetBytes(s.Trim)
 
-        Return System.Security.Cryptography.ProtectedData.Protect(csbytes, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
+        If mode = eEncryptionMode.Smart Then
+            Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
+
+            Return System.Security.Cryptography.ProtectedData.Protect(csbytes, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
+
+        Else
+
+            ' This just does a dumb value shift to obscure the original text
+
+            For i As Integer = 0 To csbytes.Length - 1
+                Dim newbyte As Integer = csbytes(i)
+                newbyte += StupidCryptOffset
+                If newbyte > 255 Then
+                    newbyte -= 256
+                End If
+                csbytes(i) = Convert.ToByte(newbyte)
+            Next
+
+            Return csbytes
+
+        End If
+
 
     End Function
 
-    Public Function DecryptedString(b As Byte()) As String
+    Public Function DecryptedString(b As Byte(), mode As eEncryptionMode) As String
 
-        Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
-        Dim decrypted As Byte() = System.Security.Cryptography.ProtectedData.Unprotect(b, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
+        If mode = eEncryptionMode.Smart Then
 
-        Return System.Text.Encoding.Unicode.GetString(decrypted)
+            Dim entropy As Byte() = {1, 9, 1, 1, 4, 5}
+            Dim decrypted As Byte() = System.Security.Cryptography.ProtectedData.Unprotect(b, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser)
+
+            Return System.Text.Encoding.Unicode.GetString(decrypted)
+
+        Else
+
+            For i As Integer = 0 To b.Length - 1
+                Dim newbyte As Integer = b(i)
+                newbyte -= StupidCryptOffset
+                If newbyte < 0 Then
+                    newbyte += 256
+                End If
+                b(i) = Convert.ToByte(newbyte)
+            Next
+
+            Return System.Text.Encoding.Unicode.GetString(b)
+
+        End If
+
 
     End Function
 
