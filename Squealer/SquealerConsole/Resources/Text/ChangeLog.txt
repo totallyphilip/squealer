@@ -1,4 +1,4 @@
-﻿1.0.12.20
+﻿1.0.12.2
 Internal improvements to EZ script handling.
 ^break
 1.0.11.2

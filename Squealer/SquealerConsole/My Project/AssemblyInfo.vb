@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Squealer 2022")>
 <Assembly: AssemblyDescription("A tool for creating SQL Server functions, views, and stored procedures with built-in error handling.")>
-<Assembly: AssemblyCompany("AsciiMotive")>
+<Assembly: AssemblyCompany("Nobody")>
 <Assembly: AssemblyProduct("Squealer")>
-<Assembly: AssemblyCopyright("(c) 2022 Philip Wright")>
+<Assembly: AssemblyCopyright("Public Domain")>
 <Assembly: AssemblyTrademark("Be kind to animals, and may the Force be with you.")>
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.12.0")>
-<Assembly: AssemblyFileVersion("1.0.12.0")>
+<Assembly: AssemblyVersion("1.0.12.2")>
+<Assembly: AssemblyFileVersion("1.0.12.2")>

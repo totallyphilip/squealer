@@ -126,7 +126,7 @@
             Console.WriteLine()
             Console.WriteLine(m.About)
             Console.WriteLine()
-            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Get the latest version at {0}", IIf(ismediadefaultlocation, Constants.HomePage, m.ZipFile)))
+            Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("Get the latest version at {0}", IIf(ismediadefaultlocation, "<broken>", m.ZipFile)))
         Else
             Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("You have the latest version of Squealer ({0}).", My.Application.Info.Version), New Textify.ColorScheme(ConsoleColor.White))
         End If

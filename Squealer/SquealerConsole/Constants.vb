@@ -9,7 +9,6 @@
     Public Const ConfigFilename As String = AppTitle & ".config"
     Public Const AutocreateFilename As String = "(" & AppTitle & ")"
     Public Const WildcardAsterisks As String = "Wildcards"
-    Public Const HomePage As String = "www.asciimotive.com"
     Public Const IncludeEzScript As String = "``include-ez-objects``"
 
     Public Const IFsymbol As String = "()*"

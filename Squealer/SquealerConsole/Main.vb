@@ -363,7 +363,6 @@ Module Main
         ' Restore the previous window size
         ResetWindowSize()
 
-        Textify.SayCentered(Constants.HomePage, True)
         Textify.SayCentered("https://github.com/totallyphilip/squealer", True)
         Textify.SayCentered(My.Application.Info.Copyright, True)
         Console.WriteLine()

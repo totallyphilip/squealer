@@ -69,6 +69,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FD0967033EC96E69E62810F341CE880C"
+        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C73C8C1E5E72C859D69C175FC959F63B"
         "MsmSig" = "8:_UNDEFINED"
@@ -83,6 +89,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_722A6C014490FABAC1DB08A33F07A06C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5A860E2B030241FBA86166D681B8B621"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -196,7 +208,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.12.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Squealer, Version=1.0.12.2, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5A860E2B030241FBA86166D681B8B621"
@@ -423,15 +435,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer"
-        "ProductCode" = "8:{2E69378A-C8F5-4BFE-AB93-4B0FF20BD336}"
-        "PackageCode" = "8:{676C44E8-C273-4FAC-ABE6-1616BEFBBE95}"
+        "ProductCode" = "8:{074DE602-6658-4ABF-9DE7-D5CE2F7AA0A0}"
+        "PackageCode" = "8:{BB113E69-7FAC-4C88-9015-510C13AD4DAC}"
         "UpgradeCode" = "8:{251AC907-8611-45F6-AD97-17492ED52E47}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.25"
+        "ProductVersion" = "8:1.0.26"
         "Manufacturer" = "8:AsciiMotive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:www.asciimotive.com"
