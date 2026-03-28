@@ -12,8 +12,54 @@ namespace SquealerConsoleCSharp.Models
     {
         public OutputSettings Output { get; set; } = new OutputSettings();
         public PromptSettings Prompt { get; set; } = new PromptSettings();
+        public WildcardSettings Wildcards { get; set; } = new WildcardSettings();
+        public EditorSettings Editor { get; set; } = new EditorSettings();
 
+        [XmlAttribute("Version")]
         public string Version { get; set; } = "1.0";
+
+        [XmlAttribute("ShowGitBranch")]
+        public bool ShowGitBranch { get; set; } = true;
+
+        [XmlAttribute("KeepScreenAlive")]
+        public bool KeepScreenAlive { get; set; } = false;
+
+        [XmlAttribute("AlwaysShowSymbols")]
+        public bool AlwaysShowSymbols { get; set; } = true;
+
+        [XmlAttribute("AutoCompressGit")]
+        public bool AutoCompressGit { get; set; } = false;
+
+        [XmlAttribute("TrackFailedItems")]
+        public bool TrackFailedItems { get; set; } = true;
+
+        [XmlAttribute("DetectDeprecatedSquealerObjects")]
+        public bool DetectDeprecatedSquealerObjects { get; set; } = true;
+
+        [XmlAttribute("AutoEditNewFiles")]
+        public bool AutoEditNewFiles { get; set; } = true;
+
+        [XmlAttribute("LastProjectFolder")]
+        public string LastProjectFolder { get; set; } = string.Empty;
+
+        [XmlAttribute("RecentProjectFolders")]
+        public string RecentProjectFolders { get; set; } = string.Empty;
+
+        [XmlAttribute("EnableEzObjects")]
+        public bool EnableEzObjects { get; set; } = false;
+
+        [XmlAttribute("EzSchema")]
+        public string EzSchema { get; set; } = "ez";
+
+        [XmlAttribute("LastVersionCheckDate")]
+        public string LastVersionCheckDateStr { get; set; } = string.Empty;
+
+        [XmlIgnore]
+        public DateTime LastVersionCheckDate
+        {
+            get => DateTime.TryParse(LastVersionCheckDateStr, out var d) ? d : DateTime.MinValue;
+            set => LastVersionCheckDateStr = value.ToString();
+        }
 
         public static Settings GetNewSettings()
         {
@@ -116,6 +162,21 @@ namespace SquealerConsoleCSharp.Models
                 }
             }
         }
+    }
+
+    public class WildcardSettings
+    {
+        [XmlAttribute("UseEdges")]
+        public bool UseEdges { get; set; } = false;
+
+        [XmlAttribute("UseSpaces")]
+        public bool UseSpaces { get; set; } = false;
+    }
+
+    public class EditorSettings
+    {
+        [XmlAttribute("Path")]
+        public string Path { get; set; } = "notepad.exe";
     }
 
 }

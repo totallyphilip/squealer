@@ -103,6 +103,11 @@ namespace SquealerConsoleCSharp.CustomCommands
             mySquealer.ExportXmlFile(filePath);
 
             AnsiConsole.MarkupLine($"file [yellow]{filename_w_ext}[/] Created.");
+
+            if (AppState.Instance.Settings.AutoEditNewFiles)
+            {
+                EditCommand.OpenFile(filePath, AppState.Instance.Settings.Editor.Path);
+            }
         }
     }
 }

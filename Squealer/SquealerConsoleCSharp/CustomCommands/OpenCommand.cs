@@ -30,26 +30,37 @@ namespace SquealerConsoleCSharp.CustomCommands
 
         private void HandleOpenCommand(string? path)
         {
-            if (path != null) 
+            // If no path given, try to restore the last used folder.
+            if (string.IsNullOrWhiteSpace(path))
             {
-                path = path.Trim();
-                if (Directory.Exists(path))
+                path = AppState.Instance.Settings.LastProjectFolder;
+                if (string.IsNullOrWhiteSpace(path))
                 {
-                    AppState.Instance.LastOpenedPath = path;
-                    Console.WriteLine($"Currect path: {AppState.Instance.LastOpenedPath}");
-                    var gitProjectName = GitHelper.GetGitProject();
-                    if(!string.IsNullOrEmpty( gitProjectName )) 
-                    { 
-                        AppState.Instance.GitProjectName = gitProjectName;
-                    }
-
-                }
-                else
-                {
-                    Console.WriteLine("Invalid Path");
+                    Console.WriteLine("No path provided and no last folder saved.");
+                    return;
                 }
             }
-            
+
+            path = path.Trim();
+            if (Directory.Exists(path))
+            {
+                AppState.Instance.LastOpenedPath = path;
+                Console.WriteLine($"Current path: {AppState.Instance.LastOpenedPath}");
+
+                var gitProjectName = GitHelper.GetGitProject();
+                if (!string.IsNullOrEmpty(gitProjectName))
+                {
+                    AppState.Instance.GitProjectName = gitProjectName;
+                }
+
+                // Save last opened folder to settings.
+                AppState.Instance.Settings.LastProjectFolder = path;
+                Models.Settings.SaveSettings(AppState.Instance.Settings, Helper.GetSettingsPath());
+            }
+            else
+            {
+                Console.WriteLine("Invalid Path");
+            }
         }
     }
 }

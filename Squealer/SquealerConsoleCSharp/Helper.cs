@@ -124,17 +124,18 @@ namespace SquealerConsoleCSharp
         }
 
 
-        public static List<string> SearchSqlrFilesInFolder(string? patterns)
+        public static List<string> SearchSqlrFilesInFolder(string? patterns, bool exactMatch = false)
         {
+            var wildcards = AppState.Instance.Settings?.Wildcards;
+
             if (string.IsNullOrEmpty(patterns))
             {
                 patterns = "*";
             }
+
             List<string> searchPatterns = patterns.Split('|').ToList();
 
-
-            searchPatterns = searchPatterns.Select(x => x + ".sqlr").ToList();
-            
+            searchPatterns = searchPatterns.Select(p => ApplyWildcardBehavior(p, wildcards, exactMatch)).ToList();
 
             Console.WriteLine($"# finding all files matching {string.Join('|', searchPatterns)}");
 
@@ -145,6 +146,23 @@ namespace SquealerConsoleCSharp
                              .ToList();
 
             return filePaths.ToList();
+        }
+
+        private static string ApplyWildcardBehavior(string pattern, Models.WildcardSettings? wildcards, bool exactMatch)
+        {
+            if (wildcards != null && wildcards.UseSpaces)
+                pattern = pattern.Replace(' ', '*');
+
+            if (string.IsNullOrWhiteSpace(pattern))
+                pattern = "*";
+            else if (!exactMatch && wildcards != null && wildcards.UseEdges)
+                pattern = "*" + pattern + "*";
+
+            // Collapse consecutive wildcards
+            while (pattern.Contains("**"))
+                pattern = pattern.Replace("**", "*");
+
+            return pattern + Constants.SquealerFileExtension;
         }
 
 
