@@ -179,16 +179,6 @@
 
     End Sub
 
-    Public Sub DownloadLatestEzBinary(sourceurl As String, destfile As String)
-        ' silently get the latest script
-        Try
-            Using client As New System.Net.WebClient()
-                client.DownloadFile(sourceurl, destfile)
-            End Using
-        Catch ex As Exception
-        End Try
-    End Sub
-
 #End Region
 
 End Class

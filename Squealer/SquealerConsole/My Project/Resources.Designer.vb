@@ -179,7 +179,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 1.0.11.0
+        '''  Looks up a localized string similar to 1.0.12.2
+        '''Internal improvements to EZ script handling.
+        '''^break
+        '''1.0.11.2
+        '''Updated to .NET Framework 4.8.1
         '''Added --NOMAGIC hint. See website for details.
         '''Removed easter egg. Nobody ever found it, so it was just project bloat.
         '''^break
@@ -189,11 +193,7 @@ Namespace My.Resources
         '''Command prompt now shows current folder if no project name is defined.
         '''Added CD as shortcut to OPEN command.
         '''Shortened error message when Git is not detected.
-        '''Fixed a typo in the release notes.
-        '''^break
-        '''1.0.10.0
-        '''Added readonly option to parameters.
-        '''Added auto [rest of string was truncated]&quot;;.
+        '''Fixed [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -266,47 +266,6 @@ Namespace My.Resources
         Friend ReadOnly Property DropAny() As String
             Get
                 Return ResourceManager.GetString("DropAny", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to 
-        '''go
-        '''
-        '''/*
-        '''
-        '''7/28/2023
-        '''	* added .foreign_key_columns
-        '''1/3/2023
-        '''	* added .key_constraints
-        '''11/14/2022
-        '''	* added .linked_logins
-        '''11/8/2022
-        '''	* added .check_constraints
-        '''	* added .foreign_keys
-        '''9/28/2022
-        '''	* added .datepointvalues()
-        '''9/21/2022
-        '''	* added .daterange()
-        '''9/12/2022
-        '''	* added .intrange()
-        '''	* added .naturalrange()
-        '''
-        '''*/
-        '''
-        '''declare @sqldrop varchar(max) =
-        '''(
-        '''	select string_agg(
-        '''		&apos;drop &apos;
-        '''		+case o.type
-        '''			when &apos;V&apos; then &apos;view&apos;
-        '''			when &apos;P&apos; then &apos;procedure&apos;
-        '''			when &apos;FN&apos; then &apos;function&apos;
-        '''			when  [rest of string was truncated]&quot;;.
-        '''</summary>
-        Friend ReadOnly Property EzObjects() As String
-            Get
-                Return ResourceManager.GetString("EzObjects", resourceCulture)
             End Get
         End Property
         
@@ -557,8 +516,7 @@ Namespace My.Resources
         '''declare @Squealer_ReturnValue int = 0;
         '''declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
         '''
-        '''begin try
-        '''	begin tra [rest of string was truncated]&quot;;.
+        '''declare @Squealer_Dea [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property P_Begin() As String
             Get

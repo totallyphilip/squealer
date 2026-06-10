@@ -101,7 +101,6 @@ Module Main
         [directory]
         download
         [edit]
-        eztool
         [exit]
         [fix]
         [generate]
@@ -384,8 +383,6 @@ Module Main
             Console.WriteLine()
         End If
 
-        GetLatestEz()
-
         Textify.SayBulletLine(Textify.eBullet.Hash, "Type HELP to get started.")
         Console.WriteLine()
 
@@ -407,11 +404,6 @@ Module Main
 
         My.Logging.WriteLog("Shutdown.")
 
-    End Sub
-
-    Private Sub GetLatestEz()
-        Dim v As New VersionCheck
-        v.DownloadLatestEzBinary(MySettings.MediaSourceUrl & EzBinFilename(), EzBinPath) ' always get latest binary
     End Sub
 
     Private Function FilesToProcess(ByVal ProjectFolder As String, ByVal Wildcard As String, SearchText As String, usedialog As Boolean, filter As SquealerObjectTypeCollection, ignoreCase As Boolean, FindExact As Boolean, hasPrePostCode As Boolean, gf As GitFlags, DifferentOnly As Boolean) As List(Of String)
@@ -750,9 +742,6 @@ Module Main
                 GeneratedOutput = My.Resources.CompareObjects.Replace("{RoutineList}", GeneratedOutput).Replace("{ExcludeFilename}", Constants.AutocreateFilename)
 
                 Dim ignoredschemas As String = "'cdc','std'"
-                If MySettings.EnableEzObjects Then
-                    ignoredschemas &= ",'ez'"
-                End If
 
                 GeneratedOutput = GeneratedOutput.Replace("{schemas-to-ignore}", ignoredschemas)
 
@@ -763,9 +752,6 @@ Module Main
                 End If
                 If MySettings.TrackFailedItems Then
                     GeneratedOutput = My.Resources.TrackFailedItems_Start & vbCrLf & GeneratedOutput & vbCrLf & My.Resources.TrackFailedItems_End
-                End If
-                If MySettings.EnableEzObjects Then
-                    GeneratedOutput = EzText(False) & GeneratedOutput
                 End If
             End If
 
@@ -795,13 +781,6 @@ Module Main
 
         ' the un-command
         cmd = New CommandCatalog.CommandDefinition({eCommandType.nerfherder.ToString, "nerf"}, {"This command is as useless as a refrigerator on Hoth."}, CommandCatalog.eCommandCategory.other)
-        cmd.Visible = False
-        MyCommands.Items.Add(cmd)
-
-        ' show ez script only
-        cmd = New CommandCatalog.CommandDefinition({eCommandType.eztool.ToString}, {"Display the EZ script from hidden options."}, CommandCatalog.eCommandCategory.other)
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("encrypt;convert .sql to .bin.new"))
-        cmd.Options.Items.Add(New CommandCatalog.CommandSwitch("extract;convert .bin or embedded resource file to .sql"))
         cmd.Visible = False
         MyCommands.Items.Add(cmd)
 
@@ -1050,23 +1029,6 @@ Module Main
 
                     Dim v As New VersionCheck
                     v.DownloadLatestInstaller(MySettings.MediaSourceUrl)
-
-
-                ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso StringInList(MySwitches, "encrypt") Then
-
-                    EzConvertSqlToNewBin()
-
-
-                ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso StringInList(MySwitches, "extract") Then
-
-                    EzExtractSqlToFile()
-
-
-                ElseIf MyCommand.Keyword = eCommandType.eztool.ToString AndAlso MySwitches.Count = 0 Then
-
-                    Dim f As New TempFileHandler("sql")
-                    f.Writeline(EzText(False))
-                    f.Show()
 
 
 
@@ -2615,63 +2577,6 @@ Module Main
 
 
     End Function
-
-#End Region
-
-#Region " Ez "
-
-    Private Function EzSqlPath() As String
-        Return My.Configger.AppDataFolder & "\ezscript.sql"
-    End Function
-
-    Private Function EzBinFilename() As String
-        Return "ezscript.bin"
-    End Function
-
-    Private Function EzBinPath() As String
-        Return My.Configger.AppDataFolder & "\" & EzBinFilename()
-    End Function
-    Private Function EzNewBinPath() As String
-        Return EzBinPath() & ".new"
-    End Function
-
-    Private Function EzText(TraceIt As Boolean) As String
-        Dim s As String
-        Try
-            Try
-                ' attempt to read plain text file from disk because local customization takes precedence
-                s = My.Computer.FileSystem.ReadAllText(EzSqlPath)
-                If TraceIt Then
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading {0}", EzSqlPath))
-                End If
-            Catch ex As Exception
-                ' attempt to read encrypted file from disk
-                s = Misc.DecryptedString(My.Computer.FileSystem.ReadAllBytes(EzBinPath), eEncryptionMode.Stupid)
-                If TraceIt Then
-                    Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading {0}", EzBinPath))
-                End If
-            End Try
-        Catch ex As Exception
-            ' default text
-            s = My.Resources.EzObjects
-            If TraceIt Then
-                Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("reading resource file"))
-            End If
-        End Try
-        Return vbCrLf & s.Trim & vbCrLf
-    End Function
-
-    Private Sub EzExtractSqlToFile()
-        My.Computer.FileSystem.WriteAllText(EzSqlPath, EzText(True), False)
-        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("writing {0}", EzSqlPath), 0, New Textify.ColorScheme(ConsoleColor.Cyan))
-        Console.WriteLine()
-    End Sub
-
-    Private Sub EzConvertSqlToNewBin()
-        My.Computer.FileSystem.WriteAllBytes(EzNewBinPath, Misc.EncryptedBytes(EzText(True), eEncryptionMode.Stupid), False)
-        Textify.SayBulletLine(Textify.eBullet.Hash, String.Format("writing {0}", EzNewBinPath), 0, New Textify.ColorScheme(ConsoleColor.Cyan))
-        Console.WriteLine()
-    End Sub
 
 #End Region
 

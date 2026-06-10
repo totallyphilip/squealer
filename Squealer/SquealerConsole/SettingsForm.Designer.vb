@@ -22,7 +22,6 @@ Partial Class SettingsForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingsForm))
         Me.optBeep = New System.Windows.Forms.CheckBox()
         Me.chkEdgesWild = New System.Windows.Forms.CheckBox()
         Me.chkSpacesWild = New System.Windows.Forms.CheckBox()
@@ -39,7 +38,6 @@ Partial Class SettingsForm
         Me.rbTempFile = New System.Windows.Forms.RadioButton()
         Me.rbClipboard = New System.Windows.Forms.RadioButton()
         Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
@@ -55,6 +53,10 @@ Partial Class SettingsForm
         Me.txtDirExample = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.tabOutput = New System.Windows.Forms.TabPage()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.rbAlter = New System.Windows.Forms.RadioButton()
+        Me.rbDrop = New System.Windows.Forms.RadioButton()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.txtProgressExample = New System.Windows.Forms.TextBox()
         Me.ddIncrement = New System.Windows.Forms.ComboBox()
@@ -73,26 +75,17 @@ Partial Class SettingsForm
         Me.chkSquealerDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.chkOutputDefaultEditor = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.tabExtra = New System.Windows.Forms.TabPage()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.rbAlter = New System.Windows.Forms.RadioButton()
-        Me.rbDrop = New System.Windows.Forms.RadioButton()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.tabOutput.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.tabWildcards.SuspendLayout()
         Me.TabPage4.SuspendLayout()
         Me.gbTextEditor.SuspendLayout()
-        Me.tabExtra.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -257,15 +250,6 @@ Partial Class SettingsForm
         Me.optDetectOldSquealerObjects.Text = "Detect deprecated Squealer objects"
         Me.optDetectOldSquealerObjects.UseVisualStyleBackColor = True
         '
-        'PictureBox1
-        '
-        Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 587)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox1.TabIndex = 12
-        Me.PictureBox1.TabStop = False
-        '
         'dlgTextEditor
         '
         Me.dlgTextEditor.DefaultExt = "exe"
@@ -281,7 +265,6 @@ Partial Class SettingsForm
         Me.Tabs.Controls.Add(Me.tabOutput)
         Me.Tabs.Controls.Add(Me.tabWildcards)
         Me.Tabs.Controls.Add(Me.TabPage4)
-        Me.Tabs.Controls.Add(Me.tabExtra)
         Me.Tabs.Location = New System.Drawing.Point(12, 12)
         Me.Tabs.Name = "Tabs"
         Me.Tabs.SelectedIndex = 0
@@ -445,6 +428,56 @@ Partial Class SettingsForm
         Me.tabOutput.TabIndex = 1
         Me.tabOutput.Text = "Output"
         Me.tabOutput.UseVisualStyleBackColor = True
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox4.Controls.Add(Me.rbAlter)
+        Me.GroupBox4.Controls.Add(Me.rbDrop)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 92)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(399, 47)
+        Me.GroupBox4.TabIndex = 25
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Default build mode"
+        '
+        'rbAlter
+        '
+        Me.rbAlter.AutoSize = True
+        Me.rbAlter.Location = New System.Drawing.Point(11, 19)
+        Me.rbAlter.Name = "rbAlter"
+        Me.rbAlter.Size = New System.Drawing.Size(45, 17)
+        Me.rbAlter.TabIndex = 10
+        Me.rbAlter.TabStop = True
+        Me.rbAlter.Text = "alter"
+        Me.rbAlter.UseVisualStyleBackColor = True
+        '
+        'rbDrop
+        '
+        Me.rbDrop.AutoSize = True
+        Me.rbDrop.Location = New System.Drawing.Point(62, 19)
+        Me.rbDrop.Name = "rbDrop"
+        Me.rbDrop.Size = New System.Drawing.Size(81, 17)
+        Me.rbDrop.TabIndex = 11
+        Me.rbDrop.TabStop = True
+        Me.rbDrop.Text = "drop/create"
+        Me.rbDrop.UseVisualStyleBackColor = True
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox3.Controls.Add(Me.rbClipboard)
+        Me.GroupBox3.Controls.Add(Me.rbTempFile)
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 39)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(399, 47)
+        Me.GroupBox3.TabIndex = 24
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Send output to"
         '
         'GroupBox2
         '
@@ -647,89 +680,6 @@ Partial Class SettingsForm
         Me.Label7.TabIndex = 4
         Me.Label7.Text = "Use default Windows application to open:"
         '
-        'tabExtra
-        '
-        Me.tabExtra.Controls.Add(Me.TextBox1)
-        Me.tabExtra.Controls.Add(Me.chkEnableEzObjects)
-        Me.tabExtra.Location = New System.Drawing.Point(4, 22)
-        Me.tabExtra.Name = "tabExtra"
-        Me.tabExtra.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabExtra.Size = New System.Drawing.Size(411, 542)
-        Me.tabExtra.TabIndex = 4
-        Me.tabExtra.Text = "EXTRA"
-        Me.tabExtra.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(3, 37)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(374, 71)
-        Me.TextBox1.TabIndex = 28
-        Me.TextBox1.Text = resources.GetString("TextBox1.Text")
-        '
-        'chkEnableEzObjects
-        '
-        Me.chkEnableEzObjects.AutoSize = True
-        Me.chkEnableEzObjects.Location = New System.Drawing.Point(4, 14)
-        Me.chkEnableEzObjects.Name = "chkEnableEzObjects"
-        Me.chkEnableEzObjects.Size = New System.Drawing.Size(109, 17)
-        Me.chkEnableEzObjects.TabIndex = 27
-        Me.chkEnableEzObjects.Text = "Script EZ Objects"
-        Me.chkEnableEzObjects.UseVisualStyleBackColor = True
-        '
-        'GroupBox3
-        '
-        Me.GroupBox3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox3.Controls.Add(Me.rbClipboard)
-        Me.GroupBox3.Controls.Add(Me.rbTempFile)
-        Me.GroupBox3.Location = New System.Drawing.Point(6, 39)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(399, 47)
-        Me.GroupBox3.TabIndex = 24
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Send output to"
-        '
-        'GroupBox4
-        '
-        Me.GroupBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox4.Controls.Add(Me.rbAlter)
-        Me.GroupBox4.Controls.Add(Me.rbDrop)
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 92)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(399, 47)
-        Me.GroupBox4.TabIndex = 25
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Default build mode"
-        '
-        'rbAlter
-        '
-        Me.rbAlter.AutoSize = True
-        Me.rbAlter.Location = New System.Drawing.Point(11, 19)
-        Me.rbAlter.Name = "rbAlter"
-        Me.rbAlter.Size = New System.Drawing.Size(45, 17)
-        Me.rbAlter.TabIndex = 10
-        Me.rbAlter.TabStop = True
-        Me.rbAlter.Text = "alter"
-        Me.rbAlter.UseVisualStyleBackColor = True
-        '
-        'rbDrop
-        '
-        Me.rbDrop.AutoSize = True
-        Me.rbDrop.Location = New System.Drawing.Point(62, 19)
-        Me.rbDrop.Name = "rbDrop"
-        Me.rbDrop.Size = New System.Drawing.Size(81, 17)
-        Me.rbDrop.TabIndex = 11
-        Me.rbDrop.TabStop = True
-        Me.rbDrop.Text = "drop/create"
-        Me.rbDrop.UseVisualStyleBackColor = True
-        '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -737,14 +687,12 @@ Partial Class SettingsForm
         Me.CancelButton = Me.btnOK
         Me.ClientSize = New System.Drawing.Size(443, 623)
         Me.Controls.Add(Me.Tabs)
-        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.btnOK)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "SettingsForm"
         Me.Text = "Settings"
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Tabs.ResumeLayout(False)
         Me.tabGeneral.ResumeLayout(False)
         Me.tabGeneral.PerformLayout()
@@ -752,6 +700,10 @@ Partial Class SettingsForm
         Me.GroupBox1.PerformLayout()
         Me.tabOutput.ResumeLayout(False)
         Me.tabOutput.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.tabWildcards.ResumeLayout(False)
@@ -760,12 +712,6 @@ Partial Class SettingsForm
         Me.TabPage4.PerformLayout()
         Me.gbTextEditor.ResumeLayout(False)
         Me.gbTextEditor.PerformLayout()
-        Me.tabExtra.ResumeLayout(False)
-        Me.tabExtra.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -786,7 +732,6 @@ Partial Class SettingsForm
     Friend WithEvents rbTempFile As System.Windows.Forms.RadioButton
     Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
     Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Tabs As Windows.Forms.TabControl
     Friend WithEvents tabGeneral As Windows.Forms.TabPage
     Friend WithEvents tabOutput As Windows.Forms.TabPage
@@ -800,7 +745,6 @@ Partial Class SettingsForm
     Friend WithEvents chkOutputDefaultEditor As Windows.Forms.CheckBox
     Friend WithEvents Label7 As Windows.Forms.Label
     Friend WithEvents btnEditorDialog As Windows.Forms.Button
-    Friend WithEvents tabExtra As Windows.Forms.TabPage
     Friend WithEvents Label8 As Windows.Forms.Label
     Friend WithEvents Label4 As Windows.Forms.Label
     Friend WithEvents Label9 As Windows.Forms.Label
@@ -812,8 +756,6 @@ Partial Class SettingsForm
     Friend WithEvents ddIncrement As Windows.Forms.ComboBox
     Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
     Friend WithEvents GroupBox2 As Windows.Forms.GroupBox
-    Friend WithEvents chkEnableEzObjects As Windows.Forms.CheckBox
-    Friend WithEvents TextBox1 As Windows.Forms.TextBox
     Friend WithEvents chkShowProjectDirectoryInTitleBar As Windows.Forms.CheckBox
     Friend WithEvents chkShowProjectNameInTitleBar As Windows.Forms.CheckBox
     Friend WithEvents chkShowProjectNameInCommandPrompt As Windows.Forms.CheckBox

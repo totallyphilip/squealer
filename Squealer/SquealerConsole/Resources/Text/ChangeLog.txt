@@ -1,4 +1,9 @@
-﻿1.0.12.2
+﻿1.0.13.0
+Added automatic deadlock handling.
+Added a setting to generate ALTER scripts by default.
+Removed EZ scripts.
+^break
+1.0.12.2
 Internal improvements to EZ script handling.
 ^break
 1.0.11.2

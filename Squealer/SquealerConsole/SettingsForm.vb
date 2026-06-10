@@ -5,7 +5,6 @@
         Me.Icon = My.Resources.PigNose
         UpdateWildcardExample()
         UpdateDirectoryExample()
-        Tabs.TabPages.Remove(tabExtra)
         tabWildcards.Text = Constants.WildcardAsterisks
         SetEditorAccess()
         chkSquealerDefaultEditor.Text = String.Format("Squealer files (*{0})", Constants.SquealerFileExtension)
@@ -23,18 +22,6 @@
         If txtTryIt.Text.EndsWith(".sqlr") Then
             txtWildcardExample.Text = "<invalid!>"
         End If
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        _Clicks += 1
-        Const MaxClicks As Integer = 7
-        Select Case _Clicks
-            Case 3
-                Tabs.TabPages.Add(tabExtra)
-                Tabs.SelectTab(tabExtra)
-            Case MaxClicks
-                PictureBox1.Visible = False
-        End Select
     End Sub
 
     Private Sub rbCompact_CheckedChanged(sender As Object, e As EventArgs) Handles rbCompact.CheckedChanged, rbFull.CheckedChanged, rbSymbolic.CheckedChanged
