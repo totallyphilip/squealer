@@ -38,7 +38,6 @@ Partial Class SettingsForm
         Me.btnOK = New System.Windows.Forms.Button()
         Me.rbTempFile = New System.Windows.Forms.RadioButton()
         Me.rbClipboard = New System.Windows.Forms.RadioButton()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.optDetectOldSquealerObjects = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.dlgTextEditor = New System.Windows.Forms.OpenFileDialog()
@@ -77,6 +76,10 @@ Partial Class SettingsForm
         Me.tabExtra = New System.Windows.Forms.TabPage()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.chkEnableEzObjects = New System.Windows.Forms.CheckBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.rbAlter = New System.Windows.Forms.RadioButton()
+        Me.rbDrop = New System.Windows.Forms.RadioButton()
         CType(Me.updnFolderSaves, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
@@ -88,6 +91,8 @@ Partial Class SettingsForm
         Me.TabPage4.SuspendLayout()
         Me.gbTextEditor.SuspendLayout()
         Me.tabExtra.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'optBeep
@@ -223,7 +228,7 @@ Partial Class SettingsForm
         'rbTempFile
         '
         Me.rbTempFile.AutoSize = True
-        Me.rbTempFile.Location = New System.Drawing.Point(166, 39)
+        Me.rbTempFile.Location = New System.Drawing.Point(86, 19)
         Me.rbTempFile.Name = "rbTempFile"
         Me.rbTempFile.Size = New System.Drawing.Size(64, 17)
         Me.rbTempFile.TabIndex = 11
@@ -234,22 +239,13 @@ Partial Class SettingsForm
         'rbClipboard
         '
         Me.rbClipboard.AutoSize = True
-        Me.rbClipboard.Location = New System.Drawing.Point(92, 39)
+        Me.rbClipboard.Location = New System.Drawing.Point(11, 19)
         Me.rbClipboard.Name = "rbClipboard"
         Me.rbClipboard.Size = New System.Drawing.Size(68, 17)
         Me.rbClipboard.TabIndex = 10
         Me.rbClipboard.TabStop = True
         Me.rbClipboard.Text = "clipboard"
         Me.rbClipboard.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(8, 41)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(77, 13)
-        Me.Label6.TabIndex = 9
-        Me.Label6.Text = "Send output to"
         '
         'optDetectOldSquealerObjects
         '
@@ -438,11 +434,10 @@ Partial Class SettingsForm
         '
         'tabOutput
         '
+        Me.tabOutput.Controls.Add(Me.GroupBox4)
+        Me.tabOutput.Controls.Add(Me.GroupBox3)
         Me.tabOutput.Controls.Add(Me.GroupBox2)
-        Me.tabOutput.Controls.Add(Me.rbTempFile)
         Me.tabOutput.Controls.Add(Me.optDetectOldSquealerObjects)
-        Me.tabOutput.Controls.Add(Me.rbClipboard)
-        Me.tabOutput.Controls.Add(Me.Label6)
         Me.tabOutput.Location = New System.Drawing.Point(4, 22)
         Me.tabOutput.Name = "tabOutput"
         Me.tabOutput.Padding = New System.Windows.Forms.Padding(3)
@@ -460,9 +455,9 @@ Partial Class SettingsForm
         Me.GroupBox2.Controls.Add(Me.ddIncrement)
         Me.GroupBox2.Controls.Add(Me.rbPercentage)
         Me.GroupBox2.Controls.Add(Me.rbDetailed)
-        Me.GroupBox2.Location = New System.Drawing.Point(3, 79)
+        Me.GroupBox2.Location = New System.Drawing.Point(6, 145)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(377, 276)
+        Me.GroupBox2.Size = New System.Drawing.Size(399, 394)
         Me.GroupBox2.TabIndex = 23
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Progress display"
@@ -477,7 +472,7 @@ Partial Class SettingsForm
         Me.txtProgressExample.Name = "txtProgressExample"
         Me.txtProgressExample.ReadOnly = True
         Me.txtProgressExample.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtProgressExample.Size = New System.Drawing.Size(365, 224)
+        Me.txtProgressExample.Size = New System.Drawing.Size(387, 342)
         Me.txtProgressExample.TabIndex = 20
         '
         'ddIncrement
@@ -685,6 +680,56 @@ Partial Class SettingsForm
         Me.chkEnableEzObjects.Text = "Script EZ Objects"
         Me.chkEnableEzObjects.UseVisualStyleBackColor = True
         '
+        'GroupBox3
+        '
+        Me.GroupBox3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox3.Controls.Add(Me.rbClipboard)
+        Me.GroupBox3.Controls.Add(Me.rbTempFile)
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 39)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(399, 47)
+        Me.GroupBox3.TabIndex = 24
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Send output to"
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox4.Controls.Add(Me.rbAlter)
+        Me.GroupBox4.Controls.Add(Me.rbDrop)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 92)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(399, 47)
+        Me.GroupBox4.TabIndex = 25
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Default build mode"
+        '
+        'rbAlter
+        '
+        Me.rbAlter.AutoSize = True
+        Me.rbAlter.Location = New System.Drawing.Point(11, 19)
+        Me.rbAlter.Name = "rbAlter"
+        Me.rbAlter.Size = New System.Drawing.Size(45, 17)
+        Me.rbAlter.TabIndex = 10
+        Me.rbAlter.TabStop = True
+        Me.rbAlter.Text = "alter"
+        Me.rbAlter.UseVisualStyleBackColor = True
+        '
+        'rbDrop
+        '
+        Me.rbDrop.AutoSize = True
+        Me.rbDrop.Location = New System.Drawing.Point(62, 19)
+        Me.rbDrop.Name = "rbDrop"
+        Me.rbDrop.Size = New System.Drawing.Size(81, 17)
+        Me.rbDrop.TabIndex = 11
+        Me.rbDrop.TabStop = True
+        Me.rbDrop.Text = "drop/create"
+        Me.rbDrop.UseVisualStyleBackColor = True
+        '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -717,6 +762,10 @@ Partial Class SettingsForm
         Me.gbTextEditor.PerformLayout()
         Me.tabExtra.ResumeLayout(False)
         Me.tabExtra.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -736,7 +785,6 @@ Partial Class SettingsForm
     Friend WithEvents optDetectOldSquealerObjects As System.Windows.Forms.CheckBox
     Friend WithEvents rbTempFile As System.Windows.Forms.RadioButton
     Friend WithEvents rbClipboard As System.Windows.Forms.RadioButton
-    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents dlgTextEditor As System.Windows.Forms.OpenFileDialog
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Tabs As Windows.Forms.TabControl
@@ -774,4 +822,8 @@ Partial Class SettingsForm
     Friend WithEvents chkTrackFailedItems As Windows.Forms.CheckBox
     Friend WithEvents chkAlwaysShowSymbols As Windows.Forms.CheckBox
     Friend WithEvents chkAutoCompressGit As Windows.Forms.CheckBox
+    Friend WithEvents GroupBox4 As Windows.Forms.GroupBox
+    Friend WithEvents rbAlter As Windows.Forms.RadioButton
+    Friend WithEvents rbDrop As Windows.Forms.RadioButton
+    Friend WithEvents GroupBox3 As Windows.Forms.GroupBox
 End Class

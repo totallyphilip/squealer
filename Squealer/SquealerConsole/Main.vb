@@ -878,7 +878,8 @@ Module Main
         ' generate
         cmd = New CommandCatalog.CommandDefinition({eCommandType.generate.ToString, "gen"}, {"Generate SQL Server CREATE or ALTER scripts.", String.Format("Output is written to a temp file and opened with your configured text editor. See {0} command.", eCommandType.setting.ToString.ToUpper)}, CommandCatalog.eCommandCategory.file, False, True)
         opt = New CommandCatalog.CommandSwitch("m;output mode")
-        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("alt;alter, do not drop original"))
+        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("alt;alter, do not drop/create"))
+        opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("drop;drop first then create"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("t;test script, limit 1 object"))
         opt.Options.Items.Add(New CommandCatalog.CommandSwitchOption("e;with encryption"))
         cmd.Options.Items.Add(opt)
@@ -1199,6 +1200,9 @@ Module Main
                     ElseIf MyCommand.Keyword = eCommandType.generate.ToString Then
 
                         action = eFileAction.generate
+                        If Not MySettings.DropFirst Then
+                            bp.OutputMode = BatchParametersClass.eOutputMode.alter
+                        End If
 
                         If StringInList(MySwitches, "m:t") Then
                             bp.OutputMode = BatchParametersClass.eOutputMode.test
@@ -1207,6 +1211,8 @@ Module Main
                             bp.OutputMode = BatchParametersClass.eOutputMode.encrypt
                         ElseIf StringInList(MySwitches, "m:alt") Then
                             bp.OutputMode = BatchParametersClass.eOutputMode.alter
+                        ElseIf StringInList(MySwitches, "m:drop") Then
+                            bp.OutputMode = BatchParametersClass.eOutputMode.normal
                         End If
 
 

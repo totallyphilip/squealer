@@ -343,6 +343,16 @@
         End Set
     End Property
 
+    Private _DropFirst As Boolean
+    Public Property DropFirst As Boolean
+        Get
+            Return _DropFirst
+        End Get
+        Set(value As Boolean)
+            _DropFirst = value
+        End Set
+    End Property
+
     Public Sub New()
         ' Use this when you just want an empty settings object.
         Me.New(False)
@@ -376,6 +386,7 @@
         Me.WildcardBehavior.UseEdges = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseEdges), False)
         Me.AutoEditNewFiles = My.Configger.LoadSetting(NameOf(Me.AutoEditNewFiles), True)
         Me.OutputToClipboard = My.Configger.LoadSetting(NameOf(Me.OutputToClipboard), True)
+        Me.DropFirst = My.Configger.LoadSetting(NameOf(Me.DropFirst), True)
         Me.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(Me.ShowLeaderboardAtStartup), False)
         Me.DetectDeprecatedSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectDeprecatedSquealerObjects), True)
         Me.ShowGitBranch = My.Configger.LoadSetting(NameOf(Me.ShowGitBranch), True)
@@ -428,6 +439,11 @@
         Else
             f.rbTempFile.Checked = True
         End If
+        If Me.DropFirst Then
+            f.rbDrop.Checked = True
+        Else
+            f.rbAlter.Checked = True
+        End If
         f.optShowGitBranch.Checked = Me.ShowGitBranch
         f.chkEnableEzObjects.Checked = Me.EnableEzObjects
         f.optBeep.Checked = Textify.ErrorAlert.Beep
@@ -466,6 +482,7 @@
         Me.WildcardBehavior.UseEdges = f.chkEdgesWild.Checked
         Me.AutoEditNewFiles = f.optEditNewFiles.Checked
         Me.OutputToClipboard = f.rbClipboard.Checked
+        Me.DropFirst = f.rbDrop.Checked
         Me.ShowGitBranch = f.optShowGitBranch.Checked
         Me.EnableEzObjects = f.chkEnableEzObjects.Checked
         Textify.ErrorAlert.Beep = f.optBeep.Checked
@@ -494,6 +511,7 @@
         My.Configger.SaveSetting(NameOf(Me.AutoEditNewFiles), Me.AutoEditNewFiles)
         My.Configger.SaveSetting(NameOf(Me.ShowLeaderboardAtStartup), Me.ShowLeaderboardAtStartup)
         My.Configger.SaveSetting(NameOf(Me.OutputToClipboard), Me.OutputToClipboard)
+        My.Configger.SaveSetting(NameOf(Me.DropFirst), Me.DropFirst)
         My.Configger.SaveSetting(NameOf(Me.DetectDeprecatedSquealerObjects), Me.DetectDeprecatedSquealerObjects)
         My.Configger.SaveSetting(NameOf(Me.TrackFailedItems), Me.TrackFailedItems)
         My.Configger.SaveSetting(NameOf(Me.AlwaysShowSymbols), Me.AlwaysShowSymbols)
