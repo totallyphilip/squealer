@@ -14,6 +14,12 @@ set quoted_identifier on;
 declare @Squealer_ReturnValue int = 0;
 declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
 
+declare @Squealer_DeadlockRetries int = 0;
+squealer_deadlockretry:
+if @Squealer_DeadlockRetries > 0
+	print 'Rerunning transaction.';
+
+
 begin try
 	begin transaction
 

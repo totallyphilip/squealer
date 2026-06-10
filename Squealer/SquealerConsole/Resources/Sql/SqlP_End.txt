@@ -32,8 +32,19 @@ begin catch
 	if @@nestlevel = 1
 	-- We're at the outermost procedure, so rollback the whole transaction.
 	begin
+
 		if xact_state() in (1,-1)
-			rollback transaction
+			rollback transaction;
+
+		-- Retry deadlocks a limited number of times with a random delay to break contention paths.
+		if @Squealer_ErrorNumber = 50001 and @Squealer_DeadlockRetries < {DeadlockRetries}
+		begin
+			set @Squealer_DeadlockRetries = @Squealer_DeadlockRetries + 1
+			declare @DeadlockRndWait varchar(100) = '00:00:00.' + right(concat('000',50 + abs(checksum(newid())) % 451),3)
+			waitfor delay @DeadlockRndWait
+			goto squealer_deadlockretry
+		end
+
 	end
 	else
 	-- We are still	within a nested	procedure, so just decrement the transaction count.
@@ -45,18 +56,34 @@ begin catch
 	declare @Squealer_ErrorSeverity int = error_severity();
 	declare @Squealer_ErrorState int = error_state();
 	declare @Squealer_ErrorMessage varchar(max);
-	if @Squealer_ErrorNumber = 50000
+	if @Squealer_ErrorNumber >= 50000
 		set @Squealer_ErrorMessage = concat(error_message(),char(13),char(10),'-> from ``this``')
 	else
 		set @Squealer_ErrorMessage = concat(
 			'Procedure: ',isnull(error_procedure(),'n/a')
 			,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
 			,char(13),char(10),'Line: ',convert(varchar,error_line())
+			,iif(
+				@Squealer_ErrorNumber = 1205
+				,concat(char(13),char(10),'Attempt: ',@Squealer_DeadlockRetries+1)
+				,''
+			)
 			,char(13),char(10),'Message: ',error_message()
 		);
 {Parameters}
 
-	raiserror(@Squealer_ErrorMessage,@Squealer_ErrorSeverity,@Squealer_ErrorState)
+	if @Squealer_ErrorNumber < 50000
+	begin
+		if @Squealer_ErrorNumber = 1205 -- deadlock
+		begin
+			set @Squealer_ErrorNumber = 50001
+			print @Squealer_ErrorMessage
+		end
+		else
+			set @Squealer_ErrorNumber = 50000;
+	end
+
+	;throw @Squealer_ErrorNumber,@Squealer_ErrorMessage,0;
 
 end catch
 

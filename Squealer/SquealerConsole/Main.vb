@@ -1795,6 +1795,9 @@ Module Main
 
         ' Header
         OutputXml.AppendChild(OutputXml.CreateComment(" Flags example: ""x;exclude from project|r;needs refactoring"" (recommend single-character flags) "))
+        If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
+            OutputXml.AppendChild(OutputXml.CreateComment(" Deadlock retries is only honored in the outermost proc. Use 0 for no retries. "))
+        End If
 
         Dim OutRoot As Xml.XmlElement = OutputXml.CreateElement(My.Application.Info.ProductName)
         OutputXml.AppendChild(OutRoot)
@@ -1802,6 +1805,7 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
+        OutRoot.SetAttribute("DeadlockRetries", obj.DeadlockRetries)
 
         ' Pre-Code.
         Dim OutPreCode As Xml.XmlElement = OutputXml.CreateElement("PreCode")
@@ -2499,7 +2503,7 @@ Module Main
                     If NoMagic Then
                         Block &= My.Resources.P_EndNoMagic.Replace("{Parameters}", ErrorLogParameters)
                     Else
-                        Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters)
+                        Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters).Replace("{DeadlockRetries}", obj.DeadlockRetries)
                     End If
                 End If
             Case SquealerObjectType.eType.ScalarFunction
