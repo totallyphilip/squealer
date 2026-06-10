@@ -2597,8 +2597,8 @@ Module Main
 
         ' Add top/bottom markers
         ExpandIndividual =
-            SpitDashes(String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)), "<BOF>") _
-            & vbCrLf & ExpandIndividual & vbCr _
+            "go" & vbCrLf & SpitDashes(String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)), "<BOF>") _
+            & vbCrLf & ExpandIndividual & vbCrLf _
             & SpitDashes(String.Format("[{0}].[{1}]", SchemaName(RootName), RoutineName(RootName)), "<EOF>") & vbCrLf & vbCrLf
 
         ' Do string replacements.
