@@ -1,5 +1,5 @@
-<Squealer Version="1.0.12.2" Updated="4/19/2025 4:45:38 AM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10122-Install.zip">
+<Squealer Version="1.0.13.0" Updated="6/15/2026 8:46:22 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10130-Install.zip">
 <About>
-<![CDATA[ Internal improvements to EZ script handling. ]]>
+<![CDATA[ Added automatic deadlock handling. Added a setting to generate ALTER scripts by default. Removed EZ scripts. ]]>
 </About>
 </Squealer>

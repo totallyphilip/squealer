@@ -179,7 +179,12 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 1.0.12.2
+        '''  Looks up a localized string similar to 1.0.13.0
+        '''Added automatic deadlock handling.
+        '''Added a setting to generate ALTER scripts by default.
+        '''Removed EZ scripts.
+        '''^break
+        '''1.0.12.2
         '''Internal improvements to EZ script handling.
         '''^break
         '''1.0.11.2
@@ -190,10 +195,7 @@ Namespace My.Resources
         '''1.0.10.2
         '''Added source repo URL to welcome screen.
         '''Added Squealer version to comments in generated output.
-        '''Command prompt now shows current folder if no project name is defined.
-        '''Added CD as shortcut to OPEN command.
-        '''Shortened error message when Git is not detected.
-        '''Fixed [rest of string was truncated]&quot;;.
+        '''Command prompt now shows current fold [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property ChangeLog() As String
             Get
@@ -678,6 +680,28 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("PigNose", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to if object_id(&apos;[{Schema}].[{RootProgramName}]&apos;,{Type}) is null
+        '''begin
+        '''
+        '''	{DropAll}
+        '''
+        '''	declare @Sql as varchar(max);
+        '''
+        '''	if &apos;{Type}&apos; = &apos;P&apos;
+        '''		set @Sql = &apos;create procedure [{Schema}].[{RootProgramName}] as select 1 as thevalue&apos;
+        '''	else if &apos;{Type}&apos; = &apos;FN&apos;
+        '''		set @Sql = &apos;create function [{Schema}].[{RootProgramName}] () returns int as begin return 1 end&apos;
+        '''	else if &apos;{Type}&apos; = &apos;IF&apos;
+        '''		set @Sql = &apos;create function [{Schema}].[{RootProgramName}] () returns table as return select 1 as thevalue&apos;
+        '''	else if &apos;{Type}&apos; = &apos; [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property SqlAll_AlterPlaceholder() As String
+            Get
+                Return ResourceManager.GetString("SqlAll_AlterPlaceholder", resourceCulture)
             End Get
         End Property
         

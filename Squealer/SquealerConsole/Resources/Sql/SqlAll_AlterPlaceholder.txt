@@ -1,0 +1,23 @@
+if object_id('[{Schema}].[{RootProgramName}]','{Type}') is null
+begin
+
+	print '[{Schema}].[{RootProgramName}] not found, will CREATE instead';
+
+	{DropAll}
+
+	declare @Sql as varchar(max);
+
+	if '{Type}' = 'P'
+		set @Sql = 'create procedure [{Schema}].[{RootProgramName}] as select 1 as thevalue'
+	else if '{Type}' = 'FN'
+		set @Sql = 'create function [{Schema}].[{RootProgramName}] () returns int as begin return 1 end'
+	else if '{Type}' = 'IF'
+		set @Sql = 'create function [{Schema}].[{RootProgramName}] () returns table as return select 1 as thevalue'
+	else if '{Type}' = 'TF'
+		set @Sql = 'create function [{Schema}].[{RootProgramName}] () returns @TableValue table (thevalue int) as begin insert @TableValue select 1 return end'
+	else if '{Type}' = 'V'
+		set @Sql = 'create view [{Schema}].[{RootProgramName}] as select 1 as thevalue';
+
+	exec (@sql)
+
+end

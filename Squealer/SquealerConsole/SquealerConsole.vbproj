@@ -201,6 +201,7 @@
     <Content Include="Resources\Reverse\ObjectList.txt" />
     <Content Include="Resources\Reverse\ObjectParameters.txt" />
     <Content Include="Resources\Reverse\ObjectPermissions.txt" />
+    <None Include="Resources\Sql\SqlAll_AlterPlaceholder.txt" />
     <Content Include="Resources\Sql\SqlP_BeginNoMagic.txt" />
     <Content Include="Resources\Sql\SqlP_EndNoMagic.txt" />
     <Content Include="Resources\Sql\SqlTf_BeginTest.txt" />

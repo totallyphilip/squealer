@@ -2184,7 +2184,7 @@ Module Main
         If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
             Dim InPreCode As String = ""
             If printsteps Then
-                InPreCode = String.Format("print '{2}/{3} creating {0}, {1}'", Constants.MyThis, oType.ToString, cur, tot) & vbCrLf & "go" & vbCrLf
+                InPreCode = String.Format("print '{2}/{3} {4}ing {0}, {1}'", Constants.MyThis, oType.ToString, cur, tot, IIf(bp.OutputMode = BatchParametersClass.eOutputMode.alter, "alter", "creat").ToString) & vbCrLf & "go" & vbCrLf
             End If
             Try
                 InPreCode &= InRoot.SelectSingleNode("PreCode").InnerText
@@ -2200,8 +2200,11 @@ Module Main
 
 
         ' Drop 
-        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
-            CodeBlocks.Add(My.Resources.DropAny.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName)).ToString)
+        Dim Dropper As String = My.Resources.DropAny.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName)).ToString
+        If bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
+            CodeBlocks.Add(My.Resources.SqlAll_AlterPlaceholder.Replace("{RootProgramName}", RoutineName(RootName)).Replace("{Schema}", SchemaName(RootName)).Replace("{DropAll}", Dropper).Replace("{Type}", SquealerObjectType.ToShortType(oType).ToString).ToString)
+        ElseIf Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then
+            CodeBlocks.Add(Dropper)
         End If
 
         ' Comments
@@ -2493,7 +2496,7 @@ Module Main
         ' Save the block.
         CodeBlocks.Add(Block)
 
-        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
+        If Not bp.OutputMode = BatchParametersClass.eOutputMode.test Then 'AndAlso Not bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
 
             Block = String.Empty
 
