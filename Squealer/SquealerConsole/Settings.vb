@@ -376,7 +376,7 @@
         Me.WildcardBehavior.UseEdges = My.Configger.LoadSetting(NameOf(Me.WildcardBehavior.UseEdges), False)
         Me.AutoEditNewFiles = My.Configger.LoadSetting(NameOf(Me.AutoEditNewFiles), True)
         Me.OutputToClipboard = My.Configger.LoadSetting(NameOf(Me.OutputToClipboard), True)
-        Me.DropFirst = My.Configger.LoadSetting(NameOf(Me.DropFirst), True)
+        Me.DropFirst = My.Configger.LoadSetting(NameOf(Me.DropFirst), False)
         Me.ShowLeaderboardAtStartup = My.Configger.LoadSetting(NameOf(Me.ShowLeaderboardAtStartup), False)
         Me.DetectDeprecatedSquealerObjects = My.Configger.LoadSetting(NameOf(Me.DetectDeprecatedSquealerObjects), True)
         Me.ShowGitBranch = My.Configger.LoadSetting(NameOf(Me.ShowGitBranch), True)

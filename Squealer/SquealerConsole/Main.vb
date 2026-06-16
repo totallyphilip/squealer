@@ -543,7 +543,11 @@ Module Main
         Dim SkippedFiles As Integer = 0
         Dim GeneratedOutput As String = String.Empty
 
-        If bp.OutputMode = BatchParametersClass.eOutputMode.string Then
+        If bp.OutputMode = BatchParametersClass.eOutputMode.alter Then
+            GeneratedOutput = "print 'mode: ALTER procs';" & vbCrLf
+        ElseIf bp.OutputMode = BatchParametersClass.eOutputMode.normal Then
+            GeneratedOutput = "print 'mode: DROP then CREATE procs';" & vbCrLf
+        ElseIf bp.OutputMode = BatchParametersClass.eOutputMode.string Then
             Console.Write(eCommandType.directory.ToString.ToLower & " - x ")
         Else
 
@@ -1765,6 +1769,7 @@ Module Main
         OutputXml.AppendChild(OutputXml.CreateComment(" Flags example: ""x;exclude from project|r;needs refactoring"" (recommend single-character flags) "))
         If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
             OutputXml.AppendChild(OutputXml.CreateComment(" Deadlock retries is only honored in the outermost proc. Use 0 for no retries. "))
+            OutputXml.AppendChild(OutputXml.CreateComment(" Use NoMagic to skip transaction and error handling. (Not recommended)."))
         End If
 
         Dim OutRoot As Xml.XmlElement = OutputXml.CreateElement(My.Application.Info.ProductName)
@@ -1773,7 +1778,11 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
-        OutRoot.SetAttribute("DeadlockRetries", obj.DeadlockRetries)
+
+        If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
+            OutRoot.SetAttribute("DeadlockRetries", obj.DeadlockRetries.ToString)
+            OutRoot.SetAttribute("NoMagic", obj.NoMagic.ToString)
+        End If
 
         ' Pre-Code.
         Dim OutPreCode As Xml.XmlElement = OutputXml.CreateElement("PreCode")
@@ -1943,12 +1952,17 @@ Module Main
 
         Dim InCode As String = String.Empty
         Try
-            InCode = InRoot.SelectSingleNode("Code").InnerText
+            InCode = InRoot.SelectSingleNode("Code").InnerText.Trim
         Catch ex As Exception
             InCode = String.Empty
         End Try
 
-        If InCode.Trim = String.Empty Then
+        ' NoMagic is handled elsewhere. Remove it from the code.
+        If InCode.ToLower.StartsWith("--nomagic") Then
+            InCode = InCode.Remove(0, "--nomagic".Length).TrimStart
+        End If
+
+        If InCode = String.Empty Then
             InCode = "/***********************************************************************" _
                 & vbCrLf & vbTab & "Comments." _
                 & vbCrLf & "***********************************************************************/" _
@@ -1976,7 +1990,7 @@ Module Main
 
         End If
 
-        CDataCode.InnerText = String.Concat(vbCrLf, vbCrLf, InCode.Trim, vbCrLf, vbCrLf)
+        CDataCode.InnerText = String.Concat(vbCrLf, vbCrLf, InCode, vbCrLf, vbCrLf)
         OutCode.AppendChild(CDataCode)
 
 
@@ -2399,7 +2413,7 @@ Module Main
             InCode = InRoot.SelectSingleNode("Code").InnerText
         Catch ex As Exception
         End Try
-        Dim NoMagic As Boolean = InCode.Trim.ToLower.StartsWith("--nomagic")
+        Dim obj As New SquealerObject(info.FullName)
 
 
         ' Begin
@@ -2409,7 +2423,7 @@ Module Main
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     BeginBlock = My.Resources.P_BeginTest
                 Else
-                    If NoMagic Then
+                    If obj.NoMagic Then
                         BeginBlock = My.Resources.P_BeginNoMagic
                     Else
                         BeginBlock = My.Resources.P_Begin
@@ -2444,7 +2458,6 @@ Module Main
         End Select
 
 
-        Dim obj As New SquealerObject(info.FullName)
         Dim WithOptions As String = obj.WithOptions
         If bp.OutputMode = BatchParametersClass.eOutputMode.encrypt Then
             If String.IsNullOrWhiteSpace(obj.WithOptions) Then
@@ -2471,10 +2484,10 @@ Module Main
                 If bp.OutputMode = BatchParametersClass.eOutputMode.test Then
                     Block &= My.Resources.P_EndTest
                 Else
-                    If NoMagic Then
+                    If obj.NoMagic Then
                         Block &= My.Resources.P_EndNoMagic.Replace("{Parameters}", ErrorLogParameters)
                     Else
-                        Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters).Replace("{DeadlockRetries}", obj.DeadlockRetries)
+                        Block &= My.Resources.P_End.Replace("{Parameters}", ErrorLogParameters).Replace("{DeadlockRetries}", obj.DeadlockRetries.ToString)
                     End If
                 End If
             Case SquealerObjectType.eType.ScalarFunction

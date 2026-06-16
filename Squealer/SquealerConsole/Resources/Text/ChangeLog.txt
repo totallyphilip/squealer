@@ -1,4 +1,8 @@
-﻿1.0.13.0
+﻿1.0.14.0
+Made ALTER the default generate mode.
+Replaced --NOMAGIC hint with structured NoMagic option.
+^break
+1.0.13.0
 Added automatic deadlock handling.
 Added a setting to generate ALTER scripts by default.
 Removed EZ scripts.

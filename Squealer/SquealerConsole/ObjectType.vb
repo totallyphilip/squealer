@@ -276,13 +276,23 @@ Public Class SquealerObject
         End Set
     End Property
 
-    Private _DeadlockRetries As String
-    Public Property DeadlockRetries As String
+    Private _DeadlockRetries As Byte
+    Public Property DeadlockRetries As Byte
         Get
             Return _DeadlockRetries
         End Get
-        Set(value As String)
+        Set(value As Byte)
             _DeadlockRetries = value
+        End Set
+    End Property
+
+    Private _NoMagic As Boolean
+    Public Property NoMagic As Boolean
+        Get
+            Return _NoMagic
+        End Get
+        Set(value As Boolean)
+            _NoMagic = value
         End Set
     End Property
 
@@ -313,7 +323,8 @@ Public Class SquealerObject
         _Type.LongType = SquealerObjectType.eType.Invalid
         _Flags = String.Empty
         _WithOptions = String.Empty
-        _DeadlockRetries = "3"
+        _DeadlockRetries = 3
+        _NoMagic = False
 
         Dim Reader As New Xml.XmlDocument
 
@@ -340,9 +351,20 @@ Public Class SquealerObject
         End Try
 
         Try
-            Dim s As String = Node.Attributes("DeadlockRetries").Value.ToString
-            Byte.Parse(s) ' Throw error if invalid
-            _DeadlockRetries = s
+            _DeadlockRetries = Byte.Parse(Node.Attributes("DeadlockRetries").Value.ToString)
+        Catch ex As Exception
+        End Try
+
+        Try
+            _NoMagic = Boolean.Parse(Node.Attributes("NoMagic").Value.ToString)
+        Catch ex As Exception
+        End Try
+
+        ' The --nomagic hint is obsolete. Convert it to a flag if detected.
+        Try
+            If Node.SelectSingleNode("Code").InnerText.Trim.ToLower.StartsWith("--nomagic") Then
+                _NoMagic = True
+            End If
         Catch ex As Exception
         End Try
 

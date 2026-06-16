@@ -11,6 +11,7 @@ declare @Squealer_ReturnValue int = 0;
 declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-release squealer
 
 print concat('begin - ``this`` - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
+print 'error handling disabled (nomagic)'
 
 /*######################################################################
                          YOUR CODE BEGINS HERE.
