@@ -16,9 +16,9 @@ declare @SqlrInternalErrorNumber int; -- for backward compatibility with pre-rel
 
 declare @Squealer_DeadlockRetries int = 0;
 squealer_deadlockretry:
-if @Squealer_DeadlockRetries > 0
-	print 'Rerunning transaction.';
 
+if @Squealer_DeadlockRetries > 0
+	print concat('Rerunning transaction, attempt #',@Squealer_DeadlockRetries);
 
 begin try
 	begin transaction

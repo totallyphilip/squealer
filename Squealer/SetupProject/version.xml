@@ -1,5 +1,5 @@
-<Squealer Version="1.0.14.0" Updated="6/16/2026 7:24:34 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10140-Install.zip">
+<Squealer Version="1.0.14.1" Updated="6/18/2026 4:45:24 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10141-Install.zip">
 <About>
-<![CDATA[ Made ALTER the default generate mode. Replaced --NOMAGIC hint with structured NoMagic option. ]]>
+<![CDATA[ Automatic deadlock handling was only working in nested transactions. Fixed. ]]>
 </About>
 </Squealer>

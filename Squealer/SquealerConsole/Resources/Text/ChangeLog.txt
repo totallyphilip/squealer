@@ -1,4 +1,7 @@
-﻿1.0.14.0
+﻿1.0.14.1
+Automatic deadlock handling was only working in nested transactions. Fixed.
+^break
+1.0.14.0
 Made ALTER the default generate mode.
 Replaced --NOMAGIC hint with structured NoMagic option.
 ^break
