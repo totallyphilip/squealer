@@ -67,18 +67,19 @@ begin catch
 		);
 {Parameters}
 
-	if @Squealer_ErrorNumber < 50000
+	begin try
+		throw 99999,@Squealer_ErrorMessage,0; -- gets the details into the log
+	end try
+	begin catch
+	end catch
+
+	if @Squealer_ErrorNumber = 1205 -- deadlock
 	begin
-		if @Squealer_ErrorNumber = 1205 -- deadlock
-		begin
-			set @Squealer_ErrorNumber = 50001
-			print @Squealer_ErrorMessage
-		end
-		else
-			set @Squealer_ErrorNumber = 50000;
+		set @Squealer_ErrorNumber = 50001
+		print @Squealer_ErrorMessage
 	end
 
-	;throw @Squealer_ErrorNumber,@Squealer_ErrorMessage,0;
+	;throw;
 
 end catch
 
