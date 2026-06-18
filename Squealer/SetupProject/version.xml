@@ -1,5 +1,5 @@
-<Squealer Version="1.0.14.1" Updated="6/18/2026 4:45:24 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10141-Install.zip">
+<Squealer Version="1.0.15.0" Updated="6/18/2026 10:38:09 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10150-Install.zip">
 <About>
-<![CDATA[ Automatic deadlock handling was only working in nested transactions. Fixed. ]]>
+<![CDATA[ Error codes were being masked and unavailable to the calling process. Fixed. ]]>
 </About>
 </Squealer>

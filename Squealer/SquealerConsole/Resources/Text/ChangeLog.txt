@@ -1,4 +1,7 @@
-﻿1.0.14.1
+﻿1.0.15.0
+Error codes were being masked and unavailable to the calling process. Fixed.
+^break
+1.0.14.1
 Automatic deadlock handling was only working in nested transactions. Fixed.
 ^break
 1.0.14.0

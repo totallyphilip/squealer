@@ -37,7 +37,7 @@ begin catch
 			rollback transaction;
 
 		-- Retry deadlocks a limited number of times with a random delay to break contention paths.
-		if @Squealer_ErrorNumber in (50001,1205) and @Squealer_DeadlockRetries < {DeadlockRetries}
+		if @Squealer_ErrorNumber = 1205 and @Squealer_DeadlockRetries < {DeadlockRetries}
 		begin
 			set @Squealer_DeadlockRetries = @Squealer_DeadlockRetries + 1
 			declare @DeadlockRndWait varchar(100) = '00:00:00.' + right(concat('000',50 + abs(checksum(newid())) % 451),3)
@@ -56,28 +56,23 @@ begin catch
 	declare @Squealer_ErrorSeverity int = error_severity();
 	declare @Squealer_ErrorState int = error_state();
 	declare @Squealer_ErrorMessage varchar(max);
-	if @Squealer_ErrorNumber >= 50000
-		set @Squealer_ErrorMessage = concat(error_message(),char(13),char(10),'-> from ``this``')
-	else
-		set @Squealer_ErrorMessage = concat(
-			'Procedure: ',isnull(error_procedure(),'n/a')
-			,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
-			,char(13),char(10),'Line: ',convert(varchar,error_line())
-			,char(13),char(10),'Message: ',error_message()
-		);
+	set @Squealer_ErrorMessage = concat(
+		'Origin: ',isnull(error_procedure(),'n/a')
+		,char(13),char(10),'Current: ``this``'
+		,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
+		,char(13),char(10),'Line: ',convert(varchar,error_line())
+		,char(13),char(10),'Message: ',error_message()
+	);
 {Parameters}
 
 	begin try
-		throw 99999,@Squealer_ErrorMessage,0; -- gets the details into the log
+		throw 100000,@Squealer_ErrorMessage,0; -- gets the details into the log
 	end try
 	begin catch
 	end catch
 
 	if @Squealer_ErrorNumber = 1205 -- deadlock
-	begin
-		set @Squealer_ErrorNumber = 50001
-		print @Squealer_ErrorMessage
-	end
+		print @Squealer_ErrorMessage;
 
 	;throw;
 

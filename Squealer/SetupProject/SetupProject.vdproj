@@ -435,15 +435,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Squealer"
-        "ProductCode" = "8:{BBE156B4-2373-41AD-A67A-FF2225768095}"
-        "PackageCode" = "8:{2425E59C-C243-47A4-AC6B-A285F7B3AB7B}"
+        "ProductCode" = "8:{409368C4-5652-4745-B097-71E420387107}"
+        "PackageCode" = "8:{7854BA6C-29AD-444F-B314-97AAD6659E06}"
         "UpgradeCode" = "8:{251AC907-8611-45F6-AD97-17492ED52E47}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.30"
+        "ProductVersion" = "8:1.0.31"
         "Manufacturer" = "8:AsciiMotive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:www.asciimotive.com"
@@ -971,7 +971,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A4C426CB92F44255B9C7A30CB627F503"
             {
-            "SourcePath" = "8:..\\SquealerConsole\\obj\\Release\\Squealer.exe"
+            "SourcePath" = "8:..\\SquealerConsole\\obj\\Debug\\Squealer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4C99EEE6EF9F40078473C339884D801E"
