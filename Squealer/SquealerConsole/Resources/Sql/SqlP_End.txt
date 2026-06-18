@@ -57,11 +57,12 @@ begin catch
 	declare @Squealer_ErrorState int = error_state();
 	declare @Squealer_ErrorMessage varchar(max);
 	set @Squealer_ErrorMessage = concat(
-		'Origin: ',isnull(error_procedure(),'n/a')
-		,char(13),char(10),'Current: ``this``'
-		,char(13),char(10),'Error: ',convert(varchar,@Squealer_ErrorNumber)
-		,char(13),char(10),'Line: ',convert(varchar,error_line())
-		,char(13),char(10),'Message: ',error_message()
+		'[INFO](@@nestlevel=',@@nestlevel,')'
+		,char(13),char(10),'~Origin: ',isnull(error_procedure(),'n/a')
+		,char(13),char(10),'~Current: ``this``'
+		,char(13),char(10),'~Error: ',convert(varchar,@Squealer_ErrorNumber)
+		,char(13),char(10),'~Line: ',convert(varchar,error_line())
+		,char(13),char(10),'~Message: ',error_message()
 	);
 {Parameters}
 

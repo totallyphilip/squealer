@@ -1,5 +1,6 @@
-﻿1.0.15.0
+﻿1.0.15.1
 Error codes were being masked and unavailable to the calling process. Fixed.
+Improved error information and readability.
 ^break
 1.0.14.1
 Automatic deadlock handling was only working in nested transactions. Fixed.
