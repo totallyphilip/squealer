@@ -1,4 +1,7 @@
-﻿1.0.15.1
+﻿1.0.15.2
+Added version number checking to prevent regression.
+^break
+1.0.15.1
 Error codes were being masked and unavailable to the calling process. Fixed.
 Improved error information and readability.
 ^break

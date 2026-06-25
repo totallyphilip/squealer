@@ -296,6 +296,13 @@ Public Class SquealerObject
         End Set
     End Property
 
+    Private _SquealerVersion As Version
+    Public ReadOnly Property SquealerVersion As Version
+        Get
+            Return _SquealerVersion
+        End Get
+    End Property
+
     Public ReadOnly Property FlagsList As List(Of String)
         Get
             Dim flags As New List(Of String)
@@ -366,6 +373,12 @@ Public Class SquealerObject
                 _NoMagic = True
             End If
         Catch ex As Exception
+        End Try
+
+        Try
+            _SquealerVersion = Version.Parse(Node.Attributes("Version").Value.ToString)
+        Catch ex As Exception
+            _SquealerVersion = Version.Parse("0.0.0.0")
         End Try
 
     End Sub

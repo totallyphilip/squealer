@@ -364,6 +364,7 @@ Module Main
 
         Textify.SayCentered("https://github.com/totallyphilip/squealer", True)
         Textify.SayCentered(My.Application.Info.Copyright, True)
+        Textify.SayCentered("Version " & My.Application.Info.Version.ToString, True)
         Console.WriteLine()
 
         Dim ver As New Version(My.Configger.LoadSetting(NameOf(MySettings.LastVersionNumberExecuted), "0.0.0.0"))
@@ -1778,6 +1779,10 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
+        If My.Application.Info.Version.CompareTo(obj.SquealerVersion) < 0 Then
+            Throw New Exception(String.Format("File version {0} is newer than Application version {1}.", obj.SquealerVersion.ToString, My.Application.Info.Version.ToString))
+        End If
+        OutRoot.SetAttribute("Version", My.Application.Info.Version.ToString)
 
         If obj.Type.LongType = SquealerObjectType.eType.StoredProcedure Then
             OutRoot.SetAttribute("DeadlockRetries", obj.DeadlockRetries.ToString)
