@@ -1779,7 +1779,13 @@ Module Main
         OutRoot.SetAttribute("Type", obj.Type.LongType.ToString)
         OutRoot.SetAttribute("Flags", obj.Flags)
         OutRoot.SetAttribute("WithOptions", obj.WithOptions)
-        If My.Application.Info.Version.CompareTo(obj.SquealerVersion) < 0 Then
+
+        Dim vcheck As Version
+        With obj.SquealerVersion ' ignore minor revision number
+            vcheck = Version.Parse(String.Format("{0}.{1}.{2}.0", .Major, .Minor, .Build))
+        End With
+
+        If My.Application.Info.Version.CompareTo(vcheck) < 0 Then
             Throw New Exception(String.Format("File version {0} is newer than Application version {1}.", obj.SquealerVersion.ToString, My.Application.Info.Version.ToString))
         End If
         OutRoot.SetAttribute("Version", My.Application.Info.Version.ToString)

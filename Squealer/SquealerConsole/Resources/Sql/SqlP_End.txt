@@ -26,6 +26,20 @@ end try
 begin catch
 
 	declare @Squealer_ErrorNumber int = error_number();
+	declare @Squealer_ErrorSeverity int = error_severity();
+	declare @Squealer_ErrorState int = error_state();
+	declare @Squealer_ErrorMessage varchar(max);
+	set @Squealer_ErrorMessage = concat(
+		'[squealer](@@nestlevel=',@@nestlevel,')'
+		,char(13),char(10),':FailedProc: ',isnull(error_procedure(),'n/a')
+		,char(13),char(10),':CurrentProc: ``this``'
+		,char(13),char(10),':Error: ',convert(varchar,@Squealer_ErrorNumber)
+		,char(13),char(10),':Line: ',convert(varchar,error_line())
+		,char(13),char(10),':Message: ',error_message()
+	);
+{Parameters}
+
+	raiserror (@Squealer_ErrorMessage,10,0) -- gets the details into the log
 
 	print concat('exception - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
@@ -52,25 +66,6 @@ begin catch
 		if xact_state() = 1
 			commit transaction
 	end
-
-	declare @Squealer_ErrorSeverity int = error_severity();
-	declare @Squealer_ErrorState int = error_state();
-	declare @Squealer_ErrorMessage varchar(max);
-	set @Squealer_ErrorMessage = concat(
-		'[INFO](@@nestlevel=',@@nestlevel,')'
-		,char(13),char(10),'~Origin: ',isnull(error_procedure(),'n/a')
-		,char(13),char(10),'~Current: ``this``'
-		,char(13),char(10),'~Error: ',convert(varchar,@Squealer_ErrorNumber)
-		,char(13),char(10),'~Line: ',convert(varchar,error_line())
-		,char(13),char(10),'~Message: ',error_message()
-	);
-{Parameters}
-
-	begin try
-		throw 100000,@Squealer_ErrorMessage,0; -- gets the details into the log
-	end try
-	begin catch
-	end catch
 
 	if @Squealer_ErrorNumber = 1205 -- deadlock
 		print @Squealer_ErrorMessage;
