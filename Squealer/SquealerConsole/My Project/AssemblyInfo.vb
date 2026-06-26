@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("Squealer 2022")>
-<Assembly: AssemblyDescription("A tool for creating SQL Server functions, views, and stored procedures with built-in error handling and automatic deadlock retrying.")>
+<Assembly: AssemblyDescription("A tool for creating SQL Server functions, views, and stored procedures with built-in error and deadlock handling.")>
 <Assembly: AssemblyCompany("Nobody")>
 <Assembly: AssemblyProduct("Squealer")>
 <Assembly: AssemblyCopyright("Public Domain")>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.16.0")>
-<Assembly: AssemblyFileVersion("1.0.16.0")>
+<Assembly: AssemblyVersion("1.0.16.1")>
+<Assembly: AssemblyFileVersion("1.0.16.1")>

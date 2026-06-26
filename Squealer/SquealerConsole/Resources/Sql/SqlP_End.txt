@@ -14,6 +14,9 @@
 
 	print concat('commit - nest level is ',@@nestlevel,'; tran count is ',@@trancount,'; xact state is ',xact_state());
 
+	if @Squealer_DeadlockRetries > 0 and @@nestlevel = 1
+		raiserror ('[squealer] Deadlock resolved! :)',10,0) -- gets the details into the log
+
 end try
 
 

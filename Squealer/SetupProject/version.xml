@@ -1,5 +1,5 @@
-<Squealer Version="1.0.16.0" Updated="6/25/2026 10:12:50 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10160-Install.zip">
+<Squealer Version="1.0.16.1" Updated="6/26/2026 6:19:20 PM" Hidden="False" ZipFile="S:\Software\Squealer\Squealer10161-Install.zip">
 <About>
-<![CDATA[ Added version number checking to prevent regression. ]]>
+<![CDATA[ Added "deadlock resolved" log messages (severity 10). ]]>
 </About>
 </Squealer>

@@ -1,4 +1,7 @@
-﻿1.0.16.0
+﻿1.0.16.1
+Added "deadlock resolved" log messages (severity 10).
+^break
+1.0.16.0
 Added version number checking to prevent regression.
 ^break
 1.0.15.1

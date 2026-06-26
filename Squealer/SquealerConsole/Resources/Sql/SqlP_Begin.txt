@@ -19,7 +19,7 @@ squealer_deadlockretry:
 
 if @Squealer_DeadlockRetries > 0
 begin
-	declare @Squealer_RetryMessage varchar(1000) = concat('Squealer re-running transaction, attempt #',@Squealer_DeadlockRetries);
+	declare @Squealer_RetryMessage varchar(1000) = concat('[squealer] Re-running transaction, attempt #',@Squealer_DeadlockRetries);
 	print @Squealer_RetryMessage;
 	raiserror (@Squealer_RetryMessage,10,0)
 end
